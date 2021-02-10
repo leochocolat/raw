@@ -1,5 +1,5 @@
 {
-    "name": "dylk-starter",
+    "name": "raw",
     "version": "1.0.0",
     "private": true,
     "scripts": {
@@ -16,7 +16,6 @@
         "lint": "npm run lint:js && npm run lint:style"
     },
     "dependencies": {
-        "@nuxtjs/axios": "^5.12.1",
         "bowser": "^2.11.0",
         "fontfaceobserver": "^2.1.0",
         "gsap": "^3.5.0",

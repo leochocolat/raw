@@ -1,6 +1,6 @@
 <template>
     <div class="page-home">
-        <BlockDummy :data="{ title: 'Home', image: '/images/dylk/bg.jpg' }" />
+        <h1>Home</h1>
     </div>
 </template>
 

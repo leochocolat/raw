@@ -67,18 +67,11 @@ export default {
      ** Nuxt.js modules
      */
     modules: [
-        // Doc: https://axios.nuxtjs.org/usage
-        '@nuxtjs/axios',
         // Doc: https://github.com/nuxt-community/dotenv-module
         '@nuxtjs/dotenv',
         '@nuxtjs/style-resources',
         '@nuxtjs/svg',
     ],
-    /*
-     ** Axios module configuration
-     ** See https://axios.nuxtjs.org/options
-     */
-    axios: {},
     /*
      ** Build configuration
      ** See https://nuxtjs.org/api/configuration-build/
