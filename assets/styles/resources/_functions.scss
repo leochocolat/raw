@@ -1,0 +1,30 @@
+// Utils
+@function strip-unit($value) {
+    @return $value / ($value * 0 + 1);
+}
+
+@function grid($columns, $total: $colums-amount) {
+    @return $columns / $total * 100%;
+}
+
+// Fonts
+@function rem($value) {
+    @return #{strip-unit($value) / (strip-unit($viewport-width-small) / 100)}rem;
+}
+
+@function rem-l($value) {
+    @return #{strip-unit($value) / (strip-unit($viewport-width-large) / 100)}rem;
+}
+
+// Sizes
+@function vw($value) {
+    @return #{strip-unit($value) / strip-unit($viewport-width-small) * 100}vw;
+}
+
+@function vw-l($value) {
+    @return #{strip-unit($value) / strip-unit($viewport-width-large) * 100}vw;
+}
+
+@function aspect-ratio($width, $height) {
+    @return #{strip-unit($height) / strip-unit($width) * 100%};
+}

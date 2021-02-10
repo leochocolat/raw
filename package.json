@@ -1,0 +1,46 @@
+{
+    "name": "dylk-starter",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "nuxt",
+        "build": "nuxt build",
+        "build:staging": "nuxt build -c nuxt.config.staging.js",
+        "build:production": "nuxt build -c nuxt.config.production.js",
+        "start:staging": "nuxt start --port 3001 -c nuxt.config.staging.js",
+        "start:production": "nuxt start --port 3000 -c nuxt.config.production.js",
+        "generate": "nuxt generate",
+        "serve": "nuxt serve",
+        "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
+        "lint:style": "stylelint **/*.{vue,css} --ignore-path .gitignore",
+        "lint": "npm run lint:js && npm run lint:style"
+    },
+    "dependencies": {
+        "@nuxtjs/axios": "^5.12.1",
+        "bowser": "^2.11.0",
+        "fontfaceobserver": "^2.1.0",
+        "gsap": "^3.5.0",
+        "nuxt": "^2.14.3"
+    },
+    "devDependencies": {
+        "@nuxtjs/svg": "^0.1.11",
+        "@nuxtjs/dotenv": "^1.4.1",
+        "@nuxtjs/eslint-config": "^3.1.0",
+        "@nuxtjs/eslint-module": "^2.0.0",
+        "@nuxtjs/style-resources": "^1.0.0",
+        "@nuxtjs/stylelint-module": "^4.0.0",
+        "babel-eslint": "^10.1.0",
+        "eslint": "^7.7.0",
+        "eslint-config-prettier": "^6.11.0",
+        "eslint-plugin-nuxt": "^1.0.0",
+        "eslint-plugin-prettier": "^3.1.4",
+        "node-sass": "^4.14.1",
+        "prettier": "^2.0.5",
+        "sass-loader": "^9.0.3",
+        "stylelint": "^13.6.1",
+        "stylelint-config-prettier": "^8.0.1",
+        "stylelint-config-standard": "^20.0.0",
+        "stylelint-order": "^4.1.0",
+        "stylelint-scss": "^3.18.0"
+    }
+}

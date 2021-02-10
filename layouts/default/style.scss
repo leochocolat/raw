@@ -1,0 +1,26 @@
+/**
+* Demo
+**/
+nav {
+    position: absolute;
+
+    top: vw(30px);
+    right: vw(50px);
+
+    font-size: rem(15px);
+    
+    @include respond-to("large") {
+        top: vw-l(30px);
+        right: vw-l(50px);
+
+        font-size: rem-l(16px);
+    }
+}
+
+a {
+    margin-right: vw(10px);
+
+    @include respond-to("large") {
+        margin-right: vw-l(10px);
+    }
+}

@@ -1,0 +1,30 @@
+// Colors
+$color-white: #ffffff;
+$color-black: #000000;
+
+// Fonts
+
+// Font sizes
+$base-font-size: 1vw;
+
+// Fluid type
+$viewport-width-small: 375px;
+$viewport-width-medium: 768px;
+$viewport-width-large: 1600px;
+
+// Breakpoints
+$breakpoints: (
+    'small': (min-width: 0,),
+    'medium': (min-width: 500px,),
+    'large': (min-width: 850px,),
+);
+
+// Easings
+
+
+:export {
+    baseFontSize: $base-font-size;
+    viewportWidthSmall: $viewport-width-small;
+    viewportWidthMedium: $viewport-width-medium;
+    viewportWidthLarge: $viewport-width-large;
+}
