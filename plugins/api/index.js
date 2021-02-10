@@ -9,21 +9,23 @@
 import coreModule from './core';
 import contentfulModule from './contentful';
 
-const apiFactory = (error, store, req, route, redirect) => ({
+const apiFactory = (i18n, error, store, req, route, redirect) => ({
     ...coreModule(),
-    ...contentfulModule({ error }),
+    ...contentfulModule({ i18n, error }),
 });
 
 export default async (context, inject) => {
-    const { error, store, route, req, redirect } = context;
-    const api = apiFactory(error, store, req, route, redirect);
+    const { app, error, store, route, req, redirect } = context;
+    const i18n = app.i18n;
+    const api = apiFactory(i18n, error, store, req, route, redirect);
 
-    // inject api into nuxt
     inject('api', api);
+    inject('i18n', i18n);
 
     // Hello World
     const setup = await api.getSetup();
     store.dispatch('setup', setup);
 
     const entries = await api.getEntries();
+    console.log(entries);
 };

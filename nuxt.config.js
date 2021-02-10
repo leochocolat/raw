@@ -71,7 +71,27 @@ export default {
         '@nuxtjs/dotenv',
         '@nuxtjs/style-resources',
         '@nuxtjs/svg',
+        // Doc: https://i18n.nuxtjs.org/
+        'nuxt-i18n',
     ],
+    /*
+     ** i18n
+     */
+    i18n: {
+        locales: [
+            { code: 'fr', name: 'fr-FR' },
+            { code: 'en', name: 'en-US' },
+        ],
+        defaultLocale: 'fr',
+        strategy: 'prefix',
+        vueI18n: {
+            fallbackLocale: 'fr',
+            messages: {
+                fr: require('./locales/fr'),
+                en: require('./locales/en'),
+            },
+        },
+    },
     /*
      ** Build configuration
      ** See https://nuxtjs.org/api/configuration-build/

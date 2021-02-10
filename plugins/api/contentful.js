@@ -5,7 +5,7 @@ const config = {
     accessToken: process.env.CTF_CDA_ACCESS_TOKEN,
 };
 
-export default function ({ error }) {
+export default function ({ i18n, error }) {
     const client = contentful.createClient(config);
 
     return {
@@ -16,7 +16,9 @@ export default function ({ error }) {
         async getEntries() {
             let res;
             try {
-                res = await client.getEntries();
+                res = await client.getEntries({
+                    locale: i18n.localeProperties.name,
+                });
             } catch (err) {
                 res = err.response;
                 return error({
@@ -34,7 +36,10 @@ export default function ({ error }) {
         async getEntriesByName(name) {
             let res;
             try {
-                res = await client.getEntries({ content_type: name });
+                res = await client.getEntries({
+                    content_type: name,
+                    locale: i18n.localeProperties.name,
+                });
             } catch (err) {
                 res = err.response;
                 if (res.status === 404) {
@@ -52,10 +57,12 @@ export default function ({ error }) {
          * @param {String} id entry id
          * @returns {Object} return the entry
          */
-        async getEntry(id) {
+        async getEntryById(id) {
             let res;
             try {
-                res = await client.getEntry(id);
+                res = await client.getEntry(id, {
+                    locale: i18n.localeProperties.name,
+                });
             } catch (err) {
                 res = err.response;
                 if (res.status === 404) {
