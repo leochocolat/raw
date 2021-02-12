@@ -14,6 +14,10 @@ const actions = {
     setBreakpoint({ commit }, breakpoint) {
         commit('SET_BREAKPOINT', breakpoint);
     },
+
+    setTouch({ commit }, value) {
+        commit('SET_TOUCH', value);
+    },
 };
 
 export default actions;

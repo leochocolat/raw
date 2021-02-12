@@ -15,6 +15,10 @@ const mutations = {
     SET_BREAKPOINT(state, breakpoint) {
         state.breakpoint = breakpoint;
     },
+
+    SET_TOUCH(state, value) {
+        state.isTouch = value;
+    },
 };
 
 export default mutations;

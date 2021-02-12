@@ -40,7 +40,7 @@ export default {
      ** Plugins to load before mounting the App
      ** https://nuxtjs.org/guide/plugins
      */
-    plugins: ['@/plugins/listeners.client.js', '@/plugins/api/index'],
+    plugins: ['@/plugins/listeners.client.js', '@/plugins/init.client.js', '@/plugins/api/index'],
     /*
      ** Auto import components
      ** See https://nuxtjs.org/api/configuration-components
