@@ -26,6 +26,26 @@ export default async (context, inject) => {
     const setup = await api.getSetup();
     store.dispatch('setup', setup);
 
-    const entries = await api.getEntries();
-    console.log(entries);
+    /**
+     * Get Entries
+     */
+    // const entries = await api.getEntries();
+
+    /**
+     * Update Entry
+     */
+    // const entries = await api.updateEntry('3nxeOCH5xF8JYV5JSSjmwq', {
+    //     message: {
+    //         [i18n.localeProperties.name]: `Je m'appelle Serge`,
+    //     },
+    // });
+
+    /**
+     * Create Entrie
+     */
+    // const newPost = await api.createEntry('message', {
+    //     message: {
+    //         [i18n.localeProperties.name]: `Je m'appelle Léo`,
+    //     },
+    // });
 };

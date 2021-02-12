@@ -1,12 +1,19 @@
-const contentful = require('contentful');
+const contentfulDelivery = require('contentful');
+const contentfulManagment = require('contentful-management');
 
-const config = {
+const configDelivery = {
     space: process.env.CTF_SPACE_ID,
-    accessToken: process.env.CTF_CDA_ACCESS_TOKEN,
+    accessToken: process.env.CTF_CDA_ACCESS_TOKEN_DELIVERY,
+};
+
+const configManagment = {
+    space: process.env.CTF_SPACE_ID,
+    accessToken: process.env.CTF_CDA_ACCESS_TOKEN_MANAGMENT,
 };
 
 export default function ({ i18n, error }) {
-    const client = contentful.createClient(config);
+    const clientDelivery = contentfulDelivery.createClient(configDelivery);
+    const clientManagment = contentfulManagment.createClient(configManagment);
 
     return {
         /**
@@ -16,7 +23,7 @@ export default function ({ i18n, error }) {
         async getEntries() {
             let res;
             try {
-                res = await client.getEntries({
+                res = await clientDelivery.getEntries({
                     locale: i18n.localeProperties.name,
                 });
             } catch (err) {
@@ -36,7 +43,7 @@ export default function ({ i18n, error }) {
         async getEntriesByName(name) {
             let res;
             try {
-                res = await client.getEntries({
+                res = await clientDelivery.getEntries({
                     content_type: name,
                     locale: i18n.localeProperties.name,
                 });
@@ -60,7 +67,7 @@ export default function ({ i18n, error }) {
         async getEntryById(id) {
             let res;
             try {
-                res = await client.getEntry(id, {
+                res = await clientDelivery.getEntry(id, {
                     locale: i18n.localeProperties.name,
                 });
             } catch (err) {
@@ -71,6 +78,53 @@ export default function ({ i18n, error }) {
                         message: `The page you're looking for doesn't exist`,
                     });
                 }
+            }
+            return res;
+        },
+
+        /**
+         * Create an entry
+         * @param {String} contentTypeId content type id
+         * @param {Object} data content type data
+         */
+        async createEntry(contentTypeId, fields) {
+            const data = { fields };
+            let res;
+            try {
+                res = await clientManagment
+                    .getSpace(configManagment.space)
+                    .then((space) => space.getEnvironment('master'))
+                    .then((environment) => environment.createEntry(contentTypeId, data));
+            } catch (err) {
+                return error(err);
+            }
+            return res;
+        },
+
+        /**
+         * Update an entry
+         * @param {String} entryId entry id
+         * @param {Object} fields fields to update
+         */
+        async updateEntry(entryId, fields) {
+            let res;
+            try {
+                res = await clientManagment
+                    .getSpace(configManagment.space)
+                    .then((space) => space.getEnvironment('master'))
+                    .then((environment) => environment.getEntry(entryId))
+                    .then((entry) => {
+                        for (const property in fields) {
+                            if (!entry.fields[property]) {
+                                console.error(`Property /${property}/ does not exist in entry : /${entryId}/`);
+                                continue;
+                            }
+                            entry.fields[property] = fields[property];
+                        }
+                        return entry.update();
+                    });
+            } catch (err) {
+                return error(err);
             }
             return res;
         },
