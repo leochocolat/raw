@@ -1,6 +1,6 @@
 <template>
     <div class="default">
-        <Webgl />
+        <Webgl v-if="isReady" />
         <Preloader />
         <!-- <nav>
             <nuxt-link :to="localePath('/')">Home</nuxt-link>

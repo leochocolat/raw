@@ -22,6 +22,7 @@ export default {
             const basePath = '';
             this.resources = resources;
             this.resourceLoader = new ResourceLoader(this.resources, basePath);
+            this.$store.dispatch('preloader/start');
         },
 
         /**
@@ -35,6 +36,8 @@ export default {
             this.resourceLoader.removeEventListener('complete', this.completeHandler);
         },
 
-        completeHandler() {},
+        completeHandler() {
+            this.$store.dispatch('preloader/complete');
+        },
     },
 };

@@ -55,15 +55,23 @@ export default class ResourceLoader extends EventDispatcher {
 
     _loadResource(resource) {
         switch (resource.type) {
-            case 'image':
+            case 'image': {
                 this._loadImage(resource);
                 break;
-            case 'font':
+            }
+            case 'font': {
                 this._loadFont(resource);
                 break;
+            }
             case 'gltf':
-            case 'glb':
-                return this._loadGltf(resource);
+            case 'glb': {
+                this._loadGltf(resource);
+                break;
+            }
+            case 'draco': {
+                this._loadDraco(resource);
+                break;
+            }
         }
     }
 
@@ -106,6 +114,32 @@ export default class ResourceLoader extends EventDispatcher {
     }
 
     _loadGltf(resource) {
+        resource.state = STATE_LOADING;
+        const stopWatch = new Stopwatch();
+        stopWatch.start();
+
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath(this._basePath + '/libs/draco/');
+        dracoLoader.setDecoderConfig({ type: 'js' });
+
+        const loader = new GLTFLoader();
+        loader.setDRACOLoader(dracoLoader);
+
+        const promise = new Promise((resolve) => {
+            loader.load(this._basePath + resource.path, (gltf) => {
+                resource.state = STATE_LOADED;
+                stopWatch.stop();
+                resource.loadingDuration = `${stopWatch.duration}ms`;
+
+                resource.data = gltf;
+                resolve(resource);
+            });
+        });
+
+        return promise;
+    }
+
+    _loadDraco(resource) {
         resource.state = STATE_LOADING;
         const stopWatch = new Stopwatch();
         stopWatch.start();
