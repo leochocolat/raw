@@ -10,7 +10,7 @@ const data = {
         'green',
         'yellow',
         'blue',
-        'black',
+        'red',
         //
     ],
 };

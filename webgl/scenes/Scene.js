@@ -3,6 +3,7 @@ import * as THREE from 'three';
 
 // Data
 import data from '../data';
+import ResourceLoader from '@/utils/ResourceLoader';
 
 class Scene extends THREE.Scene {
     constructor(options) {
@@ -19,6 +20,8 @@ class Scene extends THREE.Scene {
         this._renderTarget = this._createRenderTarget();
         this._camera = this._createCamera();
         this._debugCube = this._createDebugCube();
+
+        
 
         this._createDebugFolder();
     }
@@ -68,10 +71,12 @@ class Scene extends THREE.Scene {
             color: 'red',
         });
 
-        const mesh = new THREE.Mesh(geometry, material);
+        // const mesh = new THREE.Mesh(geometry, material);
+
+        // this.add(mesh);
+        const mesh = ResourceLoader.get('testDraco').scene;
 
         this.add(mesh);
-
         return mesh;
     }
 

@@ -128,11 +128,7 @@ export default class ResourceLoader extends EventDispatcher {
         const stopWatch = new Stopwatch();
         stopWatch.start();
 
-        const dracoLoader = new DRACOLoader();
-        dracoLoader.setDecoderPath(this._basePath + '/libs/draco/');
-
         const loader = new GLTFLoader();
-        loader.setDRACOLoader(dracoLoader);
 
         const promise = new Promise((resolve) => {
             loader.load(this._basePath + resource.path, (gltf) => {
@@ -153,14 +149,19 @@ export default class ResourceLoader extends EventDispatcher {
         const stopWatch = new Stopwatch();
         stopWatch.start();
 
-        const dracoLoader = new DRACOLoader();
-        dracoLoader.setDecoderPath(this._basePath + '/libs/draco/');
 
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath(this._basePath + '/draco/');
+ 
+        dracoLoader.setDecoderConfig({type: 'js'});
+ 
         const loader = new GLTFLoader();
+
         loader.setDRACOLoader(dracoLoader);
 
         const promise = new Promise((resolve) => {
             loader.load(this._basePath + resource.path, (gltf) => {
+                console.log(gltf)
                 resource.state = STATE_LOADED;
                 stopWatch.stop();
                 resource.loadingDuration = `${stopWatch.duration}ms`;
