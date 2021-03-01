@@ -5,6 +5,7 @@ import * as THREE from 'three';
 // Utils
 import bindAll from '@/utils/bindAll';
 import WindowResizeObserver from '@/utils/WindowResizeObserver';
+import Debugger from '@/utils/Debugger';
 
 // Scene
 import SceneManager from '@/webgl/SceneManager';
@@ -20,6 +21,7 @@ class WebglApp {
 
         this._clock = new THREE.Clock();
 
+        this._debugger = this._isDebug ? this._createDebugger() : null;
         this._renderer = this._createRenderer();
         this._sceneManager = this._createSceneManager();
 
@@ -34,6 +36,7 @@ class WebglApp {
      */
     destroy() {
         this._removeEventListeners();
+        this._debugger?.destroy();
     }
 
     /**
@@ -57,11 +60,18 @@ class WebglApp {
             renderer: this._renderer,
             nuxtRoot: this._nuxtRoot,
             isDebug: this._isDebug,
+            debugger: this._debugger,
             width: this._width,
             height: this._height,
         });
 
         return sceneManager;
+    }
+
+    _createDebugger() {
+        const debugPanel = new Debugger({ title: '.RAW Debugger' });
+
+        return debugPanel;
     }
 
     _resize() {

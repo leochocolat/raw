@@ -22,7 +22,8 @@
         "fontfaceobserver": "^2.1.0",
         "gsap": "^3.5.0",
         "nuxt": "^2.14.3",
-        "three": "^0.125.2"
+        "three": "^0.125.2",
+        "tweakpane": "^1.5.9"
     },
     "devDependencies": {
         "@nuxtjs/dotenv": "^1.4.1",

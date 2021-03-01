@@ -1,8 +1,11 @@
 // Vendor
 import FontFaceObserver from 'fontfaceobserver';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 // Utils
 import EventDispatcher from '@/utils/EventDispatcher';
+import Stopwatch from '@/utils/Stopwatch';
 import resources from '@/resources';
 
 // States
@@ -58,6 +61,9 @@ export default class ResourceLoader extends EventDispatcher {
             case 'font':
                 this._loadFont(resource);
                 break;
+            case 'gltf':
+            case 'glb':
+                return this._loadGltf(resource);
         }
     }
 
@@ -97,5 +103,31 @@ export default class ResourceLoader extends EventDispatcher {
             cache.push(resource);
             this._checkResourcesStatus();
         });
+    }
+
+    _loadGltf(resource) {
+        resource.state = STATE_LOADING;
+        const stopWatch = new Stopwatch();
+        stopWatch.start();
+
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath(this._basePath + '/libs/draco/');
+        dracoLoader.setDecoderConfig({ type: 'js' });
+
+        const loader = new GLTFLoader();
+        loader.setDRACOLoader(dracoLoader);
+
+        const promise = new Promise((resolve) => {
+            loader.load(this._basePath + resource.path, (gltf) => {
+                resource.state = STATE_LOADED;
+                stopWatch.stop();
+                resource.loadingDuration = `${stopWatch.duration}ms`;
+
+                resource.data = gltf;
+                resolve(resource);
+            });
+        });
+
+        return promise;
     }
 }

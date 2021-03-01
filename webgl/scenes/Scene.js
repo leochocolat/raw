@@ -1,18 +1,26 @@
 // Vendor
 import * as THREE from 'three';
 
+// Data
+import data from '../data';
+
 class Scene extends THREE.Scene {
     constructor(options) {
         super();
 
+        this._id = options.id;
+        this._debugger = options.debugger;
         this._width = options.width;
         this._height = options.height;
+        this._isActive = options.isActive;
 
-        this.background = new THREE.Color('green');
+        this.background = new THREE.Color(data.colors[this._id]);
 
         this._renderTarget = this._createRenderTarget();
         this._camera = this._createCamera();
         this._debugCube = this._createDebugCube();
+
+        this._createDebugFolder();
     }
 
     /**
@@ -27,8 +35,8 @@ class Scene extends THREE.Scene {
     }
 
     update(time, delta) {
-        this._debugCube.rotation.x = time;
-        this._debugCube.rotation.y = -time;
+        this._debugCube.rotation.x = time * (this._id + 1);
+        this._debugCube.rotation.y = -time * (this._id + 1);
     }
 
     resize(width, height) {
@@ -65,6 +73,12 @@ class Scene extends THREE.Scene {
         this.add(mesh);
 
         return mesh;
+    }
+
+    _createDebugFolder() {
+        if (!this._debugger) return;
+
+        this._debugger.addFolder({ title: `Scene ${this._id}`, expanded: false });
     }
 }
 

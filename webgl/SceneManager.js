@@ -12,11 +12,11 @@ const PESPECTIVE = 800;
 class SceneManager extends THREE.Scene {
     constructor(options) {
         super();
-
         this._canvas = options.canvas;
         this._renderer = options.renderer;
         this._nuxtRoot = options.nuxtRoot;
         this._isDebug = options.isDebug;
+        this._debugger = options.debugger;
         this._width = options.width;
         this._height = options.height;
 
@@ -84,8 +84,11 @@ class SceneManager extends THREE.Scene {
 
         for (let i = 0; i < 4; i++) {
             const scene = new Scene({
+                id: i,
+                debugger: this._debugger,
                 width: this._width,
                 height: this._height,
+                isActive: false,
             });
 
             scenes.push(scene);
@@ -99,9 +102,11 @@ class SceneManager extends THREE.Scene {
 
         for (let i = 0; i < 4; i++) {
             const screen = new Screen({
+                id: i,
                 width: this._width,
                 height: this._height,
                 map: this._scenes[i].renderTarget.texture,
+                isActive: false,
             });
 
             this.add(screen);

@@ -1,10 +1,14 @@
 // Vendor
 import * as THREE from 'three';
 
+// Data
+import data from '../data';
+
 class Screen extends THREE.Mesh {
     constructor(options) {
         super();
 
+        this._id = options.id;
         this._width = options.width;
         this._height = options.height;
 
@@ -13,7 +17,8 @@ class Screen extends THREE.Mesh {
         this.geometry = this._createGeometry();
         this.material = this._createMaterial();
 
-        this.scale.set(this._width, this._height, 1);
+        this.position.set(this._width * data.positions[this._id].x, this._height * data.positions[this._id].y, 0);
+        this.scale.set(this._width / 2, this._height / 2, 1);
     }
 
     /**
@@ -25,7 +30,7 @@ class Screen extends THREE.Mesh {
         this._width = width;
         this._height = height;
 
-        this.scale.set(this._width, this._height, 1);
+        this.scale.set(this._width / 2, this._height / 2, 1);
     }
 
     /**
