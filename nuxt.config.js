@@ -97,6 +97,10 @@ export default {
      ** See https://nuxtjs.org/api/configuration-build/
      */
     build: {
+        babel: {
+            plugins: ['@babel/plugin-proposal-optional-chaining'],
+        },
+
         extend(config, ctx) {
             /**
              * GLSL loader
