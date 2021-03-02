@@ -92,6 +92,7 @@ class SceneManager extends THREE.Scene {
                 width: this._width,
                 height: this._height,
                 isActive: false,
+                renderer: this._renderer,
             });
 
             scenes.push(scene);

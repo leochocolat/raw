@@ -17,6 +17,11 @@ const webgl = [
         name: 'testDraco',
         path: '/models/modelDraco.gltf',
     },
+    {
+        type: 'draco',
+        name: 'dracoPeople',
+        path: '/models/Scene_People-D.glb',
+    },
 ];
 
 const resources = [...fonts, ...images, ...webgl];

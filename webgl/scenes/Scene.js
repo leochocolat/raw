@@ -4,6 +4,9 @@ import * as THREE from 'three';
 // Data
 import data from '../data';
 import ResourceLoader from '@/utils/ResourceLoader';
+import AnimationComponent from '@/utils/AnimationComponent';
+
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 class Scene extends THREE.Scene {
     constructor(options) {
@@ -14,12 +17,16 @@ class Scene extends THREE.Scene {
         this._width = options.width;
         this._height = options.height;
         this._isActive = options.isActive;
-
+        this._renderer = options.renderer;
         this.background = new THREE.Color(data.colors[this._id]);
 
         this._renderTarget = this._createRenderTarget();
         this._camera = this._createCamera();
         this._debugCube = this._createDebugCube();
+        this._animationController = this._createAnimationController();
+
+        this._orbitControls = this._createOrbitControls();
+        this._ambientLight = this._createAmbientLight();
 
         this._createDebugFolder();
     }
@@ -36,8 +43,10 @@ class Scene extends THREE.Scene {
     }
 
     update(time, delta) {
-        // this._debugCube.rotation.x = time * (this._id + 1);
+        // this._debugCube.position.x = time * 0.002 * (this._id + 1);
         // this._debugCube.rotation.y = -time * (this._id + 1);
+
+        this._animationController.update(delta);
     }
 
     resize(width, height) {
@@ -63,20 +72,41 @@ class Scene extends THREE.Scene {
         return camera;
     }
 
+    _createOrbitControls() {
+        const orbitControls = new OrbitControls(this._camera, this._renderer.domElement);
+        return orbitControls;
+    }
+
     _createDebugCube() {
         // const geometry = new THREE.BoxGeometry(1, 1, 1);
-        // const material = new THREE.MeshBasicMaterial({
-        //     color: 'red',
-        // });
+        const material = new THREE.MeshBasicMaterial({
+            color: 'white',
+            skinning: true,
+            side: THREE.DoubleSide,
+        });
 
         // const mesh = new THREE.Mesh(geometry, material);
         // this.add(mesh);
 
         // Test model with draco compression
-        const mesh = ResourceLoader.get('testDraco').scene;
-        this.add(mesh);
+        const mesh = ResourceLoader.get('dracoPeople');
 
+        this.add(mesh.scene);
         return mesh;
+    }
+
+    _createAnimationController() {
+        const animationController = new AnimationComponent(this._debugCube);
+        animationController.playAnimation(animationController.actionType.Run);
+
+        return animationController;
+    }
+
+    _createAmbientLight() {
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+        this.add(ambientLight);
+
+        return ambientLight;
     }
 
     _createDebugFolder() {
