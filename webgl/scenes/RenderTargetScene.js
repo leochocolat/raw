@@ -75,6 +75,9 @@ class RenderTargetScene extends THREE.Scene {
         this._height = height;
 
         this._renderTarget.setSize(this._width, this._height);
+
+        this._camera.aspect = this._width / this._height;
+        this._camera.updateProjectionMatrix();
     }
 
     /**
