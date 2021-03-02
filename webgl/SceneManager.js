@@ -159,6 +159,8 @@ class SceneManager extends THREE.Scene {
     }
 
     _createDebugger() {
+        if (!this._debugger) return;
+
         const folder = this._debugger.addFolder({ title: 'Scene Manager', expanded: false });
 
         const activeScene = { name: this._activeScene.name || '' };

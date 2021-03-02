@@ -24,7 +24,7 @@ class RenderTargetScene extends THREE.Scene {
         this._renderTarget = this._createRenderTarget();
         this._camera = this._createCamera();
         this._debugCube = this._createDebugCube();
-        this._animationController = this._createAnimationController();
+        // this._animationController = this._createAnimationController();
 
         this._orbitControls = this._createOrbitControls();
         this._ambientLight = this._createAmbientLight();
@@ -66,7 +66,8 @@ class RenderTargetScene extends THREE.Scene {
 
         this._debugCube.rotation.x = time;
         this._debugCube.rotation.y = -time;
-        this._animationController.update(delta);
+
+        // this._animationController.update(delta);
     }
 
     resize(width, height) {
