@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import Screen from '@/webgl/objects/Screen';
 
 // Scenes
-import Scene from '@/webgl/scenes/Scene';
+import scenesData from '@/webgl/scenes';
 
 // Data
 import data from './data';
@@ -23,6 +23,10 @@ class SceneManager extends THREE.Scene {
         this._width = options.width;
         this._height = options.height;
 
+        this._activeScene = {};
+
+        this._debugFolder = this._createDebugger();
+
         this._camera = this._createCamera();
         this._scenes = this._createScenes();
         this._screens = this._createScreens();
@@ -35,9 +39,35 @@ class SceneManager extends THREE.Scene {
         return this._camera;
     }
 
+    get activeScene() {
+        return this._activeScene;
+    }
+
+    setActiveScene(sceneName) {
+        const activeScene = this._scenes[sceneName];
+        const activeScreen = this._screens[sceneName];
+        activeScene.setActive();
+        activeScreen.setActive();
+
+        for (const key in this._scenes) {
+            if (key === sceneName) continue;
+            this._scenes[key].setInactive();
+            this._screens[key].setInactive();
+        }
+
+        this._activeScene = activeScene;
+    }
+
+    setInactive() {
+        for (const key in this._scenes) {
+            this._scenes[key].setInactive();
+            this._screens[key].setInactive();
+        }
+    }
+
     render() {
-        for (let i = 0; i < this._scenes.length; i++) {
-            const scene = this._scenes[i];
+        for (const key in this._scenes) {
+            const scene = this._scenes[key];
             this._renderer.setRenderTarget(scene.renderTarget);
             this._renderer.render(scene, scene.camera);
             this._renderer.setRenderTarget(null);
@@ -47,9 +77,12 @@ class SceneManager extends THREE.Scene {
     }
 
     update(time, delta) {
-        for (let i = 0; i < this._scenes.length; i++) {
-            const scene = this._scenes[i];
+        for (const key in this._scenes) {
+            const scene = this._scenes[key];
             scene.update(time, delta);
+
+            const screen = this._screens[key];
+            screen.update(time, delta);
         }
     }
 
@@ -57,11 +90,11 @@ class SceneManager extends THREE.Scene {
         this._width = width;
         this._height = height;
 
-        for (let i = 0; i < this._scenes.length; i++) {
-            const scene = this._scenes[i];
+        for (const key in this._scenes) {
+            const scene = this._scenes[key];
             scene.resize(width, height);
 
-            const screen = this._screens[i];
+            const screen = this._screens[key];
             screen.resize(width, height);
         }
 
@@ -83,40 +116,64 @@ class SceneManager extends THREE.Scene {
     }
 
     _createScenes() {
-        const scenes = [];
+        const scenes = {};
 
-        for (let i = 0; i < 4; i++) {
-            const scene = new Scene({
-                id: i,
+        let index = 0;
+        for (const key in data.scenes) {
+            const scene = new scenesData[key]({
+                name: key,
+                id: index,
                 debugger: this._debugger,
                 width: this._width,
                 height: this._height,
                 isActive: false,
             });
-
-            scenes.push(scene);
+            scenes[key] = scene;
+            index++;
         }
 
         return scenes;
     }
 
     _createScreens() {
-        const screens = [];
+        const screens = {};
 
-        for (let i = 0; i < 4; i++) {
+        let index = 0;
+        for (const key in data.scenes) {
             const screen = new Screen({
-                id: i,
+                name: key,
+                id: index,
+                debugger: this._debugger,
                 width: this._width,
                 height: this._height,
-                map: this._scenes[i].renderTarget.texture,
+                map: this._scenes[key].renderTarget.texture,
                 isActive: false,
             });
-
+            screens[key] = screen;
             this.add(screen);
-            screens.push(screen);
+            index++;
         }
 
         return screens;
+    }
+
+    _createDebugger() {
+        const folder = this._debugger.addFolder({ title: 'Scene Manager', expanded: false });
+
+        const activeScene = { name: this._activeScene.name || '' };
+        folder
+            .addInput(activeScene, 'name', {
+                options: { none: '', ...data.scenes },
+            })
+            .on('change', () => {
+                if (activeScene.name === '') {
+                    this.setInactive();
+                } else {
+                    this.setActiveScene(activeScene.name);
+                }
+            });
+
+        return folder;
     }
 }
 
