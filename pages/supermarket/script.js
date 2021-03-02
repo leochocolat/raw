@@ -5,7 +5,13 @@ import gsap from 'gsap';
 import page from '@/mixins/page';
 
 export default {
+    name: 'supermarket',
+
     mixins: [page],
+
+    mounted() {
+        this.$root.webglApp.sceneManager.setActiveScene(this.$options.name);
+    },
 
     methods: {
         transitionInit() {
@@ -15,7 +21,7 @@ export default {
         firstReveal(done, routeInfos) {
             const timeline = gsap.timeline({ onComplete: done });
 
-            timeline.to(this.$el, 0.5, { alpha: 1, ease: 'circ.inOut' });
+            timeline.add(this.transitionIn, 0);
 
             return timeline;
         },

@@ -1,5 +1,5 @@
 <template>
-    <div class="page-about"></div>
+    <div class="page-bar"></div>
 </template>
 
 <script src="./script.js"></script>

@@ -34,6 +34,10 @@ class WebglApp {
     /**
      * Public
      */
+    get sceneManager() {
+        return this._sceneManager;
+    }
+
     destroy() {
         this._removeEventListeners();
         this._debugger?.destroy();

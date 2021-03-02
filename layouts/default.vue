@@ -6,7 +6,7 @@
             <nuxt-link :to="localePath('/')">Home</nuxt-link>
             <nuxt-link :to="localePath('about')">About</nuxt-link>
         </nav> -->
-        <nuxt />
+        <nuxt v-if="isReady" />
     </div>
 </template>
 
