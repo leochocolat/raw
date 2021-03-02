@@ -1,9 +1,9 @@
 const data = {
     scenes: {
-        hallway: {},
-        library: {},
-        supermarket: {},
-        bar: {},
+        hallway: 'hallway',
+        library: 'library',
+        supermarket: 'supermarket',
+        bar: 'bar',
     },
 
     positions: [
@@ -17,7 +17,7 @@ const data = {
         'green',
         'yellow',
         'blue',
-        'red',
+        'purple',
         //
     ],
 };

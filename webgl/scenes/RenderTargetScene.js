@@ -8,10 +8,11 @@ import AnimationComponent from '@/utils/AnimationComponent';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-class Scene extends THREE.Scene {
+class RenderTargetScene extends THREE.Scene {
     constructor(options) {
         super();
 
+        this._name = options.name;
         this._id = options.id;
         this._debugger = options.debugger;
         this._width = options.width;
@@ -28,7 +29,7 @@ class Scene extends THREE.Scene {
         this._orbitControls = this._createOrbitControls();
         this._ambientLight = this._createAmbientLight();
 
-        this._createDebugFolder();
+        this._debugFolder = this._createDebugFolder();
     }
 
     /**
@@ -42,10 +43,29 @@ class Scene extends THREE.Scene {
         return this._renderTarget;
     }
 
-    update(time, delta) {
-        // this._debugCube.position.x = time * 0.002 * (this._id + 1);
-        // this._debugCube.rotation.y = -time * (this._id + 1);
+    get debugFolder() {
+        return this._debugFolder;
+    }
 
+    get isActive() {
+        return this._isActive;
+    }
+
+    setActive() {
+        this._isActive = true;
+        // console.log(`Scene ${this._name} is active`);
+    }
+
+    setInactive() {
+        this._isActive = false;
+        // console.log(`Scene ${this._name} is inactive`);
+    }
+
+    update(time, delta) {
+        if (!this._isActive) return;
+
+        this._debugCube.rotation.x = time;
+        this._debugCube.rotation.y = -time;
         this._animationController.update(delta);
     }
 
@@ -78,20 +98,19 @@ class Scene extends THREE.Scene {
     }
 
     _createDebugCube() {
-        // const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshBasicMaterial({
-            color: 'white',
-            skinning: true,
-            side: THREE.DoubleSide,
+            color: 'red',
         });
 
-        // const mesh = new THREE.Mesh(geometry, material);
-        // this.add(mesh);
+        const mesh = new THREE.Mesh(geometry, material);
+        this.add(mesh);
 
         // Test model with draco compression
-        const mesh = ResourceLoader.get('dracoPeople');
+        // const mesh = ResourceLoader.get('testDraco').scene;
+        // this.add(mesh);
+        // this.add(mesh.scene);
 
-        this.add(mesh.scene);
         return mesh;
     }
 
@@ -112,8 +131,10 @@ class Scene extends THREE.Scene {
     _createDebugFolder() {
         if (!this._debugger) return;
 
-        this._debugger.addFolder({ title: `Scene ${this._id}`, expanded: false });
+        const folder = this._debugger.addFolder({ title: `Scene ${this._name}`, expanded: false });
+
+        return folder;
     }
 }
 
-export default Scene;
+export default RenderTargetScene;
