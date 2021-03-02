@@ -85,10 +85,9 @@ class SceneManager extends THREE.Scene {
     _createScenes() {
         const scenes = [];
 
-        let index = 0;
-        for (const i in data.scenes) {
-            const scene = new i.class({
-                id: index,
+        for (let i = 0; i < 4; i++) {
+            const scene = new Scene({
+                id: i,
                 debugger: this._debugger,
                 width: this._width,
                 height: this._height,
@@ -96,7 +95,6 @@ class SceneManager extends THREE.Scene {
             });
 
             scenes.push(scene);
-            index++;
         }
 
         return scenes;
