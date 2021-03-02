@@ -7,6 +7,9 @@ import Screen from '@/webgl/objects/Screen';
 // Scenes
 import Scene from '@/webgl/scenes/Scene';
 
+// Data
+import data from './data';
+
 const PESPECTIVE = 800;
 
 class SceneManager extends THREE.Scene {
@@ -82,9 +85,10 @@ class SceneManager extends THREE.Scene {
     _createScenes() {
         const scenes = [];
 
-        for (let i = 0; i < 4; i++) {
-            const scene = new Scene({
-                id: i,
+        let index = 0;
+        for (const i in data.scenes) {
+            const scene = new i.class({
+                id: index,
                 debugger: this._debugger,
                 width: this._width,
                 height: this._height,
@@ -92,6 +96,7 @@ class SceneManager extends THREE.Scene {
             });
 
             scenes.push(scene);
+            index++;
         }
 
         return scenes;

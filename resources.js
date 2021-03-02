@@ -6,14 +6,7 @@ const fonts = [];
 /**
  * Images
  */
-const images = [
-    // Test image
-    // {
-    //     type: 'image',
-    //     name: 'bg',
-    //     path: '/images/dylk/bg.jpg',
-    // },
-];
+const images = [];
 
 /**
  * WebGL

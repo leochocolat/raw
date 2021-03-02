@@ -21,8 +21,6 @@ class Scene extends THREE.Scene {
         this._camera = this._createCamera();
         this._debugCube = this._createDebugCube();
 
-        
-
         this._createDebugFolder();
     }
 
@@ -38,8 +36,8 @@ class Scene extends THREE.Scene {
     }
 
     update(time, delta) {
-        this._debugCube.rotation.x = time * (this._id + 1);
-        this._debugCube.rotation.y = -time * (this._id + 1);
+        // this._debugCube.rotation.x = time * (this._id + 1);
+        // this._debugCube.rotation.y = -time * (this._id + 1);
     }
 
     resize(width, height) {
@@ -66,17 +64,18 @@ class Scene extends THREE.Scene {
     }
 
     _createDebugCube() {
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshBasicMaterial({
-            color: 'red',
-        });
+        // const geometry = new THREE.BoxGeometry(1, 1, 1);
+        // const material = new THREE.MeshBasicMaterial({
+        //     color: 'red',
+        // });
 
         // const mesh = new THREE.Mesh(geometry, material);
-
         // this.add(mesh);
-        const mesh = ResourceLoader.get('testDraco').scene;
 
+        // Test model with draco compression
+        const mesh = ResourceLoader.get('testDraco').scene;
         this.add(mesh);
+
         return mesh;
     }
 
