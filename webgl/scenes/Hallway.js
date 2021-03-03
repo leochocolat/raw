@@ -13,6 +13,7 @@ class Hallway extends RenderTargetScene {
     constructor(options) {
         super(options);
 
+        this._name = options.name;
         this._id = options.id;
         this._debugger = options.debugger;
         this._width = options.width;
@@ -47,6 +48,14 @@ class Hallway extends RenderTargetScene {
     update(time, delta) {
         super.update(time, delta);
         this._animationController.update(delta);
+    }
+
+    /**
+     * Private
+     */
+    update(time, delta) {
+        // console.log(`update child ${this._name}`);
+        super.update(time, delta);
     }
 }
 

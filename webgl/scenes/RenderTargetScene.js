@@ -51,12 +51,10 @@ class RenderTargetScene extends THREE.Scene {
 
     setActive() {
         this._isActive = true;
-        // console.log(`Scene ${this._name} is active`);
     }
 
     setInactive() {
         this._isActive = false;
-        // console.log(`Scene ${this._name} is inactive`);
     }
 
     update(time, delta) {

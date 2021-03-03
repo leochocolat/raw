@@ -5,6 +5,8 @@ import gsap from 'gsap';
 import page from '@/mixins/page';
 
 export default {
+    name: '',
+
     mixins: [page],
 
     methods: {
