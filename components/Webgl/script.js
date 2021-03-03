@@ -8,6 +8,13 @@ export default {
     computed: {
         ...mapGetters({
             isDebug: 'context/isDebug',
+            activeScene: 'scenes/active',
+        }),
+    },
+
+    watch: {
+        ...mapGetters({
+            activeScene: 'scenes/active',
         }),
     },
 
@@ -21,5 +28,8 @@ export default {
             nuxtRoot: this.$root,
             isDebug: this.isDebug,
         });
+
+        if (this.activeScene === '') return;
+        this.$root.webglApp.sceneManager.setActiveScene(this.activeScene);
     },
 };

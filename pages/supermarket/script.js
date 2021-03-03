@@ -10,7 +10,7 @@ export default {
     mixins: [page],
 
     mounted() {
-        this.$root.webglApp.sceneManager.setActiveScene(this.$options.name);
+        this.$store.dispatch('scenes/setActiveScene', this.$options.name);
     },
 
     methods: {

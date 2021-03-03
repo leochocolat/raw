@@ -12,6 +12,7 @@ class Hallway extends RenderTargetScene {
     constructor(options) {
         super(options);
 
+        this._name = options.name;
         this._id = options.id;
         this._debugger = options.debugger;
         this._width = options.width;
@@ -19,6 +20,14 @@ class Hallway extends RenderTargetScene {
         this._isActive = options.isActive;
 
         this.background = new THREE.Color(data.colors[this._id]);
+    }
+
+    /**
+     * Private
+     */
+    update(time, delta) {
+        // console.log(`update child ${this._name}`);
+        super.update(time, delta);
     }
 }
 
