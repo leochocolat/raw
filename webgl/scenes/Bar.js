@@ -14,18 +14,25 @@ class Bar extends RenderTargetScene {
     constructor(options) {
         super(options);
 
-        this._id = options.id;
-        this._debugger = options.debugger;
-        this._width = options.width;
-        this._height = options.height;
-        this._isActive = options.isActive;
-
         this.background = new THREE.Color(data.colors[this._id]);
 
         this._dracoModel = this._setupModel();
         this._setupAnimationsModel();
     }
 
+    /**
+     * Public
+     */
+    update(time, delta) {
+        if (!this._isActive) return;
+
+        super.update(time, delta);
+        this._animationController.update(delta);
+    }
+
+    /**
+     * Private
+     */
     _setupModel() {
         const mesh = ResourceLoader.get('dracoScene_02');
 
@@ -43,11 +50,6 @@ class Bar extends RenderTargetScene {
         animationController.playAnimation(animationController.actionType.Idle);
 
         return animationController;
-    }
-
-    update(time, delta) {
-        super.update(time, delta);
-        this._animationController.update(delta);
     }
 }
 

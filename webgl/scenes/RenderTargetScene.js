@@ -51,19 +51,19 @@ class RenderTargetScene extends THREE.Scene {
 
     setActive() {
         this._isActive = true;
+        this._orbitControls.enabled = true;
     }
 
     setInactive() {
         this._isActive = false;
+        this._orbitControls.enabled = false;
     }
 
     update(time, delta) {
-        // if (!this._isActive) return;
+        if (!this._isActive) return;
 
         this._debugCube.rotation.x = time;
         this._debugCube.rotation.y = -time;
-
-        // this._animationController.update(delta);
     }
 
     resize(width, height) {
@@ -94,6 +94,7 @@ class RenderTargetScene extends THREE.Scene {
 
     _createOrbitControls() {
         const orbitControls = new OrbitControls(this._camera, this._renderer.domElement);
+        orbitControls.enabled = false;
         return orbitControls;
     }
 

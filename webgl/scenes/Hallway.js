@@ -26,6 +26,19 @@ class Hallway extends RenderTargetScene {
         this._setupAnimationsModel();
     }
 
+    /**
+     * Public
+     */
+    update(time, delta) {
+        if (!this._isActive) return;
+
+        super.update(time, delta);
+        this._animationController.update(delta);
+    }
+
+    /**
+     * Private
+     */
     _setupModel() {
         const mesh = ResourceLoader.get('dracoScene_01');
 
@@ -43,19 +56,6 @@ class Hallway extends RenderTargetScene {
         animationController.playAnimation(animationController.actionType.Idle);
 
         return animationController;
-    }
-
-    update(time, delta) {
-        super.update(time, delta);
-        this._animationController.update(delta);
-    }
-
-    /**
-     * Private
-     */
-    update(time, delta) {
-        // console.log(`update child ${this._name}`);
-        super.update(time, delta);
     }
 }
 
