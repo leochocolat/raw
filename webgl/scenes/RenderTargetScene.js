@@ -1,6 +1,5 @@
 // Vendor
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 // Data
 import data from '../data';

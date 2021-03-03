@@ -3,6 +3,7 @@ import * as THREE from 'three';
 
 // Objects
 import Screen from '@/webgl/objects/Screen';
+import ScreensContainer from '@/webgl/objects/ScreensContainer';
 
 // Scenes
 import scenesData from '@/webgl/scenes';
@@ -30,6 +31,7 @@ class SceneManager extends THREE.Scene {
         this._camera = this._createCamera();
         this._scenes = this._createScenes();
         this._screens = this._createScreens();
+        this._screensContainer = this._createScreensContainer();
     }
 
     /**
@@ -84,6 +86,8 @@ class SceneManager extends THREE.Scene {
             const screen = this._screens[key];
             screen.update(time, delta);
         }
+
+        this._screensContainer.update(time, delta);
     }
 
     resize(width, height) {
@@ -97,6 +101,8 @@ class SceneManager extends THREE.Scene {
             const screen = this._screens[key];
             screen.resize(width, height);
         }
+
+        this._screensContainer.resize(width, height);
 
         this._camera.fov = (180 * (2 * Math.atan(this._height / 2 / PESPECTIVE))) / Math.PI;
         this._camera.aspect = this._width / this._height;
@@ -156,6 +162,21 @@ class SceneManager extends THREE.Scene {
         }
 
         return screens;
+    }
+
+    _createScreensContainer() {
+        const screensContainer = new ScreensContainer({
+            scenes: this._scenes,
+            debugger: this._debugger,
+            width: this._width,
+            height: this._height,
+        });
+
+        screensContainer.position.z = 1;
+
+        this.add(screensContainer);
+
+        return screensContainer;
     }
 
     _createDebugger() {
