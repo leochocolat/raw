@@ -13,9 +13,9 @@ export default {
     },
 
     watch: {
-        ...mapGetters({
-            activeScene: 'scenes/active',
-        }),
+        activeScene(newValue) {
+            this.$root.webglApp.sceneManager.setActiveScene(newValue);
+        },
     },
 
     beforeDestroy() {
