@@ -8,28 +8,28 @@ class AnimationComponent {
         this.actionType = {};
         this.mixer = null;
         this.currentAnim = null;
-        this.setupMixer();
+        this._setupMixer();
 
         for (let index = 0; index < this.model.animations.length; index++) {
             const animation = this.model.animations[index];
-            this.setupAnimations(animation, animation.name, index);
+            this._setupAnimations(animation, animation.name, index);
         }
 
-        this.activateAllActions();
+        this._activateAllActions();
     }
 
-    setupMixer() {
+    _setupMixer() {
         this.mixer = new THREE.AnimationMixer(this.model.scene);
     }
 
-    setupAnimations(action, actionName, animationNumber) {
+    _setupAnimations(action, actionName, animationNumber) {
         this.actionType[actionName] = this.mixer.clipAction(this.animations[animationNumber]);
         this.actions.push(this.actionType[actionName]);
     }
 
-    activateAllActions(action, actionWeight) {
+    _activateAllActions(action, actionWeight) {
         this.actions.forEach((action) => {
-            this.setWeight(action, 1.0);
+            this._setWeight(action, 1.0);
         });
     }
 
@@ -45,7 +45,7 @@ class AnimationComponent {
         });
     }
 
-    setWeight(action, weight) {
+    _setWeight(action, weight) {
         action.enabled = true;
         action.setEffectiveTimeScale(1);
         action.setEffectiveWeight(weight);

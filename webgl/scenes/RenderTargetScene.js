@@ -4,7 +4,6 @@ import * as THREE from 'three';
 // Data
 import data from '../data';
 import ResourceLoader from '@/utils/ResourceLoader';
-import AnimationComponent from '@/utils/AnimationComponent';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
@@ -24,7 +23,6 @@ class RenderTargetScene extends THREE.Scene {
         this._renderTarget = this._createRenderTarget();
         this._camera = this._createCamera();
         this._debugCube = this._createDebugCube();
-        // this._animationController = this._createAnimationController();
 
         this._orbitControls = this._createOrbitControls();
         this._ambientLight = this._createAmbientLight();
@@ -62,7 +60,7 @@ class RenderTargetScene extends THREE.Scene {
     }
 
     update(time, delta) {
-        if (!this._isActive) return;
+        // if (!this._isActive) return;
 
         this._debugCube.rotation.x = time;
         this._debugCube.rotation.y = -time;
@@ -110,19 +108,7 @@ class RenderTargetScene extends THREE.Scene {
         const mesh = new THREE.Mesh(geometry, material);
         this.add(mesh);
 
-        // Test model with draco compression
-        // const mesh = ResourceLoader.get('testDraco').scene;
-        // this.add(mesh);
-        // this.add(mesh.scene);
-
         return mesh;
-    }
-
-    _createAnimationController() {
-        const animationController = new AnimationComponent(this._debugCube);
-        animationController.playAnimation(animationController.actionType.Run);
-
-        return animationController;
     }
 
     _createAmbientLight() {

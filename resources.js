@@ -14,13 +14,14 @@ const images = [];
 const webgl = [
     {
         type: 'draco',
-        name: 'testDraco',
-        path: '/models/modelDraco.gltf',
+        name: 'dracoScene_01',
+        path: '/models/Scene_01.glb',
     },
+
     {
         type: 'draco',
-        name: 'dracoPeople',
-        path: '/models/Scene_People-D.glb',
+        name: 'dracoScene_02',
+        path: '/models/Scene_02.glb',
     },
 ];
 
