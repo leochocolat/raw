@@ -1,11 +1,12 @@
 // Vendor
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 // Data
 import data from '../data';
-import ResourceLoader from '@/utils/ResourceLoader';
 
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+// Object
+import Cameras from '../objects/Cameras';
 
 class RenderTargetScene extends THREE.Scene {
     constructor(options) {
@@ -13,28 +14,25 @@ class RenderTargetScene extends THREE.Scene {
 
         this._name = options.name;
         this._id = options.id;
+        this._renderer = options.renderer;
         this._debugger = options.debugger;
         this._width = options.width;
         this._height = options.height;
         this._isActive = options.isActive;
-        this._renderer = options.renderer;
         this.background = new THREE.Color(data.colors[this._id]);
 
         this._renderTarget = this._createRenderTarget();
-        this._camera = this._createCamera();
         this._debugCube = this._createDebugCube();
-
-        this._orbitControls = this._createOrbitControls();
         this._ambientLight = this._createAmbientLight();
-
         this._debugFolder = this._createDebugFolder();
+        this._cameras = this._createCameras();
     }
 
     /**
      * Public
      */
     get camera() {
-        return this._camera;
+        return this._cameras.active;
     }
 
     get renderTarget() {
@@ -51,12 +49,12 @@ class RenderTargetScene extends THREE.Scene {
 
     setActive() {
         this._isActive = true;
-        this._orbitControls.enabled = true;
+        this._cameras.setActive();
     }
 
     setInactive() {
         this._isActive = false;
-        this._orbitControls.enabled = false;
+        this._cameras.setInactive();
     }
 
     update(time, delta) {
@@ -71,9 +69,7 @@ class RenderTargetScene extends THREE.Scene {
         this._height = height;
 
         this._renderTarget.setSize(this._width, this._height);
-
-        this._camera.aspect = this._width / this._height;
-        this._camera.updateProjectionMatrix();
+        this._cameras.resize(width, height);
     }
 
     /**
@@ -85,17 +81,17 @@ class RenderTargetScene extends THREE.Scene {
         return renderTarget;
     }
 
-    _createCamera() {
-        const camera = new THREE.PerspectiveCamera(75, this._width / this._height, 0.1, 1000);
-        camera.position.z = 2;
+    _createCameras() {
+        const cameras = new Cameras({
+            renderer: this._renderer,
+            isActive: this._isActive,
+            debugger: this._debugger,
+            debugFolder: this._debugFolder,
+            width: this._width,
+            height: this._height,
+        });
 
-        return camera;
-    }
-
-    _createOrbitControls() {
-        const orbitControls = new OrbitControls(this._camera, this._renderer.domElement);
-        orbitControls.enabled = false;
-        return orbitControls;
+        return cameras;
     }
 
     _createDebugCube() {
