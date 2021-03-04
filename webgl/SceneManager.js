@@ -157,7 +157,7 @@ class SceneManager extends THREE.Scene {
                 isActive: false,
             });
             screens[key] = screen;
-            this.add(screen);
+            // this.add(screen);
             index++;
         }
 

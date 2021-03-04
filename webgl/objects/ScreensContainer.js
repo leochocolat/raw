@@ -28,6 +28,7 @@ class ScreensContainer extends THREE.Mesh {
         this._height = height;
 
         this.scale.set(this._width, this._height, 1);
+        this.material.uniforms.u_resolution.value.set(this._width, this._height);
     }
 
     /**
@@ -40,7 +41,9 @@ class ScreensContainer extends THREE.Mesh {
     }
 
     _createMaterial() {
-        const uniforms = {};
+        const uniforms = {
+            u_resolution: { value: new THREE.Vector2(this._width, this._height) },
+        };
 
         let index = 0;
         for (const key in this._scenes) {
@@ -52,6 +55,7 @@ class ScreensContainer extends THREE.Mesh {
             uniforms,
             fragmentShader,
             vertexShader,
+            transparent: true,
         });
 
         return material;
