@@ -17,15 +17,14 @@ class Bar extends RenderTargetScene {
         this.background = new THREE.Color(data.colors[this._id]);
 
         this._dracoModel = this._setupModel();
-        this._setupAnimationsModel();
+        this._animationController = this._createAnimationController();
     }
 
     /**
      * Public
      */
-    update(time, delta) {
-        if (!this._isActive) return;
 
+    update(time, delta) {
         super.update(time, delta);
         this._animationController.update(delta);
     }
@@ -33,16 +32,13 @@ class Bar extends RenderTargetScene {
     /**
      * Private
      */
+
     _setupModel() {
-        const mesh = ResourceLoader.get('dracoScene_02');
+        const dracoModel = ResourceLoader.get('dracoScene_02');
 
-        this.add(mesh.scene);
+        this.add(dracoModel.scene);
 
-        return mesh;
-    }
-
-    _setupAnimationsModel() {
-        this._animationController = this._createAnimationController();
+        return dracoModel;
     }
 
     _createAnimationController() {
