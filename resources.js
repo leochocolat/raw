@@ -12,6 +12,7 @@ const images = [];
  * WebGL
  */
 const webgl = [
+    // Models
     {
         type: 'draco',
         name: 'dracoScene_01',
@@ -27,6 +28,27 @@ const webgl = [
         type: 'draco',
         name: 'dracoScene_03',
         path: '/models/Scene_03.glb',
+    },
+    // Videos
+    {
+        type: 'videoTexture',
+        name: 'video_test_0',
+        path: '/videos/video_test_0.mp4',
+    },
+    {
+        type: 'videoTexture',
+        name: 'video_test_1',
+        path: '/videos/video_test_1.mp4',
+    },
+    {
+        type: 'videoTexture',
+        name: 'video_test_2',
+        path: '/videos/video_test_2.mp4',
+    },
+    {
+        type: 'videoTexture',
+        name: 'video_test_3',
+        path: '/videos/video_test_3.mp4',
     },
 ];
 

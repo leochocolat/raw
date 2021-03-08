@@ -1,4 +1,5 @@
 // Vendor
+import ResourceLoader from '@/utils/ResourceLoader';
 import * as THREE from 'three';
 
 // Shaders
@@ -16,6 +17,7 @@ class ScreensContainer extends THREE.Mesh {
 
         this.geometry = this._createGeometry();
         this.material = this._createMaterial();
+        this._debugFolder = this._createDebugFolder();
     }
 
     /**
@@ -49,7 +51,9 @@ class ScreensContainer extends THREE.Mesh {
         this.material.uniforms.u_scale.value = 2;
     }
 
-    update(time, delta) {}
+    update(time, delta) {
+        this.material.uniforms.u_time.value = time;
+    }
 
     resize(width, height) {
         this._width = width;
@@ -63,7 +67,7 @@ class ScreensContainer extends THREE.Mesh {
      * Private
      */
     _createGeometry() {
-        const geometry = new THREE.PlaneGeometry(1, 1, 32);
+        const geometry = new THREE.PlaneGeometry(1, 1, 64);
 
         return geometry;
     }
@@ -73,6 +77,9 @@ class ScreensContainer extends THREE.Mesh {
             u_resolution: { value: new THREE.Vector2(this._width, this._height) },
             u_size: { value: 0.5 },
             u_scale: { value: 2 },
+            u_time: { value: 0.0 },
+            u_scan_speed: { value: 1.0 },
+            u_scan_strength: { value: 10.0 },
         };
 
         let index = 0;
@@ -81,6 +88,8 @@ class ScreensContainer extends THREE.Mesh {
             uniforms[`u_textureAlpha_${index}`] = { value: 1 };
             uniforms[`u_stepFactor_${index}`] = { value: 0.5 };
 
+            // Debug
+            // uniforms[`u_texture_${index}`] = { value: ResourceLoader.get(`video_test_${index}`) };
             index++;
         }
 
@@ -92,6 +101,17 @@ class ScreensContainer extends THREE.Mesh {
         });
 
         return material;
+    }
+
+    _createDebugFolder() {
+        if (!this._debugger) return;
+
+        const debugFolder = this._debugger.addFolder({ title: 'Screens Container', expanded: false });
+
+        debugFolder.addInput(this.material.uniforms.u_scan_speed, 'value', { label: 'Scan speed', min: 0.0, max: 5.0 });
+        debugFolder.addInput(this.material.uniforms.u_scan_strength, 'value', { label: 'Scan strength', min: 0.0, max: 50.0 });
+
+        return debugFolder;
     }
 }
 

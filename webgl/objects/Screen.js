@@ -39,14 +39,12 @@ class Screen extends THREE.Mesh {
         this._isActive = true;
         this._setScale();
         this._setPosition();
-        // console.log(`Screen ${this._name} is active`);
     }
 
     setInactive() {
         this._isActive = false;
         this._setScale();
         this._setPosition();
-        // console.log(`Screen ${this._name} is inactive`);
     }
 
     update(time, delta) {
