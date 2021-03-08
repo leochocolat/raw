@@ -51,6 +51,8 @@ class SceneManager extends THREE.Scene {
         activeScene.setActive();
         activeScreen.setActive();
 
+        this._screensContainer.updateActiveScreen(sceneName, activeScreen.sceneId);
+
         for (const key in this._scenes) {
             if (key === sceneName) continue;
             this._scenes[key].setInactive();
@@ -61,6 +63,8 @@ class SceneManager extends THREE.Scene {
     }
 
     setInactive() {
+        this._screensContainer.updateInactiveScreen();
+
         for (const key in this._scenes) {
             this._scenes[key].setInactive();
             this._screens[key].setInactive();
@@ -170,6 +174,7 @@ class SceneManager extends THREE.Scene {
             debugger: this._debugger,
             width: this._width,
             height: this._height,
+            isActive: false,
         });
 
         screensContainer.position.z = 1;

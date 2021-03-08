@@ -31,6 +31,10 @@ class Screen extends THREE.Mesh {
         return this._isActive;
     }
 
+    get sceneId() {
+        return this._id;
+    }
+
     setActive() {
         this._isActive = true;
         this._setScale();

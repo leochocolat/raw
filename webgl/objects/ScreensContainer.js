@@ -21,6 +21,34 @@ class ScreensContainer extends THREE.Mesh {
     /**
      * Public
      */
+
+    updateActiveScreen(sceneName, sceneId) {
+        let index = 0;
+        for (const key in this._scenes) {
+            if (key === sceneName) {
+                this.material.uniforms[`u_textureAlpha_${sceneId}`].value = 1;
+                this.material.uniforms[`u_stepFactor_${sceneId}`].value = 0;
+            } else {
+                this.material.uniforms[`u_textureAlpha_${index}`].value = 0;
+                this.material.uniforms[`u_stepFactor_${index}`].value = 1;
+            }
+            index++;
+        }
+        this.material.uniforms.u_size.value = 0;
+        this.material.uniforms.u_scale.value = 1;
+    }
+
+    updateInactiveScreen() {
+        let index = 0;
+        for (const key in this._scenes) {
+            this.material.uniforms[`u_textureAlpha_${index}`].value = 1;
+            this.material.uniforms[`u_stepFactor_${index}`].value = 0.5;
+            index++;
+        }
+        this.material.uniforms.u_size.value = 0.5;
+        this.material.uniforms.u_scale.value = 2;
+    }
+
     update(time, delta) {}
 
     resize(width, height) {
@@ -43,11 +71,16 @@ class ScreensContainer extends THREE.Mesh {
     _createMaterial() {
         const uniforms = {
             u_resolution: { value: new THREE.Vector2(this._width, this._height) },
+            u_size: { value: 0.5 },
+            u_scale: { value: 2 },
         };
 
         let index = 0;
         for (const key in this._scenes) {
             uniforms[`u_texture_${index}`] = { value: this._scenes[key].renderTarget.texture };
+            uniforms[`u_textureAlpha_${index}`] = { value: 1 };
+            uniforms[`u_stepFactor_${index}`] = { value: 0.5 };
+
             index++;
         }
 

@@ -23,6 +23,11 @@ const webgl = [
         name: 'dracoScene_02',
         path: '/models/Scene_02.glb',
     },
+    {
+        type: 'draco',
+        name: 'dracoScene_03',
+        path: '/models/Scene_03.glb',
+    },
 ];
 
 const resources = [...fonts, ...images, ...webgl];
