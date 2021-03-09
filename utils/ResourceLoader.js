@@ -1,5 +1,6 @@
 // Vendor
 import FontFaceObserver from 'fontfaceobserver';
+import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
@@ -71,6 +72,8 @@ export default class ResourceLoader extends EventDispatcher {
                 return this._loadGltf(resource);
             case 'draco':
                 return this._loadDraco(resource);
+            case 'videoTexture':
+                return this._loadVideoTexture(resource);
         }
     }
 
@@ -115,10 +118,31 @@ export default class ResourceLoader extends EventDispatcher {
                 resource.state = STATE_LOADED;
                 stopWatch.stop();
                 resource.loadingDuration = `${stopWatch.duration}ms`;
-
                 resolve(resource);
             });
         });
+
+        return promise;
+    }
+
+    _loadVideoTexture(resource) {
+        resource.state = STATE_LOADING;
+
+        const video = document.createElement('video');
+        video.setAttribute('autoplay', true);
+        video.setAttribute('loop', true);
+
+        const promise = new Promise((resolve) => {
+            video.addEventListener('canplay', () => {
+                resource.state = STATE_LOADED;
+                resolve(resource);
+            });
+        });
+
+        video.src = resource.path ? this._basePath + resource.path : resource.absolutePath;
+
+        const videoTexture = new THREE.VideoTexture(video);
+        resource.data = videoTexture;
 
         return promise;
     }
