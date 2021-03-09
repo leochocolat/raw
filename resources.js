@@ -29,6 +29,11 @@ const webgl = [
         name: 'dracoScene_03',
         path: '/models/Scene_03.glb',
     },
+    {
+        type: 'draco',
+        name: 'dracoScene_04',
+        path: '/models/Scene_04.glb',
+    },
     // Videos
     {
         type: 'videoTexture',

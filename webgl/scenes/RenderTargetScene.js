@@ -113,7 +113,7 @@ class RenderTargetScene extends THREE.Scene {
         });
 
         const mesh = new THREE.Mesh(geometry, material);
-        this.add(mesh);
+        // this.add(mesh);
 
         return mesh;
     }
