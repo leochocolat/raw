@@ -1,5 +1,6 @@
 // Vendor
 import * as THREE from 'three';
+import gsap from 'gsap';
 
 // Shaders
 import fragmentShader from '../shaders/screen/fragment.glsl';
@@ -26,27 +27,30 @@ class ScreensContainer extends THREE.Mesh {
         let index = 0;
         for (const key in this._scenes) {
             if (key === sceneName) {
-                this.material.uniforms[`u_textureAlpha_${sceneId}`].value = 1;
-                this.material.uniforms[`u_stepFactor_${sceneId}`].value = 0;
+                gsap.to(this.material.uniforms[`u_textureAlpha_${sceneId}`], { value: 1, duration: 0.8, ease: 'power4.inOut' });
+                gsap.to(this.material.uniforms[`u_stepFactor_${sceneId}`], { value: 0, duration: 0.8, ease: 'power4.inOut' });
             } else {
-                this.material.uniforms[`u_textureAlpha_${index}`].value = 0;
-                this.material.uniforms[`u_stepFactor_${index}`].value = 1;
+                gsap.to(this.material.uniforms[`u_textureAlpha_${index}`], { value: 0, duration: 0.85, delay: 0.1 });
+                gsap.to(this.material.uniforms[`u_stepFactor_${index}`], { value: 1, duration: 0.85, delay: 0.1 });
             }
             index++;
         }
-        this.material.uniforms.u_size.value = 0;
-        this.material.uniforms.u_scale.value = 1;
+        gsap.to(this.material.uniforms.u_size, { value: 0, duration: 0.8, ease: 'power3.inOut' });
+        gsap.to(this.material.uniforms.u_scale, { value: 1, duration: 0.8, ease: 'power3.inOut' });
     }
 
     updateInactiveScreen() {
         let index = 0;
+
         for (const key in this._scenes) {
-            this.material.uniforms[`u_textureAlpha_${index}`].value = 1;
-            this.material.uniforms[`u_stepFactor_${index}`].value = 0.5;
+            gsap.to(this.material.uniforms[`u_textureAlpha_${index}`], { value: 1, duration: 0.8, ease: 'power3.inOut' });
+            gsap.to(this.material.uniforms[`u_stepFactor_${index}`], { value: 0.5, duration: 0.8, ease: 'power3.inOut' });
             index++;
         }
-        this.material.uniforms.u_size.value = 0.5;
-        this.material.uniforms.u_scale.value = 2;
+        gsap.to(this.material.uniforms[`u_stepFactor_${index}`], { value: 0.5 });
+
+        gsap.to(this.material.uniforms.u_size, { value: 0.5, duration: 0.5, ease: 'power3.inOut' });
+        gsap.to(this.material.uniforms.u_scale, { value: 2, duration: 0.5, ease: 'power3.inOut' });
     }
 
     update(time, delta) {}

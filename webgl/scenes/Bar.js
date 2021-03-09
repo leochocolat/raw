@@ -37,6 +37,7 @@ class Bar extends RenderTargetScene {
         const dracoModel = ResourceLoader.get('dracoScene_02');
 
         this.add(dracoModel.scene);
+        dracoModel.scene.position.z = -10;
 
         return dracoModel;
     }
