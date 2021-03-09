@@ -2,7 +2,6 @@
 import * as THREE from 'three';
 
 // Objects
-import Screen from '@/webgl/objects/Screen';
 import ScreensContainer from '@/webgl/objects/ScreensContainer';
 
 // Scenes
@@ -34,7 +33,6 @@ class SceneManager extends THREE.Scene {
 
         this._camera = this._createCamera();
         this._scenes = this._createScenes();
-        this._screens = this._createScreens();
         this._screensContainer = this._createScreensContainer();
     }
 
@@ -51,34 +49,25 @@ class SceneManager extends THREE.Scene {
 
     setMenuState(state) {
         this._isMenu = state;
+
+        for (const key in this._scenes) {
+            this._scenes[key].setMenuState(state);
+            if (state) this._scenes[key].transitionToMenu();
+        }
     }
 
     setActiveScene(sceneName) {
         const activeScene = this._scenes[sceneName];
-        const activeScreen = this._screens[sceneName];
+        activeScene.transitionIn();
         activeScene.setActive();
-        activeScreen.setActive();
-
-        this._screensContainer.updateActiveScreen(sceneName, activeScreen.sceneId);
 
         for (const key in this._scenes) {
             if (key === sceneName) continue;
+            this._scenes[key].transitionOut();
             this._scenes[key].setInactive();
-            this._screens[key].setInactive();
         }
 
         this._activeScene = activeScene;
-    }
-
-    setInactive() {
-        this._screensContainer.updateInactiveScreen();
-
-        for (const key in this._scenes) {
-            this._scenes[key].setInactive();
-            this._screens[key].setInactive();
-        }
-
-        this._activeScene = {};
     }
 
     render() {
@@ -102,9 +91,6 @@ class SceneManager extends THREE.Scene {
 
             if (this._isMenu && this._updateIndex !== scene.sceneId) continue;
             scene.update(time, delta);
-
-            const screen = this._screens[key];
-            screen.update(time, delta);
         }
 
         this._screensContainer.update(time, delta);
@@ -120,9 +106,6 @@ class SceneManager extends THREE.Scene {
         for (const key in this._scenes) {
             const scene = this._scenes[key];
             scene.resize(width, height);
-
-            const screen = this._screens[key];
-            screen.resize(width, height);
         }
 
         this._screensContainer.resize(width, height);
@@ -165,28 +148,6 @@ class SceneManager extends THREE.Scene {
         return scenes;
     }
 
-    _createScreens() {
-        const screens = {};
-
-        let index = 0;
-        for (const key in data.scenes) {
-            const screen = new Screen({
-                name: key,
-                id: index,
-                debugger: this._debugger,
-                width: this._width,
-                height: this._height,
-                map: this._scenes[key].renderTarget.texture,
-                isActive: false,
-            });
-            screens[key] = screen;
-            // this.add(screen);
-            index++;
-        }
-
-        return screens;
-    }
-
     _createScreensContainer() {
         const screensContainer = new ScreensContainer({
             scenes: this._scenes,
@@ -215,7 +176,6 @@ class SceneManager extends THREE.Scene {
             })
             .on('change', () => {
                 if (activeScene.name === '') {
-                    this.setInactive();
                     this.setMenuState(true);
                 } else {
                     this.setActiveScene(activeScene.name);
