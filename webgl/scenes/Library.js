@@ -20,6 +20,13 @@ class Library extends RenderTargetScene {
 
         this.background = new THREE.Color(data.colors[this._id]);
     }
+
+    /**
+     * Public
+     */
+    update() {
+        super.update();
+    }
 }
 
 export default Library;

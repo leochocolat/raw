@@ -26,6 +26,10 @@ class SceneManager extends THREE.Scene {
 
         this._activeScene = {};
 
+        // Parital Rendering
+        this._renderIndex = 0;
+        this._updateIndex = 0;
+
         this._debugFolder = this._createDebugger();
 
         this._camera = this._createCamera();
@@ -43,6 +47,10 @@ class SceneManager extends THREE.Scene {
 
     get activeScene() {
         return this._activeScene;
+    }
+
+    setMenuState(state) {
+        this._isMenu = state;
     }
 
     setActiveScene(sceneName) {
@@ -69,22 +77,30 @@ class SceneManager extends THREE.Scene {
             this._scenes[key].setInactive();
             this._screens[key].setInactive();
         }
+
+        this._activeScene = {};
     }
 
     render() {
         for (const key in this._scenes) {
             const scene = this._scenes[key];
+            if (this._isMenu && this._renderIndex !== scene.sceneId) continue;
             this._renderer.setRenderTarget(scene.renderTarget);
             this._renderer.render(scene, scene.camera);
             this._renderer.setRenderTarget(null);
         }
 
         this._renderer.render(this, this._camera);
+
+        // Partial Rendering
+        this._renderIndex = (this._updateIndex + 1) % 4;
     }
 
     update(time, delta) {
         for (const key in this._scenes) {
             const scene = this._scenes[key];
+
+            if (this._isMenu && this._updateIndex !== scene.sceneId) continue;
             scene.update(time, delta);
 
             const screen = this._screens[key];
@@ -92,6 +108,9 @@ class SceneManager extends THREE.Scene {
         }
 
         this._screensContainer.update(time, delta);
+
+        // Partial Rendering
+        this._updateIndex = (this._updateIndex + 1) % 4;
     }
 
     resize(width, height) {
@@ -197,8 +216,10 @@ class SceneManager extends THREE.Scene {
             .on('change', () => {
                 if (activeScene.name === '') {
                     this.setInactive();
+                    this.setMenuState(true);
                 } else {
                     this.setActiveScene(activeScene.name);
+                    this.setMenuState(false);
                 }
             });
 

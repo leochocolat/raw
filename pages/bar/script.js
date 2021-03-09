@@ -11,6 +11,7 @@ export default {
 
     mounted() {
         this.$store.dispatch('scenes/setActiveScene', this.$options.name);
+        this.$store.dispatch('scenes/setMenuScene', false);
     },
 
     methods: {

@@ -9,12 +9,18 @@ export default {
         ...mapGetters({
             isDebug: 'context/isDebug',
             activeScene: 'scenes/active',
+            menuState: 'scenes/menu',
         }),
     },
 
     watch: {
         activeScene(newValue) {
             this.$root.webglApp.sceneManager.setActiveScene(newValue);
+        },
+
+        menuState(newValue) {
+            console.log(newValue);
+            this.$root.webglApp.sceneManager.setMenuState(newValue);
         },
     },
 
@@ -28,6 +34,8 @@ export default {
             nuxtRoot: this.$root,
             isDebug: this.isDebug,
         });
+
+        this.$root.webglApp.sceneManager.setMenuState(this.menuState);
 
         if (this.activeScene === '') return;
         this.$root.webglApp.sceneManager.setActiveScene(this.activeScene);

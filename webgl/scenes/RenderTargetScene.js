@@ -20,6 +20,10 @@ class RenderTargetScene extends THREE.Scene {
         this._isActive = options.isActive;
         this.background = new THREE.Color(data.colors[this._id]);
 
+        this._clock = new THREE.Clock();
+        this._sceneFps = 0;
+        this._sceneDelta = 0;
+
         this._renderTarget = this._createRenderTarget();
         this._debugCube = this._createDebugCube();
         this._ambientLight = this._createAmbientLight();
@@ -30,6 +34,10 @@ class RenderTargetScene extends THREE.Scene {
     /**
      * Public
      */
+    get sceneId() {
+        return this._id;
+    }
+
     get camera() {
         return this._cameras.active;
     }
@@ -56,8 +64,13 @@ class RenderTargetScene extends THREE.Scene {
         this._cameras.setInactive();
     }
 
-    update(time, delta) {
-        if (!this._isActive) return;
+    update() {
+        const delta = this._clock.getDelta();
+        const time = this._clock.getElapsedTime();
+        const fps = Math.round(1 / delta);
+
+        this._sceneFps = fps;
+        this._sceneDelta = delta;
 
         this._debugCube.rotation.x = time;
         this._debugCube.rotation.y = -time;
