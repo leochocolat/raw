@@ -13,13 +13,6 @@ class Hallway extends RenderTargetScene {
     constructor(options) {
         super(options);
 
-        this._name = options.name;
-        this._id = options.id;
-        this._debugger = options.debugger;
-        this._width = options.width;
-        this._height = options.height;
-        this._isActive = options.isActive;
-
         this.background = new THREE.Color(data.colors[this._id]);
 
         this._dracoModel = this._setupModel();
@@ -29,7 +22,6 @@ class Hallway extends RenderTargetScene {
     /**
      * Public
      */
-
     update() {
         super.update();
         this._animationController.update(this._sceneDelta);
@@ -38,7 +30,6 @@ class Hallway extends RenderTargetScene {
     /**
      * Private
      */
-
     _setupModel() {
         const dracoModel = ResourceLoader.get('dracoScene_01');
 

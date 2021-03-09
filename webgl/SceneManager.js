@@ -51,9 +51,12 @@ class SceneManager extends THREE.Scene {
         this._isMenu = state;
 
         for (const key in this._scenes) {
-            this._scenes[key].setMenuState(state);
             if (state) this._scenes[key].transitionToMenu();
+            this._scenes[key].setMenuState(state);
+            this._scenes[key].setActive();
         }
+
+        this._activeScene = {};
     }
 
     setActiveScene(sceneName) {
@@ -73,7 +76,11 @@ class SceneManager extends THREE.Scene {
     render() {
         for (const key in this._scenes) {
             const scene = this._scenes[key];
+            // Partial Rendering
             if (this._isMenu && this._renderIndex !== scene.sceneId) continue;
+
+            // TODO: Stop Rendering inactive scenes
+
             this._renderer.setRenderTarget(scene.renderTarget);
             this._renderer.render(scene, scene.camera);
             this._renderer.setRenderTarget(null);
@@ -88,8 +95,11 @@ class SceneManager extends THREE.Scene {
     update(time, delta) {
         for (const key in this._scenes) {
             const scene = this._scenes[key];
-
+            // Partial Rendering
             if (this._isMenu && this._updateIndex !== scene.sceneId) continue;
+
+            // TODO: Stop Updating inactive scenes
+
             scene.update(time, delta);
         }
 

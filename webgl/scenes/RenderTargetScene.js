@@ -80,7 +80,6 @@ class RenderTargetScene extends THREE.Scene {
 
         this._timelineOut = new gsap.timeline();
 
-        // this._timelineOut.to(this._uniforms[`u_texture_alpha_${this._id}`], { value: 0, duration: 0.8, ease: 'power4.inOut' });
         this._timelineOut.to(this._uniforms[`u_step_factor_${this._id}`], { value: 1, duration: 0.8, ease: 'power4.inOut' }, 0);
 
         return this._timelineOut;
@@ -92,7 +91,6 @@ class RenderTargetScene extends THREE.Scene {
 
         this._timelineMenu = new gsap.timeline();
 
-        // this._timelineMenu.to(this._uniforms[`u_texture_alpha_${this._id}`], { value: 1, duration: 0.8, ease: 'power3.inOut' });
         this._timelineMenu.to(this._uniforms[`u_step_factor_${this._id}`], { value: 0.5, duration: 0.8, ease: 'power3.inOut' }, 0);
         this._timelineMenu.to(this._uniforms[`u_size_${this._id}`], { value: 0.5, duration: 0.8, ease: 'power3.inOut' }, 0);
         this._timelineMenu.to(this._uniforms[`u_scale_${this._id}`], { value: 2, duration: 0.8, ease: 'power3.inOut' }, 0);
@@ -112,6 +110,7 @@ class RenderTargetScene extends THREE.Scene {
 
     setMenuState(state) {
         this._isMenu = state;
+        this._cameras.setInactive();
     }
 
     update() {

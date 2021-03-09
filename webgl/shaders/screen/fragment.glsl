@@ -10,11 +10,6 @@ uniform float u_step_factor_1;
 uniform float u_step_factor_2;
 uniform float u_step_factor_3;
 
-uniform float u_texture_alpha_0;
-uniform float u_texture_alpha_1;
-uniform float u_texture_alpha_2;
-uniform float u_texture_alpha_3;
-
 uniform float u_scale_0;
 uniform float u_scale_1;
 uniform float u_scale_2;
@@ -123,16 +118,16 @@ void main() {
     vec4 texel_3 = texture2D(u_texture_3, uv_3);
 
     float factore_0 = step(-1. + u_step_factor_0, -vUv.x) * step(u_step_factor_0, vUv.y);
-    texel_0 *= factore_0 * u_texture_alpha_0;
+    texel_0 *= factore_0;
 
     float factore_1 = step(u_step_factor_1, vUv.x) * step(u_step_factor_1, vUv.y);
-    texel_1 *= factore_1 * u_texture_alpha_1;
+    texel_1 *= factore_1;
 
     float factore_2 = step(-1. + u_step_factor_2, -vUv.x) * step(-1. + u_step_factor_2, -vUv.y);
-    texel_2 *= factore_2 * u_texture_alpha_2;
+    texel_2 *= factore_2;
 
     float factore_3 = step(u_step_factor_3, vUv.x) * step(-1. + u_step_factor_3, -vUv.y);
-    texel_3 *= factore_3 * u_texture_alpha_3;
+    texel_3 *= factore_3;
 
     vec4 blended = texel_0 + texel_1 + texel_2 + texel_3;
 
