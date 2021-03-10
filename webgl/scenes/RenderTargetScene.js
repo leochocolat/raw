@@ -110,7 +110,7 @@ class RenderTargetScene extends THREE.Scene {
 
     setMenuState(state) {
         this._isMenu = state;
-        this._cameras.setInactive();
+        this._cameras.setMenuState(state);
     }
 
     update() {
