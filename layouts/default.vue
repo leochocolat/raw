@@ -1,6 +1,7 @@
 <template>
     <div class="default">
-        <Webgl v-if="isReady" />
+        <Webgl />
+        <!-- <Webgl v-if="isReady" /> -->
         <Preloader />
 
         <!-- <nav>
