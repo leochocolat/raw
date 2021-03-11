@@ -35,12 +35,14 @@ export default class ResourceLoader extends EventDispatcher {
     }
 
     static getResourceByName(name) {
+        // Try to find resource in the cache
         for (let i = 0, len = ResourceLoader.cache.length; i < len; i++) {
             if (ResourceLoader.cache[i].name === name) {
                 return ResourceLoader.cache[i];
             }
         }
 
+        // If the resource is not in the cache yet, load it
         return new Promise((resolve) => {
             let resource = null;
             for (let i = 0; i < resources.length; i++) {

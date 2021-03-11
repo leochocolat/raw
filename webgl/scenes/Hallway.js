@@ -45,7 +45,7 @@ class Hallway extends RenderTargetScene {
      * Private
      */
     async _setupModel() {
-        const dracoModel = await ResourceLoader.get('dracoScene_02');
+        const dracoModel = await ResourceLoader.get('dracoScene_01');
         const clone = cloneSkinnedMesh(dracoModel);
 
         this.add(clone.scene);

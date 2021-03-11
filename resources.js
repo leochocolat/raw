@@ -20,6 +20,11 @@ const webgl = [
     },
     {
         type: 'draco',
+        name: 'dracoScene_01',
+        path: '/models/Scene_01.glb',
+    },
+    {
+        type: 'draco',
         name: 'dracoScene_02',
         path: '/models/Scene_02.glb',
     },

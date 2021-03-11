@@ -1,13 +1,16 @@
 <template>
     <div class="default">
-        <!-- <Webgl v-if="isReady" /> -->
-        <Webgl />
+        <client-only>
+            <Webgl v-if="isReady || isDebug" />
+        </client-only>
+
         <Preloader />
 
         <!-- <nav>
             <nuxt-link :to="localePath('/')">Home</nuxt-link>
             <nuxt-link :to="localePath('about')">About</nuxt-link>
         </nav> -->
+
         <nuxt />
     </div>
 </template>
