@@ -6,7 +6,6 @@ const TAP_TRESHOLD = 2;
 class DragManager {
     constructor(options) {
         this.el = options.el;
-
         this._touchStartPosition = { x: 0, y: 0 };
         this._touchPosition = { x: 0, y: 0 };
 
