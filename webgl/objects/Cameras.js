@@ -55,6 +55,10 @@ class Cameras {
         this._debugCamera.updateProjectionMatrix();
     }
 
+    setModelCamera(camera) {
+        this._mainCamera = camera;
+    }
+
     /**
      * Private
      */

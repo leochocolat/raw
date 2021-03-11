@@ -2,6 +2,7 @@
     <div class="default">
         <Webgl v-if="isReady" />
         <Preloader />
+
         <!-- <nav>
             <nuxt-link :to="localePath('/')">Home</nuxt-link>
             <nuxt-link :to="localePath('about')">About</nuxt-link>

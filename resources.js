@@ -15,10 +15,9 @@ const webgl = [
     // Models
     {
         type: 'draco',
-        name: 'dracoScene_01',
-        path: '/models/Scene_01.glb',
+        name: 'CameraMovement',
+        path: '/models/CameraMovement.glb',
     },
-
     {
         type: 'draco',
         name: 'dracoScene_02',

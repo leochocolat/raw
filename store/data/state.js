@@ -1,6 +1,4 @@
 const state = () => ({
-    active: '',
-    menu: false,
     blurValue: 0,
 });
 

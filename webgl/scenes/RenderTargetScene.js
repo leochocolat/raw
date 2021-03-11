@@ -34,6 +34,10 @@ class RenderTargetScene extends THREE.Scene {
         return this._cameras.active;
     }
 
+    get cameras() {
+        return this._cameras;
+    }
+
     get renderTarget() {
         return this._renderTarget;
     }
@@ -88,6 +92,7 @@ class RenderTargetScene extends THREE.Scene {
             debugFolder: this._debugFolder,
             width: this._width,
             height: this._height,
+            camera: this._camera,
         });
 
         return cameras;
