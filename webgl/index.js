@@ -63,7 +63,7 @@ class WebglApp {
     }
 
     _createSceneManager() {
-        if (this._debugSceneName) return;
+        if (this._isDebug && this._debugSceneName) return;
 
         const sceneManager = new SceneManager({
             canvas: this._canvas,
