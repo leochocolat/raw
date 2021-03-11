@@ -4,11 +4,13 @@ import * as THREE from 'three';
 // Component
 import RenderTargetScene from './RenderTargetScene';
 
+// Utils
+import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
+import AnimationComponent from '@/utils/AnimationComponent';
+
 // Data
 import data from '../data';
 import ResourceLoader from '@/utils/ResourceLoader';
-
-import AnimationComponent from '@/utils/AnimationComponent';
 
 class Bar extends RenderTargetScene {
     constructor(options) {
@@ -16,8 +18,8 @@ class Bar extends RenderTargetScene {
 
         this.background = new THREE.Color(data.colors[this._id]);
 
-        this._dracoModel = this._setupModel();
-        this._animationController = this._createAnimationController();
+        // this._dracoModel = this._setupModel();
+        // this._animationController = this._createAnimationController();
     }
 
     /**
@@ -25,19 +27,20 @@ class Bar extends RenderTargetScene {
      */
     update() {
         super.update();
-        this._animationController.update(this._sceneDelta);
+        // this._animationController.update(this._sceneDelta);
     }
 
     /**
      * Private
      */
     _setupModel() {
-        const dracoModel = ResourceLoader.get('dracoScene_02');
+        const dracoModel = ResourceLoader.get('dracoScene_01');
+        const clone = cloneSkinnedMesh(dracoModel);
 
-        this.add(dracoModel.scene);
-        dracoModel.scene.position.z = -10;
+        this.add(clone.scene);
+        clone.scene.position.z = -10;
 
-        return dracoModel;
+        return clone;
     }
 
     _createAnimationController() {

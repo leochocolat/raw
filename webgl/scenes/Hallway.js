@@ -4,10 +4,13 @@ import * as THREE from 'three';
 // Components
 import RenderTargetScene from './RenderTargetScene';
 
+// Utils
+import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
+import AnimationComponent from '@/utils/AnimationComponent';
+
 // Data
 import data from '../data';
 import ResourceLoader from '@/utils/ResourceLoader';
-import AnimationComponent from '@/utils/AnimationComponent';
 
 class Hallway extends RenderTargetScene {
     constructor(options) {
@@ -29,6 +32,8 @@ class Hallway extends RenderTargetScene {
      */
     update() {
         super.update();
+
+        if (!this._animationController.update) return;
         this._animationController.update(this._sceneDelta);
     }
 
@@ -39,18 +44,20 @@ class Hallway extends RenderTargetScene {
     /**
      * Private
      */
-    _setupModel() {
-        const dracoModel = ResourceLoader.get('CameraMovement');
+    async _setupModel() {
+        const dracoModel = await ResourceLoader.get('dracoScene_02');
+        const clone = cloneSkinnedMesh(dracoModel);
 
-        this.add(dracoModel.scene);
-        dracoModel.scene.position.z = -10;
+        this.add(clone.scene);
+        clone.scene.position.z = -10;
 
-        return dracoModel;
+        return clone;
     }
 
-    _createAnimationController() {
-        const animationController = new AnimationComponent(this._dracoModel);
-        animationController.playAnimation(animationController.actionType.CameraMove);
+    async _createAnimationController() {
+        const model = await this._dracoModel;
+        const animationController = new AnimationComponent(model);
+        animationController.playAnimation(animationController.actionType.Idle);
 
         return animationController;
     }

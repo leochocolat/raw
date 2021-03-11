@@ -1,3 +1,6 @@
+// Vendor
+import { mapGetters } from 'vuex';
+
 // Data
 import resources from '@/resources';
 
@@ -5,6 +8,12 @@ import resources from '@/resources';
 import ResourceLoader from '@/utils/ResourceLoader';
 
 export default {
+    computed: {
+        ...mapGetters({
+            isDebug: 'context/isDebug',
+        }),
+    },
+
     mounted() {
         this.setupResources();
         this.setupEventListeners();
@@ -21,7 +30,7 @@ export default {
         setupResources() {
             const basePath = '';
             this.resources = resources;
-            this.resourceLoader = new ResourceLoader(this.resources, basePath);
+            this.resourceLoader = new ResourceLoader(this.resources, basePath, this.isDebug);
             this.$store.dispatch('preloader/start');
         },
 

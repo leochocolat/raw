@@ -1,48 +1,73 @@
-// Vendor
-import FontFaceObserver from 'fontfaceobserver';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
-
 // Utils
+import { loadImage, loadFont, loadVideoTexture, loadGltf, loadDraco } from './loaders';
 import EventDispatcher from './EventDispatcher';
-import Stopwatch from './Stopwatch';
-import resources from '@/resources';
 
-// States
-const STATE_LOADING = 'loading';
-const STATE_LOADED = 'loaded';
+// Data
+import resources from '../resources';
 
 export default class ResourceLoader extends EventDispatcher {
-    constructor(resources, basePath) {
+    constructor(resources, basePath, isDebug) {
         super();
 
-        this._resources = this._deepClone(resources);
-        this._basePath = basePath;
-        this._allAssetsLoaded = false;
+        this.resources = this._deepClone(resources);
+        this.basePath = basePath;
+
+        if (isDebug) return;
         this._loadResources();
     }
 
     /**
      * Static
      */
+    static resources = [];
+
     static cache = [];
 
-    static get(name) {
-        const resource = this._getResourceByName(name);
+    static basePath = '';
+
+    static async get(name) {
+        const resource = await this.getResourceByName(name);
         return resource.data;
     }
 
     static setResource(resource) {
         ResourceLoader.cache = resource;
-        this._allAssetsLoaded = true;
     }
 
-    static _getResourceByName(name) {
+    static getResourceByName(name) {
         for (let i = 0, len = ResourceLoader.cache.length; i < len; i++) {
-            if (ResourceLoader.cache[i].name === name) return ResourceLoader.cache[i];
+            if (ResourceLoader.cache[i].name === name) {
+                return ResourceLoader.cache[i];
+            }
         }
-        return undefined;
+
+        return new Promise((resolve) => {
+            let resource = null;
+            for (let i = 0; i < resources.length; i++) {
+                if (resources[i].name === name) {
+                    resource = resources[i];
+                    this.loadResource(resource).then((response) => {
+                        resolve(response);
+                    });
+                }
+            }
+        });
+    }
+
+    static loadResource(resource) {
+        switch (resource.type) {
+            case 'image':
+                return loadImage(resource, this.basePath);
+            case 'font':
+                return loadFont(resource, this.basePath);
+            case 'gltf':
+            case 'glb':
+                return loadGltf(resource, this.basePath);
+            case 'draco':
+                return loadDraco(resource, this.basePath);
+            case 'videoTexture':
+                return loadVideoTexture(resource, this.basePath);
+        }
     }
 
     /**
@@ -51,147 +76,14 @@ export default class ResourceLoader extends EventDispatcher {
     _loadResources() {
         const promises = [];
 
-        for (let i = 0, len = this._resources.length; i < len; i++) {
-            promises.push(this._loadResource(this._resources[i]));
+        for (let i = 0, len = this.resources.length; i < len; i++) {
+            promises.push(ResourceLoader.loadResource(this.resources[i]));
         }
 
         return Promise.all(promises).then((responses) => {
             ResourceLoader.cache = responses;
             this.dispatchEvent('complete', responses);
         });
-    }
-
-    _loadResource(resource) {
-        switch (resource.type) {
-            case 'image':
-                return this._loadImage(resource);
-            case 'font':
-                return this._loadFont(resource);
-            case 'gltf':
-            case 'glb':
-                return this._loadGltf(resource);
-            case 'draco':
-                return this._loadDraco(resource);
-            case 'videoTexture':
-                return this._loadVideoTexture(resource);
-        }
-    }
-
-    /**
-     * Loaders
-     */
-    _loadImage(resource) {
-        resource.state = STATE_LOADING;
-        const stopWatch = new Stopwatch();
-        stopWatch.start();
-
-        const image = new Image();
-        image.crossOrigin = '';
-
-        const promise = new Promise((resolve) => {
-            image.onload = () => {
-                resource.state = STATE_LOADED;
-                stopWatch.stop();
-                resource.loadingDuration = `${stopWatch.duration}ms`;
-
-                resolve(resource);
-            };
-        });
-
-        image.src = resource.path ? this._basePath + resource.path : resource.absolutePath;
-        resource.data = image;
-
-        return promise;
-    }
-
-    _loadFont(resource) {
-        resource.state = STATE_LOADING;
-        const stopWatch = new Stopwatch();
-        stopWatch.start();
-
-        const observer = new FontFaceObserver(resource.name, {
-            weight: resource.weight,
-        });
-
-        const promise = new Promise((resolve) => {
-            observer.load().then(() => {
-                resource.state = STATE_LOADED;
-                stopWatch.stop();
-                resource.loadingDuration = `${stopWatch.duration}ms`;
-                resolve(resource);
-            });
-        });
-
-        return promise;
-    }
-
-    _loadVideoTexture(resource) {
-        resource.state = STATE_LOADING;
-
-        const video = document.createElement('video');
-        video.setAttribute('autoplay', true);
-        video.setAttribute('loop', true);
-
-        const promise = new Promise((resolve) => {
-            video.addEventListener('canplay', () => {
-                resource.state = STATE_LOADED;
-                resolve(resource);
-            });
-        });
-
-        video.src = resource.path ? this._basePath + resource.path : resource.absolutePath;
-
-        const videoTexture = new THREE.VideoTexture(video);
-        resource.data = videoTexture;
-
-        return promise;
-    }
-
-    _loadGltf(resource) {
-        resource.state = STATE_LOADING;
-        const stopWatch = new Stopwatch();
-        stopWatch.start();
-
-        const loader = new GLTFLoader();
-
-        const promise = new Promise((resolve) => {
-            loader.load(this._basePath + resource.path, (gltf) => {
-                resource.state = STATE_LOADED;
-                stopWatch.stop();
-                resource.loadingDuration = `${stopWatch.duration}ms`;
-
-                resource.data = gltf;
-                resolve(resource);
-            });
-        });
-
-        return promise;
-    }
-
-    _loadDraco(resource) {
-        resource.state = STATE_LOADING;
-        const stopWatch = new Stopwatch();
-        stopWatch.start();
-
-        const dracoLoader = new DRACOLoader();
-        dracoLoader.setDecoderPath(this._basePath + '/libs/draco/');
-        dracoLoader.setDecoderConfig({ type: 'js' });
-
-        const loader = new GLTFLoader();
-        loader.setDRACOLoader(dracoLoader);
-
-        const promise = new Promise((resolve) => {
-            loader.load(this._basePath + resource.path, (gltf) => {
-                resource.state = STATE_LOADED;
-                stopWatch.stop();
-                resource.loadingDuration = `${stopWatch.duration}ms`;
-
-                resource.data = gltf;
-                resolve(resource);
-            });
-        });
-
-        return promise;
     }
 
     /**
