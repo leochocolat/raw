@@ -9,12 +9,14 @@ import Debugger from '@/utils/Debugger';
 
 // Scene
 import SceneManager from '@/webgl/SceneManager';
+import DebugSceneManager from '@/webgl/DebugSceneManager';
 
 class WebglApp {
     constructor(options) {
         this._canvas = options.canvas;
         this._nuxtRoot = options.nuxtRoot;
         this._isDebug = options.isDebug;
+        this._debugSceneName = options.debugSceneName;
 
         this._width = WindowResizeObserver.width;
         this._height = WindowResizeObserver.height;
@@ -25,6 +27,7 @@ class WebglApp {
         this._debugger = this._isDebug ? this._createDebugger() : null;
         this._renderer = this._createRenderer();
         this._sceneManager = this._createSceneManager();
+        this._debugSceneManager = this._createDebugSceneManager();
 
         this._resize();
 
@@ -60,6 +63,8 @@ class WebglApp {
     }
 
     _createSceneManager() {
+        if (this._debugSceneName) return;
+
         const sceneManager = new SceneManager({
             canvas: this._canvas,
             renderer: this._renderer,
@@ -73,9 +78,27 @@ class WebglApp {
         return sceneManager;
     }
 
+    _createDebugSceneManager() {
+        if (!this._isDebug || !this._debugSceneName) return;
+
+        const debugSceneManager = new DebugSceneManager({
+            canvas: this._canvas,
+            renderer: this._renderer,
+            nuxtRoot: this._nuxtRoot,
+            isDebug: this._isDebug,
+            debugger: this._debugger,
+            width: this._width,
+            height: this._height,
+            sceneName: this._debugSceneName,
+        });
+
+        return debugSceneManager;
+    }
+
     _resize() {
         this._renderer.setSize(this._width, this._height, true);
-        this._sceneManager.resize(this._width, this._height);
+        this._sceneManager?.resize(this._width, this._height);
+        this._debugSceneManager?.resize(this._width, this._height);
     }
 
     // On Tick
@@ -85,13 +108,15 @@ class WebglApp {
         const fps = Math.round(1 / delta);
         this._fps = fps;
 
-        this._sceneManager.update(time, delta, fps);
+        this._sceneManager?.update(time, delta, fps);
+        this._debugSceneManager?.update(time, delta, fps);
 
         this._render();
     }
 
     _render() {
-        this._sceneManager.render();
+        this._sceneManager?.render();
+        this._debugSceneManager?.render();
     }
 
     _createDebugger() {
@@ -142,7 +167,7 @@ class WebglApp {
         const relativePosition = new THREE.Vector2(position.x / this._width, position.y / this._height);
         const normalizedPosition = new THREE.Vector2(relativePosition.x - 0.5, 1 - relativePosition.y - 0.5);
 
-        this._sceneManager.mousemoveHandler({
+        this._sceneManager?.mousemoveHandler({
             position,
             relativePosition,
             normalizedPosition,
