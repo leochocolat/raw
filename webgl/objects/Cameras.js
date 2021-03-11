@@ -44,6 +44,11 @@ class Cameras {
         this._setActiveCamera();
     }
 
+    setMenuState(state) {
+        this._isMenu = state;
+        this._setActiveCamera();
+    }
+
     resize(width, height) {
         this._width = width;
         this._height = height;
@@ -84,7 +89,7 @@ class Cameras {
 
     _setActiveCamera() {
         this._active = this._isDebug ? this._debugCamera : this._mainCamera;
-        this._orbitControls.enabled = this._isDebug && this._isActive;
+        this._orbitControls.enabled = this._isDebug && this._isActive && !this._isMenu;
     }
 
     _createDebugFolder() {

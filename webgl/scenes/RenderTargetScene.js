@@ -1,5 +1,6 @@
 // Vendor
 import * as THREE from 'three';
+import gsap from 'gsap';
 
 // Data
 import data from '../data';
@@ -20,16 +21,29 @@ class RenderTargetScene extends THREE.Scene {
         this._isActive = options.isActive;
         this.background = new THREE.Color(data.colors[this._id]);
 
+        this._clock = new THREE.Clock();
+        this._sceneFps = 0;
+        this._sceneDelta = 0;
+
         this._renderTarget = this._createRenderTarget();
         this._debugCube = this._createDebugCube();
         this._ambientLight = this._createAmbientLight();
         this._debugFolder = this._createDebugFolder();
         this._cameras = this._createCameras();
+        this._uniforms = this._createUniforms();
     }
 
     /**
      * Public
      */
+    get sceneId() {
+        return this._id;
+    }
+
+    get uniforms() {
+        return this._uniforms;
+    }
+
     get camera() {
         return this._cameras.active;
     }
@@ -50,6 +64,44 @@ class RenderTargetScene extends THREE.Scene {
         return this._isActive;
     }
 
+    transitionIn() {
+        this._timelineOut?.kill();
+        this._timelineMenu?.kill();
+
+        this._timelineIn = new gsap.timeline();
+
+        // this._timelineIn.to(this._uniforms[`u_texture_alpha_${this._id}`], { value: 1, duration: 0.8, ease: 'power4.inOut' });
+        this._timelineIn.to(this._uniforms[`u_step_factor_${this._id}`], { value: 0, duration: 0.8, ease: 'power4.inOut' }, 0);
+        this._timelineIn.to(this._uniforms[`u_size_${this._id}`], { value: 0, duration: 0.8, ease: 'power3.inOut' }, 0);
+        this._timelineIn.to(this._uniforms[`u_scale_${this._id}`], { value: 1, duration: 0.8, ease: 'power3.inOut' }, 0);
+
+        return this._timelineIn;
+    }
+
+    transitionOut() {
+        this._timelineIn?.kill();
+        this._timelineMenu?.kill();
+
+        this._timelineOut = new gsap.timeline();
+
+        this._timelineOut.to(this._uniforms[`u_step_factor_${this._id}`], { value: 1, duration: 0.8, ease: 'power4.inOut' }, 0);
+
+        return this._timelineOut;
+    }
+
+    transitionToMenu() {
+        this._timelineOut?.kill();
+        this._timelineIn?.kill();
+
+        this._timelineMenu = new gsap.timeline();
+
+        this._timelineMenu.to(this._uniforms[`u_step_factor_${this._id}`], { value: 0.5, duration: 0.8, ease: 'power3.inOut' }, 0);
+        this._timelineMenu.to(this._uniforms[`u_size_${this._id}`], { value: 0.5, duration: 0.8, ease: 'power3.inOut' }, 0);
+        this._timelineMenu.to(this._uniforms[`u_scale_${this._id}`], { value: 2, duration: 0.8, ease: 'power3.inOut' }, 0);
+
+        return this._timelineMenu;
+    }
+
     setActive() {
         this._isActive = true;
         this._cameras.setActive();
@@ -60,8 +112,18 @@ class RenderTargetScene extends THREE.Scene {
         this._cameras.setInactive();
     }
 
-    update(time, delta) {
-        if (!this._isActive) return;
+    setMenuState(state) {
+        this._isMenu = state;
+        this._cameras.setMenuState(state);
+    }
+
+    update() {
+        const delta = this._clock.getDelta();
+        const time = this._clock.getElapsedTime();
+        const fps = Math.round(1 / delta);
+
+        this._sceneFps = fps;
+        this._sceneDelta = delta;
 
         this._debugCube.rotation.x = time;
         this._debugCube.rotation.y = -time;
@@ -82,6 +144,17 @@ class RenderTargetScene extends THREE.Scene {
         const renderTarget = new THREE.WebGLRenderTarget(this._width, this._height);
 
         return renderTarget;
+    }
+
+    _createUniforms() {
+        const uniforms = {};
+        uniforms[`u_texture_${this._id}`] = { value: this._renderTarget.texture };
+        uniforms[`u_texture_alpha_${this._id}`] = { value: 1 };
+        uniforms[`u_step_factor_${this._id}`] = { value: 0.5 };
+        uniforms[`u_size_${this._id}`] = { value: 0.5 };
+        uniforms[`u_scale_${this._id}`] = { value: 2 };
+
+        return uniforms;
     }
 
     _createCameras() {
@@ -105,7 +178,7 @@ class RenderTargetScene extends THREE.Scene {
         });
 
         const mesh = new THREE.Mesh(geometry, material);
-        // this.add(mesh);
+        this.add(mesh);
 
         return mesh;
     }
@@ -121,6 +194,7 @@ class RenderTargetScene extends THREE.Scene {
         if (!this._debugger) return;
 
         const folder = this._debugger.addFolder({ title: `Scene ${this._name}`, expanded: false });
+        folder.addMonitor(this, '_sceneFps', { label: 'FPS' });
 
         return folder;
     }

@@ -20,6 +20,7 @@ class WebglApp {
         this._height = WindowResizeObserver.height;
 
         this._clock = new THREE.Clock();
+        this._fps = 0;
 
         this._debugger = this._isDebug ? this._createDebugger() : null;
         this._renderer = this._createRenderer();
@@ -72,12 +73,6 @@ class WebglApp {
         return sceneManager;
     }
 
-    _createDebugger() {
-        const debugPanel = new Debugger({ title: '.RAW Debugger' });
-
-        return debugPanel;
-    }
-
     _resize() {
         this._renderer.setSize(this._width, this._height, true);
         this._sceneManager.resize(this._width, this._height);
@@ -87,14 +82,32 @@ class WebglApp {
     _update() {
         const delta = this._clock.getDelta();
         const time = this._clock.getElapsedTime();
+        const fps = Math.round(1 / delta);
+        this._fps = fps;
 
-        this._sceneManager.update(time, delta);
+        this._sceneManager.update(time, delta, fps);
 
         this._render();
     }
 
     _render() {
         this._sceneManager.render();
+    }
+
+    _createDebugger() {
+        const debugPanel = new Debugger({ title: '.RAW Debugger' });
+
+        const performanceFolder = debugPanel.addFolder({ title: 'Performances', expanded: false });
+
+        performanceFolder.addMonitor(this, '_fps', { label: 'FPS' });
+        performanceFolder.addMonitor(this, '_fps', {
+            label: 'FPS GRAPH',
+            view: 'graph',
+            min: 0,
+            max: 100,
+        });
+
+        return debugPanel;
     }
 
     _bindAll() {

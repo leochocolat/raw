@@ -9,7 +9,14 @@ export default {
 
     mixins: [page],
 
+    mounted() {
+        this.$store.dispatch('scenes/setMenuScene', true);
+    },
+
     methods: {
+        /**
+         * Public
+         */
         transitionInit() {
             gsap.set(this.$el, { alpha: 0 });
         },
@@ -37,5 +44,9 @@ export default {
 
             return timeline;
         },
+
+        /**
+         * Private
+         */
     },
 };

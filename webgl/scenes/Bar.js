@@ -23,16 +23,14 @@ class Bar extends RenderTargetScene {
     /**
      * Public
      */
-
-    update(time, delta) {
-        super.update(time, delta);
-        this._animationController.update(delta);
+    update() {
+        super.update();
+        this._animationController.update(this._sceneDelta);
     }
 
     /**
      * Private
      */
-
     _setupModel() {
         const dracoModel = ResourceLoader.get('dracoScene_02');
 

@@ -4,18 +4,21 @@ varying vec2 vUv;
 // Uniforms
 uniform vec3 u_resolution;
 uniform float u_time;
-uniform float u_size;
-uniform float u_scale;
 
-uniform float u_stepFactor_0;
-uniform float u_stepFactor_1;
-uniform float u_stepFactor_2;
-uniform float u_stepFactor_3;
+uniform float u_step_factor_0;
+uniform float u_step_factor_1;
+uniform float u_step_factor_2;
+uniform float u_step_factor_3;
 
-uniform float u_textureAlpha_0;
-uniform float u_textureAlpha_1;
-uniform float u_textureAlpha_2;
-uniform float u_textureAlpha_3;
+uniform float u_scale_0;
+uniform float u_scale_1;
+uniform float u_scale_2;
+uniform float u_scale_3;
+
+uniform float u_size_0;
+uniform float u_size_1;
+uniform float u_size_2;
+uniform float u_size_3;
 
 uniform float u_scan_speed;
 uniform float u_scan_strength;
@@ -89,44 +92,42 @@ vec2 crt(vec2 coord, float bend)
 }
 
 void main() {
-    float scale = u_scale;
-
     // Scan Distortion
     vec2 distorted_uv = vUv;
     distorted_uv = scandistort(distorted_uv);
 
     vec2 centeredUv = vUv - 0.5;
     
-    vec2 uv_0 = centeredUv * scale + 0.5;
-    uv_0.x += u_size;
-    uv_0.y -= u_size;
+    vec2 uv_0 = centeredUv * u_scale_0 + 0.5;
+    uv_0.x += u_size_0;
+    uv_0.y -= u_size_0;
 
-    vec2 uv_1 = centeredUv * scale + 0.5;
-    uv_1.xy -= u_size;
+    vec2 uv_1 = centeredUv * u_scale_1 + 0.5;
+    uv_1.xy -= u_size_1;
 
-    vec2 uv_2 = centeredUv * scale + 0.5;
-    uv_2.xy += u_size;
+    vec2 uv_2 = centeredUv * u_scale_2 + 0.5;
+    uv_2.xy += u_size_2;
 
-    vec2 uv_3 = centeredUv * scale + 0.5;
-    uv_3.y += u_size;
-    uv_3.x -= u_size;
+    vec2 uv_3 = centeredUv * u_scale_3 + 0.5;
+    uv_3.y += u_size_3;
+    uv_3.x -= u_size_3;
 
     vec4 texel_0 = texture2D(u_texture_0, uv_0);
     vec4 texel_1 = texture2D(u_texture_1, uv_1);
     vec4 texel_2 = texture2D(u_texture_2, uv_2);
     vec4 texel_3 = texture2D(u_texture_3, uv_3);
 
-    float factore_0 = step(-1. + u_stepFactor_0, -vUv.x) * step(u_stepFactor_0, vUv.y);
-    texel_0 *= factore_0 * u_textureAlpha_0;
+    float factore_0 = step(-1. + u_step_factor_0, -vUv.x) * step(u_step_factor_0, vUv.y);
+    texel_0 *= factore_0;
 
-    float factore_1 = step(u_stepFactor_1, vUv.x) * step(u_stepFactor_1, vUv.y);
-    texel_1 *= factore_1 * u_textureAlpha_1;
+    float factore_1 = step(u_step_factor_1, vUv.x) * step(u_step_factor_1, vUv.y);
+    texel_1 *= factore_1;
 
-    float factore_2 = step(-1. + u_stepFactor_2, -vUv.x) * step(-1. + u_stepFactor_2, -vUv.y);
-    texel_2 *= factore_2 * u_textureAlpha_2;
+    float factore_2 = step(-1. + u_step_factor_2, -vUv.x) * step(-1. + u_step_factor_2, -vUv.y);
+    texel_2 *= factore_2;
 
-    float factore_3 = step(u_stepFactor_3, vUv.x) * step(-1. + u_stepFactor_3, -vUv.y);
-    texel_3 *= factore_3 * u_textureAlpha_3;
+    float factore_3 = step(u_step_factor_3, vUv.x) * step(-1. + u_step_factor_3, -vUv.y);
+    texel_3 *= factore_3;
 
     vec4 blended = texel_0 + texel_1 + texel_2 + texel_3;
 
