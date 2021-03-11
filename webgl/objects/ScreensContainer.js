@@ -24,16 +24,7 @@ class ScreensContainer extends THREE.Mesh {
     /**
      * Public
      */
-
-    updateActiveScreen() {
-        // gsap.to(this.material.uniforms.u_size, { value: 0, duration: 0.8, ease: 'power3.inOut' });
-        // gsap.to(this.material.uniforms.u_scale, { value: 1, duration: 0.8, ease: 'power3.inOut' });
-    }
-
-    updateInactiveScreen() {
-        // gsap.to(this.material.uniforms.u_size, { value: 0.5, duration: 0.5, ease: 'power3.inOut' });
-        // gsap.to(this.material.uniforms.u_scale, { value: 2, duration: 0.5, ease: 'power3.inOut' });
-    }
+    mousemoveHandler(mouse) {}
 
     update(time, delta) {
         this.material.uniforms.u_time.value = time;

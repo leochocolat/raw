@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 class Cameras {
     constructor(options) {
+        this._sceneName = options.sceneName;
         this._renderer = options.renderer;
         this._isActive = options.isActive;
         this._width = options.width;
@@ -15,7 +16,6 @@ class Cameras {
         this._isDebug = !!this._debugger;
         this._active = this._isDebug ? this._debugCamera : this._mainCamera;
         this._orbitControls = this._createOrbitControls();
-
         this._debugFolder = this._createDebugFolder();
     }
 

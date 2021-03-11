@@ -3,8 +3,8 @@ const mutations = {
         state.active = value;
     },
 
-    SET_MENU_SCENE(state) {
-        state.menu = true;
+    SET_MENU_SCENE(state, value) {
+        state.menu = value;
     },
 };
 

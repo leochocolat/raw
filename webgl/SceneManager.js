@@ -73,6 +73,14 @@ class SceneManager extends THREE.Scene {
         this._activeScene = activeScene;
     }
 
+    mousemoveHandler(mouse) {
+        for (const key in this._scenes) {
+            this._scenes[key].mousemoveHandler(mouse);
+        }
+
+        this._screensContainer.mousemoveHandler(mouse);
+    }
+
     render() {
         for (const key in this._scenes) {
             const scene = this._scenes[key];

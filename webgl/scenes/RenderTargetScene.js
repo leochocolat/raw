@@ -26,7 +26,7 @@ class RenderTargetScene extends THREE.Scene {
         this._sceneDelta = 0;
 
         this._renderTarget = this._createRenderTarget();
-        this._debugCube = this._createDebugCube();
+        // // this._debugCube = this._createDebugCube();
         this._ambientLight = this._createAmbientLight();
         this._debugFolder = this._createDebugFolder();
         this._cameras = this._createCameras();
@@ -113,6 +113,8 @@ class RenderTargetScene extends THREE.Scene {
         this._cameras.setMenuState(state);
     }
 
+    mousemoveHandler(mouse) {}
+
     update() {
         const delta = this._clock.getDelta();
         const time = this._clock.getElapsedTime();
@@ -121,6 +123,7 @@ class RenderTargetScene extends THREE.Scene {
         this._sceneFps = fps;
         this._sceneDelta = delta;
 
+        if (!this._debugCube) return;
         this._debugCube.rotation.x = time;
         this._debugCube.rotation.y = -time;
     }
@@ -155,6 +158,7 @@ class RenderTargetScene extends THREE.Scene {
 
     _createCameras() {
         const cameras = new Cameras({
+            sceneName: this._name,
             renderer: this._renderer,
             isActive: this._isActive,
             debugger: this._debugger,

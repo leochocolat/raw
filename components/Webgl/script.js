@@ -19,7 +19,6 @@ export default {
         },
 
         menuState(newValue) {
-            console.log(newValue);
             this.$root.webglApp.sceneManager.setMenuState(newValue);
         },
     },

@@ -111,17 +111,19 @@ class WebglApp {
     }
 
     _bindAll() {
-        bindAll(this, '_tickHandler', '_resizeHandler');
+        bindAll(this, '_tickHandler', '_resizeHandler', '_mousemoveHandler');
     }
 
     _setupEventListeners() {
         gsap.ticker.add(this._tickHandler);
         WindowResizeObserver.addEventListener('resize', this._resizeHandler);
+        window.addEventListener('mousemove', this._mousemoveHandler);
     }
 
     _removeEventListeners() {
         gsap.ticker.remove(this._tickHandler);
         WindowResizeObserver.removeEventListener('resize', this._resizeHandler);
+        window.removeEventListener('mousemove', this._mousemoveHandler);
     }
 
     _tickHandler() {
@@ -133,6 +135,18 @@ class WebglApp {
         this._height = height;
 
         this._resize();
+    }
+
+    _mousemoveHandler(e) {
+        const position = new THREE.Vector2(e.clientX, e.clientY);
+        const relativePosition = new THREE.Vector2(position.x / this._width, position.y / this._height);
+        const normalizedPosition = new THREE.Vector2(relativePosition.x - 0.5, 1 - relativePosition.y - 0.5);
+
+        this._sceneManager.mousemoveHandler({
+            position,
+            relativePosition,
+            normalizedPosition,
+        });
     }
 }
 

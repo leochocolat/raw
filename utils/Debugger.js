@@ -31,6 +31,7 @@ class Debugger extends Tweakpane {
 
         this.__setupStyle();
         this.__createDragButton();
+        // this.__createExportButton();
         this.__setupEventListeners();
     }
 
@@ -45,13 +46,19 @@ class Debugger extends Tweakpane {
         this.__dragButtonElement.style.cursor = 'grab';
     }
 
+    __createExportButton() {
+        this.__exportButton = this.addButton({ title: 'Export Setting' });
+        this.__exportButton.on('click', this.__exportButtonClickHandler);
+    }
+
     __bindAll() {
-        bindAll(this, '__dragHandler', '__dragButtonMousedownHandler', '__dragButtonMouseupHandler');
+        bindAll(this, '__dragHandler', '__dragButtonMousedownHandler', '__dragButtonMouseupHandler', '__tapHandler', '__exportButtonClickHandler');
     }
 
     __setupEventListeners() {
         this.__dragManager = new DragManager({ el: this.__dragButtonElement });
         this.__dragManager.addEventListener('drag', this.__dragHandler);
+        this.__dragManager.addEventListener('tap', this.__tapHandler);
         this.__dragButtonElement.addEventListener('mousedown', this.__dragButtonMousedownHandler);
         this.__dragButtonElement.addEventListener('mouseup', this.__dragButtonMouseupHandler);
     }
@@ -68,6 +75,8 @@ class Debugger extends Tweakpane {
         this.element.style.transform = `translate(${this.__offset.x}px, ${this.__offset.y}px)`;
     }
 
+    __tapHandler() {}
+
     __dragButtonMousedownHandler() {
         this.__dragButtonElement.style.cursor = 'grabbing';
     }
@@ -75,6 +84,8 @@ class Debugger extends Tweakpane {
     __dragButtonMouseupHandler() {
         this.__dragButtonElement.style.cursor = 'grab';
     }
+
+    __exportButtonClickHandler() {}
 }
 
 export default Debugger;
