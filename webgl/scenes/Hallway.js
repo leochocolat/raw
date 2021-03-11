@@ -35,6 +35,7 @@ class Hallway extends RenderTargetScene {
     _changeCamera() {
         super.cameras.setModelCamera(this._dracoModel.cameras[0]);
     }
+
     /**
      * Private
      */
