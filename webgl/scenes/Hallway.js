@@ -7,10 +7,11 @@ import RenderTargetScene from './RenderTargetScene';
 // Utils
 import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
 import AnimationComponent from '@/utils/AnimationComponent';
+import bindAll from '@/utils/bindAll';
+import SceneResourceLoader from '@/utils/SceneResourceLoader';
 
 // Data
 import data from '../data';
-import ResourceLoader from '@/utils/ResourceLoader';
 
 class Hallway extends RenderTargetScene {
     constructor(options) {
@@ -18,13 +19,11 @@ class Hallway extends RenderTargetScene {
 
         this.background = new THREE.Color(data.colors[this._id]);
 
-        this._dracoModel = this._setupModel();
+        this._bindAll();
 
-        if (this._dracoModel.cameras) {
-            this._changeCamera();
-        }
+        this._resources = this._setupResources();
 
-        this._animationController = this._createAnimationController();
+        this._setupEventListeners();
     }
 
     /**
@@ -33,33 +32,64 @@ class Hallway extends RenderTargetScene {
     update() {
         super.update();
 
-        if (!this._animationController.update) return;
+        if (!this._animationController) return;
         this._animationController.update(this._sceneDelta);
-    }
-
-    _changeCamera() {
-        super.cameras.setModelCamera(this._dracoModel.cameras[0]);
     }
 
     /**
      * Private
      */
-    async _setupModel() {
-        const dracoModel = await ResourceLoader.get('dracoScene_01');
-        const clone = cloneSkinnedMesh(dracoModel);
+    _setupResources() {
+        const resources = new SceneResourceLoader();
+        resources.addResource('dracoScene_01');
+        resources.load();
 
+        return resources;
+    }
+
+    _setup() {
+        this._model = this._createModel();
+        this._animationController = this._createAnimationController();
+        this._modelCamera = this._createModelCameraAnimation();
+    }
+
+    _createModel() {
+        const model = this._resources.get('dracoScene_01');
+        const clone = cloneSkinnedMesh(model);
         this.add(clone.scene);
-        clone.scene.position.z = -10;
 
         return clone;
     }
 
-    async _createAnimationController() {
-        const model = await this._dracoModel;
+    _createAnimationController() {
+        const model = this._model;
         const animationController = new AnimationComponent(model);
         animationController.playAnimation(animationController.actionType.Idle);
 
         return animationController;
+    }
+
+    _createModelCameraAnimation() {
+        if (!this._model.cameras) return;
+
+        super.cameras.setModelCamera(this._model.cameras[0]);
+
+        return this._model.cameras[0];
+    }
+
+    /**
+     * Events
+     */
+    _bindAll() {
+        bindAll(this, '_resourcesReadyHandler');
+    }
+
+    _setupEventListeners() {
+        this._resources.addEventListener('ready', this._resourcesReadyHandler);
+    }
+
+    _resourcesReadyHandler() {
+        this._setup();
     }
 }
 
