@@ -28,7 +28,7 @@ class DebugSceneManager {
     }
 
     render() {
-        this._scene.render();
+        this._renderer.render(this._scene, this._scene.camera);
     }
 
     /**

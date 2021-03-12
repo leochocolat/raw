@@ -23,6 +23,10 @@ class DebugScene extends THREE.Scene {
     /**
      * Public
      */
+    get camera() {
+        return this._camera;
+    }
+
     resize(width, height) {
         this._width = width;
         this._height = height;
@@ -32,10 +36,6 @@ class DebugScene extends THREE.Scene {
     }
 
     update(time, delta) {}
-
-    render() {
-        this._renderer.render(this, this._camera);
-    }
 
     /**
      * Private
