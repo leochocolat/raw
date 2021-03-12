@@ -1,5 +1,6 @@
 // Scenes
 import scenesData from '@/webgl/scenes';
+import DebugScene from './scenes/debugScenes/DebugScene';
 
 class DebugSceneManager {
     constructor(options) {
@@ -36,11 +37,12 @@ class DebugSceneManager {
      */
     _createScene() {
         if (!scenesData[this._sceneName]) {
-            console.error(`Error: Scene '${this._sceneName}' could not be found.`);
-            return;
+            console.warn(`Warning: Scene '${this._sceneName}' could not be found.`);
         }
 
-        const scene = new scenesData[this._sceneName]({
+        const constructor = scenesData[this._sceneName] || DebugScene;
+
+        const scene = new constructor({
             name: this._sceneName,
             debugger: this._debugger,
             renderer: this._renderer,

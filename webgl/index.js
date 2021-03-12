@@ -52,7 +52,7 @@ class WebglApp {
      */
     _createRenderer() {
         const renderer = new THREE.WebGLRenderer({
-            antialias: false,
+            antialias: true,
             canvas: this._canvas,
             alpha: false,
         });
