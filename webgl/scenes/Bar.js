@@ -4,11 +4,14 @@ import * as THREE from 'three';
 // Component
 import RenderTargetScene from './RenderTargetScene';
 
+// Utils
+import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
+import AnimationComponent from '@/utils/AnimationComponent';
+import SceneResourceLoader from '@/utils/SceneResourceLoader';
+import bindAll from '@/utils/bindAll';
+
 // Data
 import data from '../data';
-import ResourceLoader from '@/utils/ResourceLoader';
-
-import AnimationComponent from '@/utils/AnimationComponent';
 
 class Bar extends RenderTargetScene {
     constructor(options) {
@@ -16,8 +19,11 @@ class Bar extends RenderTargetScene {
 
         this.background = new THREE.Color(data.colors[this._id]);
 
-        this._dracoModel = this._setupModel();
-        this._animationController = this._createAnimationController();
+        this._bindAll();
+
+        this._resources = this._setupResources();
+
+        this._setupEventListeners();
     }
 
     /**
@@ -25,26 +31,65 @@ class Bar extends RenderTargetScene {
      */
     update() {
         super.update();
+
+        if (!this._animationController) return;
         this._animationController.update(this._sceneDelta);
     }
 
     /**
      * Private
      */
-    _setupModel() {
-        const dracoModel = ResourceLoader.get('dracoScene_02');
+    _setupResources() {
+        const resources = new SceneResourceLoader();
+        resources.addResource('dracoScene_01');
+        resources.load();
 
-        this.add(dracoModel.scene);
-        dracoModel.scene.position.z = -10;
+        return resources;
+    }
 
-        return dracoModel;
+    _setup() {
+        this._model = this._createModel();
+        this._animationController = this._createAnimationController();
+        this._modelCamera = this._createModelCameraAnimation();
+    }
+
+    _createModel() {
+        const model = this._resources.get('dracoScene_01');
+        const clone = cloneSkinnedMesh(model);
+        this.add(clone.scene);
+
+        return clone;
     }
 
     _createAnimationController() {
-        const animationController = new AnimationComponent(this._dracoModel);
+        const model = this._model;
+        const animationController = new AnimationComponent(model);
         animationController.playAnimation(animationController.actionType.Idle);
 
         return animationController;
+    }
+
+    _createModelCameraAnimation() {
+        if (!this._model.cameras) return;
+
+        super.cameras.setModelCamera(this._model.cameras[0]);
+
+        return this._model.cameras[0];
+    }
+
+    /**
+     * Events
+     */
+    _bindAll() {
+        bindAll(this, '_resourcesReadyHandler');
+    }
+
+    _setupEventListeners() {
+        this._resources.addEventListener('ready', this._resourcesReadyHandler);
+    }
+
+    _resourcesReadyHandler() {
+        this._setup();
     }
 }
 

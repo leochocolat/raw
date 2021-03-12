@@ -12,6 +12,7 @@ export default {
     computed: {
         ...mapGetters({
             isReady: 'preloader/isReady',
+            isDebug: 'context/isDebug',
         }),
     },
 
