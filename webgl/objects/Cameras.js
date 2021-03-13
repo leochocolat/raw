@@ -17,6 +17,7 @@ class Cameras {
         this._active = this._isDebug ? this._debugCamera : this._mainCamera;
         this._orbitControls = this._createOrbitControls();
         this._debugFolder = this._createDebugFolder();
+        this._isMenu = true;
     }
 
     /**
@@ -62,6 +63,7 @@ class Cameras {
 
     setModelCamera(camera) {
         this._mainCamera = camera;
+        this._setActiveCamera();
     }
 
     /**
@@ -88,7 +90,7 @@ class Cameras {
     }
 
     _setActiveCamera() {
-        this._active = this._isDebug ? this._debugCamera : this._mainCamera;
+        this._active = this._isDebug && !this._isMenu ? this._debugCamera : this._mainCamera;
         this._orbitControls.enabled = this._isDebug && this._isActive && !this._isMenu;
     }
 

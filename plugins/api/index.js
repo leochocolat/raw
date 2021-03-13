@@ -29,10 +29,10 @@ export default async (context, inject) => {
     /**
      * Get Entries
      */
-    const entries = await api.getEntries();
+    // const entries = await api.getEntries();
 
-    const getBlurValueEntry = await api.getEntriesByName('blurValue');
-    store.dispatch('data/setBlurValue', getBlurValueEntry.items[0].fields.value);
+    // const getBlurValueEntry = await api.getEntriesByName('blurValue');
+    // store.dispatch('data/setBlurValue', getBlurValueEntry.items[0].fields.value);
 
     /**
      * Update Entry

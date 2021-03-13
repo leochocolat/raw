@@ -41,7 +41,7 @@ class Library extends RenderTargetScene {
      */
     _setupResources() {
         const resources = new SceneResourceLoader();
-        resources.addResource('dracoScene_01');
+        resources.addResource('CameraMovement');
         resources.load();
 
         return resources;
@@ -50,11 +50,11 @@ class Library extends RenderTargetScene {
     _setup() {
         this._model = this._createModel();
         this._animationController = this._createAnimationController();
-        this._modelCamera = this._createModelCameraAnimation();
+        // this._modelCamera = this._createModelCameraAnimation();
     }
 
     _createModel() {
-        const model = this._resources.get('dracoScene_01');
+        const model = this._resources.get('CameraMovement');
         const clone = cloneSkinnedMesh(model);
         this.add(clone.scene);
 
@@ -64,7 +64,7 @@ class Library extends RenderTargetScene {
     _createAnimationController() {
         const model = this._model;
         const animationController = new AnimationComponent(model);
-        animationController.playAnimation(animationController.actionType.Idle);
+        animationController.playAnimation(animationController.actionType.CameraMove);
 
         return animationController;
     }
@@ -73,7 +73,6 @@ class Library extends RenderTargetScene {
         if (!this._model.cameras) return;
 
         super.cameras.setModelCamera(this._model.cameras[0]);
-
         return this._model.cameras[0];
     }
 

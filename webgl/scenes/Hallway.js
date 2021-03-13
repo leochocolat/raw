@@ -41,7 +41,7 @@ class Hallway extends RenderTargetScene {
      */
     _setupResources() {
         const resources = new SceneResourceLoader();
-        resources.addResource('dracoScene_01');
+        resources.addResource('CameraMovement');
         resources.load();
 
         return resources;
@@ -54,8 +54,9 @@ class Hallway extends RenderTargetScene {
     }
 
     _createModel() {
-        const model = this._resources.get('dracoScene_01');
-        const clone = cloneSkinnedMesh(model);
+        const model = this._resources.get('CameraMovement');
+        // const clone = cloneSkinnedMesh(model);
+        const clone = model;
         this.add(clone.scene);
 
         return clone;
@@ -64,7 +65,7 @@ class Hallway extends RenderTargetScene {
     _createAnimationController() {
         const model = this._model;
         const animationController = new AnimationComponent(model);
-        animationController.playAnimation(animationController.actionType.Idle);
+        animationController.playAnimation(animationController.actionType.CameraMove);
 
         return animationController;
     }

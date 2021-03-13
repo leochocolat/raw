@@ -17,6 +17,21 @@ class Blur extends DebugScene {
     }
 
     /**
+     * Public
+     */
+    resize(width, height) {
+        this._plane.material.uniforms.u_resolution.value.set(width, height);
+
+        super.resize(width, height);
+    }
+
+    update(time, delta) {
+        this._plane.material.uniforms.u_time.value = time;
+
+        super.update(time, delta);
+    }
+
+    /**
      * Private
      */
     _createPlane() {
@@ -27,6 +42,8 @@ class Blur extends DebugScene {
         const uniforms = {
             u_texture: { value: texture },
             u_blur_level: { value: 0.5 },
+            u_resolution: { value: new THREE.Vector2(this._width, this._height) },
+            u_time: { value: 0.0 },
         };
 
         const material = new THREE.ShaderMaterial({

@@ -20,6 +20,7 @@
         "contentful": "^8.1.7",
         "contentful-management": "^7.8.0",
         "fontfaceobserver": "^2.1.0",
+        "glsl-fast-gaussian-blur": "^1.0.2",
         "gsap": "^3.5.0",
         "nuxt": "^2.14.3",
         "three": "^0.125.2",

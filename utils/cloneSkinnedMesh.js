@@ -33,5 +33,17 @@ export default function cloneSkinnedMesh(gltf) {
         }
         cloneSkinnedMesh.bind(new THREE.Skeleton(orderedCloneBones, skeleton.boneInverses), cloneSkinnedMesh.matrixWorld);
     }
+
+    // Clone cameras
+    clone.cameras = [];
+
+    for (let i = 0; i < gltf.cameras.length; i++) {
+        const camera = gltf.cameras[i];
+        clone.cameras.push(camera.clone());
+    }
+
+    // console.log(gltf);
+    // console.log(clone);
+
     return clone;
 }
