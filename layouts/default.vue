@@ -1,7 +1,7 @@
 <template>
     <div class="default">
         <client-only>
-            <Webgl v-if="isReady || isDebug" />
+            <Webgl v-if="!isPrototype && (isReady || isDebug)" />
         </client-only>
 
         <Preloader />
