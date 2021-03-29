@@ -1,7 +1,12 @@
 /**
  * Fonts
  */
-const fonts = [];
+const fonts = [
+    {
+        type: 'font',
+        name: 'Default Sans',
+    },
+];
 
 /**
  * Images

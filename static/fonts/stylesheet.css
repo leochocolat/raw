@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'Default Sans';
+    src: url('fonts/DefaultSans-BookMono.eot');
+    src: url('fonts/DefaultSans-BookMono.eot?#iefix') format('embedded-opentype'),
+        url('fonts/DefaultSans-BookMono.woff2') format('woff2'),
+        url('fonts/DefaultSans-BookMono.woff') format('woff'),
+        url('fonts/DefaultSans-BookMono.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

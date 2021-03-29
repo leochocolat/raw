@@ -18,6 +18,7 @@ export default function loadFont(resource) {
 
     const promise = new Promise((resolve) => {
         observer.load().then(() => {
+            console.log('fini');
             resource.state = STATE_LOADED;
             stopWatch.stop();
             resource.loadingDuration = `${stopWatch.duration}ms`;
