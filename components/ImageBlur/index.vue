@@ -1,17 +1,22 @@
 <template>
-    <div class="imageblur">
-        <img
-            src="https://i.picsum.photos/id/692/600/700.jpg?hmac=jmB3mH356VFvuJbVxDtTZfr-9aPpwJg4XEfFhohU7oU"
-            alt=""
-        />
-        <img
-            src="https://i.picsum.photos/id/1018/600/700.jpg?hmac=3DoUFqEWtTk1fxub3ABBymYGlfiXOC52wMLmnx1K1MQ"
-            alt=""
-        />
-        <div ref="container" class="blur__container">
-            <div class="control"></div>
-            <span ref="cursor" class="cursor"></span>
-            <span class="value">{{ blurValue }}</span>
+    <div class="blur">
+        <div class="imageContainer">
+            <img
+                ref="image"
+                src="https://i.picsum.photos/id/692/600/700.jpg?hmac=jmB3mH356VFvuJbVxDtTZfr-9aPpwJg4XEfFhohU7oU"
+                alt=""
+            />
+        </div>
+
+        <div ref="container" class="vote__container">
+            <div ref="" class="caption">
+                Comment montreriez-vous cette image ?
+            </div>
+            <div class="control">
+                <span ref="cursor" class="cursor"></span>
+            </div>
+            <span class="value">{{ blurElm.blurValue }}</span>
+            <div ref="submitVoteBtn" class="submitBtn">Valider</div>
         </div>
     </div>
 </template>
