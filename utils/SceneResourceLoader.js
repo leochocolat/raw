@@ -39,7 +39,7 @@ class SceneResourceLoader extends EventDispatcher {
 
         for (let i = 0; i < this._resources.length; i++) {
             const resource = this._resources[i];
-            const promise = ResourceLoader.get(resource);
+            const promise = ResourceLoader.load(resource);
             promises.push(promise);
         }
 

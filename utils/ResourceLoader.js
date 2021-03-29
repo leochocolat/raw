@@ -25,8 +25,13 @@ export default class ResourceLoader extends EventDispatcher {
 
     static basePath = '';
 
-    static async get(name) {
-        const resource = await this.getResourceByName(name);
+    static get(name) {
+        const resource = this.getResourceByName(name);
+        return resource.data;
+    }
+
+    static async load(name) {
+        const resource = await this.loadResourceByName(name);
         return resource.data;
     }
 
@@ -35,6 +40,15 @@ export default class ResourceLoader extends EventDispatcher {
     }
 
     static getResourceByName(name) {
+        // Try to find resource in the cache
+        for (let i = 0, len = ResourceLoader.cache.length; i < len; i++) {
+            if (ResourceLoader.cache[i].name === name) {
+                return ResourceLoader.cache[i];
+            }
+        }
+    }
+
+    static loadResourceByName(name) {
         // Try to find resource in the cache
         for (let i = 0, len = ResourceLoader.cache.length; i < len; i++) {
             if (ResourceLoader.cache[i].name === name) {
