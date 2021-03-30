@@ -1,6 +1,10 @@
 <template>
-    <div class="prototype"></div>
+    <div class="prototype" @click="clickHandler">
+        <Warning ref="screen1" :data="data.warning" />
+        <Tutorial ref="screen2" :data="data.tutorial1" />
+        <Tutorial ref="screen3" :data="data.tutorial2" />
+    </div>
 </template>
 
-<script src="./script"></script>
+<script src="./script.js"></script>
 <style src="./style.scss" lang="scss" scoped></style>
