@@ -24,9 +24,7 @@
     text-align: center;
     
     @include respond-to('large') {
-        width: vw-l(600px);
-
-        font-size: rem-l(25px);
+        width: vw-l(650px);
     }
 }
 

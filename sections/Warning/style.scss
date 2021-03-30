@@ -17,7 +17,7 @@
 }
 
 .container {
-    width: vw(180px);
+    width: vw(250px);
 
     margin: auto;
 
@@ -25,17 +25,19 @@
     
     @include respond-to('large') {
         width: vw-l(600px);
-
-        font-size: rem-l(25px);
     }
 }
 
 .heading {
     margin-bottom: vw(10px);
 
+    font-size: rem(14px);
+
     color: red;
     
     @include respond-to('large') {
         margin-bottom: vw-l(28px);
+
+        font-size: rem-l(25px);
     }
 }

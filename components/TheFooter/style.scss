@@ -1,0 +1,23 @@
+.footer {
+    display: flex;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    height: vw(40px);
+
+    padding-right: $padding-left;
+    padding-left: $padding-left;
+    
+    @include respond-to('large') {
+        height: vw-l(40px);
+
+        padding-right: $padding-left-l;
+        padding-left: $padding-left-l;
+    }
+}

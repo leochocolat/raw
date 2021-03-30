@@ -1,3 +1,9 @@
 .paragraph {
     font-family: $font-mono;
+
+    font-size: rem(14px);
+
+    @include respond-to('large') {
+        font-size: rem-l(25px);
+    }
 }

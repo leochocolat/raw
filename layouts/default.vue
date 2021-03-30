@@ -12,6 +12,8 @@
         </nav> -->
 
         <nuxt />
+
+        <TheFooter />
     </div>
 </template>
 
