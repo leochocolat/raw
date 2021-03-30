@@ -1,7 +1,7 @@
 <template>
     <div class="blur">
         <div class="container">
-            <div class="imageContainer">
+            <div class="image-container">
                 <img
                     ref="image"
                     src="https://i.picsum.photos/id/692/600/700.jpg?hmac=jmB3mH356VFvuJbVxDtTZfr-9aPpwJg4XEfFhohU7oU"
@@ -9,15 +9,21 @@
                 />
             </div>
 
-            <div ref="container" class="vote__container">
-                <div ref="" class="caption">
+            <div ref="container" class="vote-container">
+                <div class="caption">
                     Comment montreriez-vous cette image ?
                 </div>
                 <div class="control">
                     <span ref="cursor" class="cursor"></span>
                 </div>
-                <span class="value">{{ blurElm.blurValue }}</span>
-                <div ref="submitVoteBtn" class="submitBtn">Valider</div>
+                <span class="value">{{ blurValue }}</span>
+                <button
+                    ref="buttonSubmit"
+                    class="button-submit"
+                    @click="clickSubmitHandler"
+                >
+                    Valider
+                </button>
             </div>
         </div>
     </div>

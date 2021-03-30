@@ -12,11 +12,7 @@
     height: 100%;
 }
 
-.container {
-    
-}
-
-.vote__container {
+.vote-container {
     width: 500px;
     height: 20px;
 
@@ -29,7 +25,7 @@
     text-align: center;
 }
 
-.imageContainer {
+.image-container {
     width: 300px;
     height: 500px;
     overflow: hidden;
@@ -71,7 +67,10 @@ img {
     font-size: 14px;
 }
 
-.submitBtn {
+.button-submit {
+    display: block;
+
+    margin: auto;
     margin-top: 20px;
 
     font-size: rem-l(20px);

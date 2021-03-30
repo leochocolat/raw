@@ -6,76 +6,70 @@ import DragManager from '@/utils/DragManager';
 import clamp from '@/utils/math/clamp';
 
 export default {
-    data() {
-        return {
-            blurElm: {
-                blurValue: 0,
-            },
-        };
-    },
     computed: {
         ...mapGetters({
             blurValue: 'data/blurValue',
         }),
     },
 
-    watch: {},
-
-    beforeDestroy() {},
-
     mounted() {
-        this.ui = {
-            image: this.$refs.image,
-            blurElm: {
-                cursor: this.$refs.cursor,
-                cursorPos: 0,
-                containerSize: this.$refs.container.getBoundingClientRect().width,
-                blurValue: this.blurValue,
-            },
-        };
+        this.containerSize = this.$refs.container.getBoundingClientRect().width;
+        this.cursorPosition = 0;
 
         this.setupEventListener();
         this.setCursorPosition();
     },
 
+    beforeDestroy() {
+        this.removeEventListener();
+    },
+
     methods: {
         setCursorPosition() {
-            this.ui.blurElm.cursorPos = this.blurElm.blurValue * this.ui.blurElm.containerSize;
-            this.ui.blurElm.cursor.style.transform = `translate3D(${this.ui.blurElm.cursorPos}px, 0px, 0px)`;
+            this.cursorPosition = this.blurValue * this.containerSize;
+            this.$refs.cursor.style.transform = `translate3D(${this.cursorPosition}px, 0px, 0px)`;
         },
 
         updateCursorPos(event) {
-            this.ui.blurElm.cursorPos -= event.delta.x;
-            this.ui.blurElm.cursor.style.transform = `translate3D(${clamp(this.ui.blurElm.cursorPos, 0, this.ui.blurElm.containerSize - 10)}px, 0px, 0px)`;
+            this.cursorPosition -= event.delta.x;
+            this.$refs.cursor.style.transform = `translate3D(${clamp(this.cursorPosition, 0, this.containerSize - 10)}px, 0px, 0px)`;
         },
 
         updateBlurValue() {
-            this.blurElm.blurValue = clamp(this.ui.blurElm.cursorPos / this.ui.blurElm.containerSize, 0.01, 0.99).toFixed(2);
-            this.ui.image.style.filter = `blur(${this.blurElm.blurValue * 10}px)`;
+            const blurValue = clamp(this.cursorPosition / this.containerSize, 0.01, 0.99).toFixed(2);
+            this.$refs.image.style.filter = `blur(${blurValue * 10}px)`;
+            this.$store.dispatch('data/setBlurValue', blurValue);
         },
 
+        /**
+         * Events
+         */
+        setupEventListener() {
+            this.dragManager = new DragManager({ el: this.$refs.cursor });
+            this.dragManager.addEventListener('drag', this.dragHandler);
+        },
+
+        removeEventListener() {
+            this.dragManager.removeEventListener('drag', this.dragHandler);
+        },
+
+        /**
+         * Handlers
+         */
         dragHandler(event) {
             this.updateCursorPos(event);
             this.updateBlurValue();
         },
 
-        submitVoteHandler() {
+        clickSubmitHandler() {
             this.$api.createEntry('blurValue', {
                 title: {
                     [this.$i18n.localeProperties.name]: 'Value',
                 },
                 value: {
-                    [this.$i18n.localeProperties.name]: parseFloat(this.blurElm.blurValue),
+                    [this.$i18n.localeProperties.name]: parseFloat(this.blurValue),
                 },
             });
-        },
-
-        setupEventListener() {
-            const dragManager = new DragManager({ el: this.ui.blurElm.cursor });
-            dragManager.addEventListener('drag', this.dragHandler);
-            dragManager.addEventListener('dragend', this.dragEndHandler);
-
-            this.$refs.submitVoteBtn.addEventListener('click', this.submitVoteHandler);
         },
     },
 };
