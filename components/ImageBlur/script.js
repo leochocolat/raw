@@ -60,13 +60,13 @@ export default {
             this.updateBlurValue();
         },
 
-        async submitVoteHandler() {
-            const newPost = await this.$api.createEntry('blurValue', {
+        submitVoteHandler() {
+            this.$api.createEntry('blurValue', {
                 title: {
                     [this.$i18n.localeProperties.name]: 'Value',
                 },
                 value: {
-                    [this.$i18n.localeProperties.name]: this.blurElm.blurValue,
+                    [this.$i18n.localeProperties.name]: parseFloat(this.blurElm.blurValue),
                 },
             });
         },
