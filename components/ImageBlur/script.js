@@ -1,4 +1,3 @@
-import gsap from 'gsap';
 // Vendor
 import { mapGetters } from 'vuex';
 

@@ -57,7 +57,6 @@ class Hallway extends RenderTargetScene {
         const model = this._resources.get('CameraMovement');
         // const clone = cloneSkinnedMesh(model);
         const clone = model;
-        clone.cameras[0].lookAt(0, 0, 0);
         this.add(clone.scene);
 
         return clone;
@@ -66,7 +65,7 @@ class Hallway extends RenderTargetScene {
     _createAnimationController() {
         const model = this._model;
         const animationController = new AnimationComponent(model);
-        // animationController.playAnimation(animationController.actionType.CameraMove);
+        animationController.playAnimation(animationController.actionType.CameraMove);
 
         return animationController;
     }

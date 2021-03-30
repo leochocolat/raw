@@ -27,14 +27,14 @@ export default {
             this.timelineLeave?.kill();
 
             this.timelineEnter = new gsap.timeline();
-            this.timelineEnter.to(this.$refs.frame.$el, { duration: 0.5, scale: 0.95, ease: 'circ.out' });
+            this.timelineEnter.to(this.$refs.frame.$el, { duration: 0.5, scaleY: 0.95, ease: 'circ.out' });
         },
 
         mouseleaveHandler() {
             this.timelineEnter?.kill();
 
             this.timelineLeave = new gsap.timeline();
-            this.timelineLeave.to(this.$refs.frame.$el, { duration: 0.5, scale: 1, ease: 'circ.out' });
+            this.timelineLeave.to(this.$refs.frame.$el, { duration: 0.5, scaleY: 1, ease: 'circ.out' });
         },
 
         clickHandler() {
