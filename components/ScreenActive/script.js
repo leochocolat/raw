@@ -2,7 +2,11 @@
 import gsap from 'gsap';
 
 export default {
-    props: ['data'],
+    data() {
+        return {
+            locale: this.$i18n.locale,
+        };
+    },
 
     methods: {
         /**

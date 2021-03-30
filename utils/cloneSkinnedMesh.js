@@ -42,8 +42,5 @@ export default function cloneSkinnedMesh(gltf) {
         clone.cameras.push(camera.clone());
     }
 
-    // console.log(gltf);
-    // console.log(clone);
-
     return clone;
 }

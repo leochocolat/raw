@@ -1,9 +1,32 @@
+.blur {
+    display: flex;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+}
+
+.container {
+    
+}
+
 .vote__container {
     width: 500px;
     height: 20px;
 
+    margin: auto;
+
+    @include unselectable();
+
     margin-top: 40px;
-    @include unselectable;
+
+    text-align: center;
 }
 
 .imageContainer {

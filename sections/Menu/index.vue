@@ -1,10 +1,19 @@
 <template>
     <div class="menu">
         <div class="screens-container">
-            <Screen :name="locale === 'fr' ? 'Couloir' : 'Hallway'" />
-            <Screen :name="locale === 'fr' ? 'Supermarché' : 'Supermarket'" />
-            <Screen :name="locale === 'fr' ? 'Bibliothèque' : 'Library'" />
-            <Screen :name="locale === 'fr' ? 'Bar' : 'Bar'" />
+            <Screen
+                class="screen"
+                :name="locale === 'fr' ? 'Couloir' : 'Hallway'"
+            />
+            <Screen
+                class="screen"
+                :name="locale === 'fr' ? 'Supermarché' : 'Supermarket'"
+            />
+            <Screen
+                class="screen"
+                :name="locale === 'fr' ? 'Bibliothèque' : 'Library'"
+            />
+            <Screen class="screen" :name="locale === 'fr' ? 'Bar' : 'Bar'" />
         </div>
     </div>
 </template>

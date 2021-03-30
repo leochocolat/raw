@@ -5,4 +5,16 @@
     height: 100%;
     
     text-transform: uppercase;
+
+    > div {
+        visibility: hidden;
+
+        pointer-events: none;
+    }
+
+    .is-enable {
+        visibility: visible;
+
+        pointer-events: all;
+    }
 }
