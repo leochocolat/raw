@@ -13,7 +13,7 @@ export default {
 
     mounted() {
         this.index = 0;
-        this.screens = [this.$refs.screen1, this.$refs.screen2, this.$refs.screen3];
+        this.screens = [this.$refs.screen1, this.$refs.screen2, this.$refs.screen3, this.$refs.screen4];
         this.activeScreen = this.screens[this.index];
 
         this.activeScreen.transitionIn();

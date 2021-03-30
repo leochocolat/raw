@@ -1,0 +1,15 @@
+.button-stop {
+    height: 100%;
+
+    font-size: rem(13px);
+    color: red;
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    @include respond-to('large') {
+        height: 100%;
+
+        font-size: rem-l(17px);
+    }
+}

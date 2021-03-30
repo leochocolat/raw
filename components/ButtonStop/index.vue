@@ -1,9 +1,5 @@
 <template>
-    <div class="footer">
-        <LangSwitch />
-        <Instructions />
-        <ButtonStop />
-    </div>
+    <button class="button-stop">Stop</button>
 </template>
 
 <script src="./script.js"></script>

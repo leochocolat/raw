@@ -7,3 +7,7 @@
         font-size: rem-l(25px);
     }
 }
+
+* {
+    @include text-rendering();
+}

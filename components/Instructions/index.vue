@@ -1,8 +1,6 @@
 <template>
-    <div class="footer">
-        <LangSwitch />
-        <Instructions />
-        <ButtonStop />
+    <div class="instructions">
+        [instructions]
     </div>
 </template>
 

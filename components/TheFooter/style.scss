@@ -9,13 +9,15 @@
     align-items: center;
 
     width: 100%;
-    height: vw(40px);
+    height: vw($footer-height);
 
     padding-right: $padding-left;
     padding-left: $padding-left;
+
+    // background-color: black;
     
     @include respond-to('large') {
-        height: vw-l(40px);
+        height: vw-l($footer-height-l);
 
         padding-right: $padding-left-l;
         padding-left: $padding-left-l;

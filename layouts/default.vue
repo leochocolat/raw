@@ -6,12 +6,15 @@
 
         <Preloader />
 
+        <!-- i18n router link Example -->
         <!-- <nav>
             <nuxt-link :to="localePath('/')">Home</nuxt-link>
             <nuxt-link :to="localePath('about')">About</nuxt-link>
         </nav> -->
 
-        <nuxt />
+        <div class="main-container">
+            <nuxt />
+        </div>
 
         <TheFooter />
     </div>
