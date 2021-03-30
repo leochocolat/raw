@@ -2,7 +2,7 @@
     <div class="warning">
         <div class="container">
             <div class="heading">
-                Warning
+                {{ locale === 'fr' ? 'Avertissement' : 'Warning' }}
             </div>
             <div class="paragraph">
                 {{ data }}
