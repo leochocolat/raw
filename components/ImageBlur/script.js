@@ -9,7 +9,6 @@ export default {
     computed: {
         ...mapGetters({
             entryById: 'data/entryById',
-            censorshipFactorById: 'data/censorshipFactorById',
         }),
 
         entry() {

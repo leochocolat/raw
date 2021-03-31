@@ -147,9 +147,9 @@ export default function ({ i18n, error, store }) {
         for (let i = 0; i < entries.items.length; i++) {
             const entry = entries.items[i];
             const sysId = entry.sys.id;
-            const { id, name, censorshipData, censorshipFactor } = entry.fields;
+            const { id } = entry.fields;
 
-            scenesEntries[id] = { sysId, id, name, censorshipData, censorshipFactor };
+            scenesEntries[id] = { sysId, ...entry.fields };
         }
 
         return scenesEntries;

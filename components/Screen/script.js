@@ -1,5 +1,8 @@
 // Assets
 import ArrowDown from '@/assets/icons/arrow-down.svg?inline';
+
+// Vendor
+import { mapGetters } from 'vuex';
 import gsap from 'gsap';
 
 export default {
@@ -7,8 +10,29 @@ export default {
 
     data() {
         return {
-            time: new Date().toLocaleTimeString('en-GB'),
+            // time: new Date().toLocaleTimeString('en-GB'),
+            currentTime: new Date().getTime(),
+            startTime: new Date().getTime(),
+            duration: 0,
         };
+    },
+
+    computed: {
+        ...mapGetters({
+            entryById: 'data/entryById',
+        }),
+
+        entry() {
+            const entry = this.entryById(this.name);
+            return entry;
+        },
+
+        time() {
+            const entry = this.entryById(this.name.toLowerCase());
+            const date = new Date(entry.startTime);
+            date.setSeconds(date.getSeconds() + this.duration);
+            return date.toLocaleTimeString('en-GB');
+        },
     },
 
     mounted() {
@@ -18,7 +42,9 @@ export default {
     methods: {
         startClock() {
             setInterval(() => {
-                this.time = new Date().toLocaleTimeString('en-GB');
+                // this.time = new Date().toLocaleTimeString('en-GB');
+                this.currentTime = new Date().getTime();
+                this.duration = (this.currentTime - this.startTime) / 1000;
             }, 1000);
         },
 
