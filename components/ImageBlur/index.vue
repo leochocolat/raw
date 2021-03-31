@@ -16,7 +16,7 @@
                 <div class="control">
                     <span ref="cursor" class="cursor"></span>
                 </div>
-                <span class="value">{{ blurValue }}</span>
+                <span class="value">{{ censorshipFactor }}</span>
                 <button
                     ref="buttonSubmit"
                     class="button-submit"

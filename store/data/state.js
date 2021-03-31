@@ -1,5 +1,9 @@
 const state = () => ({
-    blurValue: 0,
+    sceneEntries: [],
+    hallway: {},
+    supermarket: {},
+    library: {},
+    bar: {},
 });
 
 export default state;

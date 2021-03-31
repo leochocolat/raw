@@ -14,7 +14,7 @@ const configManagment = {
 const FIELD_CENSORSHIP_DATA = 'censorshipData';
 const FIELD_CENSORSHIP_FACTOR = 'censorshipFactor';
 
-export default function ({ i18n, error }) {
+export default function ({ i18n, error, store }) {
     const clientDelivery = contentfulDelivery.createClient(configDelivery);
     const clientManagment = contentfulManagment.createClient(configManagment);
 
@@ -146,10 +146,10 @@ export default function ({ i18n, error }) {
 
         for (let i = 0; i < entries.items.length; i++) {
             const entry = entries.items[i];
-            const { id } = entry.sys;
-            const { name, censorshipData, censorshipFactor } = entry.fields;
+            const sysId = entry.sys.id;
+            const { id, name, censorshipData, censorshipFactor } = entry.fields;
 
-            scenesEntries[name] = { id, censorshipData, censorshipFactor };
+            scenesEntries[id] = { sysId, id, name, censorshipData, censorshipFactor };
         }
 
         return scenesEntries;
@@ -161,12 +161,12 @@ export default function ({ i18n, error }) {
      * @param {Number} value
      * @return {Promise}
      */
-    function updateSceneCensorship(name, value) {
-        if (!scenesEntries[name]) throw new Error(`Could not find scene entry with name /${name}/`);
+    function updateSceneCensorship(id, value) {
+        if (!store.state.data.sceneEntries[id]) throw new Error(`Could not find scene entry with id /${id}/`);
 
-        const id = scenesEntries[name].id;
+        const sysId = store.state.data.sceneEntries[id].sysId;
 
-        getEntryById(id).then((response) => {
+        getEntryById(sysId).then((response) => {
             const data = response.fields[FIELD_CENSORSHIP_DATA];
 
             const newData = data && data.inputs ? data.inputs : [];
@@ -181,14 +181,14 @@ export default function ({ i18n, error }) {
             const newFactor = sumFactor / newData.length;
 
             // Update censorship data
-            updateEntry(id, {
+            updateEntry(sysId, {
                 [FIELD_CENSORSHIP_DATA]: {
-                    [i18n.localeProperties.name]: {
+                    'fr-FR': {
                         inputs: newData,
                     },
                 },
                 [FIELD_CENSORSHIP_FACTOR]: {
-                    [i18n.localeProperties.name]: newFactor,
+                    'fr-FR': newFactor,
                 },
             }).then((response) => {
                 response.publish();

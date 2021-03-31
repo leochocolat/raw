@@ -1,6 +1,12 @@
 const getters = {
-    blurValue(state) {
-        return state.blurValue;
+    sceneEntries(state) {
+        return state.sceneEntries;
+    },
+
+    entryById(state) {
+        return (id) => {
+            return state[id];
+        };
     },
 };
 

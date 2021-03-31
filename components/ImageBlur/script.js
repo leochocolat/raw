@@ -8,14 +8,25 @@ import clamp from '@/utils/math/clamp';
 export default {
     computed: {
         ...mapGetters({
-            blurValue: 'data/blurValue',
+            entryById: 'data/entryById',
+            censorshipFactorById: 'data/censorshipFactorById',
         }),
+
+        entry() {
+            const entry = this.entryById('hallway');
+            return entry;
+        },
+
+        censorshipFactor() {
+            const entry = this.entryById('hallway');
+            const censorship = entry.censorshipFactor;
+            return censorship;
+        },
     },
 
     mounted() {
         this.containerSize = this.$refs.container.getBoundingClientRect().width;
         this.cursorPosition = 0;
-
         this.setupEventListener();
         this.setCursorPosition();
     },
@@ -26,7 +37,7 @@ export default {
 
     methods: {
         setCursorPosition() {
-            this.cursorPosition = this.blurValue * this.containerSize;
+            this.cursorPosition = this.censorshipFactor * this.containerSize;
             this.$refs.cursor.style.transform = `translate3D(${this.cursorPosition}px, 0px, 0px)`;
         },
 
@@ -35,10 +46,10 @@ export default {
             this.$refs.cursor.style.transform = `translate3D(${clamp(this.cursorPosition, 0, this.containerSize - 10)}px, 0px, 0px)`;
         },
 
-        updateBlurValue() {
-            const blurValue = clamp(this.cursorPosition / this.containerSize, 0.01, 0.99).toFixed(2);
-            this.$refs.image.style.filter = `blur(${blurValue * 10}px)`;
-            this.$store.dispatch('data/setBlurValue', blurValue);
+        updateCensorshipFactor() {
+            const censorshipFactor = clamp(this.cursorPosition / this.containerSize, 0.01, 0.99).toFixed(2);
+            this.$refs.image.style.filter = `blur(${censorshipFactor * 10}px)`;
+            this.$store.dispatch('data/setSceneCensorshipFactor', { id: 'hallway', value: censorshipFactor });
         },
 
         /**
@@ -58,18 +69,11 @@ export default {
          */
         dragHandler(event) {
             this.updateCursorPos(event);
-            this.updateBlurValue();
+            this.updateCensorshipFactor();
         },
 
         clickSubmitHandler() {
-            this.$api.createEntry('blurValue', {
-                title: {
-                    [this.$i18n.localeProperties.name]: 'Value',
-                },
-                value: {
-                    [this.$i18n.localeProperties.name]: parseFloat(this.blurValue),
-                },
-            });
+            this.$api.updateSceneCensorship('hallway', parseFloat(this.censorshipFactor));
         },
     },
 };

@@ -11,7 +11,7 @@ import contentfulModule from './contentful';
 
 const apiFactory = (i18n, error, store, req, route, redirect) => ({
     ...coreModule(),
-    ...contentfulModule({ i18n, error }),
+    ...contentfulModule({ i18n, error, store }),
 });
 
 export default async (context, inject) => {
@@ -26,23 +26,22 @@ export default async (context, inject) => {
     const setup = await api.getSetup();
     store.dispatch('setup', setup);
 
+    // Get censorship datas
+    const sceneEntries = await api.getScenesEntries();
+    store.dispatch('data/setSceneEntries', sceneEntries);
+
     /**
      * Get Entries
      */
     // const entries = await api.getEntries();
-
-    // Get blur
-    // const getBlurValueEntry = await api.getEntriesByName('blurValue');
-    // store.dispatch('data/setBlurValue', getBlurValueEntry.items[0].fields.value);
+    // const entries = await api.getEntriesByName('name');
 
     /**
      * Update Json Entry
      */
     // const entries = await api.updateEntry('4r4Hki14AsqrV4cNRf38IH', {
-    //     testJson: {
-    //         [i18n.localeProperties.name]: { test: 'test1' },
-    //     },
-    // });
+    //     field: { [i18n.localeProperties.name]: data },
+    // }).then((response) => { response.publish() })
 
     /**
      * Create Entrie

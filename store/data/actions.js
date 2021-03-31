@@ -1,6 +1,10 @@
 const actions = {
-    setBlurValue({ commit }, value) {
-        commit('SET_BLUR_VALUE', value);
+    setSceneEntries({ commit }, entries) {
+        commit('SET_SCENE_ENTRIES', entries);
+    },
+
+    setSceneCensorshipFactor({ commit }, { id, value }) {
+        commit('SET_SCENE_CENSORSHIP_FACTOR', { id, value });
     },
 };
 

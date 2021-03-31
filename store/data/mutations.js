@@ -1,6 +1,14 @@
 const mutations = {
-    SET_BLUR_VALUE(state, value) {
-        state.blurValue = value;
+    SET_SCENE_ENTRIES(state, entries) {
+        state.sceneEntries = entries;
+
+        for (const key in entries) {
+            state[key] = entries[key];
+        }
+    },
+
+    SET_SCENE_CENSORSHIP_FACTOR(state, { id, value }) {
+        state[id].censorshipFactor = value;
     },
 };
 
