@@ -1,5 +1,6 @@
 // Vendor
 import gsap from 'gsap';
+import { mapGetters } from 'vuex';
 
 export default {
     data() {
@@ -9,6 +10,16 @@ export default {
     },
 
     props: ['data'],
+
+    computed: {
+        ...mapGetters({
+            sceneEntries: 'data/sceneEntries',
+        }),
+    },
+
+    mounted() {
+        console.log(this.sceneEntries);
+    },
 
     methods: {
         /**

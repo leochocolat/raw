@@ -1,9 +1,6 @@
 <template>
     <div class="screen-active">
-        <Screen
-            class="screen"
-            :name="locale === 'fr' ? 'Couloir' : 'Hallway'"
-        />
+        <Screen id="hallway" class="screen" />
         <ImageBlur class="image-blur" />
     </div>
 </template>

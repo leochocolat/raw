@@ -17,7 +17,7 @@
                     <span>this camera</span>
                 </div>
                 <div class="name">
-                    {{ name }}
+                    {{ entry.name }}
                 </div>
             </div>
         </div>

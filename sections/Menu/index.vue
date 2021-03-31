@@ -2,6 +2,13 @@
     <div class="menu">
         <div class="screens-container">
             <Screen
+                v-for="(item, key) in sceneEntries"
+                :id="item.id"
+                :key="key"
+                class="screen"
+            />
+
+            <!-- <Screen
                 class="screen"
                 :name="locale === 'fr' ? 'Couloir' : 'Hallway'"
             />
@@ -12,8 +19,8 @@
             <Screen
                 class="screen"
                 :name="locale === 'fr' ? 'Bibliothèque' : 'Library'"
-            />
-            <Screen class="screen" :name="locale === 'fr' ? 'Bar' : 'Bar'" />
+            /> -->
+            <!-- <Screen class="screen" :name="locale === 'fr' ? 'Bar' : 'Bar'" /> -->
         </div>
     </div>
 </template>

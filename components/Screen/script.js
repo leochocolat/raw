@@ -6,11 +6,10 @@ import { mapGetters } from 'vuex';
 import gsap from 'gsap';
 
 export default {
-    props: ['name'],
+    props: ['id'],
 
     data() {
         return {
-            // time: new Date().toLocaleTimeString('en-GB'),
             currentTime: new Date().getTime(),
             startTime: new Date().getTime(),
             duration: 0,
@@ -23,12 +22,12 @@ export default {
         }),
 
         entry() {
-            const entry = this.entryById(this.name);
+            const entry = this.entryById(this.id);
             return entry;
         },
 
         time() {
-            const entry = this.entryById(this.name.toLowerCase());
+            const entry = this.entryById(this.id);
             const date = new Date(entry.startTime);
             date.setSeconds(date.getSeconds() + this.duration);
             return date.toLocaleTimeString('en-GB');
@@ -39,13 +38,17 @@ export default {
         this.startClock();
     },
 
+    beforeDestroy() {
+        this.stopClock();
+    },
+
     methods: {
         startClock() {
-            setInterval(() => {
-                // this.time = new Date().toLocaleTimeString('en-GB');
-                this.currentTime = new Date().getTime();
-                this.duration = (this.currentTime - this.startTime) / 1000;
-            }, 1000);
+            this._clock = setInterval(this.clockHandler, 1000);
+        },
+
+        stopClock() {
+            clearInterval(this._clock);
         },
 
         // Events
@@ -65,6 +68,11 @@ export default {
 
         clickHandler() {
             this.$store.dispatch('scenes/setActiveScene', 'hallway');
+        },
+
+        clockHandler() {
+            this.currentTime = new Date().getTime();
+            this.duration = (this.currentTime - this.startTime) / 1000;
         },
     },
 
