@@ -23,3 +23,15 @@
         padding-left: $padding-left-l;
     }
 }
+
+.instructions {
+    position: absolute;
+    right: 0;
+    left: 0;
+
+    width: 50%;
+
+    margin: auto;
+
+    text-align: center;
+}

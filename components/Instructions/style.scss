@@ -2,6 +2,8 @@
     font-size: rem(13px);
     text-transform: uppercase;
 
+    pointer-events: none;
+
     @include respond-to('large') {
         font-size: rem-l(17px);
     }

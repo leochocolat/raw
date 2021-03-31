@@ -1,7 +1,7 @@
 <template>
     <div class="footer">
         <LangSwitch />
-        <Instructions />
+        <Instructions class="instructions" />
         <ButtonStop />
     </div>
 </template>
