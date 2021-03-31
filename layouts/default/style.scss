@@ -10,6 +10,7 @@
     
     // Prototype
     // padding-bottom: 0;
+    pointer-events: none;
 
     @include respond-to('large') {
         height: calc(100% - #{vw-l($footer-height-l)});
