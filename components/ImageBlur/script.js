@@ -50,7 +50,7 @@ export default {
         },
 
         removeEventListener() {
-            this.dragManager.removeEventListener('drag', this.dragHandler);
+            this.dragManager.close();
         },
 
         /**

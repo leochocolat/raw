@@ -31,15 +31,16 @@ export default async (context, inject) => {
      */
     // const entries = await api.getEntries();
 
+    // Get blur
     // const getBlurValueEntry = await api.getEntriesByName('blurValue');
     // store.dispatch('data/setBlurValue', getBlurValueEntry.items[0].fields.value);
 
     /**
-     * Update Entry
+     * Update Json Entry
      */
-    // const entries = await api.updateEntry('3nxeOCH5xF8JYV5JSSjmwq', {
-    //     message: {
-    //         [i18n.localeProperties.name]: `Je m'appelle Serge`,
+    // const entries = await api.updateEntry('4r4Hki14AsqrV4cNRf38IH', {
+    //     testJson: {
+    //         [i18n.localeProperties.name]: { test: 'test1' },
     //     },
     // });
 

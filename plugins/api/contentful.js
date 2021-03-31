@@ -11,122 +11,200 @@ const configManagment = {
     accessToken: process.env.CTF_CDA_ACCESS_TOKEN_MANAGMENT,
 };
 
+const FIELD_CENSORSHIP_DATA = 'censorshipData';
+const FIELD_CENSORSHIP_FACTOR = 'censorshipFactor';
+
 export default function ({ i18n, error }) {
     const clientDelivery = contentfulDelivery.createClient(configDelivery);
     const clientManagment = contentfulManagment.createClient(configManagment);
 
-    return {
-        /**
-         * Returns the list of entries
-         * @returns {Array.<Object>} List of all entries
-         */
-        async getEntries() {
-            let res;
-            try {
-                res = await clientDelivery.getEntries({
-                    locale: i18n.localeProperties.name,
-                });
-            } catch (err) {
-                res = err.response;
+    /**
+     * Basics
+     */
+
+    /**
+     * Returns the list of entries
+     * @returns {Array.<Object>} List of all entries
+     */
+    async function getEntries() {
+        let res;
+        try {
+            res = await clientDelivery.getEntries({
+                locale: i18n.localeProperties.name,
+            });
+        } catch (err) {
+            res = err.response;
+            return error({
+                message: err.message,
+            });
+        }
+        return res;
+    }
+
+    /**
+     * Returns the list of entries by names
+     * @param {String} name entry name
+     * @returns {Array.<Object>} List of entries
+     */
+    async function getEntriesByName(name) {
+        let res;
+        try {
+            res = await clientDelivery.getEntries({
+                content_type: name,
+                locale: i18n.localeProperties.name,
+            });
+        } catch (err) {
+            res = err.response;
+            if (res.status === 404) {
                 return error({
-                    message: err.message,
+                    statusCode: 404,
+                    message: `The page you're looking for doesn't exist`,
                 });
             }
-            return res;
-        },
+        }
+        return res;
+    }
 
-        /**
-         * Returns the list of entries by names
-         * @param {String} name entry name
-         * @returns {Array.<Object>} List of entries
-         */
-        async getEntriesByName(name) {
-            let res;
-            try {
-                res = await clientDelivery.getEntries({
-                    content_type: name,
-                    locale: i18n.localeProperties.name,
+    /**
+     * Returns the entry needed by its id
+     * @param {String} id entry id
+     * @returns {Object} return the entry
+     */
+    async function getEntryById(id) {
+        let res;
+        try {
+            res = await clientDelivery.getEntry(id, {
+                locale: i18n.localeProperties.name,
+            });
+        } catch (err) {
+            res = err.response;
+            if (res.status === 404) {
+                return error({
+                    statusCode: 404,
+                    message: `The page you're looking for doesn't exist`,
                 });
-            } catch (err) {
-                res = err.response;
-                if (res.status === 404) {
-                    return error({
-                        statusCode: 404,
-                        message: `The page you're looking for doesn't exist`,
-                    });
-                }
             }
-            return res;
-        },
+        }
+        return res;
+    }
 
-        /**
-         * Returns the entry needed by its id
-         * @param {String} id entry id
-         * @returns {Object} return the entry
-         */
-        async getEntryById(id) {
-            let res;
-            try {
-                res = await clientDelivery.getEntry(id, {
-                    locale: i18n.localeProperties.name,
-                });
-            } catch (err) {
-                res = err.response;
-                if (res.status === 404) {
-                    return error({
-                        statusCode: 404,
-                        message: `The page you're looking for doesn't exist`,
-                    });
-                }
-            }
-            return res;
-        },
+    /**
+     * Create an entry
+     * @param {String} contentTypeId content type id
+     * @param {Object} data content type data
+     */
+    async function createEntry(contentTypeId, fields) {
+        const data = { fields };
+        let res;
+        try {
+            res = await clientManagment
+                .getSpace(configManagment.space)
+                .then((space) => space.getEnvironment('master'))
+                .then((environment) => environment.createEntry(contentTypeId, data));
+        } catch (err) {
+            return error(err);
+        }
+        return res;
+    }
 
-        /**
-         * Create an entry
-         * @param {String} contentTypeId content type id
-         * @param {Object} data content type data
-         */
-        async createEntry(contentTypeId, fields) {
-            const data = { fields };
-            let res;
-            try {
-                res = await clientManagment
-                    .getSpace(configManagment.space)
-                    .then((space) => space.getEnvironment('master'))
-                    .then((environment) => environment.createEntry(contentTypeId, data));
-            } catch (err) {
-                return error(err);
-            }
-            return res;
-        },
-
-        /**
-         * Update an entry
-         * @param {String} entryId entry id
-         * @param {Object} fields fields to update
-         */
-        async updateEntry(entryId, fields) {
-            let res;
-            try {
-                res = await clientManagment
-                    .getSpace(configManagment.space)
-                    .then((space) => space.getEnvironment('master'))
-                    .then((environment) => environment.getEntry(entryId))
-                    .then((entry) => {
-                        for (const property in fields) {
-                            if (!entry.fields[property]) {
-                                console.error(`Property /${property}/ does not exist in entry : /${entryId}/`);
-                                continue;
-                            }
-                            entry.fields[property] = fields[property];
+    /**
+     * Update an entry
+     * @param {String} entryId entry id
+     * @param {Object} fields fields to update
+     */
+    async function updateEntry(entryId, fields) {
+        let res;
+        try {
+            res = await clientManagment
+                .getSpace(configManagment.space)
+                .then((space) => space.getEnvironment('master'))
+                .then((environment) => environment.getEntry(entryId))
+                .then((entry) => {
+                    for (const property in fields) {
+                        if (!entry.fields[property]) {
+                            console.error(`Property /${property}/ does not exist in entry : /${entryId}/`);
+                            continue;
                         }
-                        return entry.update();
-                    });
-            } catch (err) {
-                return error(err);
+                        entry.fields[property] = fields[property];
+                    }
+                    return entry.update();
+                });
+        } catch (err) {
+            return error(err);
+        }
+        return res;
+    }
+
+    /**
+     * Custom
+     * Specific methods for .RAW project
+     */
+    const scenesEntries = {};
+
+    async function getScenesEntries() {
+        const entries = await getEntriesByName('scene');
+
+        for (let i = 0; i < entries.items.length; i++) {
+            const entry = entries.items[i];
+            const { id } = entry.sys;
+            const { name, censorshipData, censorshipFactor } = entry.fields;
+
+            scenesEntries[name] = { id, censorshipData, censorshipFactor };
+        }
+
+        return scenesEntries;
+    }
+
+    /**
+     * Update censorship for a specific scene entry
+     * @param {String} name
+     * @param {Number} value
+     * @return {Promise}
+     */
+    function updateSceneCensorship(name, value) {
+        if (!scenesEntries[name]) throw new Error(`Could not find scene entry with name /${name}/`);
+
+        const id = scenesEntries[name].id;
+
+        getEntryById(id).then((response) => {
+            const data = response.fields[FIELD_CENSORSHIP_DATA];
+
+            const newData = data && data.inputs ? data.inputs : [];
+            newData.push(value);
+
+            // Compute newFactor
+            let sumFactor = 0;
+            for (let i = 0; i < newData.length; i++) {
+                const input = newData[i];
+                sumFactor += input;
             }
-            return res;
-        },
+            const newFactor = sumFactor / newData.length;
+
+            // Update censorship data
+            updateEntry(id, {
+                [FIELD_CENSORSHIP_DATA]: {
+                    [i18n.localeProperties.name]: {
+                        inputs: newData,
+                    },
+                },
+                [FIELD_CENSORSHIP_FACTOR]: {
+                    [i18n.localeProperties.name]: newFactor,
+                },
+            }).then((response) => {
+                response.publish();
+            });
+        });
+    }
+
+    return {
+        // Basis
+        getEntries,
+        getEntriesByName,
+        getEntryById,
+        createEntry,
+        updateEntry,
+        // Custom
+        getScenesEntries,
+        updateSceneCensorship,
     };
 }
