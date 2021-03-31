@@ -17,10 +17,6 @@ export default {
         }),
     },
 
-    mounted() {
-        console.log(this.sceneEntries);
-    },
-
     methods: {
         /**
          * Public

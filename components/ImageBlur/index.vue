@@ -6,6 +6,7 @@
                     ref="image"
                     src="https://i.picsum.photos/id/692/600/700.jpg?hmac=jmB3mH356VFvuJbVxDtTZfr-9aPpwJg4XEfFhohU7oU"
                     alt=""
+                    :style="`filter: blur(${censorshipFactor * 10}px)`"
                 />
             </div>
 
@@ -16,7 +17,7 @@
                 <div class="control">
                     <span ref="cursor" class="cursor"></span>
                 </div>
-                <span class="value">{{ censorshipFactor }}</span>
+                <span class="value">{{ censorshipFactor.toFixed(2) }}</span>
                 <button
                     ref="buttonSubmit"
                     class="button-submit"

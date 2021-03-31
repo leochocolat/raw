@@ -46,8 +46,7 @@ export default {
         },
 
         updateCensorshipFactor() {
-            const censorshipFactor = clamp(this.cursorPosition / this.containerSize, 0.01, 0.99).toFixed(2);
-            this.$refs.image.style.filter = `blur(${censorshipFactor * 10}px)`;
+            const censorshipFactor = clamp(this.cursorPosition / this.containerSize, 0.01, 0.99);
             this.$store.dispatch('data/setSceneCensorshipFactor', { id: 'hallway', value: censorshipFactor });
         },
 
@@ -72,7 +71,7 @@ export default {
         },
 
         clickSubmitHandler() {
-            this.$api.updateSceneCensorship('hallway', parseFloat(this.censorshipFactor));
+            this.$api.updateSceneCensorship('hallway', this.censorshipFactor);
         },
     },
 };
