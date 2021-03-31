@@ -50,12 +50,13 @@ class Bar extends RenderTargetScene {
     _setup() {
         this._model = this._createModel();
         this._animationController = this._createAnimationController();
-        // this._modelCamera = this._createModelCameraAnimation();
+        this._modelCamera = this._createModelCameraAnimation();
     }
 
     _createModel() {
         const model = this._resources.get('CameraMovement');
-        const clone = cloneSkinnedMesh(model);
+        // const clone = cloneSkinnedMesh(model);
+        const clone = model;
         this.add(clone.scene);
 
         return clone;
