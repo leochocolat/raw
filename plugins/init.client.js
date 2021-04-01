@@ -6,7 +6,8 @@ export default ({ query, store }) => {
     /**
      * Context
      */
-    const isDebug = (query.debug || query.debug === null) && process.env.NODE_ENV === 'development';
+    // const isDebug = (query.debug || query.debug === null) && process.env.NODE_ENV === 'development';
+    const isDebug = query.debug || query.debug === null;
     store.dispatch('context/setDebug', isDebug);
 
     /**
