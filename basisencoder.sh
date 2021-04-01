@@ -10,7 +10,7 @@ if [ ! -d "$INPUT_DIRECTORY" ]; then
 fi
 
 OUTPUT_DIRECTORY="$INPUT_DIRECTORY/basis"
-BASISU="./basis_universal/bin_osx/basisu"
+BASISU="./tools/basis_universal/bin_osx/basisu"
 
 if [ ! -d "$OUTPUT_DIRECTORY" ]; then
     echo "$OUTPUT_DIRECTORY is not a directory. creating directory."
