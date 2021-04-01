@@ -12,7 +12,7 @@ class Blur extends DebugScene {
     constructor(options) {
         super(options);
 
-        this._plane = this._createPlane();
+        this._model = this._createModel();
         this._addDebugSettings();
     }
 
@@ -20,14 +20,10 @@ class Blur extends DebugScene {
      * Public
      */
     resize(width, height) {
-        this._plane.material.uniforms.u_resolution.value.set(width, height);
-
         super.resize(width, height);
     }
 
     update(time, delta) {
-        this._plane.material.uniforms.u_time.value = time;
-
         super.update(time, delta);
     }
 

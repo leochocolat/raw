@@ -7,6 +7,7 @@ import Supermarket from './Supermarket';
 // Debug Scenes
 import Blur from './debugScenes/Blur';
 import Screen from './debugScenes/Screen';
+import AnimTexture from './debugScenes/AnimTexture';
 
 export default {
     // Main Scenes
@@ -17,4 +18,5 @@ export default {
     // Debug Scenes
     blur: Blur,
     screen: Screen,
+    animTexture: AnimTexture,
 };
