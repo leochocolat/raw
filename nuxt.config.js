@@ -122,5 +122,8 @@ export default {
 
     env: {
         NODE_ENV: process.env.NODE_ENV,
+        CTF_SPACE_ID: process.env.CTF_SPACE_ID,
+        CTF_CDA_ACCESS_TOKEN_DELIVERY: process.env.CTF_CDA_ACCESS_TOKEN_DELIVERY,
+        CTF_CDA_ACCESS_TOKEN_MANAGMENT: process.env.CTF_CDA_ACCESS_TOKEN_MANAGMENT,
     },
 };
