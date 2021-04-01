@@ -22,6 +22,9 @@ uniform float u_crt_bending;
 // Noise
 uniform float u_noise_scale;
 uniform float u_noise_intensity;
+// Vignette
+uniform float u_vignette_scale;
+uniform float u_vignette_intensity;
 
 float rand(vec2 co)
 {
@@ -92,5 +95,13 @@ void main()
     float ys = floor(vUv.y * u_noise_scale);
     vec4 noise_color = vec4(rand(vec2(xs * u_time, ys * u_time)) * u_noise_intensity * u_global_intensity);
 
-    gl_FragColor = base_color + noise_color;
+    // Vignettage
+    vec2 vig_uv = vUv; 
+    vig_uv *=  1.0 - vig_uv.yx;
+    float vig = vig_uv.x * vig_uv.y * u_vignette_intensity; // multiply with sth for intensity
+    vig = pow(vig, u_vignette_scale * u_global_intensity); // change pow for modifying the extend of the vignette
+
+    gl_FragColor = (base_color + noise_color) * vig;
+    // gl_FragColor = vec4(vig * vig);
+
 }

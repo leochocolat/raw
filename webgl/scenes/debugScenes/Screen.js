@@ -69,6 +69,9 @@ class Screen extends DebugScene {
             // Noise
             u_noise_intensity: { value: 0.04 },
             u_noise_scale: { value: 150.0 },
+            // Noise
+            u_vignette_intensity: { value: 22.0 },
+            u_vignette_scale: { value: 0.15 },
         };
 
         const material = new THREE.ShaderMaterial({
@@ -120,6 +123,10 @@ class Screen extends DebugScene {
         const noise = this._debugFolder.addFolder({ title: 'Noise' });
         noise.addInput(this._plane.material.uniforms.u_noise_intensity, 'value', { label: 'intensity', min: 0, max: 0.5 });
         noise.addInput(this._plane.material.uniforms.u_noise_scale, 'value', { label: 'scale', min: 10, max: 500 });
+
+        const vignette = this._debugFolder.addFolder({ title: 'Vignette' });
+        vignette.addInput(this._plane.material.uniforms.u_vignette_intensity, 'value', { label: 'intensity', min: 0, max: 50 });
+        vignette.addInput(this._plane.material.uniforms.u_vignette_scale, 'value', { label: 'scale', min: 0, max: 2 });
 
         const animations = this._debugFolder.addFolder({ title: 'Animations' });
         animations.addButton({ title: 'Animate out' }).on('click', this._debugAnimationOutClickHandler);
