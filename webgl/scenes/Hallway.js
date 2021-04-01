@@ -48,8 +48,8 @@ class Hallway extends RenderTargetScene {
     }
 
     _setup() {
-        this._model = this._createModel();
         this._material = this._createMaterial();
+        this._model = this._createModel();
         // this._animationController = this._createAnimationController();
         // this._modelCamera = this._createModelCameraAnimation();
     }
@@ -60,16 +60,17 @@ class Hallway extends RenderTargetScene {
         const clone = model;
         this.add(clone.scene);
 
+        clone.scene.traverse((child) => {
+            if (child.isMesh) {
+                child.material = this._material;
+            }
+        });
+
         return clone;
     }
 
     _createMaterial() {
         const material = new THREE.MeshNormalMaterial();
-
-        this._model.scene.traverse((child) => {
-            console.log(child);
-            child.material = material;
-        });
 
         return material;
     }
