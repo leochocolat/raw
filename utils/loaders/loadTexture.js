@@ -16,7 +16,8 @@ export default function load(resource, basePath) {
             src,
             (texture) => {
                 resource.state = STATE_LOADED;
-                resolve(texture);
+                resource.data = texture;
+                resolve(resource);
             },
             null,
             reject
