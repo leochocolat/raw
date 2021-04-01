@@ -28,6 +28,12 @@ const webgl = [
         name: 'scene_hallway',
         path: '/models/scene_hallway.gltf',
     },
+    // Textures
+    {
+        type: 'texture',
+        name: 'texture_test',
+        path: '/textures/texture_test.png',
+    },
     // Videos
     {
         type: 'videoTexture',
