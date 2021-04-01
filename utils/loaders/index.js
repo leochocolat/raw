@@ -3,5 +3,6 @@ import loadFont from './loadFont';
 import loadVideoTexture from './loadVideoTexture';
 import loadGltf from './loadGltf';
 import loadDraco from './loadDraco';
+import loadTexture from './loadTexture';
 
-export { loadImage, loadFont, loadVideoTexture, loadGltf, loadDraco };
+export { loadImage, loadFont, loadVideoTexture, loadGltf, loadDraco, loadTexture };

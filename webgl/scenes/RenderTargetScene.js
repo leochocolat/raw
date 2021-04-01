@@ -19,7 +19,7 @@ class RenderTargetScene extends THREE.Scene {
         this._width = options.width;
         this._height = options.height;
         this._isActive = options.isActive;
-        this.background = new THREE.Color(data.colors[this._id]);
+        // this.background = new THREE.Color(data.colors[this._id]);
 
         this._clock = new THREE.Clock();
         this._sceneFps = 0;

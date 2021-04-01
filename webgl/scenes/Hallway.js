@@ -17,7 +17,7 @@ class Hallway extends RenderTargetScene {
     constructor(options) {
         super(options);
 
-        this.background = new THREE.Color(data.colors[this._id]);
+        // this.background = new THREE.Color(data.colors[this._id]);
 
         this._bindAll();
 
@@ -41,7 +41,7 @@ class Hallway extends RenderTargetScene {
      */
     _setupResources() {
         const resources = new SceneResourceLoader();
-        resources.addResource('CameraMovement');
+        resources.addResource('scene_hallway');
         resources.load();
 
         return resources;
@@ -49,17 +49,29 @@ class Hallway extends RenderTargetScene {
 
     _setup() {
         this._model = this._createModel();
-        this._animationController = this._createAnimationController();
-        this._modelCamera = this._createModelCameraAnimation();
+        this._material = this._createMaterial();
+        // this._animationController = this._createAnimationController();
+        // this._modelCamera = this._createModelCameraAnimation();
     }
 
     _createModel() {
-        const model = this._resources.get('CameraMovement');
+        const model = this._resources.get('scene_hallway');
         // const clone = cloneSkinnedMesh(model);
         const clone = model;
         this.add(clone.scene);
 
         return clone;
+    }
+
+    _createMaterial() {
+        const material = new THREE.MeshNormalMaterial();
+
+        this._model.scene.traverse((child) => {
+            console.log(child);
+            child.material = material;
+        });
+
+        return material;
     }
 
     _createAnimationController() {

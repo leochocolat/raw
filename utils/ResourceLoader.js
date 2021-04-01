@@ -1,5 +1,5 @@
 // Utils
-import { loadImage, loadFont, loadVideoTexture, loadGltf, loadDraco } from './loaders';
+import { loadImage, loadFont, loadVideoTexture, loadGltf, loadDraco, loadTexture } from './loaders';
 import EventDispatcher from './EventDispatcher';
 
 // Data
@@ -76,6 +76,8 @@ export default class ResourceLoader extends EventDispatcher {
                 return loadImage(resource, this.basePath);
             case 'font':
                 return loadFont(resource, this.basePath);
+            case 'texture':
+                return loadTexture(resource, this.basePath);
             case 'gltf':
             case 'glb':
                 return loadGltf(resource, this.basePath);

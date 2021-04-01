@@ -6,6 +6,7 @@ import Supermarket from './Supermarket';
 
 // Debug Scenes
 import Blur from './debugScenes/Blur';
+import Screen from './debugScenes/Screen';
 
 export default {
     // Main Scenes
@@ -15,4 +16,5 @@ export default {
     supermarket: Supermarket,
     // Debug Scenes
     blur: Blur,
+    screen: Screen,
 };

@@ -25,30 +25,15 @@ const webgl = [
     },
     {
         type: 'draco',
-        name: 'dracoScene_01',
-        path: '/models/Scene_01.glb',
-    },
-    {
-        type: 'draco',
-        name: 'dracoScene_02',
-        path: '/models/Scene_02.glb',
-    },
-    {
-        type: 'draco',
-        name: 'dracoScene_03',
-        path: '/models/Scene_03.glb',
-    },
-    {
-        type: 'draco',
-        name: 'dracoScene_04',
-        path: '/models/Scene_04.glb',
+        name: 'scene_hallway',
+        path: '/models/scene_hallway.gltf',
     },
     // Videos
-    // {
-    //     type: 'videoTexture',
-    //     name: 'video_test_0',
-    //     path: '/videos/video_test_0.mp4',
-    // },
+    {
+        type: 'videoTexture',
+        name: 'video_test_0',
+        path: '/videos/video_test_0.mp4',
+    },
     // {
     //     type: 'videoTexture',
     //     name: 'video_test_1',
