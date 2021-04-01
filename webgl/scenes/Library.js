@@ -48,9 +48,16 @@ class Library extends RenderTargetScene {
     }
 
     _setup() {
+        this._material = this._createMaterial();
         this._model = this._createModel();
         this._animationController = this._createAnimationController();
         this._modelCamera = this._createModelCameraAnimation();
+    }
+
+    _createMaterial() {
+        const material = new THREE.MeshNormalMaterial();
+
+        return material;
     }
 
     _createModel() {
@@ -58,6 +65,12 @@ class Library extends RenderTargetScene {
         // const clone = cloneSkinnedMesh(model);
         const clone = model;
         this.add(clone.scene);
+
+        clone.scene.traverse((child) => {
+            if (child.isMesh) {
+                child.material = this._material;
+            }
+        });
 
         return clone;
     }
