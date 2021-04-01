@@ -1,5 +1,5 @@
 // Vendor
-import { TextureLoader } from 'three';
+import { TextureLoader, sRGBEncoding } from 'three';
 
 // States
 const STATE_LOADING = 'loading';
@@ -16,6 +16,10 @@ export default function load(resource, basePath) {
             src,
             (texture) => {
                 resource.state = STATE_LOADED;
+
+                texture.flipY = false;
+                texture.encoding = sRGBEncoding;
+
                 resource.data = texture;
                 resolve(resource);
             },
