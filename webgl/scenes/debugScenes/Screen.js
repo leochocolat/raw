@@ -55,7 +55,11 @@ class Screen extends DebugScene {
             u_resolution: { value: new THREE.Vector2(this._width, this._height) },
             u_texture: { value: this._resources.get('video_test_0') },
             u_global_intensity: { value: 1 },
-            u_blue_filter_intensity: { value: 0.1 },
+            // Color filter
+            u_red_filter_intensity: { value: -0.1 },
+            u_green_filter_intensity: { value: 0 },
+            u_blue_filter_intensity: { value: 0 },
+            // CRT Displacement
             u_crt_bending: { value: 0.2 },
             // Scanline
             u_scanline_vertical: { value: true },
@@ -106,8 +110,12 @@ class Screen extends DebugScene {
     _addDebugSettings() {
         this._debugFolder.expanded = true;
         this._debugFolder.addInput(this._plane.material.uniforms.u_global_intensity, 'value', { label: 'Effect Intensity', min: 0, max: 1 });
-        this._debugFolder.addInput(this._plane.material.uniforms.u_blue_filter_intensity, 'value', { label: 'Blue filter intensity', min: 0, max: 1 });
         this._debugFolder.addInput(this._plane.material.uniforms.u_crt_bending, 'value', { label: 'CRT Bending', min: 0, max: 1 });
+
+        const colorFilter = this._debugFolder.addFolder({ title: 'Color filter' });
+        colorFilter.addInput(this._plane.material.uniforms.u_red_filter_intensity, 'value', { label: 'Red', min: -1, max: 1 });
+        colorFilter.addInput(this._plane.material.uniforms.u_green_filter_intensity, 'value', { label: 'Green', min: -1, max: 1 });
+        colorFilter.addInput(this._plane.material.uniforms.u_blue_filter_intensity, 'value', { label: 'Blue', min: -1, max: 1 });
 
         const scanline = this._debugFolder.addFolder({ title: 'Scanline' });
         scanline.addInput(this._plane.material.uniforms.u_scanline_vertical, 'value', { label: 'Vertical' });

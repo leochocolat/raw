@@ -7,6 +7,9 @@ uniform float u_time;
 
 uniform sampler2D u_texture;
 uniform float u_global_intensity;
+// Color filter
+uniform float u_red_filter_intensity;
+uniform float u_green_filter_intensity;
 uniform float u_blue_filter_intensity;
 // Scanline
 uniform float u_scanline_amount_factor;
@@ -87,7 +90,9 @@ void main()
 
     // Adjust base color
     vec4 filtered_color = base_color;
-    filtered_color.r -= filtered_color.r * u_blue_filter_intensity * u_global_intensity;
+    filtered_color.r += filtered_color.r * u_red_filter_intensity * u_global_intensity;
+    filtered_color.b += filtered_color.b * u_blue_filter_intensity * u_global_intensity;
+    filtered_color.g += filtered_color.g * u_green_filter_intensity * u_global_intensity;
     base_color = filtered_color;
 
     // Noise
