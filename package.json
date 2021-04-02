@@ -24,7 +24,6 @@
         "glsl-fast-gaussian-blur": "^1.0.2",
         "gsap": "^3.5.0",
         "nuxt": "^2.14.3",
-        "resource-loader": "github:immersive-garden/resource-loader",
         "three": "^0.125.2",
         "tweakpane": "^1.5.9"
     },
