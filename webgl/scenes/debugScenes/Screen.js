@@ -18,7 +18,6 @@ class Screen extends DebugScene {
         super(options);
 
         this._resources = this._setupResources();
-        console.log(this._resources);
 
         this._bindAll();
         this._setupEventListeners();
@@ -154,8 +153,6 @@ class Screen extends DebugScene {
     }
 
     _debugAnimationOutClickHandler() {
-        console.log('click');
-
         this._timelineIn?.kill();
 
         this._timelineOut = new gsap.timeline();
