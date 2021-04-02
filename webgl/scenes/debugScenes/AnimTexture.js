@@ -7,7 +7,7 @@ import fragment from '../../shaders/customBasicMaterial/frag.glsl';
 
 // Utils
 import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
-import SceneResourceLoader from '@/utils/SceneResourceLoader';
+import { ResourceManager } from '@/utils/resource-loader';
 import AnimationComponent from '@/utils/AnimationComponent';
 
 import bindAll from '@/utils/bindAll';
@@ -56,11 +56,10 @@ class AnimTexture extends DebugScene {
      */
 
     _setupResources() {
-        const resources = new SceneResourceLoader();
-        resources.addResource('soldier');
-        resources.addResource('tex1');
-        resources.addResource('tex2');
-        resources.addResource('tex3');
+        const resources = new ResourceManager({
+            name: 'animTexture',
+            namespace: 'animTexture',
+        });
 
         resources.load();
 
@@ -261,7 +260,7 @@ class AnimTexture extends DebugScene {
     }
 
     _setupEventListeners() {
-        this._resources.addEventListener('ready', this._resourcesReadyHandler);
+        this._resources.addEventListener('complete', this._resourcesReadyHandler);
     }
 
     _resourcesReadyHandler() {

@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 
 // Utils
-import SceneResourceLoader from '@/utils/SceneResourceLoader';
+import { ResourceManager } from '@/utils/resource-loader';
 
 // Shader
 import vertex from '../../shaders/screen-effect/vertex.glsl';
@@ -18,6 +18,7 @@ class Screen extends DebugScene {
         super(options);
 
         this._resources = this._setupResources();
+        console.log(this._resources);
 
         this._bindAll();
         this._setupEventListeners();
@@ -100,8 +101,7 @@ class Screen extends DebugScene {
     }
 
     _setupResources() {
-        const resources = new SceneResourceLoader();
-        resources.addResource('video_test_0');
+        const resources = new ResourceManager({ name: 'screen', namespace: 'screen' });
         resources.load();
 
         return resources;
@@ -146,7 +146,7 @@ class Screen extends DebugScene {
     }
 
     _setupEventListeners() {
-        this._resources.addEventListener('ready', this._resourcesReadyHandler);
+        this._resources.addEventListener('complete', this._resourcesReadyHandler);
     }
 
     _resourcesReadyHandler() {

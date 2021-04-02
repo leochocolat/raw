@@ -1,8 +1,7 @@
-import loadImage from './loadImage';
-import loadFont from './loadFont';
-import loadTexture from './loadTexture';
-import loadVideoTexture from './loadVideoTexture';
-import loadGltf from './loadGltf';
-import loadDraco from './loadDraco';
+import ThreeGltfDracoLoader from './three-gltf-draco-loader';
+import ThreeBasisTextureLoader from './three-basis-texture-loader';
+import ThreeTextureLoader from './three-texture-loader';
+import ThreeVideoTextureLoader from './three-video-texture-loader';
+import FontLoader from './font-loader';
 
-export { loadImage, loadFont, loadVideoTexture, loadGltf, loadDraco, loadTexture };
+export { ThreeGltfDracoLoader, ThreeBasisTextureLoader, ThreeTextureLoader, ThreeVideoTextureLoader, FontLoader };

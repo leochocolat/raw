@@ -5,75 +5,72 @@ const fonts = [
     {
         type: 'font',
         name: 'Default Sans',
+        path: '/',
+        preload: true,
+        options: {
+            weight: 300,
+        },
     },
 ];
 
-/**
- * Images
- */
-const images = [
-    {
-        type: 'texture',
-        name: 'tex1',
-        path: '/images/tex1.jpg',
-    },
-    {
-        type: 'texture',
-        name: 'tex2',
-        path: '/images/tex2.jpg',
-    },
-    {
-        type: 'texture',
-        name: 'tex3',
-        path: '/images/tex3.jpg',
-    },
-];
-
-/**
- * Images
- */
-const textures = [
-    {
-        type: 'texture',
-        name: 'tex1',
-        path: '/images/tex1.jpg',
-    },
-    {
-        type: 'texture',
-        name: 'tex2',
-        path: '/images/tex2.jpg',
-    },
-    {
-        type: 'texture',
-        name: 'tex3',
-        path: '/images/tex3.jpg',
-    },
-];
 /**
  * WebGL
  */
 const webgl = [
     // Models
     {
-        type: 'draco',
+        type: 'gltf',
         name: 'CameraMovement',
         path: '/models/CameraMovement.glb',
+        preload: false,
     },
     {
-        type: 'draco',
+        type: 'gltf',
         name: 'scene_hallway',
         path: '/models/scene_hallway.gltf',
+        preload: false,
     },
     {
         type: 'gltf',
         name: 'soldier',
         path: '/models/Soldier.glb',
+        namespace: 'animTexture',
+        preload: false,
+    },
+    // Textures
+    {
+        type: 'texture',
+        name: 'tex1',
+        path: '/images/tex1.jpg',
+        namespace: 'animTexture',
+        preload: false,
+    },
+    {
+        type: 'texture',
+        name: 'tex2',
+        path: '/images/tex2.jpg',
+        namespace: 'animTexture',
+        preload: false,
+    },
+    {
+        type: 'texture',
+        name: 'tex3',
+        path: '/images/tex3.jpg',
+        namespace: 'animTexture',
+        preload: false,
     },
     // Videos
     {
-        type: 'videoTexture',
+        type: 'video-texture',
         name: 'video_test_0',
         path: '/videos/video_test_0.mp4',
+        preload: false,
+        namespace: 'screen',
+        options: {
+            autoplay: true,
+            loop: true,
+            muted: false,
+        },
     },
 
     // Videos
@@ -99,6 +96,6 @@ const webgl = [
     // },
 ];
 
-const resources = [...fonts, ...images, ...textures, ...webgl];
+const resources = [...fonts, ...webgl];
 
 export default resources;

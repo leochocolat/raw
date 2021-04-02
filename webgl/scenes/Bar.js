@@ -7,7 +7,7 @@ import RenderTargetScene from './RenderTargetScene';
 // Utils
 import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
 import AnimationComponent from '@/utils/AnimationComponent';
-import SceneResourceLoader from '@/utils/SceneResourceLoader';
+import { ResourceManager } from '@/utils/resource-loader';
 import bindAll from '@/utils/bindAll';
 
 // Data
@@ -40,8 +40,10 @@ class Bar extends RenderTargetScene {
      * Private
      */
     _setupResources() {
-        const resources = new SceneResourceLoader();
-        resources.addResource('CameraMovement');
+        const resources = new ResourceManager({
+            name: 'bar',
+        });
+        resources.addByName('CameraMovement');
         resources.load();
 
         return resources;
@@ -99,7 +101,7 @@ class Bar extends RenderTargetScene {
     }
 
     _setupEventListeners() {
-        this._resources.addEventListener('ready', this._resourcesReadyHandler);
+        this._resources.addEventListener('complete', this._resourcesReadyHandler);
     }
 
     _resourcesReadyHandler() {

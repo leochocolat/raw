@@ -1,5 +1,5 @@
 // Vendor
-import ResourceLoader from '@/utils/ResourceLoader';
+import { ResourceLoader } from '@/utils/resource-loader';
 import * as THREE from 'three';
 import gsap from 'gsap';
 

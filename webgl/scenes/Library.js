@@ -8,7 +8,7 @@ import RenderTargetScene from './RenderTargetScene';
 import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
 import AnimationComponent from '@/utils/AnimationComponent';
 import bindAll from '@/utils/bindAll';
-import SceneResourceLoader from '@/utils/SceneResourceLoader';
+import { ResourceManager } from '@/utils/resource-loader';
 
 // Data
 import data from '../data';
@@ -40,8 +40,8 @@ class Library extends RenderTargetScene {
      * Private
      */
     _setupResources() {
-        const resources = new SceneResourceLoader();
-        resources.addResource('CameraMovement');
+        const resources = new ResourceManager({ name: 'library', namespace: 'library' });
+        resources.addByName('CameraMovement');
         resources.load();
 
         return resources;
@@ -98,7 +98,7 @@ class Library extends RenderTargetScene {
     }
 
     _setupEventListeners() {
-        this._resources.addEventListener('ready', this._resourcesReadyHandler);
+        this._resources.addEventListener('complete', this._resourcesReadyHandler);
     }
 
     _resourcesReadyHandler() {

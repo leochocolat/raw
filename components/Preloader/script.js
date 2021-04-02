@@ -5,7 +5,9 @@ import { mapGetters } from 'vuex';
 import resources from '@/resources';
 
 // Utils
-import ResourceLoader from '@/utils/ResourceLoader';
+import { WebGLRenderer } from 'three';
+import { ResourceLoader } from '@/utils/resource-loader';
+import { ThreeGltfDracoLoader, ThreeBasisTextureLoader, ThreeTextureLoader, FontLoader, ThreeVideoTextureLoader } from '@/utils/loaders';
 
 export default {
     computed: {
@@ -28,9 +30,18 @@ export default {
          * Private
          */
         setupResources() {
-            const basePath = '';
+            ResourceLoader.basePath = '';
+            ResourceLoader.registerLoader(ThreeGltfDracoLoader, 'gltf', { decoderPath: '/libs/draco/' });
+            ResourceLoader.registerLoader(ThreeTextureLoader, 'texture');
+            ResourceLoader.registerLoader(FontLoader, 'font');
+            ResourceLoader.registerLoader(ThreeVideoTextureLoader, 'video-texture');
+            ResourceLoader.registerLoader(ThreeBasisTextureLoader, 'basis', { decoderPath: '/libs/basis/', renderer: new WebGLRenderer() });
+
             this.resources = resources;
-            this.resourceLoader = new ResourceLoader(this.resources, basePath, this.isDebug);
+            this.resourceLoader = new ResourceLoader();
+            this.resourceLoader.add({ resources, preload: false });
+            this.resourceLoader.preload();
+
             this.$store.dispatch('preloader/start');
         },
 
