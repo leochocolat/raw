@@ -63,6 +63,8 @@ class Cameras {
 
     setModelCamera(camera) {
         this._mainCamera = camera;
+        this._mainCamera.aspect = this._width / this._height;
+        this._mainCamera.updateProjectionMatrix();
         this._setActiveCamera();
     }
 
@@ -97,7 +99,7 @@ class Cameras {
     _createDebugFolder() {
         if (!this._debugger) return;
 
-        const debugFolder = this._debugger.addFolder({ title: 'Cameras', expanded: false });
+        const debugFolder = this._debugger.addFolder({ title: 'Cameras', expanded: true });
         debugFolder.addInput(this, '_isDebug', { label: 'isDebug' }).on('change', () => {
             this._setActiveCamera();
         });

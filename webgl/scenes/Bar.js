@@ -32,8 +32,20 @@ class Bar extends RenderTargetScene {
     update() {
         super.update();
 
-        if (!this._animationController) return;
-        this._animationController.update(this._sceneDelta);
+        this._updateAnimationController();
+    }
+
+    mousemoveHandler(e) {
+        if (!e.settings.isEnable) return;
+
+        const positionFactor = e.settings.positionFactor;
+
+        const rotationFactor = e.settings.rotationFactor;
+
+        this.cameras.main.position.set(e.normalizedPosition.current.x * positionFactor.x, e.normalizedPosition.current.y * positionFactor.y);
+
+        this.cameras.main.rotation.y = e.normalizedPosition.current.x * rotationFactor.x * (Math.PI / 180);
+        this.cameras.main.rotation.x = e.normalizedPosition.current.y * rotationFactor.y * (Math.PI / 180);
     }
 
     /**
@@ -91,6 +103,12 @@ class Bar extends RenderTargetScene {
         super.cameras.setModelCamera(this._model.cameras[0]);
 
         return this._model.cameras[0];
+    }
+
+    // On Tick
+    _updateAnimationController() {
+        if (!this._animationController) return;
+        this._animationController.update(this._sceneDelta);
     }
 
     /**
