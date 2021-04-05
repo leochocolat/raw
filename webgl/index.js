@@ -26,24 +26,17 @@ class WebglApp {
         this._fps = 0;
 
         this._mousePosition = {
-            current: {
-                position: new THREE.Vector2(this._width / 2, this._height / 2),
-                relativePosition: new THREE.Vector2(0.5, 0.5),
-                normalizedPosition: new THREE.Vector2(0, 0),
-            },
-            target: {
-                position: new THREE.Vector2(this._width / 2, this._height / 2),
-                relativePosition: new THREE.Vector2(0.5, 0.5),
-                normalizedPosition: new THREE.Vector2(0, 0),
-            },
+            position: new THREE.Vector2(this._width / 2, this._height / 2),
+            relativePosition: new THREE.Vector2(0.5, 0.5),
+            normalizedPosition: new THREE.Vector2(0, 0),
         };
 
         this._settings = {
             mouseInteractions: {
                 isEnable: true,
-                positionFactor: { x: 1, y: 1 },
+                positionFactor: { x: 2, y: 2 },
                 // Degrees
-                rotationFactor: { x: -30, y: -30 },
+                rotationFactor: { x: -20, y: 20 },
                 damping: 0.1,
             },
         };
@@ -135,32 +128,12 @@ class WebglApp {
         this._sceneManager?.update(time, delta, fps);
         this._debugSceneManager?.update(time, delta, fps);
 
-        this._updateMousePosition();
-
         this._render();
     }
 
     _render() {
         this._sceneManager?.render();
         this._debugSceneManager?.render();
-    }
-
-    _updateMousePosition() {
-        this._mousePosition.current.position.x = math.lerp(this._mousePosition.current.position.x, this._mousePosition.target.position.x, this._settings.mouseInteractions.damping);
-        this._mousePosition.current.position.y = math.lerp(this._mousePosition.current.position.y, this._mousePosition.target.position.y, this._settings.mouseInteractions.damping);
-
-        this._mousePosition.current.relativePosition.x = math.lerp(this._mousePosition.current.relativePosition.x, this._mousePosition.target.relativePosition.x, this._settings.mouseInteractions.damping);
-        this._mousePosition.current.relativePosition.y = math.lerp(this._mousePosition.current.relativePosition.y, this._mousePosition.target.relativePosition.y, this._settings.mouseInteractions.damping);
-
-        this._mousePosition.current.normalizedPosition.x = math.lerp(this._mousePosition.current.normalizedPosition.x, this._mousePosition.target.normalizedPosition.x, this._settings.mouseInteractions.damping);
-        this._mousePosition.current.normalizedPosition.y = math.lerp(this._mousePosition.current.normalizedPosition.y, this._mousePosition.target.normalizedPosition.y, this._settings.mouseInteractions.damping);
-
-        this._sceneManager?.mousemoveHandler({
-            position: { current: this._mousePosition.current.position, target: this._mousePosition.target.position },
-            relativePosition: { current: this._mousePosition.current.relativePosition, target: this._mousePosition.target.relativePosition },
-            normalizedPosition: { current: this._mousePosition.current.normalizedPosition, target: this._mousePosition.target.normalizedPosition },
-            settings: this._settings.mouseInteractions,
-        });
     }
 
     // Debugger
@@ -179,8 +152,8 @@ class WebglApp {
 
         const interactions = debugPanel.addFolder({ title: 'Interactions', expanded: true });
         interactions.addInput(this._settings.mouseInteractions, 'isEnable', { label: 'enable' });
-        interactions.addInput(this._settings.mouseInteractions.positionFactor, 'x', { label: 'Position X', min: 0, max: 5 });
-        interactions.addInput(this._settings.mouseInteractions.positionFactor, 'y', { label: 'Position Y', min: 0, max: 5 });
+        interactions.addInput(this._settings.mouseInteractions.positionFactor, 'x', { label: 'Position X', min: 0, max: 10 });
+        interactions.addInput(this._settings.mouseInteractions.positionFactor, 'y', { label: 'Position Y', min: 0, max: 10 });
         // Degrees
         interactions.addInput(this._settings.mouseInteractions.rotationFactor, 'x', { label: 'Rotation X', min: -90, max: 90 });
         interactions.addInput(this._settings.mouseInteractions.rotationFactor, 'y', { label: 'Rotation Y', min: -90, max: 90 });
@@ -218,9 +191,16 @@ class WebglApp {
     }
 
     _mousemoveHandler(e) {
-        this._mousePosition.target.position.set(e.clientX, e.clientY);
-        this._mousePosition.target.relativePosition.set(this._mousePosition.target.position.x / this._width, this._mousePosition.target.position.y / this._height);
-        this._mousePosition.target.normalizedPosition.set(this._mousePosition.target.relativePosition.x - 0.5, 1 - this._mousePosition.target.relativePosition.y - 0.5);
+        this._mousePosition.position.set(e.clientX, e.clientY);
+        this._mousePosition.relativePosition.set(this._mousePosition.position.x / this._width, this._mousePosition.position.y / this._height);
+        this._mousePosition.normalizedPosition.set(this._mousePosition.relativePosition.x - 0.5, 1 - this._mousePosition.relativePosition.y - 0.5);
+
+        this._sceneManager?.mousemoveHandler({
+            position: this._mousePosition.position,
+            relativePosition: this._mousePosition.relativePosition,
+            normalizedPosition: this._mousePosition.normalizedPosition,
+            settings: this._settings.mouseInteractions,
+        });
     }
 }
 
