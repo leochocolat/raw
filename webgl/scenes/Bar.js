@@ -129,7 +129,9 @@ class Bar extends RenderTargetScene {
     }
 
     _createMaterial() {
-        const material = new THREE.MeshNormalMaterial();
+        const material = new THREE.MeshNormalMaterial({
+            side: THREE.DoubleSide,
+        });
 
         return material;
     }

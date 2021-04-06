@@ -33,9 +33,9 @@ class WebglApp {
         this._settings = {
             mouseInteractions: {
                 isEnable: true,
-                positionFactor: { x: 2, y: 2 },
+                positionFactor: { x: 5, y: 2 },
                 // Degrees
-                rotationFactor: { x: -20, y: 20 },
+                rotationFactor: { x: -30, y: 30 },
                 damping: 0.1,
             },
         };
