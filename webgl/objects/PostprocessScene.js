@@ -24,6 +24,14 @@ class PostprocessScene extends THREE.Scene {
         return this._renderTarget;
     }
 
+    get width() {
+        return this._width;
+    }
+
+    get height() {
+        return this._height;
+    }
+
     resize(width, height) {
         this._width = width;
         this._height = height;

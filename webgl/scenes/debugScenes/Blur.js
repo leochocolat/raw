@@ -99,11 +99,11 @@ class Blur extends DebugScene {
 
     _addDebugSettings() {
         this._debugFolder.expanded = true;
-        const firstPath = this._debugFolder.addFolder({ title: 'First Path' });
-        firstPath.addInput(this._postprocessPlane.material.uniforms.u_blur_direction, 'value', { label: 'Blur Direction' });
+        const firstPass = this._debugFolder.addFolder({ title: 'First Pass' });
+        firstPass.addInput(this._postprocessPlane.material.uniforms.u_blur_direction, 'value', { label: 'Blur Direction' });
 
-        const secondPath = this._debugFolder.addFolder({ title: 'Second Path' });
-        secondPath.addInput(this._finalPlane.material.uniforms.u_blur_direction, 'value', { label: 'Blur Direction' });
+        const secondPass = this._debugFolder.addFolder({ title: 'Second Pass' });
+        secondPass.addInput(this._finalPlane.material.uniforms.u_blur_direction, 'value', { label: 'Blur Direction' });
     }
 }
 

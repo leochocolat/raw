@@ -27,8 +27,8 @@ export default async (context, inject) => {
     store.dispatch('setup', setup);
 
     // Get censorship datas
-    const sceneEntries = await api.getScenesEntries();
-    store.dispatch('data/setSceneEntries', sceneEntries);
+    // const sceneEntries = await api.getScenesEntries();
+    // store.dispatch('data/setSceneEntries', sceneEntries);
 
     /**
      * Get Entries

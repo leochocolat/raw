@@ -11,9 +11,18 @@ export default {
         };
     },
 
-    asyncData({ $api }) {
-        return $api.getEntryById('5rjWV266TXZKdTaYcuht6i').then((response) => {
-            return { data: response.fields };
+    asyncData({ $api, store }) {
+        const promises = [$api.getEntryById('5rjWV266TXZKdTaYcuht6i'), $api.getScenesEntries()];
+
+        return Promise.all(promises).then((responses) => {
+            const homeEntry = responses[0];
+            const sceneEntries = responses[1];
+            store.dispatch('data/setSceneEntries', sceneEntries);
+
+            return {
+                data: homeEntry.fields,
+                sceneEntries,
+            };
         });
     },
 

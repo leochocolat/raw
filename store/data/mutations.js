@@ -1,6 +1,8 @@
 const mutations = {
     SET_SCENE_ENTRIES(state, entries) {
-        state.sceneEntries = entries;
+        // Prevent mutation errors
+        const newEntries = JSON.parse(JSON.stringify(entries));
+        state.sceneEntries = newEntries;
 
         for (const key in entries) {
             state[key] = entries[key];
