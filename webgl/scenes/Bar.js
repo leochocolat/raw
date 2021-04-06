@@ -139,7 +139,6 @@ class Bar extends RenderTargetScene {
         // const clone = cloneSkinnedMesh(model);
         const clone = model;
         this.add(clone.scene);
-
         clone.scene.traverse((child) => {
             if (child.isMesh) {
                 child.material = this._material;
