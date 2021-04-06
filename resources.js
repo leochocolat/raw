@@ -21,7 +21,13 @@ const webgl = [
     {
         type: 'gltf',
         name: 'CameraMovement',
-        path: '/models/CameraMovement.glb',
+        path: '/models/Hallway.glb',
+        preload: false,
+    },
+    {
+        type: 'gltf',
+        name: 'hallway',
+        path: '/models/Hallway.glb',
         preload: false,
     },
     {

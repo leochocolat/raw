@@ -41,7 +41,7 @@ class Hallway extends RenderTargetScene {
      */
     _setupResources() {
         const resources = new ResourceManager({ name: 'hallway', namespace: 'hallway' });
-        resources.addByName('scene_hallway');
+        resources.addByName('hallway');
         resources.load();
 
         return resources;
@@ -50,14 +50,15 @@ class Hallway extends RenderTargetScene {
     _setup() {
         this._material = this._createMaterial();
         this._model = this._createModel();
-        // this._animationController = this._createAnimationController();
-        // this._modelCamera = this._createModelCameraAnimation();
+        this._animationController = this._createAnimationController();
+        this._modelCamera = this._createModelCameraAnimation();
     }
 
     _createModel() {
-        const model = this._resources.get('scene_hallway');
+        const model = this._resources.get('hallway');
         // const clone = cloneSkinnedMesh(model);
         const clone = model;
+        console.log(model);
         this.add(clone.scene);
 
         clone.scene.traverse((child) => {
@@ -79,6 +80,7 @@ class Hallway extends RenderTargetScene {
         const model = this._model;
         const animationController = new AnimationComponent(model);
         animationController.playAnimation(animationController.actionType.CameraMove);
+        console.log(animationController.actionType.CameraMove);
 
         return animationController;
     }
@@ -87,7 +89,7 @@ class Hallway extends RenderTargetScene {
         if (!this._model.cameras) return;
 
         super.cameras.setModelCamera(this._model.cameras[0]);
-
+        this._model.cameras[0].fov = 75;
         return this._model.cameras[0];
     }
 
