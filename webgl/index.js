@@ -4,7 +4,6 @@ import * as THREE from 'three';
 
 // Utils
 import bindAll from '@/utils/bindAll';
-import math from '@/utils/math';
 import WindowResizeObserver from '@/utils/WindowResizeObserver';
 import Debugger from '@/utils/Debugger';
 
@@ -150,7 +149,7 @@ class WebglApp {
             max: 100,
         });
 
-        const interactions = debugPanel.addFolder({ title: 'Interactions', expanded: true });
+        const interactions = debugPanel.addFolder({ title: 'Interactions', expanded: false });
         interactions.addInput(this._settings.mouseInteractions, 'isEnable', { label: 'enable' });
         interactions.addInput(this._settings.mouseInteractions.positionFactor, 'x', { label: 'Position X', min: 0, max: 10 });
         interactions.addInput(this._settings.mouseInteractions.positionFactor, 'y', { label: 'Position Y', min: 0, max: 10 });
