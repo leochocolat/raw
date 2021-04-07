@@ -161,11 +161,7 @@ export default function ({ i18n, error, store }) {
      * @param {Number} value
      * @return {Promise}
      */
-    function updateSceneCensorship(id, value) {
-        if (!store.state.data.sceneEntries[id]) throw new Error(`Could not find scene entry with id /${id}/`);
-
-        const sysId = store.state.data.sceneEntries[id].sysId;
-
+    function updateSceneCensorship(sysId, value) {
         return getEntryById(sysId).then((response) => {
             const data = response.fields[FIELD_CENSORSHIP_DATA];
 

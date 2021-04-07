@@ -9,13 +9,7 @@ export default {
         };
     },
 
-    props: ['data'],
-
-    computed: {
-        ...mapGetters({
-            sceneEntries: 'data/sceneEntries',
-        }),
-    },
+    props: ['data', 'scene-entries'],
 
     methods: {
         /**

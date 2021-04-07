@@ -15,10 +15,15 @@
             :class="activeIndex === 2 ? 'is-enable' : ''"
             :data="data.tutorial2"
         />
-        <Menu ref="screen4" :class="activeIndex === 3 ? 'is-enable' : ''" />
+        <Menu
+            ref="screen4"
+            :class="activeIndex === 3 ? 'is-enable' : ''"
+            :scene-entries="sceneEntries"
+        />
         <ScreenActive
             ref="screen5"
             :class="activeIndex === 4 ? 'is-enable' : ''"
+            :scene-entries="sceneEntries"
         />
     </div>
 </template>

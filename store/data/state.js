@@ -1,9 +1,11 @@
 const state = () => ({
-    sceneEntries: [],
-    hallway: {},
-    supermarket: {},
-    library: {},
-    bar: {},
+    scenes: {
+        hallway: {},
+        supermarket: {},
+        library: {},
+        bar: {},
+    },
+    isComplete: false,
 });
 
 export default state;

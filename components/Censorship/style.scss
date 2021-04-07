@@ -1,4 +1,4 @@
-.blur {
+.censorship {
     display: flex;
 
     position: absolute;
@@ -74,6 +74,7 @@ img {
     margin-top: 20px;
 
     font-size: rem-l(20px);
+    text-transform: uppercase;
 
     cursor: pointer;
 }

@@ -2,33 +2,27 @@
 import ArrowDown from '@/assets/icons/arrow-down.svg?inline';
 
 // Vendor
-import { mapGetters } from 'vuex';
 import gsap from 'gsap';
 
 export default {
-    props: ['id'],
+    props: ['id', 'data'],
 
     data() {
         return {
+            lang: this.$i18n.locale,
             currentTime: new Date().getTime(),
             startTime: new Date().getTime(),
             duration: 0,
+            callToAction: {
+                fr: ['selectionner', 'la camera'],
+                en: ['select', 'this camera'],
+            },
         };
     },
 
     computed: {
-        ...mapGetters({
-            entryById: 'data/entryById',
-        }),
-
-        entry() {
-            const entry = this.entryById(this.id);
-            return entry;
-        },
-
         time() {
-            const entry = this.entryById(this.id);
-            const date = new Date(entry.startTime);
+            const date = new Date(this.data.startTime);
             date.setSeconds(date.getSeconds() + this.duration);
             return date.toLocaleTimeString('en-GB');
         },
@@ -54,14 +48,12 @@ export default {
         // Events
         mouseenterHandler() {
             this.timelineLeave?.kill();
-
             this.timelineEnter = new gsap.timeline();
             this.timelineEnter.to(this.$refs.frame.$el, { duration: 0.5, scaleY: 0.95, ease: 'circ.out' });
         },
 
         mouseleaveHandler() {
             this.timelineEnter?.kill();
-
             this.timelineLeave = new gsap.timeline();
             this.timelineLeave.to(this.$refs.frame.$el, { duration: 0.5, scaleY: 1, ease: 'circ.out' });
         },

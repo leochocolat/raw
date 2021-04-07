@@ -17,7 +17,6 @@ export default {
         return Promise.all(promises).then((responses) => {
             const homeEntry = responses[0];
             const sceneEntries = responses[1];
-            store.dispatch('data/setSceneEntries', sceneEntries);
 
             return {
                 data: homeEntry.fields,

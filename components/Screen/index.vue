@@ -12,12 +12,13 @@
             <Frame ref="frame" />
             <div class="screen-footer">
                 <div class="call-to-action">
-                    <span> Select<ArrowDown class="arrow-down" /> </span>
-                    <br />
-                    <span>this camera</span>
+                    <span>
+                        {{ callToAction[lang][0]
+                        }}<ArrowDown class="arrow-down" /> </span
+                    ><br /><span>{{ callToAction[lang][1] }}</span>
                 </div>
                 <div class="name">
-                    {{ entry.name }}
+                    {{ data.name }}
                 </div>
             </div>
         </div>

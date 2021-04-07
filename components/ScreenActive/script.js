@@ -2,6 +2,8 @@
 import gsap from 'gsap';
 
 export default {
+    props: ['scene-entries'],
+
     data() {
         return {
             locale: this.$i18n.locale,

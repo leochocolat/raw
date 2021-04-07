@@ -1,11 +1,7 @@
 const getters = {
-    sceneEntries(state) {
-        return state.sceneEntries;
-    },
-
-    entryById(state) {
+    sceneCensorshipFactor(state) {
         return (id) => {
-            return state[id];
+            return state.scenes[id].censorshipFactor;
         };
     },
 };

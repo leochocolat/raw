@@ -5,6 +5,7 @@
                 v-for="(item, key) in sceneEntries"
                 :id="item.id"
                 :key="key"
+                :data="item"
                 class="screen"
             />
 

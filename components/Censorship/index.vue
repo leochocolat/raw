@@ -1,23 +1,23 @@
 <template>
-    <div class="blur">
+    <div class="censorship">
         <div class="container">
             <div class="image-container">
                 <img
                     ref="image"
                     src="https://i.picsum.photos/id/692/600/700.jpg?hmac=jmB3mH356VFvuJbVxDtTZfr-9aPpwJg4XEfFhohU7oU"
                     alt=""
-                    :style="`filter: blur(${censorshipFactor * 10}px)`"
+                    :style="`filter: blur(${newCensorshipFactor * 10}px)`"
                 />
             </div>
 
             <div ref="container" class="vote-container">
                 <div class="caption">
-                    Comment montreriez-vous cette image ?
+                    {{ data.callToAction }}
                 </div>
                 <div class="control">
                     <span ref="cursor" class="cursor"></span>
                 </div>
-                <span class="value">{{ censorshipFactor.toFixed(2) }}</span>
+                <span class="value">{{ newCensorshipFactor.toFixed(2) }}</span>
                 <div class="message">{{ isSent ? 'success' : '' }}</div>
                 <button
                     ref="buttonSubmit"
@@ -25,7 +25,7 @@
                     :disabled="isSent"
                     @click="clickSubmitHandler"
                 >
-                    Valider
+                    {{ lang === 'fr' ? 'Valider' : 'Submit' }}
                 </button>
             </div>
         </div>
