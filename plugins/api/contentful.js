@@ -166,7 +166,7 @@ export default function ({ i18n, error, store }) {
 
         const sysId = store.state.data.sceneEntries[id].sysId;
 
-        getEntryById(sysId).then((response) => {
+        return getEntryById(sysId).then((response) => {
             const data = response.fields[FIELD_CENSORSHIP_DATA];
 
             const newData = data && data.inputs ? data.inputs : [];

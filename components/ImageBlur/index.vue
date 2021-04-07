@@ -18,9 +18,11 @@
                     <span ref="cursor" class="cursor"></span>
                 </div>
                 <span class="value">{{ censorshipFactor.toFixed(2) }}</span>
+                <div class="message">{{ isSent ? 'success' : '' }}</div>
                 <button
                     ref="buttonSubmit"
                     class="button-submit"
+                    :disabled="isSent"
                     @click="clickSubmitHandler"
                 >
                     Valider

@@ -6,6 +6,12 @@ import DragManager from '@/utils/DragManager';
 import clamp from '@/utils/math/clamp';
 
 export default {
+    data() {
+        return {
+            isSent: false,
+        };
+    },
+
     computed: {
         ...mapGetters({
             entryById: 'data/entryById',
@@ -71,7 +77,9 @@ export default {
         },
 
         clickSubmitHandler() {
-            this.$api.updateSceneCensorship('hallway', this.censorshipFactor);
+            this.$api.updateSceneCensorship('hallway', this.censorshipFactor).then(() => {
+                this.isSent = true;
+            });
         },
     },
 };
