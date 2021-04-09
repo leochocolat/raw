@@ -2,12 +2,13 @@
 varying vec2 vUv;
 
 uniform sampler2D u_texture;
+
 uniform vec2 u_resolution;
 uniform float u_time;
 uniform vec2 u_blur_direction;
 
-#pragma glslify: blur = require('glsl-fast-gaussian-blur/13')
-// #pragma glslify: blur = require('glsl-fast-gaussian-blur')
+// #pragma glslify: blur = require('glsl-fast-gaussian-blur/13')
+#pragma glslify: blur = require('glsl-fast-gaussian-blur')
 
 
 void main() {

@@ -2,11 +2,11 @@
 import * as THREE from 'three';
 
 // Postprocessing
-import PostprocessScene from '../../objects/PostprocessScene';
+import BlurPlaneBuffer from '../../buffers/BlurPlaneBuffer';
 
 // Shader
-import vertex from '../../shaders/blur/vertex.glsl';
-import fragment from '../../shaders/blur/fragment.glsl';
+import vertex from '../../shaders/censorship/vertex.glsl';
+import fragment from '../../shaders/censorship/fragment.glsl';
 
 // Scene
 import DebugScene from './DebugScene';
@@ -15,10 +15,16 @@ class Blur extends DebugScene {
     constructor(options) {
         super(options);
 
-        this._postprocessScene = this._createPostprocessScene();
-        this._postprocessPlane = this._createPostprocessPlane();
-        this._finalPlane = this._createFinalPlane();
-        this._addDebugSettings();
+        this._time = 0;
+
+        this._texture = new THREE.TextureLoader().load('https://images.unsplash.com/photo-1615431921909-37c4aed74df5?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzM3x8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60', () => {
+            this._bufferA = this._createBufferA();
+            this._bufferB = this._createBufferB();
+
+            this._finalPlane = this._createFinalPlane();
+        });
+
+        // this._addDebugSettings();
     }
 
     /**
@@ -26,84 +32,106 @@ class Blur extends DebugScene {
      */
     resize(width, height) {
         super.resize(width, height);
+
+        if (!this._finalPlane) return;
+
+        this._bufferA.resize(width, height);
+        this._bufferB.resize(width, height);
     }
 
     update(time, delta) {
+        this._time = time;
+
         super.update(time, delta);
     }
 
     render() {
-        this._renderer.setRenderTarget(this._postprocessScene.renderTarget);
-        this._renderer.render(this._postprocessScene, this._postprocessScene.camera);
+        if (!this._finalPlane) return;
+
+        const anim = Math.sin(this._time) * 0.5 + 0.5;
+
+        let writeBuffer = this._bufferA;
+        let readBuffer = this._bufferB;
+
+        const iterations = 8;
+
+        for (let i = 0; i < iterations; i++) {
+            const radius = (iterations - i - 1) * anim;
+
+            // Render write buffer
+            this._renderer.setRenderTarget(writeBuffer);
+            this._renderer.render(writeBuffer.scene, writeBuffer.camera);
+
+            // Set Texture
+            readBuffer.plane.material.uniforms.u_texture.value = writeBuffer.texture;
+
+            // Set blur direction
+            readBuffer.plane.material.uniforms.u_blur_direction.value.x = i % 2 === 0 ? radius : 0;
+            readBuffer.plane.material.uniforms.u_blur_direction.value.y = i % 2 === 0 ? 0 : radius;
+
+            // Render read buffer
+            this._renderer.setRenderTarget(readBuffer);
+            this._renderer.render(readBuffer.scene, readBuffer.camera);
+
+            // Set Texture
+            writeBuffer.plane.material.uniforms.u_texture.value = readBuffer.texture;
+
+            // Set blur direction
+            readBuffer.plane.material.uniforms.u_blur_direction.value.x = i % 2 === 0 ? radius : 0;
+            readBuffer.plane.material.uniforms.u_blur_direction.value.y = i % 2 === 0 ? 0 : radius;
+
+            // Swap buffers
+            const t = writeBuffer;
+            writeBuffer = readBuffer;
+            readBuffer = t;
+        }
+
         this._renderer.setRenderTarget(null);
+
+        this._finalPlane.material.uniforms.u_texture.value = writeBuffer.texture;
+
         super.render();
     }
 
     /**
      * Private
      */
-    _createPostprocessScene() {
-        const scene = new PostprocessScene(this._width, this._height);
+    _createBufferA() {
+        const buffer = new BlurPlaneBuffer(this._width, this._width, this._texture);
 
-        return scene;
+        return buffer;
     }
 
-    _createPostprocessPlane() {
-        const geometry = new THREE.PlaneGeometry(this._width, this._height, 1);
+    _createBufferB() {
+        const buffer = new BlurPlaneBuffer(this._width, this._width, this._texture);
 
-        const texture = new THREE.TextureLoader().load('https://images.unsplash.com/photo-1615431921909-37c4aed74df5?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzM3x8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60');
-
-        const uniforms = {
-            u_texture: { value: texture },
-            u_blur_direction: { value: new THREE.Vector2(0, 1) },
-            u_resolution: { value: new THREE.Vector2(this._width, this._height) },
-            u_time: { value: 0.0 },
-        };
-
-        const material = new THREE.ShaderMaterial({
-            side: THREE.DoubleSide,
-            uniforms,
-            fragmentShader: fragment,
-            vertexShader: vertex,
-        });
-
-        const mesh = new THREE.Mesh(geometry, material);
-
-        this._postprocessScene.add(mesh);
-
-        return mesh;
+        return buffer;
     }
 
     _createFinalPlane() {
         const geometry = new THREE.PlaneGeometry(1, 1, 1);
 
         const uniforms = {
-            u_texture: { value: this._postprocessScene.renderTarget.texture },
-            u_blur_direction: { value: new THREE.Vector2(1, 0) },
+            u_texture: { value: this._texture },
+            u_size: { value: new THREE.Vector2(this._texture.image.width, this._texture.image.height) },
             u_resolution: { value: new THREE.Vector2(this._width, this._height) },
             u_time: { value: 0.0 },
         };
 
         const material = new THREE.ShaderMaterial({
-            side: THREE.DoubleSide,
             uniforms,
             fragmentShader: fragment,
             vertexShader: vertex,
+            side: THREE.DoubleSide,
         });
 
         const mesh = new THREE.Mesh(geometry, material);
         this.add(mesh);
-
         return mesh;
     }
 
     _addDebugSettings() {
         this._debugFolder.expanded = true;
-        const firstPass = this._debugFolder.addFolder({ title: 'First Pass' });
-        firstPass.addInput(this._postprocessPlane.material.uniforms.u_blur_direction, 'value', { label: 'Blur Direction' });
-
-        const secondPass = this._debugFolder.addFolder({ title: 'Second Pass' });
-        secondPass.addInput(this._finalPlane.material.uniforms.u_blur_direction, 'value', { label: 'Blur Direction' });
     }
 }
 
