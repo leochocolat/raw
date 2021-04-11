@@ -17,6 +17,10 @@ class Blur extends DebugScene {
 
         this._time = 0;
 
+        this._settings = {
+            blur: 0,
+        };
+
         this._texture = new THREE.TextureLoader().load('https://images.unsplash.com/photo-1615431921909-37c4aed74df5?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzM3x8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60', () => {
             this._bufferA = this._createBufferA();
             this._bufferB = this._createBufferB();
@@ -24,7 +28,7 @@ class Blur extends DebugScene {
             this._finalPlane = this._createFinalPlane();
         });
 
-        // this._addDebugSettings();
+        this._addDebugSettings();
     }
 
     /**
@@ -48,47 +52,7 @@ class Blur extends DebugScene {
     render() {
         if (!this._finalPlane) return;
 
-        const anim = Math.sin(this._time) * 0.5 + 0.5;
-
-        let writeBuffer = this._bufferA;
-        let readBuffer = this._bufferB;
-
-        const iterations = 8;
-
-        for (let i = 0; i < iterations; i++) {
-            const radius = (iterations - i - 1) * anim;
-
-            // Render write buffer
-            this._renderer.setRenderTarget(writeBuffer);
-            this._renderer.render(writeBuffer.scene, writeBuffer.camera);
-
-            // Set Texture
-            readBuffer.plane.material.uniforms.u_texture.value = writeBuffer.texture;
-
-            // Set blur direction
-            readBuffer.plane.material.uniforms.u_blur_direction.value.x = i % 2 === 0 ? radius : 0;
-            readBuffer.plane.material.uniforms.u_blur_direction.value.y = i % 2 === 0 ? 0 : radius;
-
-            // Render read buffer
-            this._renderer.setRenderTarget(readBuffer);
-            this._renderer.render(readBuffer.scene, readBuffer.camera);
-
-            // Set Texture
-            writeBuffer.plane.material.uniforms.u_texture.value = readBuffer.texture;
-
-            // Set blur direction
-            readBuffer.plane.material.uniforms.u_blur_direction.value.x = i % 2 === 0 ? radius : 0;
-            readBuffer.plane.material.uniforms.u_blur_direction.value.y = i % 2 === 0 ? 0 : radius;
-
-            // Swap buffers
-            const t = writeBuffer;
-            writeBuffer = readBuffer;
-            readBuffer = t;
-        }
-
-        this._renderer.setRenderTarget(null);
-
-        this._finalPlane.material.uniforms.u_texture.value = writeBuffer.texture;
+        this._applyBlur();
 
         super.render();
     }
@@ -130,8 +94,43 @@ class Blur extends DebugScene {
         return mesh;
     }
 
+    _applyBlur() {
+        const iterations = 8;
+
+        let writeBuffer = this._bufferA; // Execute blur
+        let readBuffer = this._bufferB; // Recieve blur
+
+        for (let i = 0; i < iterations; i++) {
+            const radius = (iterations - i - 1) * this._settings.blur;
+
+            writeBuffer.plane.material.uniforms.u_blur_direction.value.x = i % 2 === 0 ? radius : 0;
+            writeBuffer.plane.material.uniforms.u_blur_direction.value.y = i % 2 === 0 ? 0 : radius;
+
+            this._renderer.setRenderTarget(writeBuffer);
+            this._renderer.render(writeBuffer.scene, writeBuffer.camera);
+
+            readBuffer.plane.material.uniforms.u_texture.value = writeBuffer.texture;
+
+            this._renderer.setRenderTarget(readBuffer);
+            this._renderer.render(readBuffer.scene, readBuffer.camera);
+
+            // Swap buffers
+            const t = writeBuffer;
+            writeBuffer = readBuffer;
+            readBuffer = t;
+        }
+
+        this._renderer.setRenderTarget(null);
+
+        this._finalPlane.material.uniforms.u_texture.value = readBuffer.texture;
+
+        readBuffer.plane.material.uniforms.u_texture.value = this._texture;
+        writeBuffer.plane.material.uniforms.u_texture.value = this._texture;
+    }
+
     _addDebugSettings() {
         this._debugFolder.expanded = true;
+        this._debugFolder.addInput(this._settings, 'blur', { min: 0, max: 1 });
     }
 }
 
