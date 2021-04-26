@@ -3,5 +3,6 @@ import ThreeBasisTextureLoader from './three-basis-texture-loader';
 import ThreeTextureLoader from './three-texture-loader';
 import ThreeVideoTextureLoader from './three-video-texture-loader';
 import FontLoader from './font-loader';
+import PizzicatoAudioLoader from './pizzicato-audio-loader';
 
-export { ThreeGltfDracoLoader, ThreeBasisTextureLoader, ThreeTextureLoader, ThreeVideoTextureLoader, FontLoader };
+export { ThreeGltfDracoLoader, ThreeBasisTextureLoader, ThreeTextureLoader, ThreeVideoTextureLoader, FontLoader, PizzicatoAudioLoader };

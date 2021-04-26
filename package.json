@@ -24,6 +24,7 @@
         "glsl-fast-gaussian-blur": "^1.0.2",
         "gsap": "^3.5.0",
         "nuxt": "^2.14.3",
+        "pizzicato": "^0.6.4",
         "three": "^0.125.2",
         "tweakpane": "^1.5.9"
     },

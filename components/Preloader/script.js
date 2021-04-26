@@ -7,7 +7,7 @@ import resources from '@/resources';
 // Utils
 import { WebGLRenderer } from 'three';
 import { ResourceLoader } from '@/utils/resource-loader';
-import { ThreeGltfDracoLoader, ThreeBasisTextureLoader, ThreeTextureLoader, FontLoader, ThreeVideoTextureLoader } from '@/utils/loaders';
+import { ThreeGltfDracoLoader, ThreeBasisTextureLoader, ThreeTextureLoader, FontLoader, ThreeVideoTextureLoader, PizzicatoAudioLoader } from '@/utils/loaders';
 
 export default {
     computed: {
@@ -36,6 +36,7 @@ export default {
             ResourceLoader.registerLoader(FontLoader, 'font');
             ResourceLoader.registerLoader(ThreeVideoTextureLoader, 'video-texture');
             ResourceLoader.registerLoader(ThreeBasisTextureLoader, 'basis', { decoderPath: '/libs/basis/', renderer: new WebGLRenderer() });
+            ResourceLoader.registerLoader(PizzicatoAudioLoader, 'audio');
 
             this.resources = resources;
             this.resourceLoader = new ResourceLoader();
