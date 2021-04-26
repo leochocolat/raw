@@ -13,7 +13,10 @@ class Cameras {
 
         this._mainCamera = this._createMainCamera();
         this._debugCamera = this._createDebugCamera();
-        this._isDebug = !!this._debugger;
+
+        // this._isDebug = !!this._debugger;
+        this._isDebug = false;
+
         this._active = this._isDebug ? this._debugCamera : this._mainCamera;
         this._orbitControls = this._createOrbitControls();
         this._debugFolder = this._createDebugFolder();

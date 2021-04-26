@@ -5,7 +5,6 @@ import * as THREE from 'three';
 import RenderTargetScene from './RenderTargetScene';
 
 // Utils
-import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
 import AnimationComponent from '@/utils/AnimationComponent';
 import bindAll from '@/utils/bindAll';
 import { ResourceManager } from '@/utils/resource-loader';
@@ -56,9 +55,8 @@ class Hallway extends RenderTargetScene {
 
     _createModel() {
         const model = this._resources.get('hallway');
-        // const clone = cloneSkinnedMesh(model);
         const clone = model;
-        console.log(model);
+
         this.add(clone.scene);
 
         clone.scene.traverse((child) => {
@@ -80,7 +78,6 @@ class Hallway extends RenderTargetScene {
         const model = this._model;
         const animationController = new AnimationComponent(model);
         animationController.playAnimation(animationController.actionType.CameraMove);
-        console.log(animationController.actionType.CameraMove);
 
         return animationController;
     }
@@ -88,7 +85,7 @@ class Hallway extends RenderTargetScene {
     _createModelCameraAnimation() {
         if (!this._model.cameras) return;
 
-        super.cameras.setModelCamera(this._model.cameras[0]);
+        this.cameras.setModelCamera(this._model.cameras[0]);
         this._model.cameras[0].fov = 75;
         return this._model.cameras[0];
     }

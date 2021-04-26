@@ -84,6 +84,7 @@ class SceneManager extends THREE.Scene {
     render() {
         for (const key in this._scenes) {
             const scene = this._scenes[key];
+
             // Partial Rendering
             if (this._isMenu && this._renderIndex !== scene.sceneId) continue;
 

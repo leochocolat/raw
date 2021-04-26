@@ -70,7 +70,6 @@ class RenderTargetScene extends THREE.Scene {
 
         this._timelineIn = new gsap.timeline();
 
-        // this._timelineIn.to(this._uniforms[`u_texture_alpha_${this._id}`], { value: 1, duration: 0.8, ease: 'power4.inOut' });
         this._timelineIn.to(this._uniforms[`u_step_factor_${this._id}`], { value: 0, duration: 0.8, ease: 'power4.inOut' }, 0);
         this._timelineIn.to(this._uniforms[`u_size_${this._id}`], { value: 0, duration: 0.8, ease: 'power3.inOut' }, 0);
         this._timelineIn.to(this._uniforms[`u_scale_${this._id}`], { value: 1, duration: 0.8, ease: 'power3.inOut' }, 0);
