@@ -41,6 +41,14 @@ export default {
      ** https://nuxtjs.org/guide/plugins
      */
     plugins: ['@/plugins/listeners.client.js', '@/plugins/init.client.js', '@/plugins/api/index'],
+
+    /*
+     * Middleware
+     */
+    router: {
+        middleware: 'user',
+    },
+
     /*
      ** Auto import components
      ** See https://nuxtjs.org/api/configuration-components
@@ -73,6 +81,8 @@ export default {
         '@nuxtjs/svg',
         // Doc: https://i18n.nuxtjs.org/
         'nuxt-i18n',
+        // Doc: https://github.com/microcipcip/cookie-universal/tree/master/packages/cookie-universal-nuxt#readme
+        'cookie-universal-nuxt',
     ],
     /*
      ** i18n
