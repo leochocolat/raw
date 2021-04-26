@@ -1,7 +1,7 @@
 <template>
     <div class="screen-active">
-        <Screen id="hallway" class="screen" :data="sceneEntries['hallway']" />
-        <Censorship class="image-blur" :data="sceneEntries['hallway']" />
+        <Screen id="bar" class="screen" :data="sceneEntries['bar']" />
+        <!-- <Censorship class="image-blur" :data="sceneEntries['hallway']" /> -->
     </div>
 </template>
 

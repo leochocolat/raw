@@ -16,7 +16,12 @@ class WindowResizeObserver extends EventDispatcher {
         this._viewportWidth = null;
         this._viewportHeight = null;
 
+        this._canvasWidth = null;
+        this._canvasHeight = null;
+
         this._ghostElement = this._createGhostElement();
+
+        this._canvasContainerSize = null;
 
         this._bindHandlers();
         this._setupEventListeners();
@@ -41,6 +46,19 @@ class WindowResizeObserver extends EventDispatcher {
 
     get viewportHeight() {
         return this._viewportHeight;
+    }
+
+    get canvasWidth() {
+        return this._canvasWidth;
+    }
+
+    get canvasHeight() {
+        return this._canvasHeight;
+    }
+
+    setCanvasContainer(el) {
+        this._canvasContainer = el;
+        this._updateCanvasDimensions();
     }
 
     /**
@@ -88,10 +106,21 @@ class WindowResizeObserver extends EventDispatcher {
         this._viewportHeight = window.innerHeight;
     }
 
+    _updateCanvasDimensions() {
+        if (!this._canvasContainer) return;
+        const size = this._canvasContainer.getBoundingClientRect();
+        this._canvasWidth = size.width;
+        this._canvasHeight = size.height;
+    }
+
     _dispatchResizeEvent() {
         this.dispatchEvent('resize', {
             width: this._width,
             height: this._height,
+            viewportWidth: this._viewportWidth,
+            viewportHeight: this._viewportHeight,
+            canvasWidth: this._canvasWidth,
+            canvasHeight: this._canvasHeight,
         });
     }
 
@@ -100,6 +129,7 @@ class WindowResizeObserver extends EventDispatcher {
         this._debounceTimeout = setTimeout(() => {
             this._updateDimensions();
             this._updateViewportDimensions();
+            this._updateCanvasDimensions();
             this._dispatchResizeEvent();
         }, DEBOUNCE_RATE);
     }

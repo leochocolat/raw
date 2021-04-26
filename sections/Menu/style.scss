@@ -6,11 +6,17 @@
     left: 0;
 
     width: 100%;
-    height: 100%;
+    height: content-height();
 
-    background-color: black;
+    padding: content-padding();
 
     border: solid 1px rgba(255, 255, 255, 0.5);
+
+    @include respond-to('large') {
+        height: content-height-l();
+
+        padding: content-padding-l();
+    }
 }
 
 .screens-container {

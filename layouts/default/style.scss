@@ -1,23 +1,14 @@
-.main-container {
+.canvas-size-helper {
     position: absolute;
     top: 0;
     left: 0;
 
     width: 100%;
-    height: calc(100% - #{vw($footer-height)});
-
-    padding: $padding-top $padding-left;
+    height: content-height();
     
-    // Prototype
-    // padding-bottom: 0;
     pointer-events: none;
 
     @include respond-to('large') {
-        height: calc(100% - #{vw-l($footer-height-l)});
-
-        padding: $padding-top-l $padding-left-l;
-
-        // Prototype
-        // padding-bottom: 0;
+        height: content-height-l();
     }
 }

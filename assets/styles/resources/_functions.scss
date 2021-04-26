@@ -28,3 +28,20 @@
 @function aspect-ratio($width, $height) {
     @return #{strip-unit($height) / strip-unit($width) * 100%};
 }
+
+// Custom sizes
+@function content-height() {
+    @return calc(100% - #{vw-l($footer-height)});
+}
+
+@function content-height-l() {
+    @return calc(100% - #{vw-l($footer-height-l)});
+}
+
+@function content-padding() {
+    @return $padding-top $padding-left;
+}
+
+@function content-padding-l() {
+    @return $padding-top-l $padding-left-l;
+}

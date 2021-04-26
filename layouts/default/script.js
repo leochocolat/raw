@@ -1,4 +1,5 @@
 // Vendor
+import WindowResizeObserver from '@/utils/WindowResizeObserver';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -23,6 +24,7 @@ export default {
     },
 
     mounted() {
+        WindowResizeObserver.setCanvasContainer(this.$refs.canvasSizeHelper);
         this.$store.dispatch('router/setCurrent', this.$route);
     },
 };

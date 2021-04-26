@@ -54,9 +54,14 @@
 }
 
 .arrow-down {
+    width: vw(8px);
+    height: auto;
+
     margin-left: vw(3px);
 
     @include respond-to('large') {
+        width: vw-l(10px);
+
         margin-left: vw-l(5px);
     }
 }

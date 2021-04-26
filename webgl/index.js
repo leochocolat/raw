@@ -18,8 +18,8 @@ class WebglApp {
         this._isDebug = options.isDebug;
         this._debugSceneName = options.debugSceneName;
 
-        this._width = WindowResizeObserver.width;
-        this._height = WindowResizeObserver.height;
+        this._width = WindowResizeObserver.canvasWidth;
+        this._height = WindowResizeObserver.canvasHeight;
 
         this._clock = new THREE.Clock();
         this._fps = 0;
@@ -182,9 +182,9 @@ class WebglApp {
         this._update();
     }
 
-    _resizeHandler({ width, height }) {
-        this._width = width;
-        this._height = height;
+    _resizeHandler({ canvasWidth, canvasHeight }) {
+        this._width = canvasWidth;
+        this._height = canvasHeight;
 
         this._resize();
     }
