@@ -89,7 +89,7 @@ class ScreensContainer extends THREE.Mesh {
             u_crt_bending: { value: 0.2 },
             // Scanline
             u_scanline_vertical: { value: true },
-            u_scanline_amount_factor: { value: 1 },
+            u_scanline_amount_factor: { value: 1.67 },
             u_scanline_speed: { value: 20 },
             u_scanline_min_intensity: { value: 0.01 },
             u_scanline_max_intensity: { value: 0.06 },

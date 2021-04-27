@@ -58,7 +58,7 @@ float rand(vec2 co) {
 
 vec3 scanline(float coord, vec3 screen, float speed, float intensity) {
     // With time
-	screen.rgb -= sin(coord + u_time * speed) * intensity;
+	screen.rgb -= sin((coord * u_scanline_amount_factor) + u_time * speed) * intensity;
 
 	return screen;
 }

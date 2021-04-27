@@ -59,7 +59,7 @@ export default {
         },
 
         clickHandler() {
-            this.$store.dispatch('scenes/setActiveScene', 'bar');
+            this.$store.dispatch('scenes/setActiveScene', this.id);
         },
 
         clockHandler() {

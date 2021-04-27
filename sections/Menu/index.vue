@@ -2,26 +2,25 @@
     <div class="menu">
         <div class="screens-container">
             <Screen
-                v-for="(item, key) in sceneEntries"
-                :id="item.id"
-                :key="key"
-                :data="item"
+                :id="sceneEntries['hallway'].id"
+                :data="sceneEntries['hallway']"
                 class="screen"
-            />
-
-            <!-- <Screen
-                class="screen"
-                :name="locale === 'fr' ? 'Couloir' : 'Hallway'"
             />
             <Screen
+                :id="sceneEntries['library'].id"
+                :data="sceneEntries['library']"
                 class="screen"
-                :name="locale === 'fr' ? 'Supermarché' : 'Supermarket'"
             />
             <Screen
+                :id="sceneEntries['supermarket'].id"
+                :data="sceneEntries['supermarket']"
                 class="screen"
-                :name="locale === 'fr' ? 'Bibliothèque' : 'Library'"
-            /> -->
-            <!-- <Screen class="screen" :name="locale === 'fr' ? 'Bar' : 'Bar'" /> -->
+            />
+            <Screen
+                :id="sceneEntries['bar'].id"
+                :data="sceneEntries['bar']"
+                class="screen"
+            />
         </div>
     </div>
 </template>
