@@ -1,6 +1,8 @@
 // Varyings
 varying vec2 v_uv;
 
+uniform sampler2D u_texture_initial;
+uniform sampler2D u_blur_mask;
 uniform sampler2D u_texture;
 uniform vec2 u_resolution;
 uniform float u_time;
@@ -23,9 +25,23 @@ vec2 resized_uv(vec2 inital_uv, vec2 aspect_ratio)
 
 void main() {
     vec2 r_uv = resized_uv(v_uv, u_size);
-    r_uv = v_uv;
+
+    vec4 blur_mask_texel = texture2D(u_blur_mask, r_uv);
+    vec4 blur_texel = texture2D(u_texture, r_uv);
+
+    // Apply mask on blur texel
+    // blur_texel.a = blur_mask_texel.r;
+
+    vec4 initial_texel = texture2D(u_texture_initial, r_uv);
+
+    // Apply mask inverse on initial texel
+    // initial_texel.a = 1.0 - blur_mask_texel.r;
     
-    vec4 texel = texture2D(u_texture, r_uv);
+    vec4 texel = initial_texel;
+
+    // texel = blur_mask_texel;
+    // texel = initial_texel;
+    // texel = blur_texel;
 
     gl_FragColor = texel;
 }

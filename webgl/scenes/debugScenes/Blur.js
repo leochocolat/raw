@@ -8,26 +8,28 @@ import BlurPlaneBuffer from '../../buffers/BlurPlaneBuffer';
 import vertex from '../../shaders/censorship/vertex.glsl';
 import fragment from '../../shaders/censorship/fragment.glsl';
 
+// Utils
+import { ResourceManager } from '@/utils/resource-loader';
+
 // Scene
 import DebugScene from './DebugScene';
+
+// Reduce to improve performances
+const BUFFER_QUALITY_FACTOR = 0.4;
 
 class Blur extends DebugScene {
     constructor(options) {
         super(options);
 
-        this._time = 0;
-
         this._settings = {
             blur: 0,
         };
 
-        this._texture = new THREE.TextureLoader().load('https://images.unsplash.com/photo-1615431921909-37c4aed74df5?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzM3x8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60', () => {
-            this._bufferA = this._createBufferA();
-            this._bufferB = this._createBufferB();
+        this._bindAll();
 
-            this._finalPlane = this._createFinalPlane();
-        });
+        this._resources = this._setupResources();
 
+        this._setupEventListeners();
         this._addDebugSettings();
     }
 
@@ -39,13 +41,10 @@ class Blur extends DebugScene {
 
         if (!this._finalPlane) return;
 
-        this._bufferA.resize(width, height);
-        this._bufferB.resize(width, height);
+        this._resizeBuffers();
     }
 
     update(time, delta) {
-        this._time = time;
-
         super.update(time, delta);
     }
 
@@ -60,14 +59,53 @@ class Blur extends DebugScene {
     /**
      * Private
      */
+    _resizeBuffers() {
+        this._getBufferSize();
+
+        this._bufferA.resize(this._bufferWidth, this._bufferHeight);
+        this._bufferB.resize(this._bufferWidth, this._bufferHeight);
+    }
+
+    _getBufferSize() {
+        // Set buffer size with texture aspect ratio
+        const aspectRatio = this._texture.image.width / this._texture.image.height;
+        const width = this._width * BUFFER_QUALITY_FACTOR;
+        const height = width / aspectRatio;
+
+        this._bufferWidth = width;
+        this._bufferHeight = height;
+    }
+
+    _setupResources() {
+        const resources = new ResourceManager({
+            name: 'blur',
+            namespace: 'blur',
+        });
+
+        resources.load();
+
+        return resources;
+    }
+
+    _setup() {
+        this._texture = this._resources.get('texture-test-blur');
+        this._maskTexture = this._resources.get('blur-mask-test');
+
+        this._getBufferSize();
+
+        this._bufferA = this._createBufferA();
+        this._bufferB = this._createBufferB();
+        this._finalPlane = this._createFinalPlane();
+    }
+
     _createBufferA() {
-        const buffer = new BlurPlaneBuffer(this._width, this._width, this._texture);
+        const buffer = new BlurPlaneBuffer(this._bufferWidth, this._bufferHeight, this._texture);
 
         return buffer;
     }
 
     _createBufferB() {
-        const buffer = new BlurPlaneBuffer(this._width, this._width, this._texture);
+        const buffer = new BlurPlaneBuffer(this._bufferWidth, this._bufferHeight, this._texture);
 
         return buffer;
     }
@@ -76,9 +114,11 @@ class Blur extends DebugScene {
         const geometry = new THREE.PlaneGeometry(1, 1, 1);
 
         const uniforms = {
+            u_texture_initial: { value: this._texture },
+            u_blur_mask: { value: this._maskTexture },
             u_texture: { value: this._texture },
-            u_size: { value: new THREE.Vector2(this._texture.image.width, this._texture.image.height) },
-            u_resolution: { value: new THREE.Vector2(this._width, this._height) },
+            u_size: { value: new THREE.Vector2(this._bufferWidth, this._bufferHeight) },
+            u_resolution: { value: new THREE.Vector2(1, 1) },
             u_time: { value: 0.0 },
         };
 
@@ -87,6 +127,7 @@ class Blur extends DebugScene {
             fragmentShader: fragment,
             vertexShader: vertex,
             side: THREE.DoubleSide,
+            transparent: true,
         });
 
         const mesh = new THREE.Mesh(geometry, material);
@@ -130,7 +171,20 @@ class Blur extends DebugScene {
 
     _addDebugSettings() {
         this._debugFolder.expanded = true;
-        this._debugFolder.addInput(this._settings, 'blur', { min: 0, max: 1 });
+        this._debugFolder.addInput(this._settings, 'blur', { min: 0, max: 5 });
+    }
+
+    // Events
+    _bindAll() {
+        this._loadCompleteHandler = this._loadCompleteHandler.bind(this);
+    }
+
+    _setupEventListeners() {
+        this._resources.addEventListener('complete', this._loadCompleteHandler);
+    }
+
+    _loadCompleteHandler() {
+        this._setup();
     }
 }
 

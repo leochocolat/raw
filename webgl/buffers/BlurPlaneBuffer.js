@@ -33,7 +33,20 @@ class BlurPlaneBuffer extends THREE.WebGLRenderTarget {
         return this._plane;
     }
 
-    resize(width, height) {}
+    resize(width, height) {
+        this._width = width;
+        this._height = height;
+
+        this.setSize(this._width, this._height);
+        this._plane.scale.set(this._width, this._height);
+
+        this._camera.left = this._width / -2;
+        this._camera.right = this._width / 2;
+        this._camera.top = this._height / 2;
+        this._camera.bottom = this._height / -2;
+
+        this._camera.updateProjectionMatrix();
+    }
 
     update() {}
 
@@ -41,11 +54,9 @@ class BlurPlaneBuffer extends THREE.WebGLRenderTarget {
      * Private
      */
     _createCamera() {
-        // const camera = new THREE.OrthographicCamera(this._width / -2, this._width / 2, this._height / 2, this._height / -2, 1, 1000);
-        // camera.position.z = 1;
+        const camera = new THREE.OrthographicCamera(this._width / -2, this._width / 2, this._height / 2, this._height / -2, 1, 1000);
 
-        const camera = new THREE.PerspectiveCamera(30, this._width / this._height, 0.1, 1000);
-        camera.position.z = 2;
+        camera.position.z = 1;
 
         return camera;
     }
@@ -57,7 +68,6 @@ class BlurPlaneBuffer extends THREE.WebGLRenderTarget {
     }
 
     _createPlane() {
-        // const geometry = new THREE.PlaneGeometry(this._width, this._height, 1);
         const geometry = new THREE.PlaneGeometry(1, 1, 1);
 
         const uniforms = {
@@ -74,6 +84,8 @@ class BlurPlaneBuffer extends THREE.WebGLRenderTarget {
         });
 
         const mesh = new THREE.Mesh(geometry, material);
+
+        mesh.scale.set(this._width, this._height);
 
         this._scene.add(mesh);
 

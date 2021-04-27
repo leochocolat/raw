@@ -65,6 +65,21 @@ const webgl = [
         namespace: 'animTexture',
         preload: false,
     },
+    // Test Blur
+    {
+        type: 'texture',
+        name: 'texture-test-blur',
+        path: '/textures/texture_test_blur.png',
+        namespace: 'blur',
+        preload: false,
+    },
+    {
+        type: 'texture',
+        name: 'blur-mask-test',
+        path: '/textures/blur-mask-test.jpg',
+        namespace: 'blur',
+        preload: false,
+    },
     // Videos
     {
         type: 'video-texture',
