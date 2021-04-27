@@ -31,7 +31,7 @@
 
 // Custom sizes
 @function content-height() {
-    @return calc(100% - #{vw-l($footer-height)});
+    @return calc(100% - #{vw($footer-height)});
 }
 
 @function content-height-l() {
