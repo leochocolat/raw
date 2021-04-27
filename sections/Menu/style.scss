@@ -6,11 +6,10 @@
     left: 0;
 
     width: 100%;
+
     height: content-height();
 
     padding: content-padding();
-
-    border: solid 1px rgba(255, 255, 255, 0.5);
 
     @include respond-to('large') {
         height: content-height-l();
@@ -28,6 +27,8 @@
 
     width: 100%;
     height: 100%;
+
+    border: solid 1px rgba(255, 255, 255, 0.5);
 }
 
 .screen {

@@ -1,7 +1,8 @@
 // Varyings
 varying vec2 vUv;
 
-// Uniforms
+// Split Screens uniforms
+
 uniform vec3 u_resolution;
 uniform float u_time;
 
@@ -20,83 +21,79 @@ uniform float u_size_1;
 uniform float u_size_2;
 uniform float u_size_3;
 
-uniform float u_scan_speed;
-uniform float u_scan_strength;
-
 uniform sampler2D u_texture_0;
 uniform sampler2D u_texture_1;
 uniform sampler2D u_texture_2;
 uniform sampler2D u_texture_3;
 
-float hash12(vec2 p) {
-	vec3 p3  = fract(vec3(p.xyx) * .1031);
-    p3 += dot(p3, p3.yzx + 33.33);
-    return fract((p3.x + p3.y) * p3.z);
+// Old screen effect uniforms
+
+uniform float u_global_intensity;
+// Color filter
+uniform float u_red_filter_intensity;
+uniform float u_green_filter_intensity;
+uniform float u_blue_filter_intensity;
+// Scanline
+uniform float u_scanline_amount_factor;
+uniform float u_scanline_min_intensity;
+uniform float u_scanline_max_intensity;
+uniform float u_scanline_speed;
+uniform bool u_scanline_vertical;
+// RGB Shift
+uniform float u_rgb_shift_amount;
+uniform vec2 u_rgb_shift_angle;
+// CRT
+uniform float u_crt_bending;
+// Noise
+uniform float u_noise_scale;
+uniform float u_noise_intensity;
+// Vignette
+uniform float u_vignette_scale;
+uniform float u_vignette_intensity;
+
+// Utils
+float rand(vec2 co) {
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
-float noise(vec2 uv) {
-	float n0 = hash12(uv.xy + u_time * 6.0);
-	float n1 = hash12(uv.xy - u_time * 4.0);
-	vec4 noiseTexture0 = vec4(vec3(n0), 1.0);
-	vec4 noiseTexture1 = vec4(vec3(n1), 1.0);
-	return clamp(noiseTexture0.r + noiseTexture1.g, 0.96, 1.0);
-}
+vec3 scanline(float coord, vec3 screen, float speed, float intensity) {
+    // With time
+	screen.rgb -= sin(coord + u_time * speed) * intensity;
 
-float slowscan(vec2 uv) {
-	return sin(u_resolution.y * uv.y * 0.02 + u_time * 6.0);
-}
-
-vec2 scandistort(vec2 uv) {
-    float speed = u_time * u_scan_speed;
-	float scan = clamp(cos(uv.y + speed) * u_scan_strength, 0.0, 1.0);
-	float amount = scan * uv.x;
-
-	float noise = hash12(vec2(uv.x, amount));
-	vec4 noiseTexture = vec4(vec3(noise), 1.0);
-	
-	uv.x -= 0.05 * mix(noiseTexture.r * amount, amount, 0.9);
-
-	return uv;	 
-}
-
-vec3 scanline(vec2 coord, vec3 screen)
-{
-	screen.rgb -= sin((coord.y + (u_time * 29.0))) * 0.02;
 	return screen;
 }
 
-vec3 sampleSplit(sampler2D tex, vec2 coord)
-{
-	vec3 frag;
-	frag.r = texture2D(tex, vec2(coord.x - 0.01 * sin(u_time), coord.y)).r;
-	frag.g = texture2D(tex, vec2(coord.x                          , coord.y)).g;
-	frag.b = texture2D(tex, vec2(coord.x + 0.01 * sin(u_time), coord.y)).b;
-	return frag;
+vec4 RGBShift(vec2 uv, vec2 angle, float amount, sampler2D texel) {
+    vec2 offset = amount * vec2( cos(angle.x), sin(angle.y));
+    vec4 cr = texture2D(texel, uv + offset);
+    vec4 cg = texture2D(texel, uv);
+    vec4 cb = texture2D(texel, uv - offset);
+    vec4 ca = texture2D(texel, uv - offset);
+
+    vec4 final = vec4(cr.r, cg.g, cb.b, ca.a);
+
+    return final;
 }
 
-vec2 crt(vec2 coord, float bend)
-{
+vec2 crt(vec2 coord, float bend) {
 	// put in symmetrical coords
 	coord = (coord - 0.5) * 2.0;
 
-	coord *= 1.1;	
+	// coord *= 1.1;	
 
 	// deform coords
-	coord.x *= 1.0 + pow((abs(coord.y) / bend), 2.0);
-	coord.y *= 1.0 + pow((abs(coord.x) / bend), 2.0);
+	coord.x *= 1.0 + pow((abs(coord.y) * bend), 2.0);
+	coord.y *= 1.0 + pow((abs(coord.x) * bend), 2.0);
 
 	// transform back to 0.0 - 1.0 space
-	coord  = (coord / 2.0) + 0.5;
+	coord = (coord / 2.0) + 0.5;
 
 	return coord;
 }
 
-void main() {
-    // Scan Distortion
-    vec2 distorted_uv = vUv;
-    distorted_uv = scandistort(distorted_uv);
-
-    vec2 centeredUv = vUv - 0.5;
+// Split Screens
+vec4 splitScreens(vec2 uv) {
+    vec2 centeredUv = uv - 0.5;
     
     vec2 uv_0 = centeredUv * u_scale_0 + 0.5;
     uv_0.x += u_size_0;
@@ -117,6 +114,12 @@ void main() {
     vec4 texel_2 = texture2D(u_texture_2, uv_2);
     vec4 texel_3 = texture2D(u_texture_3, uv_3);
 
+    // Apply RGBShift
+    texel_0 = RGBShift(uv_0, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_0);
+    texel_1 = RGBShift(uv_1, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_1);
+    texel_2 = RGBShift(uv_2, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_2);
+    texel_3 = RGBShift(uv_3, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_3);
+
     float factore_0 = step(-1. + u_step_factor_0, -vUv.x) * step(u_step_factor_0, vUv.y);
     texel_0 *= factore_0;
 
@@ -131,29 +134,55 @@ void main() {
 
     vec4 blended = texel_0 + texel_1 + texel_2 + texel_3;
 
-    // Scanlines
-    vec2 screenSpace = vUv * u_resolution.xy;
-	blended.rgb = scanline(screenSpace, blended.rgb);
-
-    gl_FragColor = blended;
+    return blended;
 }
 
+// Old screen effect
+vec4 applyScanlines(vec4 texel, vec2 uv) {
+    if (u_scanline_vertical) {
+        texel.rgb = scanline(uv.x * u_resolution.x, texel.rgb, u_scanline_speed, u_scanline_min_intensity + u_scanline_max_intensity * u_global_intensity);
+    }
+    else {
+        texel.rgb = scanline(uv.y * u_resolution.y, texel.rgb, u_scanline_speed, u_scanline_min_intensity + u_scanline_max_intensity * u_global_intensity);
+    }
 
-// WITH ALPHA BLENDING
+    return texel;
+}
 
-// void main() {
-//     vec4 firstTexture = texture2D(u_texture_0, vUv);
-//     vec4 secondTexture = texture2D(u_texture_1, vUv);
-//     vec4 thirdTexture = texture2D(u_texture_2, vUv);
-//     vec4 fourthTexture = texture2D(u_texture_3, vUv);
+vec4 applyColorFilter(vec4 texel) {
+    vec4 filtered_color = texel;
+    filtered_color.r += filtered_color.r * u_red_filter_intensity * u_global_intensity;
+    filtered_color.b += filtered_color.b * u_blue_filter_intensity * u_global_intensity;
+    filtered_color.g += filtered_color.g * u_green_filter_intensity * u_global_intensity;
+    return filtered_color;
+}
 
-//     firstTexture.a = step(-0.5, -vUv.x) * step(0.5, vUv.y);
-//     secondTexture.a = step(0.5, vUv.x) * step(0.5, vUv.y);
-//     thirdTexture.a = step(-0.5, -vUv.x) * step(-0.5, -vUv.y);
-//     fourthTexture.a = step(0.5, vUv.x) * step(-0.5, -vUv.y);
-    
-//     vec4 mixLeft = mix(firstTexture, thirdTexture, thirdTexture.a);
-//     vec4 mixRight = mix(secondTexture, fourthTexture, fourthTexture.a);
+vec4 applyWhiteNoise(vec4 texel, vec2 uv) {
+    float xs = floor(uv.x * u_noise_scale * u_resolution.x / u_resolution.y);
+    float ys = floor(uv.y * u_noise_scale);
+    vec4 noise_color = vec4(rand(vec2(xs * u_time, ys * u_time)) * u_noise_intensity * u_global_intensity);
+    return texel + noise_color;
+}
 
-//     gl_FragColor = mix(mixLeft, mixRight, mixRight.a);
-// }
+vec4 applyVignettage(vec4 texel, vec2 uv) {
+    vec2 vig_uv = vUv; 
+    vig_uv *=  1.0 - vig_uv.yx;
+    float vig = vig_uv.x * vig_uv.y * u_vignette_intensity; // multiply with sth for intensity
+    vig = pow(vig, u_vignette_scale * u_global_intensity); // change pow for modifying the extend of the vignette   
+
+    return texel * vig;
+}
+
+void main() {
+    // UV Displacement
+    vec2 crt_uv = crt(vUv, u_crt_bending * u_global_intensity);
+
+    // Screens + RGBShift
+    gl_FragColor = splitScreens(crt_uv);
+
+    // Old Screen effect
+    gl_FragColor = applyScanlines(gl_FragColor, vUv);
+    gl_FragColor = applyColorFilter(gl_FragColor);
+    gl_FragColor = applyWhiteNoise(gl_FragColor, vUv);
+    gl_FragColor = applyVignettage(gl_FragColor, vUv);
+}
