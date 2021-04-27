@@ -75,5 +75,5 @@ void main() {
             break;
     }
 
-	gl_FragColor = vec4( outTexture.rgb, diffuseColor.a );
+	gl_FragColor = vec4(1.0, 1.0, 1.0, diffuseColor.a );
 }

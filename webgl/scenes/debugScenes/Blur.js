@@ -99,13 +99,13 @@ class Blur extends DebugScene {
     }
 
     _createBufferA() {
-        const buffer = new BlurPlaneBuffer(this._bufferWidth, this._bufferHeight, this._texture);
+        const buffer = new BlurPlaneBuffer(this._bufferWidth, this._bufferHeight, this._texture, this._maskTexture);
 
         return buffer;
     }
 
     _createBufferB() {
-        const buffer = new BlurPlaneBuffer(this._bufferWidth, this._bufferHeight, this._texture);
+        const buffer = new BlurPlaneBuffer(this._bufferWidth, this._bufferHeight, this._texture, this._maskTexture);
 
         return buffer;
     }

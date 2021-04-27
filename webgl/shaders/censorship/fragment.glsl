@@ -35,13 +35,19 @@ void main() {
     vec4 initial_texel = texture2D(u_texture_initial, r_uv);
 
     // Apply mask inverse on initial texel
-    // initial_texel.a = 1.0 - blur_mask_texel.r;
     
+    
+    // initial_texel.a = .5 - blur_mask_texel.r;
     vec4 texel = initial_texel;
-
-    // texel = blur_mask_texel;
+  // if(initial_texel.a > .8) {
+      // texel = blur_mask_texel;
+      // } else {
+      texel = blur_texel;
+      // }
     // texel = initial_texel;
-    // texel = blur_texel;
+
+    
 
     gl_FragColor = texel;
+
 }
