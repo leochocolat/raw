@@ -14,7 +14,7 @@ const apiFactory = (i18n, error, store, req, route, redirect) => ({
     ...contentfulModule({ i18n, error, store }),
 });
 
-export default async (context, inject) => {
+export default async(context, inject) => {
     const { app, error, store, route, req, redirect } = context;
     const i18n = app.i18n;
     const api = apiFactory(i18n, error, store, req, route, redirect);

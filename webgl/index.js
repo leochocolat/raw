@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import bindAll from '@/utils/bindAll';
 import WindowResizeObserver from '@/utils/WindowResizeObserver';
 import Debugger from '@/utils/Debugger';
+import DevicePerformance from '@/utils/DevicePerformance';
 
 // Scene
 import SceneManager from '@/webgl/SceneManager';
