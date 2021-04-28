@@ -83,7 +83,7 @@ export default {
                     this.activeScreen = this.screens[targetIndex];
                 },
                 null,
-                0.5
+                0.5,
             );
             this.timelineIndex.add(target.transitionIn, 0.5);
         },

@@ -5,7 +5,7 @@ import { mapGetters } from 'vuex';
 export default {
     data() {
         return {
-            isPrototype: this.$route.name === 'prototype___fr' || this.$route.name === 'prototype___en',
+            isPrototype: this.getRouteBaseName() === 'prototype',
         };
     },
 
@@ -24,7 +24,12 @@ export default {
     },
 
     mounted() {
+        this.$root.footer = this.$refs.footer;
         WindowResizeObserver.setCanvasContainer(this.$refs.canvasSizeHelper);
         this.$store.dispatch('router/setCurrent', this.$route);
+
+        if (this.isPrototype || this.isDebug) {
+            this.$refs.preloader.disable();
+        }
     },
 };

@@ -1,5 +1,9 @@
 <template>
-    <div class="preloader"></div>
+    <div class="preloader">
+
+        <PreloaderScreens ref="preloaderScreens" />
+
+    </div>
 </template>
 
 <script src="./script.js"></script>

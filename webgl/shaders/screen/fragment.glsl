@@ -21,10 +21,16 @@ uniform float u_size_1;
 uniform float u_size_2;
 uniform float u_size_3;
 
+uniform float u_texture_alpha_0;
+uniform float u_texture_alpha_1;
+uniform float u_texture_alpha_2;
+uniform float u_texture_alpha_3;
+
 uniform sampler2D u_texture_0;
 uniform sampler2D u_texture_1;
 uniform sampler2D u_texture_2;
 uniform sampler2D u_texture_3;
+
 
 // Old screen effect uniforms
 
@@ -115,10 +121,10 @@ vec4 splitScreens(vec2 uv) {
     vec4 texel_3 = texture2D(u_texture_3, uv_3);
 
     // Apply RGBShift
-    texel_0 = RGBShift(uv_0, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_0);
-    texel_1 = RGBShift(uv_1, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_1);
-    texel_2 = RGBShift(uv_2, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_2);
-    texel_3 = RGBShift(uv_3, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_3);
+    texel_0 = RGBShift(uv_0, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_0) * u_texture_alpha_0;
+    texel_1 = RGBShift(uv_1, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_1) * u_texture_alpha_1;
+    texel_2 = RGBShift(uv_2, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_2) * u_texture_alpha_2;
+    texel_3 = RGBShift(uv_3, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_3) * u_texture_alpha_3;
 
     float factore_0 = step(-1. + u_step_factor_0, -vUv.x) * step(u_step_factor_0, vUv.y);
     texel_0 *= factore_0;

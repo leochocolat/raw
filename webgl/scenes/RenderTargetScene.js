@@ -64,6 +64,14 @@ class RenderTargetScene extends THREE.Scene {
         return this._isActive;
     }
 
+    show() {
+        const timelineShow = new gsap.timeline();
+
+        timelineShow.to(this._uniforms[`u_texture_alpha_${this._id}`], { value: 1, ease: 'power4.inOut' });
+
+        return timelineShow;
+    }
+
     transitionIn() {
         this._timelineOut?.kill();
         this._timelineMenu?.kill();
@@ -151,7 +159,7 @@ class RenderTargetScene extends THREE.Scene {
     _createUniforms() {
         const uniforms = {};
         uniforms[`u_texture_${this._id}`] = { value: this._renderTarget.texture };
-        uniforms[`u_texture_alpha_${this._id}`] = { value: 1 };
+        uniforms[`u_texture_alpha_${this._id}`] = { value: 0 };
         uniforms[`u_step_factor_${this._id}`] = { value: 0.5 };
         uniforms[`u_size_${this._id}`] = { value: 0.5 };
         uniforms[`u_scale_${this._id}`] = { value: 2 };

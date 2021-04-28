@@ -1,8 +1,8 @@
 <template>
     <div class="footer">
         <LangSwitch />
-        <Instructions class="instructions" />
-        <ButtonStop />
+        <Instructions ref="instructions" class="instructions" />
+        <ButtonStop ref="buttonStop" />
     </div>
 </template>
 

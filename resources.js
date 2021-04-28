@@ -22,26 +22,26 @@ const webgl = [
         type: 'gltf',
         name: 'CameraMovement',
         path: '/models/Hallway.glb',
-        preload: false,
+        // preload: false,
     },
     {
         type: 'gltf',
         name: 'hallway',
         path: '/models/Hallway.glb',
-        preload: false,
+        // preload: false,
     },
     {
         type: 'gltf',
         name: 'scene_hallway',
         path: '/models/scene_hallway.gltf',
-        preload: false,
+        // preload: false,
     },
     {
         type: 'gltf',
         name: 'soldier',
         path: '/models/Soldier.glb',
         namespace: 'animTexture',
-        preload: false,
+        // preload: false,
     },
     // Textures
     {
@@ -49,21 +49,21 @@ const webgl = [
         name: 'tex1',
         path: '/images/tex1.jpg',
         namespace: 'animTexture',
-        preload: false,
+        // preload: false,
     },
     {
         type: 'texture',
         name: 'tex2',
         path: '/images/tex2.jpg',
         namespace: 'animTexture',
-        preload: false,
+        // preload: false,
     },
     {
         type: 'texture',
         name: 'tex3',
         path: '/images/tex3.jpg',
         namespace: 'animTexture',
-        preload: false,
+        // preload: false,
     },
     // Test Blur
     {
@@ -71,21 +71,21 @@ const webgl = [
         name: 'texture-test-blur',
         path: '/textures/texture_test_blur.png',
         namespace: 'blur',
-        preload: false,
+        // preload: false,
     },
     {
         type: 'texture',
         name: 'blur-mask-test',
         path: '/textures/blur-mask-test.jpg',
         namespace: 'blur',
-        preload: false,
+        // preload: false,
     },
     // Videos
     {
         type: 'video-texture',
         name: 'video_test_0',
         path: '/videos/video_test_0.mp4',
-        preload: false,
+        // preload: false,
         namespace: 'screen',
         options: {
             autoplay: true,

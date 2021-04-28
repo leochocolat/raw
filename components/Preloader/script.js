@@ -10,6 +10,12 @@ import { ResourceLoader } from '@/utils/resource-loader';
 import { ThreeGltfDracoLoader, ThreeBasisTextureLoader, ThreeTextureLoader, FontLoader, ThreeVideoTextureLoader, PizzicatoAudioLoader } from '@/utils/loaders';
 
 export default {
+    data() {
+        return {
+            isDisable: false,
+        };
+    },
+
     computed: {
         ...mapGetters({
             isDebug: 'context/isDebug',
@@ -26,6 +32,14 @@ export default {
     },
 
     methods: {
+        /**
+         * Public
+         */
+        disable() {
+            this.isDisable = true;
+            this.$refs.preloaderScreens.disable();
+        },
+
         /**
          * Private
          */
@@ -44,6 +58,11 @@ export default {
             this.resourceLoader.preload();
 
             this.$store.dispatch('preloader/start');
+            this.$refs.preloaderScreens.start();
+        },
+
+        start() {
+            this.$root.webglApp.start();
         },
 
         /**
@@ -59,6 +78,12 @@ export default {
 
         completeHandler() {
             this.$store.dispatch('preloader/complete');
+
+            this.$refs.preloaderScreens.isPreloaderComplete = true;
+
+            if (this.$refs.preloaderScreens.isComplete || this.$refs.preloaderScreens.isDisable) {
+                this.start();
+            }
         },
     },
 };

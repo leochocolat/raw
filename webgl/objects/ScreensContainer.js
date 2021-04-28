@@ -25,6 +25,16 @@ class ScreensContainer extends THREE.Mesh {
     /**
      * Public
      */
+    showScenes() {
+        const timelineShow = new gsap.timeline();
+
+        for (const key in this._scenes) {
+            timelineShow.add(this._scenes[key].show(), Math.random());
+        }
+
+        return timelineShow;
+    }
+
     effectIn() {
         this._timelineEffectOut?.kill();
 
@@ -97,8 +107,8 @@ class ScreensContainer extends THREE.Mesh {
             u_rgb_shift_amount: { value: 0.002 },
             u_rgb_shift_angle: { value: new THREE.Vector2(0.0, 1.0) },
             // Noise
-            u_noise_intensity: { value: 0.04 },
-            u_noise_scale: { value: 150.0 },
+            u_noise_intensity: { value: 0.02 },
+            u_noise_scale: { value: 400.0 },
             // Noise
             u_vignette_intensity: { value: 22.0 },
             u_vignette_scale: { value: 0.15 },

@@ -7,16 +7,17 @@
         <!-- WebGL -->
         <client-only>
             <!-- <Webgl v-if="!isPrototype && (isReady || isDebug)" /> -->
-            <Webgl v-if="(isReady || isDebug)" />
+            <!-- <Webgl v-if="(isReady || isDebug)" /> -->
+            <Webgl />
         </client-only>
-
-        <!-- Preloader -->
-        <Preloader />
 
         <!-- Nuxt App -->
         <Nuxt />
 
-        <TheFooter />
+        <!-- Preloader -->
+        <Preloader ref="preloader" />
+
+        <TheFooter ref="footer" />
     </div>
 </template>
 

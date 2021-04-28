@@ -58,6 +58,10 @@ class WebglApp {
         return this._sceneManager;
     }
 
+    start() {
+        this._sceneManager.start();
+    }
+
     destroy() {
         this._removeEventListeners();
         this._debugger?.destroy();

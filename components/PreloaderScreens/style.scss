@@ -1,0 +1,15 @@
+.preloader-screens {
+    text-transform: uppercase;
+}
+
+.screen {
+    visibility: hidden;
+
+    pointer-events: none;
+
+    &.is-enable {
+        visibility: visible;
+
+        pointer-events: all;
+    }
+}

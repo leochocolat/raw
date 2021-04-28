@@ -1,4 +1,4 @@
-.tutorial {
+.cookies {
     opacity: 0;
     
     display: flex;
@@ -23,14 +23,14 @@
 }
 
 .container {
-    width: vw(180px);
+    width: vw(200px);
 
     margin: auto;
 
     text-align: center;
     
     @include respond-to('large') {
-        width: vw-l(650px);
+        width: vw-l(600px);
     }
 }
 
