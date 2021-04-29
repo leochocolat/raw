@@ -66,7 +66,11 @@ export default {
             this.$store.dispatch('data/setSceneComplete', { id: this.data.id, value: true });
 
             // Cookies
-            this.$cookies.set('data', this.$store.state.data);
+            this.$cookies.set('data', this.$store.state.data, {
+                // One month
+                expires: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
+                maxAge: 1000 * 3600 * 24 * 30,
+            });
         },
 
         submitCensorship() {

@@ -5,20 +5,16 @@ import * as THREE from 'three';
 import RenderTargetScene from './RenderTargetScene';
 
 // Utils
-import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
 import AnimationComponent from '@/utils/AnimationComponent';
 import { ResourceManager } from '@/utils/resource-loader';
 import bindAll from '@/utils/bindAll';
 import math from '@/utils/math';
 
-// Data
-import data from '../data';
-
 class Bar extends RenderTargetScene {
     constructor(options) {
         super(options);
 
-        this.background = new THREE.Color(data.colors[this._id]);
+        this.background = new THREE.Color('red');
 
         this._cameraPosition = {
             current: new THREE.Vector3(0, 0, 0),

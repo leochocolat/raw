@@ -14,7 +14,7 @@
     padding-right: $padding-left;
     padding-left: $padding-left;
 
-    // background-color: black;
+    background-color: black;
     
     @include respond-to('large') {
         height: vw-l($footer-height-l);

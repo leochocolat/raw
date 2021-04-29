@@ -38,7 +38,7 @@ export default {
          * Public
          */
         start() {
-            this.screens = [this.$refs.screen0, this.$refs.screen1, this.$refs.screen2, this.$refs.screen3, this.$refs.screen4];
+            this.screens = [this.$refs.cookies, this.$refs.warning, this.$refs.intro, this.$refs.instructions, this.$refs.stop];
             this.steps = ['cookies', 'warning', 'intro', 'instructions', 'stop'];
             this.activeIndex = 0;
             this.index = 0;

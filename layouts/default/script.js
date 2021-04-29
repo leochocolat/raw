@@ -14,21 +14,27 @@ export default {
             this.$store.dispatch('router/setCurrent', to);
             this.$store.dispatch('router/setPrevious', from);
         },
+
+        isReady(isReady) {
+            if (isReady) this.$root.webglApp.start();
+        },
     },
 
     computed: {
         ...mapGetters({
             isReady: 'preloader/isReady',
             isDebug: 'context/isDebug',
+            isDevelopment: 'context/isDevelopment',
+            isProduction: 'context/isProduction',
         }),
     },
 
     mounted() {
-        this.$root.footer = this.$refs.footer;
         WindowResizeObserver.setCanvasContainer(this.$refs.canvasSizeHelper);
         this.$store.dispatch('router/setCurrent', this.$route);
 
-        if (this.isHome || this.isDebug) {
+        // Remove preloader for quick debugging
+        if (this.isHome || this.isDebug || !this.isProduction) {
             this.$refs.preloader.disable();
         }
     },

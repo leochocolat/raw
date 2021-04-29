@@ -66,6 +66,8 @@ class SceneManager extends THREE.Scene {
     }
 
     setActiveScene(sceneName) {
+        if (!sceneName || sceneName === '') return;
+
         const activeScene = this._scenes[sceneName];
         activeScene.transitionIn();
         activeScene.setActive();

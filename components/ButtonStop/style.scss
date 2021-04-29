@@ -11,15 +11,15 @@
 
     cursor: pointer;
 
-    @include respond-to('large') {
-        height: 100%;
-
-        font-size: rem-l(17px);
-    }
-
     @media (hover: hover) {
         &:hover {
             color: rgba(255, 0, 0, 0.7);
         }
+    }
+
+    @include respond-to('large') {
+        height: 100%;
+
+        font-size: rem-l(17px);
     }
 }

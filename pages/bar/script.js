@@ -2,7 +2,7 @@
 import scene from '@/mixins/scene';
 
 export default {
-    name: 'hallway',
+    name: 'bar',
 
     mixins: [scene],
 };

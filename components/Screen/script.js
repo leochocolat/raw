@@ -41,21 +41,25 @@ export default {
         },
     },
 
-    mounted() {
-        this.startClock();
-    },
-
     beforeDestroy() {
-        this.stopClock();
+        this.resetClock();
     },
 
     methods: {
+        /**
+         * Public
+         */
         startClock() {
             this._clock = setInterval(this.clockHandler, 1000);
         },
 
         stopClock() {
             clearInterval(this._clock);
+        },
+
+        resetClock() {
+            this.duration = 0;
+            this.stopClock();
         },
 
         // Events
@@ -69,11 +73,6 @@ export default {
             this.timelineEnter?.kill();
             this.timelineLeave = new gsap.timeline();
             this.timelineLeave.to(this.$refs.frame.$el, { duration: 0.5, scaleY: 1, ease: 'circ.out' });
-        },
-
-        clickHandler() {
-            // this.$router.push(this.id);
-            // this.$store.dispatch('scenes/setActiveScene', this.id);
         },
 
         clockHandler() {

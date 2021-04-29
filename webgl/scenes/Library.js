@@ -5,19 +5,13 @@ import * as THREE from 'three';
 import RenderTargetScene from './RenderTargetScene';
 
 // Utils
-import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
 import AnimationComponent from '@/utils/AnimationComponent';
 import bindAll from '@/utils/bindAll';
 import { ResourceManager } from '@/utils/resource-loader';
 
-// Data
-import data from '../data';
-
 class Library extends RenderTargetScene {
     constructor(options) {
         super(options);
-
-        this.background = new THREE.Color(data.colors[this._id]);
 
         this._bindAll();
 
@@ -55,14 +49,15 @@ class Library extends RenderTargetScene {
     }
 
     _createMaterial() {
-        const material = new THREE.MeshNormalMaterial();
+        const material = new THREE.MeshNormalMaterial({
+            side: THREE.DoubleSide,
+        });
 
         return material;
     }
 
     _createModel() {
         const model = this._resources.get('CameraMovement');
-        // const clone = cloneSkinnedMesh(model);
         const clone = model;
         this.add(clone.scene);
 

@@ -2,35 +2,35 @@
     <div class="preloader-screens">
 
         <Cookies
-            ref="screen0"
+            ref="cookies"
             class="screen"
             :class="activeIndex === 0 ? 'is-enable' : ''"
             :data="data.cookieMessage"
         />
 
         <Warning
-            ref="screen1"
+            ref="warning"
             class="screen"
             :class="activeIndex === 1 ? 'is-enable' : ''"
             :data="data.warning"
         />
 
         <Tutorial
-            ref="screen2"
+            ref="intro"
             class="screen"
             :class="activeIndex === 2 ? 'is-enable' : ''"
             :data="data.tutorial1"
         />
 
         <Tutorial
-            ref="screen3"
+            ref="instructions"
             class="screen"
             :class="activeIndex === 3 ? 'is-enable' : ''"
             :data="data.tutorial2"
         />
 
         <Tutorial
-            ref="screen4"
+            ref="stop"
             class="screen"
             :class="activeIndex === 4 ? 'is-enable' : ''"
             :data="data.tutorial3"

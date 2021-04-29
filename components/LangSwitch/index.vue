@@ -1,10 +1,12 @@
 <template>
     <div class="lang-switch">
         <div class="container">
-            <nuxt-link :to="switchLocalePath('fr')" class="link">Fr </nuxt-link
-            ><span class="pipe">|</span
-            ><nuxt-link :to="switchLocalePath('en')" class="link"
-                >&nbsp;En
+            <nuxt-link :to="switchLocalePath('fr')" class="link">
+                Fr
+            </nuxt-link><span class="pipe">|</span><nuxt-link
+                :to="switchLocalePath('en')"
+                class="link"
+            >&nbsp;En
             </nuxt-link>
         </div>
     </div>

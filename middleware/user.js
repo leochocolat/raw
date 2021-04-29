@@ -6,9 +6,10 @@ export default function({ store, $cookies }) {
         store.dispatch('data/setFromCookies', data);
     } else {
         // Set initial datas
-        $cookies.set('data', store.state.data);
+        $cookies.set('data', store.state.data, {
+            // One month
+            expires: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
+            maxAge: 1000 * 3600 * 24 * 30,
+        });
     }
-
-    // console.log($cookies.get('data'));
-    // console.log(store.state.data);
 }

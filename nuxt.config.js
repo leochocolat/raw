@@ -30,7 +30,12 @@ export default {
      ** CSS Style Resources
      */
     styleResources: {
-        scss: ['@/assets/styles/resources/_variables.scss', '@/assets/styles/resources/_mixins.scss', '@/assets/styles/resources/_functions.scss', '@/assets/styles/resources/_breakpoints.scss'],
+        scss: [
+            '@/assets/styles/resources/_variables.scss',
+            '@/assets/styles/resources/_mixins.scss',
+            '@/assets/styles/resources/_functions.scss',
+            '@/assets/styles/resources/_breakpoints.scss',
+        ],
     },
     /*
      ** Global CSS
@@ -40,7 +45,12 @@ export default {
      ** Plugins to load before mounting the App
      ** https://nuxtjs.org/guide/plugins
      */
-    plugins: ['@/plugins/listeners.client.js', '@/plugins/init.client.js', '@/plugins/api/index'],
+    plugins: [
+        '@/plugins/listeners.client.js',
+        '@/plugins/init.client.js',
+        '@/plugins/init.server.js',
+        '@/plugins/api/index',
+    ],
 
     /*
      * Middleware

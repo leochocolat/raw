@@ -1,6 +1,3 @@
-// Vendor
-import { mapGetters } from 'vuex';
-
 // Data
 import resources from '@/resources';
 
@@ -14,12 +11,6 @@ export default {
         return {
             isDisable: false,
         };
-    },
-
-    computed: {
-        ...mapGetters({
-            isDebug: 'context/isDebug',
-        }),
     },
 
     mounted() {
@@ -63,8 +54,6 @@ export default {
         },
 
         start() {
-            // Start App
-            this.$root.webglApp.start();
             this.$store.dispatch('preloader/setReady');
         },
 

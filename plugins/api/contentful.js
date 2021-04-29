@@ -14,7 +14,7 @@ const configManagment = {
 const FIELD_CENSORSHIP_DATA = 'censorshipData';
 const FIELD_CENSORSHIP_FACTOR = 'censorshipFactor';
 
-export default function ({ i18n, error, store }) {
+export default function({ i18n, error, store }) {
     const clientDelivery = contentfulDelivery.createClient(configDelivery);
     const clientManagment = contentfulManagment.createClient(configManagment);
 
@@ -58,7 +58,7 @@ export default function ({ i18n, error, store }) {
             if (res.status === 404) {
                 return error({
                     statusCode: 404,
-                    message: `The page you're looking for doesn't exist`,
+                    message: 'The page you\'re looking for doesn\'t exist',
                 });
             }
         }
@@ -81,7 +81,7 @@ export default function ({ i18n, error, store }) {
             if (res.status === 404) {
                 return error({
                     statusCode: 404,
-                    message: `The page you're looking for doesn't exist`,
+                    message: 'The page you\'re looking for doesn\'t exist',
                 });
             }
         }
@@ -99,8 +99,8 @@ export default function ({ i18n, error, store }) {
         try {
             res = await clientManagment
                 .getSpace(configManagment.space)
-                .then((space) => space.getEnvironment('master'))
-                .then((environment) => environment.createEntry(contentTypeId, data));
+                .then(space => space.getEnvironment('master'))
+                .then(environment => environment.createEntry(contentTypeId, data));
         } catch (err) {
             return error(err);
         }
@@ -117,8 +117,8 @@ export default function ({ i18n, error, store }) {
         try {
             res = await clientManagment
                 .getSpace(configManagment.space)
-                .then((space) => space.getEnvironment('master'))
-                .then((environment) => environment.getEntry(entryId))
+                .then(space => space.getEnvironment('master'))
+                .then(environment => environment.getEntry(entryId))
                 .then((entry) => {
                     for (const property in fields) {
                         if (!entry.fields[property]) {

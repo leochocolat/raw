@@ -10,6 +10,8 @@
     font-size: rem(13px);
     text-transform: uppercase;
 
+    cursor: default;
+
     @include respond-to('large') {
         font-size: rem-l(17px);
     }
@@ -22,14 +24,18 @@
 
     transition: opacity 0.05s ease-in-out;
 
+    cursor: pointer;
+
     &.nuxt-link-active {
         opacity: 1;
 
         pointer-events: none;
     }
 
-    &:hover {
-        opacity: 1;
+    @media (hover: hover) {
+        &:hover {
+            opacity: 1;
+        }
     }
 }
 
