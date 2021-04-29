@@ -7,7 +7,11 @@ const actions = {
         commit('SET_STEP', value);
     },
 
-    complete({ commit }) {
+    setReady({ commit }) {
+        commit('SET_READY');
+    },
+
+    setComplete({ commit }) {
         commit('SET_COMPLETED');
     },
 };

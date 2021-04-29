@@ -29,7 +29,6 @@ export default {
         },
 
         showInstructions() {
-            console.log('show');
             this.$refs.instructions.transitionIn();
         },
     },

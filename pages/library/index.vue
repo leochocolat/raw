@@ -1,5 +1,9 @@
 <template>
-    <div class="page-library"></div>
+    <div class="page-library">
+
+        <ScreenActive :scene="scene" />
+
+    </div>
 </template>
 
 <script src="./script.js"></script>

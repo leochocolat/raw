@@ -5,7 +5,7 @@ import { mapGetters } from 'vuex';
 export default {
     data() {
         return {
-            isPrototype: this.getRouteBaseName() === 'prototype',
+            isHome: this.getRouteBaseName() === 'index',
         };
     },
 
@@ -28,7 +28,7 @@ export default {
         WindowResizeObserver.setCanvasContainer(this.$refs.canvasSizeHelper);
         this.$store.dispatch('router/setCurrent', this.$route);
 
-        if (this.isPrototype || this.isDebug) {
+        if (this.isHome || this.isDebug) {
             this.$refs.preloader.disable();
         }
     },

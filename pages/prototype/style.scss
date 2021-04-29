@@ -1,15 +1,3 @@
-.prototype {
-    text-transform: uppercase;
-
-    > div {
-        visibility: hidden;
-
-        pointer-events: none;
-    }
-
-    .is-enable {
-        visibility: visible;
-
-        pointer-events: all;
-    }
+.page-home {
+    opacity: 0;
 }

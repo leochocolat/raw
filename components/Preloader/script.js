@@ -57,12 +57,15 @@ export default {
             this.resourceLoader.add({ resources, preload: false });
             this.resourceLoader.preload();
 
+            // Start preloader
             this.$store.dispatch('preloader/start');
             this.$refs.preloaderScreens.start();
         },
 
         start() {
+            // Start App
             this.$root.webglApp.start();
+            this.$store.dispatch('preloader/setReady');
         },
 
         /**
@@ -77,7 +80,7 @@ export default {
         },
 
         completeHandler() {
-            this.$store.dispatch('preloader/complete');
+            this.$store.dispatch('preloader/setComplete');
 
             this.$refs.preloaderScreens.isPreloaderComplete = true;
 

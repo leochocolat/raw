@@ -3,6 +3,7 @@ import ArrowDown from '@/assets/icons/arrow-down.svg?inline';
 
 // Vendor
 import gsap from 'gsap';
+import { mapGetters } from 'vuex';
 
 export default {
     props: ['id', 'data'],
@@ -21,10 +22,22 @@ export default {
     },
 
     computed: {
+        ...mapGetters({
+            isSceneComplete: 'data/isSceneComplete',
+        }),
+
+        isComplete() {
+            return this.isSceneComplete(this.id);
+        },
+
         time() {
             const date = new Date(this.data.startTime);
             date.setSeconds(date.getSeconds() + this.duration);
             return date.toLocaleTimeString('en-GB');
+        },
+
+        isDisable() {
+            return this.getRouteBaseName() === this.id;
         },
     },
 
@@ -59,7 +72,8 @@ export default {
         },
 
         clickHandler() {
-            this.$store.dispatch('scenes/setActiveScene', this.id);
+            // this.$router.push(this.id);
+            // this.$store.dispatch('scenes/setActiveScene', this.id);
         },
 
         clockHandler() {

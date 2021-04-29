@@ -7,8 +7,12 @@ const getters = {
         return state.step;
     },
 
-    isReady(state) {
+    isComplete(state) {
         return state.state === 'COMPLETED';
+    },
+
+    isReady(state) {
+        return state.state === 'READY';
     },
 };
 

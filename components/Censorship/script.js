@@ -1,3 +1,6 @@
+// Vendor
+import { mapGetters } from 'vuex';
+
 // Utils
 import DragManager from '@/utils/DragManager';
 import clamp from '@/utils/math/clamp';
@@ -13,6 +16,16 @@ export default {
             newCensorshipFactor: this.$store.state.data.scenes[this.data.id].censorshipFactor || this.data.censorshipFactor,
             censorshipDelta: this.$store.state.data.scenes[this.data.id].censorshipDelta || 0,
         };
+    },
+
+    computed: {
+        ...mapGetters({
+            isSceneComplete: 'data/isSceneComplete',
+        }),
+
+        isComplete() {
+            return this.isSceneComplete(this.data.id);
+        },
     },
 
     mounted() {
@@ -47,9 +60,13 @@ export default {
         },
 
         updateStore() {
+            // Store
             this.$store.dispatch('data/setSceneCensorshipFactor', { id: this.data.id, value: this.newCensorshipFactor });
             this.$store.dispatch('data/setSceneCensorshipDelta', { id: this.data.id, value: this.censorshipDelta });
             this.$store.dispatch('data/setSceneComplete', { id: this.data.id, value: true });
+
+            // Cookies
+            this.$cookies.set('data', this.$store.state.data);
         },
 
         submitCensorship() {
@@ -60,6 +77,8 @@ export default {
                 .then(() => {
                     this.isSent = true;
                     this.isSubmitting = false;
+                    this.updateStore();
+                    this.$router.push(this.localePath('prototype'));
                 })
                 .catch(() => {
                     this.isSubmitting = false;
@@ -91,7 +110,6 @@ export default {
 
         clickSubmitHandler() {
             if (this.isSubmitting || this.isSent) return;
-            this.updateStore();
             this.submitCensorship();
         },
     },

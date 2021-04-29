@@ -5,25 +5,21 @@ import gsap from 'gsap';
 import page from '@/mixins/page';
 
 export default {
-    name: '',
-
     mixins: [page],
 
-    asyncData({ $api }) {
+    asyncData({ $api, route }) {
+        const routeName = route.name.split('___')[0];
         return $api.getScenesEntries().then((response) => {
-            return { sceneEntries: response };
+            return { scene: response[routeName] };
         });
     },
 
     mounted() {
-        this.$store.dispatch('scenes/setMenuScene', true);
-        this.$store.dispatch('scenes/setActiveScene', '');
+        this.$store.dispatch('scenes/setActiveScene', this.$options.name);
+        this.$store.dispatch('scenes/setMenuScene', false);
     },
 
     methods: {
-        /**
-         * Public
-         */
         transitionInit() {
             gsap.set(this.$el, { alpha: 0 });
         },
@@ -31,7 +27,7 @@ export default {
         firstReveal(done, routeInfos) {
             const timeline = gsap.timeline({ onComplete: done });
 
-            timeline.to(this.$el, 0.5, { alpha: 1, ease: 'circ.inOut' });
+            timeline.add(this.transitionIn, 0);
 
             return timeline;
         },
@@ -51,9 +47,5 @@ export default {
 
             return timeline;
         },
-
-        /**
-         * Private
-         */
     },
 };

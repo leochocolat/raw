@@ -15,6 +15,7 @@ export default {
 
     watch: {
         activeScene(newValue) {
+            if (!newValue) return;
             this.$root.webglApp.sceneManager?.setActiveScene(newValue);
         },
 
@@ -37,7 +38,7 @@ export default {
 
         this.$root.webglApp.sceneManager?.setMenuState(this.menuState);
 
-        if (this.activeScene === '') return;
+        if (!this.activeScene || this.activeScene === '') return;
         this.$root.webglApp.sceneManager?.setActiveScene(this.activeScene);
     },
 };

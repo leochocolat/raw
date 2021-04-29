@@ -1,7 +1,14 @@
 export default function({ store, $cookies }) {
-    // Get Cookies and dispatch to store
-    // const data = $cookies.get('data');
-    // if (data) {
-    //     // store.dispatch('data/setFromCookies', data);
-    // }
+    const data = $cookies.get('data');
+
+    if (data) {
+        // Send datas to store
+        store.dispatch('data/setFromCookies', data);
+    } else {
+        // Set initial datas
+        $cookies.set('data', store.state.data);
+    }
+
+    // console.log($cookies.get('data'));
+    // console.log(store.state.data);
 }

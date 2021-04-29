@@ -1,5 +1,5 @@
 <template>
-    <div class="censorship">
+    <div class="censorship" :class="isComplete ? 'is-complete' : ''">
         <div class="container">
             <div class="image-container">
                 <img
@@ -18,7 +18,9 @@
                     <span ref="cursor" class="cursor"></span>
                 </div>
                 <span class="value">{{ newCensorshipFactor.toFixed(2) }}</span>
-                <div class="message">{{ isSent ? 'success' : '' }}</div>
+                <div class="message">
+                    {{ isSent ? 'success' : '' }}
+                </div>
                 <button
                     ref="buttonSubmit"
                     class="button-submit"

@@ -1,6 +1,5 @@
 // Vendor
 import gsap from 'gsap';
-import { mapGetters } from 'vuex';
 
 export default {
     data() {

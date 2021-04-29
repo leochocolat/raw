@@ -1,12 +1,5 @@
 .preloader {
-    // position: fixed;
-    // top: 0;
-    // left: 0;
-
-    // width: 100%;
-    // height: content-height();
-
-    // @include respond-to('large') {
-    //     height: content-height-l();
-    // }
+    * {
+        @include unselectable();
+    }
 }

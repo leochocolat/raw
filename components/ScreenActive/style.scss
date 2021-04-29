@@ -1,6 +1,4 @@
 .screen-active {
-    opacity: 0;
-
     position: absolute;
     top: 0;
     left: 0;
@@ -10,6 +8,8 @@
 
     padding: content-padding();
 
+    text-transform: uppercase;
+
     @include respond-to('large') {
         height: content-height-l();
 
@@ -18,6 +18,8 @@
 }
 
 .screen {
+    display: block;
+
     width: 100%;
     height: 100%;
 
