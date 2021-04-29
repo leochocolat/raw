@@ -12,6 +12,8 @@
 
     cursor: default;
 
+    @include unselectable();
+
     @include respond-to('large') {
         font-size: rem-l(17px);
     }
