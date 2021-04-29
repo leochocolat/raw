@@ -60,7 +60,7 @@ class WebglApp {
     }
 
     start() {
-        this._sceneManager.start();
+        this._sceneManager?.start();
     }
 
     destroy() {
