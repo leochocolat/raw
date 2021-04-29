@@ -21,11 +21,11 @@ export default {
          * Public
          */
         transitionIn() {
-            gsap.to(this.$el, { duration: 0.5, alpha: 1 });
+            gsap.to(this.$el, { duration: 0.5, autoAlpha: 1 });
         },
 
         transitionOut() {
-            gsap.to(this.$el, { duration: 0.5, alpha: 0 });
+            gsap.to(this.$el, { duration: 0.5, autoAlpha: 0 });
         },
 
         /**
