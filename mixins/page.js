@@ -42,7 +42,7 @@ export default {
 
         enter(el, done) {
             // Prevent transition to happen if preloader is not completed
-            if (!this.$store.state.preloader.isReady) return;
+            if (this.$store.state.preloader.state !== 'READY') return;
 
             const page = getPage(el.__vue__);
             const routeInfos = {
