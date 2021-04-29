@@ -1,6 +1,7 @@
 <template>
     <div class="footer">
-        <LangSwitch />
+        <LangSwitch ref="langSwitch" />
+        <ButtonSound ref="buttonSound" />
         <Instructions ref="instructions" class="instructions" />
         <ButtonStop ref="buttonStop" />
     </div>
