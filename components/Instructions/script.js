@@ -1,7 +1,26 @@
 // Vendor
 import gsap from 'gsap';
+import { mapGetters } from 'vuex';
 
 export default {
+    data() {
+        return {
+            content: 'instructions',
+        };
+    },
+
+    computed: {
+        ...mapGetters({
+            instructions: 'instructions',
+        }),
+    },
+
+    watch: {
+        instructions(instructions) {
+            this.content = instructions;
+        },
+    },
+
     methods: {
         /**
          * Public

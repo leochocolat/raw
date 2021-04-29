@@ -1,6 +1,6 @@
 <template>
     <div class="instructions">
-        [instructions]
+        [{{ content }}]
     </div>
 </template>
 

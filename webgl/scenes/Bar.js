@@ -14,8 +14,6 @@ class Bar extends RenderTargetScene {
     constructor(options) {
         super(options);
 
-        this.background = new THREE.Color('red');
-
         this._cameraPosition = {
             current: new THREE.Vector3(0, 0, 0),
             target: new THREE.Vector3(0, 0, 0),
