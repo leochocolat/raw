@@ -23,6 +23,8 @@ class AnimTexture extends DebugScene {
         this._isReady = false;
         this._resources = this._setupResources();
 
+        this._modelsCount = 1;
+
         this._addDebugSettings();
         this._setupEventListeners();
     }
@@ -48,6 +50,7 @@ class AnimTexture extends DebugScene {
 
             this._skeleton.boneTexture.needsUpdate = true;
         }
+
         super.update(time, delta);
     }
 
@@ -61,29 +64,35 @@ class AnimTexture extends DebugScene {
             namespace: 'animTexture',
         });
 
+        resources.addByName('library');
+
         resources.load();
 
         return resources;
     }
 
     _setup() {
-        this._modelsCount = 350;
         this._animationControllers = [];
 
         const texture1 = this._resources.get('tex1');
-        const texture2 = this._resources.get('tex2');
-        const texture3 = this._resources.get('tex3');
 
+        const hallway = this._resources.get('library');
+
+        // this._modelsCount = hallway.scene.getObjectByName('Humans').children.length;
+
+        // this._humansEmpty = [...hallway.scene.getObjectByName('Humans').children];
         this._uniforms = {
             time: { value: 0.0 },
             textures: {
-                value: [texture1, texture2, texture3],
+                value: [texture1, texture1, texture1],
             },
         };
 
         this._offsetMatrix = new THREE.Matrix4();
 
-        this._model = this._createModel();
+        this._material = this._createMaterial();
+        // this._mainModel = this._createMainModel();
+        this._skinnedModel = this._setupSkinnedModel();
         this._mesh = this._setupMesh();
         this._instancedGeometry = this._createInstancedGeometry();
         this._skeleton = this._createSkeleton();
@@ -92,23 +101,42 @@ class AnimTexture extends DebugScene {
         this._isReady = true;
     }
 
-    _createModel() {
-        const model = this._resources.get('soldier');
-        const clone = cloneSkinnedMesh(model);
+    _createMainModel() {
+        const model = this._resources.get('hallway');
+        // const clone = cloneSkinnedMesh(model);
+        model.scene.traverse((child) => {
+            if (child.isMesh) {
+                child.material = this._material;
+            }
+        });
 
-        return clone;
+        this.add(model.scene);
+        return model;
+    }
+
+    _createMaterial() {
+        const material = new THREE.MeshNormalMaterial();
+
+        return material;
+    }
+
+    _setupSkinnedModel() {
+        const model = this._resources.get('HommeAdulte');
+        // const clone = cloneSkinnedMesh(model);
+        // console.log(model);
+        // this.add(model.scene);
+        return model;
     }
 
     _createAnimationController(skinnedMesh) {
-        const model = this._model;
+        const model = this._skinnedModel;
         const animationController = new AnimationComponent(model, skinnedMesh);
 
         return animationController;
     }
 
     _setupMesh() {
-        const mesh = this._model.scene.getObjectByName('vanguard_Mesh');
-
+        const mesh = this._skinnedModel.scene.getObjectByName('HommeAdulte');
         const material = new THREE.ShaderMaterial({
             skinning: true,
             vertexShader: vertex,
@@ -135,12 +163,13 @@ class AnimTexture extends DebugScene {
         const tmp = new THREE.Object3D();
 
         for (let i = 0; i < this._modelsCount; i++) {
-            tmp.position.set((Math.random() - 0.5) * 600.0, (Math.random() - 0.5) * 600.0 + 200, -150);
+            // tmp.position.set((Math.random() - 0.5) * 10.0, (Math.random() - 0.5) * 10.0, -10);
+            tmp.position.set(0, 0, 0);
 
             tmp.rotation.set(0, 0, Math.random() * 2.0 * Math.PI);
 
             // tmp.scale.set(1, 1, 1).multiplyScalar(Math.random() * 0.75 + 0.25);
-            tmp.scale.set(1, 1, 1).multiplyScalar(0.25);
+            // tmp.scale.set(1, 1, 1).multiplyScalar(0.25);
 
             tmp.updateMatrix();
             tmp.normalMatrix.getNormalMatrix(tmp.matrix);
@@ -164,14 +193,47 @@ class AnimTexture extends DebugScene {
             instanceColors.push(Math.random() * 0.75 + 0.25);
         }
 
+        // with empty humans positions in blender export
+
+        // for (let i = 0; i < this._modelsCount; i++) {
+        //     tmp.position.set(this._humansEmpty[i].position.x, this._humansEmpty[i].position.y, this._humansEmpty[i].position.z);
+
+        //     tmp.rotation.set(this._humansEmpty[i].rotation.x, this._humansEmpty[i].rotation.y, this._humansEmpty[i].rotation.z);
+
+        //     tmp.scale.set(this._humansEmpty[i].scale.x, this._humansEmpty[i].scale.y, this._humansEmpty[i].scale.z);
+        //     // tmp.scale.set(1, 1, 1).multiplyScalar(0.25);
+
+        //     tmp.updateMatrix();
+        //     tmp.normalMatrix.getNormalMatrix(tmp.matrix);
+
+        //     for (let j = 0; j < 4; j++) {
+        //         instanceMatrixColumns0.push(tmp.matrix.elements[j]);
+        //         instanceMatrixColumns1.push(tmp.matrix.elements[j + 4]);
+        //         instanceMatrixColumns2.push(tmp.matrix.elements[j + 8]);
+        //         instanceMatrixColumns3.push(tmp.matrix.elements[j + 12]);
+        //     }
+
+        //     for (let j = 0; j < 3; j++) {
+        //         instanceNormalMatrixColumns0.push(tmp.normalMatrix.elements[j]);
+        //         instanceNormalMatrixColumns1.push(tmp.normalMatrix.elements[j + 3]);
+        //         instanceNormalMatrixColumns2.push(tmp.normalMatrix.elements[j + 6]);
+        //     }
+
+        //     textureIdx.push(i);
+        //     instanceColors.push(Math.random() * 0.75 + 0.25);
+        //     instanceColors.push(Math.random() * 0.75 + 0.25);
+        //     instanceColors.push(Math.random() * 0.75 + 0.25);
+        // }
+
         const instancedGeometry = new THREE.InstancedBufferGeometry();
+
         instancedGeometry.setAttribute('position', this._mesh.geometry.getAttribute('position'));
         instancedGeometry.setAttribute('normal', this._mesh.geometry.getAttribute('normal'));
         instancedGeometry.setAttribute('uv', this._mesh.geometry.getAttribute('uv'));
 
-        if (instancedGeometry.getAttribute('uv2')) {
-            instancedGeometry.setAttribute('uv2', this._mesh.geometry.getAttribute('uv2'));
-        }
+        // if (instancedGeometry.getAttribute('uv2')) {
+        //     instancedGeometry.setAttribute('uv2', this._mesh.geometry.getAttribute('uv2'));
+        // }
         instancedGeometry.setAttribute('skinIndex', this._mesh.geometry.getAttribute('skinIndex'));
         instancedGeometry.setAttribute('skinWeight', this._mesh.geometry.getAttribute('skinWeight'));
         instancedGeometry.setIndex(this._mesh.geometry.getIndex());
@@ -234,16 +296,19 @@ class AnimTexture extends DebugScene {
         this.add(parent);
 
         // TPOSE is making models jumping
-        // const animations = [...this._model.animations];
-        const animations = [THREE.AnimationClip.findByName(this._model.animations, 'Idle'), THREE.AnimationClip.findByName(this._model.animations, 'Walk'), THREE.AnimationClip.findByName(this._model.animations, 'Run')];
-        const animationTypes = [0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2];
+        // const animations = [...this._skinnedModel.animations];
+        // const animations = [THREE.AnimationClip.findByName(this._skinnedModel.animations, 'Idle'), THREE.AnimationClip.findByName(this._skinnedModel.animations, 'Walk'), THREE.AnimationClip.findByName(this._skinnedModel.animations, 'Run')];
+        const animations = [THREE.AnimationClip.findByName(this._skinnedModel.animations, 'AnimTest')];
+        // console.log(this._skinnedModel.animations);
+        // const animationTypes = [0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2];
+        const animationTypes = [0];
 
         for (let i = 0; i < this._modelsCount; i++) {
-            const animationController = new AnimationComponent(this._model, skinnedMesh);
+            const animationController = new AnimationComponent(this._skinnedModel, skinnedMesh);
             const animationType = animationTypes[(Math.random() * animationTypes.length) | 0];
             this._animationControllers.push(animationController);
 
-            animationController.playAnimation(animationController.actionType[animations[animationType].name]);
+            animationController.playAnimation({ animation: animationController.actionType[animations[animationType].name], loopOnce: false });
         }
         // this._instancedGeometry.setAttribute('instanceSpeed', new THREE.InstancedBufferAttribute(new Float32Array(instanceSpeeds), 1));
     }

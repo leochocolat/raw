@@ -3,6 +3,7 @@ import * as THREE from 'three';
 
 // Components
 import RenderTargetScene from './RenderTargetScene';
+import BlurScreen from '../utils/BlurScreen';
 
 // Utils
 import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
@@ -16,7 +17,6 @@ import data from '../data';
 class Library extends RenderTargetScene {
     constructor(options) {
         super(options);
-
         this.background = new THREE.Color(data.colors[this._id]);
 
         this._bindAll();
@@ -32,6 +32,9 @@ class Library extends RenderTargetScene {
     update() {
         super.update();
 
+        if (!this._blurScreen) return;
+        this._blurScreen.update(this._sceneDelta);
+
         if (!this._animationController) return;
         this._animationController.update(this._sceneDelta);
     }
@@ -41,7 +44,9 @@ class Library extends RenderTargetScene {
      */
     _setupResources() {
         const resources = new ResourceManager({ name: 'library', namespace: 'library' });
-        resources.addByName('CameraMovement');
+        resources.addByName('texture-test-blur');
+        resources.addByName('blur-mask-test');
+
         resources.load();
 
         return resources;
@@ -50,19 +55,24 @@ class Library extends RenderTargetScene {
     _setup() {
         this._material = this._createMaterial();
         this._model = this._createModel();
+        this._interactionScreen = this._setupInteractionScreen();
+
         this._animationController = this._createAnimationController();
         this._modelCamera = this._createModelCameraAnimation();
     }
 
     _createMaterial() {
-        const material = new THREE.MeshNormalMaterial();
+        const texture = this._resources.get('texture_library');
+        const material = new THREE.MeshBasicMaterial({
+            map: texture,
+        });
 
         return material;
     }
 
     _createModel() {
-        const model = this._resources.get('CameraMovement');
-        // const clone = cloneSkinnedMesh(model);
+        const model = this._resources.get('library');
+
         const clone = model;
         this.add(clone.scene);
 
@@ -75,10 +85,19 @@ class Library extends RenderTargetScene {
         return clone;
     }
 
+    _setupInteractionScreen() {
+        const screenTexture = this._resources.get('texture-test-blur');
+        const maskTexture = this._resources.get('blur-mask-test');
+
+        const screen = this._model.scene.getObjectByName('Interaction_SCREEN');
+        this._blurScreen = new BlurScreen({ blurFactor: 3, scenePlane: screen, maskTexture, screenTexture, renderer: this._renderer, width: this._width, height: this._height });
+    }
+
     _createAnimationController() {
         const model = this._model;
+
         const animationController = new AnimationComponent(model);
-        animationController.playAnimation(animationController.actionType.CameraMove);
+        animationController.playAnimation({ animation: animationController.actionType.CameraMove, loopOnce: false });
 
         return animationController;
     }

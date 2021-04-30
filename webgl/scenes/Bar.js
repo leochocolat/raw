@@ -153,7 +153,7 @@ class Bar extends RenderTargetScene {
     _createAnimationController() {
         const model = this._model;
         const animationController = new AnimationComponent(model);
-        animationController.playAnimation(animationController.actionType.CameraMove);
+        animationController.playAnimation({ animation: animationController.actionType.CameraMove, loopOnce: false });
 
         return animationController;
     }
