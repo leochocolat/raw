@@ -74,13 +74,13 @@ class DragManager {
 
     _removeEventListeners() {
         if (this.isTouch()) {
-            this.el.removeEventListener('touchstart', this.__touchstartHandler);
-            window.removeEventListener('touchmove', this.__touchmoveHandler);
-            window.removeEventListener('touchend', this.__touchendHandler);
+            this.el.removeEventListener('touchstart', this._touchstartHandler);
+            window.removeEventListener('touchmove', this._touchmoveHandler);
+            window.removeEventListener('touchend', this._touchendHandler);
         } else {
-            this.el.removeEventListener('mousedown', this.__mousedownHandler);
-            window.removeEventListener('mousemove', this.__mousemoveHandler);
-            window.removeEventListener('mouseup', this.__mouseupHandler);
+            this.el.removeEventListener('mousedown', this._mousedownHandler);
+            window.removeEventListener('mousemove', this._mousemoveHandler);
+            window.removeEventListener('mouseup', this._mouseupHandler);
         }
     }
 

@@ -1,6 +1,10 @@
 // Vendor
 import WindowResizeObserver from '@/utils/WindowResizeObserver';
 import { mapGetters } from 'vuex';
+import gsap from 'gsap';
+import InertiaPlugin from '@/vendor/gsap/InertiaPlugin';
+
+gsap.registerPlugin(InertiaPlugin);
 
 export default {
     data() {

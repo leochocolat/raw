@@ -11,6 +11,10 @@ export default {
     data() {
         return {
             lang: this.$i18n.locale,
+            isSubmitting: false,
+            isSent: false,
+            newCensorshipFactor: this.$store.state.data.scenes[this.data.id].censorshipFactor || this.data.censorshipFactor,
+            censorshipDelta: this.$store.state.data.scenes[this.data.id].censorshipDelta || 0,
         };
     },
 
@@ -25,7 +29,6 @@ export default {
     },
 
     mounted() {
-        // console.log(this.data);
         // this.containerSize = this.$refs.container.getBoundingClientRect().width;
         // this.cursorPosition = 0;
         // this.setupEventListener();
@@ -33,7 +36,7 @@ export default {
     },
 
     beforeDestroy() {
-        // this.removeEventListener();
+        this.removeEventListener();
     },
 
     methods: {

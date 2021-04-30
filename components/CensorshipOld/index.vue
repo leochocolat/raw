@@ -1,24 +1,16 @@
 <template>
     <div class="censorship" :class="isComplete ? 'is-complete' : ''">
-
         <div class="container">
-
-            <div class="form">
-
-                <InputCensorship class="input-censorship" :scene="data" :label1="data.callToAction" :label2="data.callToAction2" :max-range="data.censorshipRange" />
-
-            </div>
-
-            <!-- <div class="image-container">
+            <div class="image-container">
                 <img
                     ref="image"
                     src="https://i.picsum.photos/id/692/600/700.jpg?hmac=jmB3mH356VFvuJbVxDtTZfr-9aPpwJg4XEfFhohU7oU"
                     alt=""
                     :style="`filter: blur(${newCensorshipFactor * 10}px)`"
                 />
-            </div> -->
+            </div>
 
-            <!-- <div ref="container" class="vote-container">
+            <div ref="container" class="vote-container">
                 <div class="caption">
                     {{ data.callToAction }}
                 </div>
@@ -37,9 +29,8 @@
                 >
                     {{ lang === 'fr' ? 'Valider' : 'Submit' }}
                 </button>
-            </div> -->
+            </div>
         </div>
-
     </div>
 </template>
 

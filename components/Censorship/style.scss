@@ -11,86 +11,102 @@
     width: 100%;
     height: 100%;
 
-    // &.is-complete {
-    //     display: none;
-    // }
+    padding: content-padding();
+
+    @include respond-to('large') {
+        padding: content-padding-l();
+    }
 }
 
-.vote-container {
-    width: 500px;
-    height: 20px;
-
-    margin: auto;
-
-    @include unselectable();
-
-    margin-top: 40px;
-
-    text-align: center;
-}
-
-.image-container {
-    width: 300px;
-    height: 500px;
-    overflow: hidden;
-
-    margin: 0 auto;
-}
-
-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.control {
+.container {
     position: relative;
 
     width: 100%;
     height: 100%;
-
-
-    border: 2px solid white;
 }
 
-.cursor {
+.form {
     position: absolute;
-    top: 0;
+    right: 0;
+    bottom: 20%;
     left: 0;
-
-    width: 10px;
-    height: 100%;
-
-    background-color:white;
-
-    cursor: pointer;
 }
 
-.value {
-    font-weight: bolder;
-    font-size: 14px;
-}
+// .vote-container {
+//     width: 500px;
+//     height: 20px;
 
-.button-submit {
-    display: block;
+//     margin: auto;
 
-    margin: auto;
-    margin-top: 20px;
+//     @include unselectable();
 
-    font-size: rem-l(20px);
-    text-transform: uppercase;
+//     margin-top: 40px;
 
-    cursor: pointer;
-}
+//     text-align: center;
+// }
 
-.message {
-    font-size: 14px;
-    color: green;
-    text-transform: lowercase;
-}
+// .image-container {
+//     width: 300px;
+//     height: 500px;
+//     overflow: hidden;
 
-.caption {
-    margin-bottom: 10px;
+//     margin: 0 auto;
+// }
 
-    font-size: rem-l(20px);
-}
+// img {
+//     width: 100%;
+//     height: 100%;
+//     object-fit: cover;
+// }
+
+// .control {
+//     position: relative;
+
+//     width: 100%;
+//     height: 100%;
+
+
+//     border: 2px solid white;
+// }
+
+// .cursor {
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+
+//     width: 10px;
+//     height: 100%;
+
+//     background-color:white;
+
+//     cursor: pointer;
+// }
+
+// .value {
+//     font-weight: bolder;
+//     font-size: 14px;
+// }
+
+// .button-submit {
+//     display: block;
+
+//     margin: auto;
+//     margin-top: 20px;
+
+//     font-size: rem-l(20px);
+//     text-transform: uppercase;
+
+//     cursor: pointer;
+// }
+
+// .message {
+//     font-size: 14px;
+//     color: green;
+//     text-transform: lowercase;
+// }
+
+// .caption {
+//     margin-bottom: 10px;
+
+//     font-size: rem-l(20px);
+// }

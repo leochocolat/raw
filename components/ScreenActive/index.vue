@@ -1,7 +1,26 @@
 <template>
     <div class="screen-active">
-        <Screen :id="scene.id" ref="screen" class="screen" :data="scene" />
-        <Censorship class="image-blur" :data="scene" />
+
+        <div class="container">
+
+            <div class="time paragraph">
+                {{ time }}
+            </div>
+
+            <Frame ref="frame" />
+
+            <div class="screen-footer">
+                <div class="call-to-action">
+                    <span>Censure</span>
+                </div>
+                <div class="name">
+                    {{ scene.name }}
+                </div>
+            </div>
+
+            <Censorship class="censorship" :data="scene" />
+
+        </div>
     </div>
 </template>
 
