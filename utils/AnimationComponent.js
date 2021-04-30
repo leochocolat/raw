@@ -22,10 +22,13 @@ class AnimationComponent {
      * Public
      */
 
-    playAnimation(action) {
-        this.currentAnim = action.getClip().name;
-
-        action.play();
+    playAnimation(options) {
+        this.currentAnim = options.animation.getClip().name;
+        options.animation.play();
+        if (options.loopOnce) {
+            options.animation.clampWhenFinished = true;
+            options.animation.loop = THREE.LoopOnce;
+        }
     }
 
     pauseAnimation(action) {

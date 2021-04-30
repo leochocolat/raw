@@ -50,7 +50,6 @@ class DebugSceneManager {
             width: this._width,
             height: this._height,
         });
-
         return scene;
     }
 }

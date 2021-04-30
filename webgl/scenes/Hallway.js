@@ -51,7 +51,6 @@ class Hallway extends RenderTargetScene {
     _createModel() {
         const model = this._resources.get('hallway');
         const clone = model;
-
         this.add(clone.scene);
 
         clone.scene.traverse((child) => {
@@ -64,8 +63,9 @@ class Hallway extends RenderTargetScene {
     }
 
     _createMaterial() {
+        const texture = this._resources.get('texture_hallway');
         const material = new THREE.MeshNormalMaterial({
-            side: THREE.DoubleSide,
+            // map: texture,
         });
 
         return material;
@@ -74,7 +74,7 @@ class Hallway extends RenderTargetScene {
     _createAnimationController() {
         const model = this._model;
         const animationController = new AnimationComponent(model);
-        animationController.playAnimation(animationController.actionType.CameraMove);
+        animationController.playAnimation({ animation: animationController.actionType.CameraMove, loopOnce: false });
 
         return animationController;
     }
