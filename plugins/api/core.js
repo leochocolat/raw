@@ -5,7 +5,7 @@
  *
  */
 
-export default function () {
+export default function() {
     return {
         /**
          * Returns 'Hello world'

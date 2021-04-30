@@ -1,0 +1,41 @@
+.button-sound {
+    opacity: 0;
+    visibility: hidden;
+
+    position: absolute;
+    top: 0;
+    left: $padding-left;
+
+    height: 100%;
+
+    font-size: rem(13px);
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    @media (hover: hover) {
+        &:hover {
+            .state {
+                opacity: 0.75;
+            }
+        }
+    }
+
+    @include respond-to('large') {
+        left: $padding-left-l;
+
+        height: 100%;
+
+        font-size: rem-l(17px);
+    }
+}
+
+.state {
+    opacity: 1;
+
+    transition: opacity 0.3s ease-in-out;
+
+    &.is-muted {
+        opacity: 0.5;
+    }
+}

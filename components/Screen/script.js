@@ -3,6 +3,7 @@ import ArrowDown from '@/assets/icons/arrow-down.svg?inline';
 
 // Vendor
 import gsap from 'gsap';
+import { mapGetters } from 'vuex';
 
 export default {
     props: ['id', 'data'],
@@ -17,32 +18,57 @@ export default {
                 fr: ['selectionner', 'la camera'],
                 en: ['select', 'this camera'],
             },
+            resultTitle: {
+                fr: 'facteur de censure',
+                en: 'Censorship factor',
+            },
         };
     },
 
     computed: {
+        ...mapGetters({
+            isSceneComplete: 'data/isSceneComplete',
+            sceneCensorshipFactor: 'data/sceneCensorshipFactor',
+        }),
+
+        censorshipFactor() {
+            return this.sceneCensorshipFactor(this.data.id);
+        },
+
+        isComplete() {
+            return this.isSceneComplete(this.id);
+        },
+
         time() {
             const date = new Date(this.data.startTime);
             date.setSeconds(date.getSeconds() + this.duration);
             return date.toLocaleTimeString('en-GB');
         },
-    },
 
-    mounted() {
-        this.startClock();
+        isDisable() {
+            return this.getRouteBaseName() === this.id;
+        },
     },
 
     beforeDestroy() {
-        this.stopClock();
+        this.resetClock();
     },
 
     methods: {
+        /**
+         * Public
+         */
         startClock() {
             this._clock = setInterval(this.clockHandler, 1000);
         },
 
         stopClock() {
             clearInterval(this._clock);
+        },
+
+        resetClock() {
+            this.duration = 0;
+            this.stopClock();
         },
 
         // Events
@@ -56,10 +82,6 @@ export default {
             this.timelineEnter?.kill();
             this.timelineLeave = new gsap.timeline();
             this.timelineLeave.to(this.$refs.frame.$el, { duration: 0.5, scaleY: 1, ease: 'circ.out' });
-        },
-
-        clickHandler() {
-            this.$store.dispatch('scenes/setActiveScene', this.id);
         },
 
         clockHandler() {

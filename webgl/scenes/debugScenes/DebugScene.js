@@ -37,8 +37,6 @@ class DebugScene extends THREE.Scene {
 
     update(time, delta) {}
 
-    render() {}
-
     /**
      * Private
      */

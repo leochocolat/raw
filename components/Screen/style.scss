@@ -5,15 +5,31 @@
 
     font-size: rem(14px);
 
-    border: solid 1px rgba(255, 255, 255, 0.5);
-
-    cursor: pointer;
+    @include unselectable();
 
     @include respond-to('large') {
         padding: $padding-top-l $padding-left-l;
 
         font-size: rem-l(17px);
     }
+
+    &.is-complete {
+        background-color: rgba(0, 0, 0, 0.6);
+    }
+}
+
+.link {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    color: transparent;
+
+    @include unselectable();
 }
 
 .container {
@@ -26,6 +42,20 @@
 
     width: 100%;
     height: 100%;
+}
+
+.message-complete {
+    position: absolute;
+    top: calc(50% - 0.5em);
+    left: 0;
+
+    width: 100%;
+
+    text-align: center;
+
+    pointer-events: none;
+
+    @include unselectable();
 }
 
 .time {

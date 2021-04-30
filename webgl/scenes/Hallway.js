@@ -9,14 +9,9 @@ import AnimationComponent from '@/utils/AnimationComponent';
 import bindAll from '@/utils/bindAll';
 import { ResourceManager } from '@/utils/resource-loader';
 
-// Data
-import data from '../data';
-
 class Hallway extends RenderTargetScene {
     constructor(options) {
         super(options);
-
-        // this.background = new THREE.Color(data.colors[this._id]);
 
         this._bindAll();
 

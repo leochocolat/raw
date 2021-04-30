@@ -1,5 +1,9 @@
 <template>
-    <div class="page-hallway"></div>
+    <div class="page-hallway">
+
+        <ScreenActive :scene="scene" />
+
+    </div>
 </template>
 
 <script src="./script.js"></script>

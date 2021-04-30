@@ -1,5 +1,9 @@
 <template>
-    <div class="page-supermarket"></div>
+    <div class="page-supermarket">
+
+        <ScreenActive :scene="scene" />
+
+    </div>
 </template>
 
 <script src="./script.js"></script>

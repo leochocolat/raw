@@ -52,8 +52,6 @@ class Blur extends DebugScene {
         if (!this._finalPlane) return;
 
         this._applyBlur();
-
-        super.render();
     }
 
     /**

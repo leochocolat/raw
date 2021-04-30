@@ -1,6 +1,3 @@
-// Vendor
-import { mapGetters } from 'vuex';
-
 // Data
 import resources from '@/resources';
 
@@ -10,10 +7,10 @@ import { ResourceLoader } from '@/utils/resource-loader';
 import { ThreeGltfDracoLoader, ThreeBasisTextureLoader, ThreeTextureLoader, FontLoader, ThreeVideoTextureLoader, PizzicatoAudioLoader } from '@/utils/loaders';
 
 export default {
-    computed: {
-        ...mapGetters({
-            isDebug: 'context/isDebug',
-        }),
+    data() {
+        return {
+            isDisable: false,
+        };
     },
 
     mounted() {
@@ -26,6 +23,14 @@ export default {
     },
 
     methods: {
+        /**
+         * Public
+         */
+        disable() {
+            this.isDisable = true;
+            this.$refs.preloaderScreens.disable();
+        },
+
         /**
          * Private
          */
@@ -43,7 +48,13 @@ export default {
             this.resourceLoader.add({ resources, preload: false });
             this.resourceLoader.preload();
 
+            // Start preloader
             this.$store.dispatch('preloader/start');
+            this.$refs.preloaderScreens.start();
+        },
+
+        start() {
+            this.$store.dispatch('preloader/setReady');
         },
 
         /**
@@ -58,7 +69,13 @@ export default {
         },
 
         completeHandler() {
-            this.$store.dispatch('preloader/complete');
+            this.$store.dispatch('preloader/setComplete');
+
+            this.$refs.preloaderScreens.isPreloaderComplete = true;
+
+            if (this.$refs.preloaderScreens.isComplete || this.$refs.preloaderScreens.isDisable) {
+                this.start();
+            }
         },
     },
 };

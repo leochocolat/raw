@@ -6,18 +6,13 @@ import RenderTargetScene from './RenderTargetScene';
 import BlurScreen from '../utils/BlurScreen';
 
 // Utils
-import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
 import AnimationComponent from '@/utils/AnimationComponent';
 import bindAll from '@/utils/bindAll';
 import { ResourceManager } from '@/utils/resource-loader';
 
-// Data
-import data from '../data';
-
 class Library extends RenderTargetScene {
     constructor(options) {
         super(options);
-        this.background = new THREE.Color(data.colors[this._id]);
 
         this._bindAll();
 

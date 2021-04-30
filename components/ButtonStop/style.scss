@@ -1,11 +1,21 @@
 .button-stop {
+    opacity: 0;
+
     height: 100%;
 
     font-size: rem(13px);
-    color: red;
+    color: rgba(255, 0, 0, 1);
     text-transform: uppercase;
 
+    transition: color 0.2s ease-out;
+
     cursor: pointer;
+
+    @media (hover: hover) {
+        &:hover {
+            color: rgba(255, 0, 0, 0.7);
+        }
+    }
 
     @include respond-to('large') {
         height: 100%;

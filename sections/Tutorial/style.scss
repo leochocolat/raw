@@ -15,8 +15,6 @@
 
     padding: content-padding();
 
-    background-color: black;
-
     @include respond-to('large') {
         height: content-height-l();
 

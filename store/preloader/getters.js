@@ -3,8 +3,16 @@ const getters = {
         return state.state;
     },
 
-    isReady(state) {
+    step(state) {
+        return state.step;
+    },
+
+    isComplete(state) {
         return state.state === 'COMPLETED';
+    },
+
+    isReady(state) {
+        return state.state === 'READY';
     },
 };
 

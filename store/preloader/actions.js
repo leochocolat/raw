@@ -3,7 +3,15 @@ const actions = {
         commit('SET_LOADING');
     },
 
-    complete({ commit }) {
+    setStep({ commit }, value) {
+        commit('SET_STEP', value);
+    },
+
+    setReady({ commit }) {
+        commit('SET_READY');
+    },
+
+    setComplete({ commit }) {
         commit('SET_COMPLETED');
     },
 };

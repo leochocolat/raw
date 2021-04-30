@@ -1,6 +1,5 @@
 // Vendor
 import * as THREE from 'three';
-import gsap from 'gsap';
 
 // Objects
 import ScreensContainer from '@/webgl/objects/ScreensContainer';
@@ -48,6 +47,10 @@ class SceneManager extends THREE.Scene {
         return this._activeScene;
     }
 
+    start() {
+        this._screensContainer.showScenes();
+    }
+
     setMenuState(state) {
         this._isMenu = state;
 
@@ -63,6 +66,8 @@ class SceneManager extends THREE.Scene {
     }
 
     setActiveScene(sceneName) {
+        if (!sceneName || sceneName === '') return;
+
         const activeScene = this._scenes[sceneName];
         activeScene.transitionIn();
         activeScene.setActive();

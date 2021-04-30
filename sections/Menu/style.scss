@@ -1,5 +1,5 @@
 .menu {
-    opacity: 0;
+    // opacity: 0;
 
     position: absolute;
     top: 0;
@@ -10,6 +10,8 @@
     height: content-height();
 
     padding: content-padding();
+
+    text-transform: uppercase;
 
     @include respond-to('large') {
         height: content-height-l();

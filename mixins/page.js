@@ -1,8 +1,34 @@
+// Vendor
+import { mapGetters } from 'vuex';
+
 // Utils
 import getPage from '@/utils/getPage';
 
 export default {
     type: 'page',
+
+    computed: {
+        ...mapGetters({
+            isReady: 'preloader/isReady',
+        }),
+    },
+
+    watch: {
+        isReady(isReady) {
+            if (isReady) this.__start();
+        },
+    },
+
+    methods: {
+        __start() {
+            const routeInfos = {
+                previous: this.$store.state.router.previous,
+                current: this.$store.state.router.current,
+            };
+
+            this.firstReveal(null, routeInfos);
+        },
+    },
 
     transition: {
         appear: true,
@@ -15,14 +41,23 @@ export default {
         },
 
         enter(el, done) {
+            // Prevent transition to happen if preloader is not completed
+            if (this.$store.state.preloader.state !== 'READY') return;
+
             const page = getPage(el.__vue__);
             const routeInfos = {
                 previous: this.$store.state.router.previous,
                 current: this.$store.state.router.current,
             };
 
-            if (!routeInfos.previous && page && page.firstReveal) page.firstReveal(done, routeInfos);
-            else if (page && page.transitionIn) page.transitionIn(done, routeInfos);
+            // Handle first reveal with preloader
+            // if (!routeInfos.previous && page && page.firstReveal) page.firstReveal(done, routeInfos);
+            if (!routeInfos.previous) {
+                done();
+                return;
+            };
+
+            if (page && page.transitionIn) page.transitionIn(done, routeInfos);
             else done();
         },
 
