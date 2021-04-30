@@ -18,13 +18,22 @@ export default {
                 fr: ['selectionner', 'la camera'],
                 en: ['select', 'this camera'],
             },
+            resultTitle: {
+                fr: 'facteur de censure',
+                en: 'Censorship factor',
+            },
         };
     },
 
     computed: {
         ...mapGetters({
             isSceneComplete: 'data/isSceneComplete',
+            sceneCensorshipFactor: 'data/sceneCensorshipFactor',
         }),
+
+        censorshipFactor() {
+            return this.sceneCensorshipFactor(this.data.id);
+        },
 
         isComplete() {
             return this.isSceneComplete(this.id);

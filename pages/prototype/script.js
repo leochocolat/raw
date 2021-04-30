@@ -41,7 +41,7 @@ export default {
 
             timeline.to(this.$el, 0.5, { alpha: 1, ease: 'circ.inOut' });
             timeline.call(() => {
-                this.$store.dispatch('setInstructions', 'Coucou');
+                // this.$store.dispatch('setInstructions', 'Coucou');
             }, null);
 
             return timeline;

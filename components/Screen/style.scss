@@ -5,6 +5,8 @@
 
     font-size: rem(14px);
 
+    @include unselectable();
+
     @include respond-to('large') {
         padding: $padding-top-l $padding-left-l;
 
@@ -40,6 +42,20 @@
 
     width: 100%;
     height: 100%;
+}
+
+.message-complete {
+    position: absolute;
+    top: calc(50% - 0.5em);
+    left: 0;
+
+    width: 100%;
+
+    text-align: center;
+
+    pointer-events: none;
+
+    @include unselectable();
 }
 
 .time {
