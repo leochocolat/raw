@@ -45,7 +45,7 @@ class RenderTargetScene extends THREE.Scene {
         this._sceneDelta = 0;
 
         this._renderTarget = this._createRenderTarget();
-        // // this._debugCube = this._createDebugCube();
+        // this._debugCube = this._createDebugCube();
         this._ambientLight = this._createAmbientLight();
         this._debugFolder = this._createDebugFolder();
         this._cameras = this._createCameras();
@@ -253,7 +253,7 @@ class RenderTargetScene extends THREE.Scene {
     }
 
     _updateCameraPosition() {
-        // if (!this._interactionsSettings || !this._interactionsSettings.isEnable) return;
+        if (!this._interactionsSettings.isEnable || !this._isActive || this._isMenu) return;
 
         const damping = this._interactionsSettings.damping;
 
