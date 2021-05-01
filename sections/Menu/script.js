@@ -1,3 +1,6 @@
+// Vendor
+import gsap from 'gsap';
+
 export default {
     data() {
         return {
@@ -7,7 +10,18 @@ export default {
 
     props: ['data', 'scene-entries'],
 
-    mounted() {
-        this.$store.dispatch('setInstructions', this.data.instructionsMenu);
+    methods: {
+        /**
+         * Public
+         */
+        transitionIn() {
+            const timeline = new gsap.timeline();
+
+            timeline.call(() => {
+                this.$store.dispatch('setInstructions', this.data.instructionsMenu);
+            }, null);
+
+            return timeline;
+        },
     },
 };

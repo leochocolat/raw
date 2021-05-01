@@ -34,6 +34,10 @@ class Library extends RenderTargetScene {
         this._animationController.update(this._sceneDelta);
     }
 
+    setCensorship(censorshipFactor) {
+        this._blurScreen.blur = censorshipFactor * 5;
+    }
+
     /**
      * Private
      */

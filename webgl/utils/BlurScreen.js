@@ -29,6 +29,14 @@ class BlurScreen {
         this._setup();
     }
 
+    get blur() {
+        return this._settings.blur;
+    }
+
+    set blur(value) {
+        this._settings.blur = value;
+    }
+
     /**
      * Public
      */

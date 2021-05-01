@@ -40,6 +40,7 @@ export default {
             const timeline = gsap.timeline({ onComplete: done });
 
             timeline.to(this.$el, 0.5, { alpha: 1, ease: 'circ.inOut' });
+            timeline.add(this.$refs.menu.transitionIn());
 
             return timeline;
         },
@@ -48,9 +49,7 @@ export default {
             const timeline = gsap.timeline({ onComplete: done });
 
             timeline.to(this.$el, 0.5, { alpha: 1, ease: 'circ.inOut' });
-            timeline.call(() => {
-                // this.$store.dispatch('setInstructions', 'Coucou');
-            }, null);
+            timeline.add(this.$refs.menu.transitionIn());
 
             return timeline;
         },

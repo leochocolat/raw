@@ -2,7 +2,7 @@
     <div class="page-home">
 
         <Menu
-            ref="screen4"
+            ref="menu"
             :data="home.fields"
             :scene-entries="sceneEntries"
         />
