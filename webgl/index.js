@@ -158,14 +158,14 @@ class WebglApp {
             max: 100,
         });
 
-        const interactions = debugPanel.addFolder({ title: 'Interactions', expanded: false });
-        interactions.addInput(this._settings.mouseInteractions, 'isEnable', { label: 'enable' });
-        interactions.addInput(this._settings.mouseInteractions.positionFactor, 'x', { label: 'Position X', min: 0, max: 10 });
-        interactions.addInput(this._settings.mouseInteractions.positionFactor, 'y', { label: 'Position Y', min: 0, max: 10 });
-        // Degrees
-        interactions.addInput(this._settings.mouseInteractions.rotationFactor, 'x', { label: 'Rotation X', min: -90, max: 90 });
-        interactions.addInput(this._settings.mouseInteractions.rotationFactor, 'y', { label: 'Rotation Y', min: -90, max: 90 });
-        interactions.addInput(this._settings.mouseInteractions, 'damping', { label: 'Damping', min: 0, max: 1 });
+        // const interactions = debugPanel.addFolder({ title: 'Interactions', expanded: false });
+        // interactions.addInput(this._settings.mouseInteractions, 'isEnable', { label: 'enable' });
+        // interactions.addInput(this._settings.mouseInteractions.positionFactor, 'x', { label: 'Position X', min: 0, max: 10 });
+        // interactions.addInput(this._settings.mouseInteractions.positionFactor, 'y', { label: 'Position Y', min: 0, max: 10 });
+        // // Degrees
+        // interactions.addInput(this._settings.mouseInteractions.rotationFactor, 'x', { label: 'Rotation X', min: -90, max: 90 });
+        // interactions.addInput(this._settings.mouseInteractions.rotationFactor, 'y', { label: 'Rotation Y', min: -90, max: 90 });
+        // interactions.addInput(this._settings.mouseInteractions, 'damping', { label: 'Damping', min: 0, max: 1 });
 
         return debugPanel;
     }
@@ -207,7 +207,6 @@ class WebglApp {
             position: this._mousePosition.position,
             relativePosition: this._mousePosition.relativePosition,
             normalizedPosition: this._mousePosition.normalizedPosition,
-            settings: this._settings.mouseInteractions,
         });
     }
 }

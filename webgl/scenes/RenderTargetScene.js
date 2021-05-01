@@ -8,6 +8,9 @@ import data from '../data';
 // Object
 import Cameras from '../objects/Cameras';
 
+// Utils
+import math from '@/utils/math';
+
 class RenderTargetScene extends THREE.Scene {
     constructor(options) {
         super();
@@ -21,6 +24,21 @@ class RenderTargetScene extends THREE.Scene {
         this._isActive = options.isActive;
 
         // this.background = new THREE.Color(data.colors[this._id]);
+
+        this._initialCameraPosition = new THREE.Vector3(0, 0, 0);
+        this._initialCameraRotation = new THREE.Vector3(0, 0, 0);
+
+        this._cameraPosition = {
+            current: new THREE.Vector3(0, 0, 0),
+            target: new THREE.Vector3(0, 0, 0),
+        };
+
+        this._cameraRotation = {
+            current: new THREE.Vector3(0, 0, 0),
+            target: new THREE.Vector3(0, 0, 0),
+        };
+
+        this._interactionsSettings = JSON.parse(JSON.stringify(data.settings.mouseInteractions));
 
         this._clock = new THREE.Clock();
         this._sceneFps = 0;
@@ -63,6 +81,10 @@ class RenderTargetScene extends THREE.Scene {
 
     get isActive() {
         return this._isActive;
+    }
+
+    get interactionsSettings() {
+        return this._interactionsSettings;
     }
 
     show() {
@@ -117,15 +139,60 @@ class RenderTargetScene extends THREE.Scene {
 
     setInactive() {
         this._isActive = false;
+
+        // Position
+        this._cameraPosition.target.x = 0;
+        this._cameraPosition.target.y = 0;
+
+        // Rotation
+        this._cameraRotation.target.x = 0;
+        this._cameraRotation.target.y = 0;
+
         this._cameras.setInactive();
     }
 
     setMenuState(state) {
         this._isMenu = state;
+
+        // Position
+        this._cameraPosition.target.x = 0;
+        this._cameraPosition.target.y = 0;
+
+        // Rotation
+        this._cameraRotation.target.x = 0;
+        this._cameraRotation.target.y = 0;
+
         this._cameras.setMenuState(state);
     }
 
-    mousemoveHandler(mouse) {}
+    setModelCamera(camera) {
+        this.cameras.setModelCamera(camera);
+
+        // Apply positions and rotation to Vectors used for mouse interactions
+        this._cameraPosition.current.set(camera.position.x, camera.position.y, camera.position.z);
+        this._cameraPosition.target.set(camera.position.x, camera.position.y, camera.position.z);
+
+        this._cameraRotation.current.set(camera.rotation.y, camera.rotation.x, camera.rotation.z);
+        this._cameraRotation.target.set(camera.rotation.y, camera.rotation.x, camera.rotation.z);
+
+        this._initialCameraRotation.set(camera.rotation.y, camera.rotation.x, camera.rotation.z);
+    }
+
+    // Hooks
+    mousemoveHandler(e) {
+        if (!this._interactionsSettings.isEnable || !this._isActive || this._isMenu) return;
+
+        const positionFactor = this._interactionsSettings.positionFactor;
+        const rotationFactor = this._interactionsSettings.rotationFactor;
+
+        // Position
+        this._cameraPosition.target.x = e.normalizedPosition.x * positionFactor.x + this._initialCameraPosition.x;
+        this._cameraPosition.target.y = e.normalizedPosition.y * positionFactor.y + this._initialCameraPosition.y;
+
+        // Rotation
+        this._cameraRotation.target.x = e.normalizedPosition.x * rotationFactor.x * (Math.PI / 180) + this._initialCameraRotation.x;
+        this._cameraRotation.target.y = e.normalizedPosition.y * rotationFactor.y * (Math.PI / 180) + this._initialCameraRotation.y;
+    }
 
     update() {
         const delta = this._clock.getDelta();
@@ -134,6 +201,8 @@ class RenderTargetScene extends THREE.Scene {
 
         this._sceneFps = fps;
         this._sceneDelta = delta;
+
+        this._updateCameraPosition();
 
         if (!this._debugCube) return;
         this._debugCube.rotation.x = time;
@@ -183,6 +252,24 @@ class RenderTargetScene extends THREE.Scene {
         return cameras;
     }
 
+    _updateCameraPosition() {
+        // if (!this._interactionsSettings || !this._interactionsSettings.isEnable) return;
+
+        const damping = this._interactionsSettings.damping;
+
+        // Position
+        this._cameraPosition.current.x = math.lerp(this._cameraPosition.current.x, this._cameraPosition.target.x, damping);
+        this._cameraPosition.current.y = math.lerp(this._cameraPosition.current.y, this._cameraPosition.target.y, damping);
+
+        // Rotation
+        this._cameraRotation.current.x = math.lerp(this._cameraRotation.current.x, this._cameraRotation.target.x, damping);
+        this._cameraRotation.current.y = math.lerp(this._cameraRotation.current.y, this._cameraRotation.target.y, damping);
+
+        this.cameras.main.position.set(this._cameraPosition.current.x, this._cameraPosition.current.y, this._cameraPosition.current.z);
+        this.cameras.main.rotation.y = this._cameraRotation.current.x;
+        this.cameras.main.rotation.x = this._cameraRotation.current.y;
+    }
+
     _createDebugCube() {
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshBasicMaterial({
@@ -207,6 +294,15 @@ class RenderTargetScene extends THREE.Scene {
 
         const folder = this._debugger.addFolder({ title: `Scene ${this._name}`, expanded: false });
         folder.addMonitor(this, '_sceneFps', { label: 'FPS' });
+
+        const interactions = folder.addFolder({ title: 'Interactions', expanded: true });
+        interactions.addInput(this._interactionsSettings, 'isEnable', { label: 'enable' });
+        interactions.addInput(this._interactionsSettings.positionFactor, 'x', { label: 'Position X', min: 0, max: 10 });
+        interactions.addInput(this._interactionsSettings.positionFactor, 'y', { label: 'Position Y', min: 0, max: 10 });
+        // Degrees
+        interactions.addInput(this._interactionsSettings.rotationFactor, 'x', { label: 'Rotation X', min: -90, max: 90 });
+        interactions.addInput(this._interactionsSettings.rotationFactor, 'y', { label: 'Rotation Y', min: -90, max: 90 });
+        interactions.addInput(this._interactionsSettings, 'damping', { label: 'Damping', min: 0, max: 1 });
 
         return folder;
     }

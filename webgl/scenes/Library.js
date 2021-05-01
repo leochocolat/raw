@@ -18,12 +18,19 @@ class Library extends RenderTargetScene {
 
         this._resources = this._setupResources();
 
+        this._updateSettings();
+
         this._setupEventListeners();
     }
 
     /**
      * Public
      */
+    setCensorship(censorshipFactor) {
+        this._blurScreen.blur = censorshipFactor * 5;
+    }
+
+    // Hooks
     update() {
         super.update();
 
@@ -32,10 +39,6 @@ class Library extends RenderTargetScene {
 
         if (!this._animationController) return;
         this._animationController.update(this._sceneDelta);
-    }
-
-    setCensorship(censorshipFactor) {
-        this._blurScreen.blur = censorshipFactor * 5;
     }
 
     /**
@@ -104,8 +107,21 @@ class Library extends RenderTargetScene {
     _createModelCameraAnimation() {
         if (!this._model.cameras) return;
 
-        super.cameras.setModelCamera(this._model.cameras[0]);
+        this.setModelCamera(this._model.cameras[0]);
+
         return this._model.cameras[0];
+    }
+
+    _updateSettings() {
+        this.interactionsSettings.isEnable = true;
+
+        this.interactionsSettings.positionFactor.x = 0;
+        this.interactionsSettings.positionFactor.y = 0;
+
+        this.interactionsSettings.rotationFactor.x = -10;
+        this.interactionsSettings.rotationFactor.y = 10;
+
+        this._debugFolder?.refresh();
     }
 
     /**

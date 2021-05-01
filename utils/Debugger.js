@@ -23,6 +23,13 @@ class Debugger extends Tweakpane {
         this.__removeEventListeners();
     }
 
+    addFolder(options) {
+        const folder = super.addFolder(options);
+        folder.refresh = this.refresh;
+
+        return folder;
+    }
+
     /**
      * Private
      */
