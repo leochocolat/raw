@@ -3,6 +3,7 @@
 
         <Menu
             ref="screen4"
+            :data="home.fields"
             :scene-entries="sceneEntries"
         />
 

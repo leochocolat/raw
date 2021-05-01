@@ -10,8 +10,16 @@ export default {
     mixins: [page],
 
     asyncData({ $api }) {
-        return $api.getScenesEntries().then((response) => {
-            return { sceneEntries: response };
+        const promises = [
+            $api.getEntryById('5rjWV266TXZKdTaYcuht6i'),
+            $api.getScenesEntries(),
+        ];
+
+        return Promise.all(promises).then((responses) => {
+            return {
+                home: responses[0],
+                sceneEntries: responses[1],
+            };
         });
     },
 

@@ -20,6 +20,10 @@ class DebugSceneManager {
     /**
      * Public
      */
+    get scene() {
+        return this._scene;
+    }
+
     resize(width, height) {
         this._scene.resize(width, height);
     }

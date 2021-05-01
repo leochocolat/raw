@@ -5,7 +5,14 @@
 
             <div class="form">
 
-                <InputCensorship class="input-censorship" :scene="data" :label1="data.callToAction" :label2="data.callToAction2" :max-range="data.censorshipRange" />
+                <InputCensorship
+                    ref="inputCensorship"
+                    class="input-censorship"
+                    :scene="data"
+                    :label1="data.callToAction"
+                    :label2="data.callToAction2"
+                    :max-range="data.censorshipRange"
+                />
 
             </div>
 

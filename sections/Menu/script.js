@@ -6,4 +6,8 @@ export default {
     },
 
     props: ['data', 'scene-entries'],
+
+    mounted() {
+        this.$store.dispatch('setInstructions', this.data.instructionsMenu);
+    },
 };

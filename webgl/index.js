@@ -59,6 +59,10 @@ class WebglApp {
         return this._sceneManager;
     }
 
+    get debugSceneManager() {
+        return this._debugSceneManager;
+    }
+
     start() {
         this._sceneManager?.start();
     }

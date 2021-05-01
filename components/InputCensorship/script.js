@@ -15,6 +15,7 @@ export default {
 
     data() {
         return {
+            // Submit
             isSubmitting: false,
             isSent: false,
             // Censorship
@@ -27,6 +28,20 @@ export default {
             maxFactor: math.clamp((this.$store.state.data.scenes[this.scene.id].censorshipFactor || this.scene.censorshipFactor) + this.maxRange, 0, 1),
             // Visual
             isOffRange: false,
+            // Content
+            lang: this.$i18n.locale,
+            validationInstruction: {
+                fr: 'Appuyez sur entrer pour valider',
+                en: 'Press enter to validate',
+            },
+            submitErrorMessage: {
+                fr: 'Il y a eu une erreur, réessayer plus tard',
+                en: 'Something went wrong please try again later',
+            },
+            submitSuccessMessage: {
+                fr: 'La censure de ce contenu a bien été prise en compte',
+                en: 'The censorship of this content has been updated successfully',
+            },
         };
     },
 
@@ -45,6 +60,13 @@ export default {
         /**
          * Public
          */
+        transitionIn() {
+            this.$store.dispatch('setInstructions', this.scene.instruction);
+        },
+
+        transitionOut() {
+            this.$store.dispatch('setInstructions', '');
+        },
 
         /**
          * Private
@@ -55,16 +77,24 @@ export default {
             this.rangeLimitBounds = this.$refs.rangeLimit.getBoundingClientRect();
         },
 
+        initCensorship() {
+            this.$root.webglApp.debugSceneManager?.scene.setCensorship(this.newCensorshipFactor);
+        },
+
         initDragPosition() {
             this.dragPosition = this.dragRelativePosition * this.rangeBounds.width;
         },
 
         updateDragPosition(mousePositionX) {
-            this.dragPosition = math.clamp(mousePositionX - this.rangeBounds.x, 0, this.rangeBounds.width);
+            // Drag position is clamped to full range bounds
+            this.dragPosition = math.clamp(mousePositionX - this.rangeBounds.x, 0, this.rangeBounds.width - 2);
+
+            // Relative Drag position is clamped to min and max values
             this.dragRelativePosition = math.clamp(this.dragPosition / this.rangeBounds.width, this.minFactor, this.maxFactor);
 
             this.watchOffRange();
             this.updateCensorshipFactor();
+            this.updateCensorshipDelta();
         },
 
         watchOffRange() {
@@ -77,6 +107,25 @@ export default {
 
         updateCensorshipFactor() {
             this.newCensorshipFactor = this.dragRelativePosition;
+
+            // console.log(this.$root.webglApp.sceneManager?.scenes[this.scene.id]);
+            if (this.$root.webglApp.debugSceneManager?.scene.setCensorship) {
+                this.$root.webglApp.debugSceneManager.scene.setCensorship(this.newCensorshipFactor);
+            }
+
+            if (this.$root.webglApp.sceneManager?.scenes[this.scene.id].setCensorship) {
+                this.$root.webglApp.sceneManager.scenes[this.scene.id].setCensorship(this.newCensorshipFactor);
+            }
+        },
+
+        updateCensorshipDelta() {
+            this.censorshipDelta = this.newCensorshipFactor - this.scene.censorshipFactor;
+
+            if (this.hasStartedDraging) return;
+            if (this.censorshipDelta !== 0) {
+                this.hasStartedDraging = true;
+                this.$store.dispatch('setInstructions', this.validationInstruction[this.lang]);
+            }
         },
 
         throw() {
@@ -94,6 +143,45 @@ export default {
             });
         },
 
+        submit() {
+            if (this.isSubmitting || this.isSent) return;
+            this.isSubmitting = true;
+
+            this.$api
+                .updateSceneCensorship(this.scene.sysId, this.newCensorshipFactor)
+                .then(() => {
+                    this.isSent = true;
+                    this.isSubmitting = false;
+
+                    this.$store.dispatch('setInstructions', this.submitSuccessMessage[this.lang]);
+
+                    // Update store
+                    this.updateStore();
+
+                    // Redirect to home
+                    this.$router.push(this.localePath('prototype'));
+                })
+                .catch(() => {
+                    this.isSubmitting = false;
+                    this.$store.dispatch('setInstructions', this.submitErrorMessage[this.lang]);
+                    throw new Error('Something went wrong while updating censorship data');
+                });
+        },
+
+        updateStore() {
+            // Store
+            this.$store.dispatch('data/setSceneCensorshipFactor', { id: this.scene.id, value: this.newCensorshipFactor });
+            this.$store.dispatch('data/setSceneCensorshipDelta', { id: this.scene.id, value: this.censorshipDelta });
+            this.$store.dispatch('data/setSceneComplete', { id: this.scene.id, value: true });
+
+            // Cookies
+            this.$cookies.set('data', this.$store.state.data, {
+                // One month
+                expires: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
+                maxAge: 1000 * 3600 * 24 * 30,
+            });
+        },
+
         setupEventListeners() {
             WindowResizeObserver.addEventListener('resize', this.resizeHandler);
 
@@ -104,10 +192,14 @@ export default {
             this.dragManager.addEventListener('drag', this.dragHandler);
             this.dragManager.addEventListener('dragend', this.dragendHandler);
             this.dragManager.addEventListener('tap', this.tapHandler);
+
+            // Submit
+            window.addEventListener('keydown', this.keydownHandler);
         },
 
         removeEventListeners() {
             WindowResizeObserver.removeEventListener('resize', this.resizeHandler);
+            window.removeEventListener('keydown', this.keydownHandler);
 
             // Remove drag events
             this.dragManager.close();
@@ -119,6 +211,11 @@ export default {
             this.getBounds();
             this.throw();
             this.initDragPosition();
+            this.initCensorship();
+        },
+
+        keydownHandler(e) {
+            if (e.key === 'Enter') this.submit();
         },
 
         dragstartHandler(e) {

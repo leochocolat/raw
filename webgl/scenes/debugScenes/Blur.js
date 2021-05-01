@@ -54,6 +54,10 @@ class Blur extends DebugScene {
         this._applyBlur();
     }
 
+    setCensorship(censorshipFactor) {
+        this._settings.blur = censorshipFactor * 5;
+    }
+
     /**
      * Private
      */
