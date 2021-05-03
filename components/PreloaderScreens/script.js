@@ -9,7 +9,7 @@ export default {
         return {
             data: {},
             activeIndex: 0,
-            intervalTime: 3000,
+            intervalTime: 4500,
             isDisable: false,
             isComplete: false,
             isPreloaderComplete: false,
