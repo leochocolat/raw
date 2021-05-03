@@ -83,7 +83,7 @@ const webgl = [
         namespace: 'animTexture',
         preload: false,
     },
-    // Videos
+    // Test Videos
     {
         type: 'video-texture',
         name: 'video_test_0',
@@ -93,7 +93,34 @@ const webgl = [
         options: {
             autoplay: true,
             loop: true,
-            muted: false,
+            muted: true,
+            playsinline: true,
+        },
+    },
+    // Test Violent content
+    {
+        type: 'video-texture',
+        name: 'video_test_0',
+        path: '/videos/video_test_0.mp4',
+        preload: false,
+        namespace: 'screen',
+        options: {
+            autoplay: true,
+            loop: true,
+            muted: true,
+            playsinline: true,
+        },
+    },
+    {
+        type: 'video-texture',
+        name: 'video-gore-test',
+        path: '/videos/gore_test2.mp4',
+        preload: false,
+        options: {
+            autoplay: true,
+            loop: true,
+            muted: true,
+            playsinline: true,
         },
     },
 ];

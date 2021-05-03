@@ -64,9 +64,13 @@ class BlurScreen {
 
     _getBufferSize() {
         // Set buffer size with texture aspect ratio
+        const videoAspectRatio = this._screenTexture.image.videoWidth / this._screenTexture.image.videoHeight;
         const aspectRatio = this._screenTexture.image.width / this._screenTexture.image.height;
+
+        const ratio = aspectRatio || videoAspectRatio;
+
         const width = this._width * BUFFER_QUALITY_FACTOR;
-        const height = width / aspectRatio;
+        const height = width / ratio;
         // console.log()
         this._bufferWidth = width;
         this._bufferHeight = height;

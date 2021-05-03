@@ -70,9 +70,13 @@ class Blur extends DebugScene {
 
     _getBufferSize() {
         // Set buffer size with texture aspect ratio
+        const videoAspectRatio = this._texture.image.videoWidth / this._texture.image.videoHeight;
         const aspectRatio = this._texture.image.width / this._texture.image.height;
+
+        const ratio = aspectRatio || videoAspectRatio;
+
         const width = this._width * BUFFER_QUALITY_FACTOR;
-        const height = width / aspectRatio;
+        const height = width / ratio;
 
         this._bufferWidth = width;
         this._bufferHeight = height;
@@ -84,13 +88,16 @@ class Blur extends DebugScene {
             namespace: 'blur',
         });
 
+        resources.addByName('video-gore-test');
+
         resources.load();
 
         return resources;
     }
 
     _setup() {
-        this._texture = this._resources.get('texture-test-blur');
+        // this._texture = this._resources.get('texture-test-blur');
+        this._texture = this._resources.get('video-gore-test');
         this._maskTexture = this._resources.get('blur-mask-test');
 
         this._getBufferSize();

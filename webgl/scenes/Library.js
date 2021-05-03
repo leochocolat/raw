@@ -26,8 +26,16 @@ class Library extends RenderTargetScene {
     /**
      * Public
      */
+    transitionIn() {
+        super.transitionIn();
+
+        if (!this._animationController) return;
+
+        this._animationController.playAnimation({ animation: this._animationController.actionType.CameraMove, loopOnce: false });
+    }
+
     setCensorship(censorshipFactor) {
-        this._blurScreen.blur = censorshipFactor * 5;
+        this._blurScreen.blur = censorshipFactor * 1;
     }
 
     // Hooks
@@ -48,6 +56,7 @@ class Library extends RenderTargetScene {
         const resources = new ResourceManager({ name: 'library', namespace: 'library' });
         resources.addByName('texture-test-blur');
         resources.addByName('blur-mask-test');
+        resources.addByName('video-gore-test');
 
         resources.load();
 
@@ -88,11 +97,12 @@ class Library extends RenderTargetScene {
     }
 
     _setupInteractionScreen() {
-        const screenTexture = this._resources.get('texture-test-blur');
+        // const screenTexture = this._resources.get('texture-test-blur');
+        const screenTexture = this._resources.get('video-gore-test');
         const maskTexture = this._resources.get('blur-mask-test');
 
         const screen = this._model.scene.getObjectByName('Interaction_SCREEN');
-        this._blurScreen = new BlurScreen({ blurFactor: 0, scenePlane: screen, maskTexture, screenTexture, renderer: this._renderer, width: this._width, height: this._height });
+        this._blurScreen = new BlurScreen({ blurFactor: 0.5, scenePlane: screen, maskTexture, screenTexture, renderer: this._renderer, width: this._width, height: this._height });
     }
 
     _createAnimationController() {

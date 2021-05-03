@@ -10,6 +10,7 @@ class ThreeVideoTextureLoader extends Loader {
         video.setAttribute('autoplay', options.autoplay);
         video.setAttribute('loop', options.loop);
         video.setAttribute('muted', options.mutes);
+        video.setAttribute('playsinline', options.playsinline);
 
         const promise = new Promise((resolve) => {
             video.addEventListener('canplay', () => {

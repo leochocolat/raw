@@ -26,6 +26,19 @@ class Hallway extends RenderTargetScene {
     /**
      * Public
      */
+    transitionIn() {
+        super.transitionIn();
+
+        if (!this._animationController) return;
+
+        this._animationController.playAnimation({ animation: this._animationController.actionType.CameraMove, loopOnce: false });
+    }
+
+    setCensorship(censorshipFactor) {
+        this._blurScreen.blur = censorshipFactor * 1;
+    }
+
+    // Hooks
     update() {
         super.update();
 
@@ -43,6 +56,7 @@ class Hallway extends RenderTargetScene {
         const resources = new ResourceManager({ name: 'hallway', namespace: 'hallway' });
         resources.addByName('texture-test-blur');
         resources.addByName('blur-mask-test');
+        resources.addByName('video-gore-test');
         resources.load();
 
         return resources;
@@ -72,11 +86,12 @@ class Hallway extends RenderTargetScene {
     }
 
     _setupInteractionScreen() {
-        const screenTexture = this._resources.get('texture-test-blur');
+        // const screenTexture = this._resources.get('texture-test-blur');
+        const screenTexture = this._resources.get('video-gore-test');
         const maskTexture = this._resources.get('blur-mask-test');
 
         const screen = this._model.scene.getObjectByName('Interaction_SCREEN');
-        this._blurScreen = new BlurScreen({ blurFactor: 0, scenePlane: screen, maskTexture, screenTexture, renderer: this._renderer, width: this._width, height: this._height });
+        this._blurScreen = new BlurScreen({ blurFactor: 0.5, scenePlane: screen, maskTexture, screenTexture, renderer: this._renderer, width: this._width, height: this._height });
     }
 
     _createMaterial() {
@@ -108,8 +123,8 @@ class Hallway extends RenderTargetScene {
     _updateSettings() {
         this.interactionsSettings.isEnable = true;
 
-        this.interactionsSettings.positionFactor.x = 0.5;
-        this.interactionsSettings.positionFactor.y = 0.2;
+        this.interactionsSettings.positionFactor.x = 0;
+        this.interactionsSettings.positionFactor.y = 0;
 
         this.interactionsSettings.rotationFactor.x = -10;
         this.interactionsSettings.rotationFactor.y = 10;

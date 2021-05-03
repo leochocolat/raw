@@ -21,7 +21,6 @@ class AnimationComponent {
     /**
      * Public
      */
-
     playAnimation(options) {
         this.currentAnim = options.animation.getClip().name;
         options.animation.play();
