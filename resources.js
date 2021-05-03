@@ -28,14 +28,14 @@ const webgl = [
         type: 'gltf',
         name: 'library',
         namespace: 'library',
-        path: '/models/scene_library-d.glb',
+        path: '/models/scene_library.glb',
         preload: false,
     },
     {
         type: 'gltf',
         name: 'hallway',
         namespace: 'hallway',
-        path: '/models/Hallway.glb',
+        path: '/models/scene_hallway.glb',
         preload: false,
     },
     {
@@ -58,6 +58,7 @@ const webgl = [
         name: 'texture_hallway',
         namespace: 'hallway',
         path: '/textures/basis/scene_hallway.basis',
+        // path: '/textures/scene_hallway.png',
         preload: false,
     },
     // Test Blur

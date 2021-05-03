@@ -92,14 +92,14 @@ class Library extends RenderTargetScene {
         const maskTexture = this._resources.get('blur-mask-test');
 
         const screen = this._model.scene.getObjectByName('Interaction_SCREEN');
-        this._blurScreen = new BlurScreen({ blurFactor: 3, scenePlane: screen, maskTexture, screenTexture, renderer: this._renderer, width: this._width, height: this._height });
+        this._blurScreen = new BlurScreen({ blurFactor: 0, scenePlane: screen, maskTexture, screenTexture, renderer: this._renderer, width: this._width, height: this._height });
     }
 
     _createAnimationController() {
         const model = this._model;
 
         const animationController = new AnimationComponent(model);
-        animationController.playAnimation({ animation: animationController.actionType.CameraMove, loopOnce: false });
+        // animationController.playAnimation({ animation: animationController.actionType.CameraMove, loopOnce: false });
 
         return animationController;
     }

@@ -3,6 +3,7 @@ import * as THREE from 'three';
 
 // Components
 import RenderTargetScene from './RenderTargetScene';
+import BlurScreen from '../utils/BlurScreen';
 
 // Utils
 import AnimationComponent from '@/utils/AnimationComponent';
@@ -17,6 +18,8 @@ class Hallway extends RenderTargetScene {
 
         this._resources = this._setupResources();
 
+        this._updateSettings();
+
         this._setupEventListeners();
     }
 
@@ -25,6 +28,9 @@ class Hallway extends RenderTargetScene {
      */
     update() {
         super.update();
+
+        if (!this._blurScreen) return;
+        this._blurScreen.update(this._sceneDelta);
 
         if (!this._animationController) return;
         this._animationController.update(this._sceneDelta);
@@ -35,7 +41,8 @@ class Hallway extends RenderTargetScene {
      */
     _setupResources() {
         const resources = new ResourceManager({ name: 'hallway', namespace: 'hallway' });
-        resources.addByName('hallway');
+        resources.addByName('texture-test-blur');
+        resources.addByName('blur-mask-test');
         resources.load();
 
         return resources;
@@ -44,6 +51,8 @@ class Hallway extends RenderTargetScene {
     _setup() {
         this._material = this._createMaterial();
         this._model = this._createModel();
+        this._interactionScreen = this._setupInteractionScreen();
+
         this._animationController = this._createAnimationController();
         this._modelCamera = this._createModelCameraAnimation();
     }
@@ -62,10 +71,19 @@ class Hallway extends RenderTargetScene {
         return clone;
     }
 
+    _setupInteractionScreen() {
+        const screenTexture = this._resources.get('texture-test-blur');
+        const maskTexture = this._resources.get('blur-mask-test');
+
+        const screen = this._model.scene.getObjectByName('Interaction_SCREEN');
+        this._blurScreen = new BlurScreen({ blurFactor: 0, scenePlane: screen, maskTexture, screenTexture, renderer: this._renderer, width: this._width, height: this._height });
+    }
+
     _createMaterial() {
         const texture = this._resources.get('texture_hallway');
-        const material = new THREE.MeshNormalMaterial({
-            // map: texture,
+
+        const material = new THREE.MeshBasicMaterial({
+            map: texture,
         });
 
         return material;
@@ -74,7 +92,7 @@ class Hallway extends RenderTargetScene {
     _createAnimationController() {
         const model = this._model;
         const animationController = new AnimationComponent(model);
-        animationController.playAnimation({ animation: animationController.actionType.CameraMove, loopOnce: false });
+        // animationController.playAnimation({ animation: animationController.actionType.CameraMove, loopOnce: false });
 
         return animationController;
     }
@@ -83,8 +101,20 @@ class Hallway extends RenderTargetScene {
         if (!this._model.cameras) return;
 
         this.cameras.setModelCamera(this._model.cameras[0]);
-        this._model.cameras[0].fov = 75;
+
         return this._model.cameras[0];
+    }
+
+    _updateSettings() {
+        this.interactionsSettings.isEnable = true;
+
+        this.interactionsSettings.positionFactor.x = 0.5;
+        this.interactionsSettings.positionFactor.y = 0.2;
+
+        this.interactionsSettings.rotationFactor.x = -10;
+        this.interactionsSettings.rotationFactor.y = 10;
+
+        this._debugFolder?.refresh();
     }
 
     /**

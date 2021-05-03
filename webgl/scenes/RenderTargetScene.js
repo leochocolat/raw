@@ -169,13 +169,13 @@ class RenderTargetScene extends THREE.Scene {
         this.cameras.setModelCamera(camera);
 
         // Apply positions and rotation to Vectors used for mouse interactions
-        this._cameraPosition.current.set(camera.position.x, camera.position.y, camera.position.z);
-        this._cameraPosition.target.set(camera.position.x, camera.position.y, camera.position.z);
+        // this._cameraPosition.current.set(camera.position.x, camera.position.y, camera.position.z);
+        // this._cameraPosition.target.set(camera.position.x, camera.position.y, camera.position.z);
 
-        this._cameraRotation.current.set(camera.rotation.y, camera.rotation.x, camera.rotation.z);
-        this._cameraRotation.target.set(camera.rotation.y, camera.rotation.x, camera.rotation.z);
+        // this._cameraRotation.current.set(camera.rotation.y, camera.rotation.x, camera.rotation.z);
+        // this._cameraRotation.target.set(camera.rotation.y, camera.rotation.x, camera.rotation.z);
 
-        this._initialCameraRotation.set(camera.rotation.y, camera.rotation.x, camera.rotation.z);
+        // this._initialCameraRotation.set(camera.rotation.y, camera.rotation.x, camera.rotation.z);
     }
 
     // Hooks
@@ -186,12 +186,16 @@ class RenderTargetScene extends THREE.Scene {
         const rotationFactor = this._interactionsSettings.rotationFactor;
 
         // Position
-        this._cameraPosition.target.x = e.normalizedPosition.x * positionFactor.x + this._initialCameraPosition.x;
-        this._cameraPosition.target.y = e.normalizedPosition.y * positionFactor.y + this._initialCameraPosition.y;
+        // this._cameraPosition.target.x = e.normalizedPosition.x * positionFactor.x + this._initialCameraPosition.x;
+        // this._cameraPosition.target.y = e.normalizedPosition.y * positionFactor.y + this._initialCameraPosition.y;
+        this._cameraPosition.target.x = e.normalizedPosition.x * positionFactor.x;
+        this._cameraPosition.target.y = e.normalizedPosition.y * positionFactor.y;
 
         // Rotation
-        this._cameraRotation.target.x = e.normalizedPosition.x * rotationFactor.x * (Math.PI / 180) + this._initialCameraRotation.x;
-        this._cameraRotation.target.y = e.normalizedPosition.y * rotationFactor.y * (Math.PI / 180) + this._initialCameraRotation.y;
+        // this._cameraRotation.target.x = e.normalizedPosition.x * rotationFactor.x * (Math.PI / 180) + this._initialCameraRotation.x;
+        // this._cameraRotation.target.y = e.normalizedPosition.y * rotationFactor.y * (Math.PI / 180) + this._initialCameraRotation.y;
+        this._cameraRotation.target.x = e.normalizedPosition.x * rotationFactor.x * (Math.PI / 180);
+        this._cameraRotation.target.y = e.normalizedPosition.y * rotationFactor.y * (Math.PI / 180);
     }
 
     update() {
