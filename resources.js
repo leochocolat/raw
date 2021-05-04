@@ -99,6 +99,13 @@ const webgl = [
     },
     // Test Violent content
     {
+        type: 'texture',
+        name: 'texture-gore-test',
+        path: '/textures/video-gore-test.jpg',
+        preload: false,
+        options: {},
+    },
+    {
         type: 'video-texture',
         name: 'video_test_0',
         path: '/videos/video_test_0.mp4',

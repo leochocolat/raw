@@ -67,7 +67,6 @@ class Bar extends RenderTargetScene {
 
     _createModel() {
         const model = this._resources.get('CameraMovement');
-        // const clone = cloneSkinnedMesh(model);
         const clone = model;
         this.add(clone.scene);
         clone.scene.traverse((child) => {
@@ -82,7 +81,7 @@ class Bar extends RenderTargetScene {
     _createAnimationController() {
         const model = this._model;
         const animationController = new AnimationComponent(model);
-        animationController.playAnimation({ animation: animationController.actionType.CameraMove, loopOnce: false });
+        animationController.playAnimation({ animation: animationController.actionType.CameraMove, loop: false });
 
         return animationController;
     }

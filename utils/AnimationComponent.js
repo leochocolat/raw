@@ -24,7 +24,7 @@ class AnimationComponent {
     playAnimation(options) {
         this.currentAnim = options.animation.getClip().name;
         options.animation.play();
-        if (options.loopOnce) {
+        if (!options.loop) {
             options.animation.clampWhenFinished = true;
             options.animation.loop = THREE.LoopOnce;
         }
