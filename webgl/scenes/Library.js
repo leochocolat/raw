@@ -35,7 +35,7 @@ class Library extends RenderTargetScene {
     }
 
     setCensorship(censorshipFactor) {
-        this._blurScreen.blur = censorshipFactor * 1;
+        this._blurScreen.blur = censorshipFactor;
     }
 
     // Hooks

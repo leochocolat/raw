@@ -35,7 +35,7 @@ class Hallway extends RenderTargetScene {
     }
 
     setCensorship(censorshipFactor) {
-        this._blurScreen.blur = censorshipFactor * 3;
+        this._blurScreen.blur = censorshipFactor;
     }
 
     // Hooks
@@ -91,7 +91,7 @@ class Hallway extends RenderTargetScene {
         const maskTexture = this._resources.get('blur-mask-test');
 
         const screen = this._model.scene.getObjectByName('Interaction_SCREEN');
-        this._blurScreen = new BlurScreen({ blurFactor: 0.5 * 3, scenePlane: screen, maskTexture, screenTexture, renderer: this._renderer, width: this._width, height: this._height });
+        this._blurScreen = new BlurScreen({ blurFactor: 0.5, scenePlane: screen, maskTexture, screenTexture, renderer: this._renderer, width: this._width, height: this._height });
     }
 
     _createMaterial() {

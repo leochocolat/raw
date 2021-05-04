@@ -11,11 +11,12 @@ import fragment from '../shaders/censorship/fragment.glsl';
 
 // Reduce to improve performances
 const BUFFER_QUALITY_FACTOR = 0.4;
+const BLUR_INTENSITY_FACTOR = 3.5;
 
 class BlurScreen {
     constructor(options) {
         this._settings = {
-            blur: options.blurFactor,
+            blur: options.blurFactor * BLUR_INTENSITY_FACTOR,
         };
 
         this._width = options.width;
@@ -34,7 +35,7 @@ class BlurScreen {
     }
 
     set blur(value) {
-        this._settings.blur = value;
+        this._settings.blur = value * BLUR_INTENSITY_FACTOR;
     }
 
     /**
