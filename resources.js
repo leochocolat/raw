@@ -75,6 +75,9 @@ const webgl = [
         path: '/textures/blur-mask-test.jpg',
         namespace: 'blur',
         preload: false,
+        options: {
+            flipY: true,
+        },
     },
     {
         type: 'texture',

@@ -109,7 +109,7 @@ class Library extends RenderTargetScene {
         const model = this._model;
 
         const animationController = new AnimationComponent(model);
-        animationController.playAnimation({ animation: animationController.actionType.CameraMove, loopOnce: false });
+        // animationController.playAnimation({ animation: animationController.actionType.CameraMove, loopOnce: false });
 
         return animationController;
     }

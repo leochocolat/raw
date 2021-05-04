@@ -6,7 +6,6 @@ import BlurPlaneBuffer from '../buffers/BlurPlaneBuffer';
 
 // Shader
 import vertex from '../shaders/censorship/vertex.glsl';
-
 import fragment from '../shaders/censorship/fragment.glsl';
 
 // Reduce to improve performances
@@ -16,6 +15,7 @@ const BLUR_INTENSITY_FACTOR = 3.5;
 class BlurScreen {
     constructor(options) {
         this._settings = {
+            // blur: (1 - options.blurFactor) * BLUR_INTENSITY_FACTOR,
             blur: options.blurFactor * BLUR_INTENSITY_FACTOR,
         };
 
@@ -35,6 +35,7 @@ class BlurScreen {
     }
 
     set blur(value) {
+        // this._settings.blur = (1 - value) * BLUR_INTENSITY_FACTOR;
         this._settings.blur = value * BLUR_INTENSITY_FACTOR;
     }
 
