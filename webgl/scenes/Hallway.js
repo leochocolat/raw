@@ -86,8 +86,8 @@ class Hallway extends RenderTargetScene {
     }
 
     _setupInteractionScreen() {
-        // const screenTexture = this._resources.get('texture-test-blur');
-        const screenTexture = this._resources.get('video-gore-test');
+        const screenTexture = this._resources.get('texture-test-blur');
+        // const screenTexture = this._resources.get('video-gore-test');
         const maskTexture = this._resources.get('blur-mask-test');
 
         const screen = this._model.scene.getObjectByName('Interaction_SCREEN');

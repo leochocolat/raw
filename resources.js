@@ -21,30 +21,30 @@ const webgl = [
     {
         type: 'gltf',
         name: 'CameraMovement',
-        path: '/models/Hallway.glb',
+        path: '/models/CameraMovement.glb',
         preload: false,
     },
     {
         type: 'gltf',
         name: 'library',
         namespace: 'library',
-        path: '/models/scene_library.glb',
+        path: '/models/scene_library-d.glb',
         preload: false,
     },
     {
         type: 'gltf',
         name: 'hallway',
         namespace: 'hallway',
-        path: '/models/scene_hallway.glb',
+        path: '/models/scene_hallway-d.glb',
         preload: false,
     },
-    {
-        type: 'gltf',
-        name: 'HommeAdulte',
-        path: '/models/HommeAdulte.glb',
-        namespace: 'animTexture',
-        preload: false,
-    },
+    // {
+    //     type: 'gltf',
+    //     name: 'HommeAdulte',
+    //     path: '/models/HommeAdulte-d.glb',
+    //     namespace: 'animTexture',
+    //     preload: false,
+    // },
     // Textures
     {
         type: 'basis',
@@ -58,7 +58,7 @@ const webgl = [
         name: 'texture_hallway',
         namespace: 'hallway',
         path: '/textures/basis/scene_hallway.basis',
-        // path: '/textures/scene_hallway.png',
+        // path: '/textures/scene_hallway.jpg',
         preload: false,
     },
     // Test Blur
