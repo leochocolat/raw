@@ -89,7 +89,7 @@ class Cameras {
     }
 
     _createOrbitControls() {
-        const orbitControls = new OrbitControls(this._debugCamera, this._renderer.domElement);
+        const orbitControls = new OrbitControls(this._debugCamera, document.documentElement);
         orbitControls.enabled = this._isDebug && this._isActive;
         return orbitControls;
     }

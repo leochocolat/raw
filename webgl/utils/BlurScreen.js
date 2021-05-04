@@ -64,6 +64,12 @@ class BlurScreen {
         this._bufferB.resize(this._bufferWidth, this._bufferHeight);
     }
 
+    _getContainerSize() {
+        const container = new THREE.Box3().setFromObject(this._screenMesh);
+
+        return container.getSize();
+    }
+
     _getBufferSize() {
         // Set buffer size with texture aspect ratio
         const videoAspectRatio = this._screenTexture.image.videoWidth / this._screenTexture.image.videoHeight;
@@ -73,7 +79,7 @@ class BlurScreen {
 
         const width = this._width * BUFFER_QUALITY_FACTOR;
         const height = width / ratio;
-        // console.log()
+
         this._bufferWidth = width;
         this._bufferHeight = height;
     }
@@ -81,8 +87,11 @@ class BlurScreen {
     _setup() {
         this._getBufferSize();
 
+        this._containerSize = this._getContainerSize();
+
         this._bufferA = this._createBufferA();
         this._bufferB = this._createBufferB();
+
         this._createFinalPlane();
     }
 
@@ -104,7 +113,7 @@ class BlurScreen {
             u_blur_mask: { value: this._maskTexture },
             u_texture: { value: this._screenTexture },
             u_size: { value: new THREE.Vector2(this._bufferWidth, this._bufferHeight) },
-            u_resolution: { value: new THREE.Vector2(1, 1) },
+            u_resolution: { value: new THREE.Vector2(this._containerSize.x, this._containerSize.z) },
             u_time: { value: 0.0 },
         };
 
@@ -115,6 +124,7 @@ class BlurScreen {
             side: THREE.DoubleSide,
             transparent: true,
         });
+
         this._screenMesh.material = material;
     }
 
