@@ -103,7 +103,9 @@ const webgl = [
         name: 'texture-gore-test',
         path: '/textures/video-gore-test.jpg',
         preload: false,
-        options: {},
+        options: {
+            flipY: true,
+        },
     },
     {
         type: 'video-texture',
