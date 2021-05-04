@@ -40,5 +40,6 @@ void main() {
     texel = blur_texel;
     // texel = blur_mask_texel;
 
-    gl_FragColor = texel;
+
+    gl_FragColor = texel;    
 }

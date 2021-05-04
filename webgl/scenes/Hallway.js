@@ -31,11 +31,11 @@ class Hallway extends RenderTargetScene {
 
         if (!this._animationController) return;
 
-        this._animationController.playAnimation({ animation: this._animationController.actionType.CameraMove, loopOnce: false });
+        this._animationController.playAnimation({ animation: this._animationController.actionType.CameraMove, loop: false });
     }
 
     setCensorship(censorshipFactor) {
-        this._blurScreen.blur = censorshipFactor * 1;
+        this._blurScreen.blur = censorshipFactor;
     }
 
     // Hooks
@@ -56,7 +56,7 @@ class Hallway extends RenderTargetScene {
         const resources = new ResourceManager({ name: 'hallway', namespace: 'hallway' });
         resources.addByName('texture-test-blur');
         resources.addByName('blur-mask-test');
-        resources.addByName('video-gore-test');
+        resources.addByName('texture-gore-test');
         resources.load();
 
         return resources;
@@ -86,7 +86,7 @@ class Hallway extends RenderTargetScene {
     }
 
     _setupInteractionScreen() {
-        const screenTexture = this._resources.get('texture-test-blur');
+        const screenTexture = this._resources.get('texture-gore-test');
         // const screenTexture = this._resources.get('video-gore-test');
         const maskTexture = this._resources.get('blur-mask-test');
 
@@ -107,7 +107,7 @@ class Hallway extends RenderTargetScene {
     _createAnimationController() {
         const model = this._model;
         const animationController = new AnimationComponent(model);
-        // animationController.playAnimation({ animation: animationController.actionType.CameraMove, loopOnce: false });
+        // animationController.playAnimation({ animation: animationController.actionType.CameraMove, loop: false });
 
         return animationController;
     }
