@@ -56,7 +56,7 @@ export default {
      * Middleware
      */
     router: {
-        middleware: 'user',
+        // middleware: 'user',
     },
 
     /*
