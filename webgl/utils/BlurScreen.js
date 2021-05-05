@@ -66,8 +66,9 @@ class BlurScreen {
 
     _getContainerSize() {
         const container = new THREE.Box3().setFromObject(this._screenMesh);
+        const size = new THREE.Vector3();
 
-        return container.getSize();
+        return container.getSize(size);
     }
 
     _getBufferSize() {

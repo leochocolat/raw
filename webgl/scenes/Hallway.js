@@ -57,6 +57,7 @@ class Hallway extends RenderTargetScene {
         resources.addByName('texture-test-blur');
         resources.addByName('blur-mask-test');
         resources.addByName('texture-gore-test');
+        resources.addByName('video-gore-test');
         resources.load();
 
         return resources;
@@ -86,8 +87,8 @@ class Hallway extends RenderTargetScene {
     }
 
     _setupInteractionScreen() {
-        const screenTexture = this._resources.get('texture-gore-test');
-        // const screenTexture = this._resources.get('video-gore-test');
+        // const screenTexture = this._resources.get('texture-gore-test');
+        const screenTexture = this._resources.get('video-gore-test');
         const maskTexture = this._resources.get('blur-mask-test');
 
         const screen = this._model.scene.getObjectByName('Interaction_SCREEN');

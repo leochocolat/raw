@@ -87,20 +87,6 @@ const webgl = [
         namespace: 'animTexture',
         preload: false,
     },
-    // Test Videos
-    {
-        type: 'video-texture',
-        name: 'video_test_0',
-        path: '/videos/video_test_0.mp4',
-        preload: false,
-        namespace: 'screen',
-        options: {
-            autoplay: true,
-            loop: true,
-            muted: true,
-            playsinline: true,
-        },
-    },
     // Test Violent content
     {
         type: 'texture',
