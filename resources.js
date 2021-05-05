@@ -38,13 +38,13 @@ const webgl = [
         path: '/models/scene_hallway-d.glb',
         preload: false,
     },
-    // {
-    //     type: 'gltf',
-    //     name: 'HommeAdulte',
-    //     path: '/models/HommeAdulte-d.glb',
-    //     namespace: 'animTexture',
-    //     preload: false,
-    // },
+    {
+        type: 'gltf',
+        name: 'HommeAdulte',
+        path: '/models/HommeAdulte-d.glb',
+        namespace: 'animTexture',
+        preload: false,
+    },
     // Textures
     {
         type: 'basis',
