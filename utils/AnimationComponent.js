@@ -22,8 +22,9 @@ class AnimationComponent {
      * Public
      */
     playAnimation(options) {
-        this.currentAnim = options.animation.getClip().name;
+        this.currentAnim = options.animation.getClip();
         options.animation.play();
+
         if (!options.loop) {
             options.animation.clampWhenFinished = true;
             options.animation.loop = THREE.LoopOnce;
@@ -60,8 +61,18 @@ class AnimationComponent {
         this.playAnimation(endAction);
     }
 
+    setAnimationProgress(options) {
+        const duration = this.currentAnim ? this.currentAnim.duration : options.animation.getClip().duration;
+        const progress = duration * options.progress;
+        options.animation.time = progress;
+    }
+
+    getAnimationProgress(options) {
+        return options.animation.time;
+    }
+
     getCurrentAnim() {
-        return this.currentAnim;
+        return this.currentAnim.name;
     }
 
     update(delta) {
