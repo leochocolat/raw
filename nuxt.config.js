@@ -53,13 +53,6 @@ export default {
     ],
 
     /*
-     * Middleware
-     */
-    router: {
-        middleware: 'user',
-    },
-
-    /*
      ** Auto import components
      ** See https://nuxtjs.org/api/configuration-components
      */

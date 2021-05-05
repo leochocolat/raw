@@ -1,4 +1,4 @@
-export default ({ query, store }) => {
+export default ({ query, store, $cookies }) => {
     /**
      * Context
      */
@@ -14,4 +14,21 @@ export default ({ query, store }) => {
     store.dispatch('context/setDebug', isDebug);
 
     // console.log({ isProduction, isDevelopment, isDebug });
+
+    /**
+     * User
+     */
+    const data = $cookies.get('data');
+
+    if (data) {
+        // Send datas to store
+        store.dispatch('data/setFromCookies', data);
+    } else {
+        // Set initial datas
+        $cookies.set('data', store.state.data, {
+            // One month
+            expires: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
+            maxAge: 1000 * 3600 * 24 * 30,
+        });
+    }
 };

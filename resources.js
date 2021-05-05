@@ -55,6 +55,7 @@ const webgl = [
     },
     {
         type: 'basis',
+        // type: 'texture',
         name: 'texture_hallway',
         namespace: 'hallway',
         path: '/textures/basis/scene_hallway.basis',
@@ -75,6 +76,9 @@ const webgl = [
         path: '/textures/blur-mask-test.jpg',
         namespace: 'blur',
         preload: false,
+        options: {
+            flipY: true,
+        },
     },
     {
         type: 'texture',
