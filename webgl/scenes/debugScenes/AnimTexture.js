@@ -81,6 +81,7 @@ class AnimTexture extends DebugScene {
         // this._modelsCount = hallway.scene.getObjectByName('Humans').children.length;
 
         // this._humansEmpty = [...hallway.scene.getObjectByName('Humans').children];
+
         this._uniforms = {
             time: { value: 0.0 },
             textures: {

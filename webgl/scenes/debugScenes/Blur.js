@@ -96,7 +96,6 @@ class Blur extends DebugScene {
     }
 
     _setup() {
-        // this._texture = this._resources.get('texture-test-blur');
         this._texture = this._resources.get('video-gore-test');
         this._maskTexture = this._resources.get('blur-mask-test');
 

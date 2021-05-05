@@ -54,7 +54,6 @@ class Hallway extends RenderTargetScene {
      */
     _setupResources() {
         const resources = new ResourceManager({ name: 'hallway', namespace: 'hallway' });
-        resources.addByName('texture-test-blur');
         resources.addByName('blur-mask-test');
         resources.addByName('texture-gore-test');
         resources.addByName('video-gore-test');

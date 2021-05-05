@@ -56,9 +56,8 @@ class Library extends RenderTargetScene {
      */
     _setupResources() {
         const resources = new ResourceManager({ name: 'library', namespace: 'library' });
-        resources.addByName('texture-test-blur');
         resources.addByName('blur-mask-test');
-        // resources.addByName('video-gore-test');
+        resources.addByName('video-gore-test');
         resources.addByName('texture-gore-test');
 
         resources.load();
@@ -100,8 +99,8 @@ class Library extends RenderTargetScene {
     }
 
     _setupInteractionScreen() {
-        const screenTexture = this._resources.get('texture-gore-test');
-        // const screenTexture = this._resources.get('video-gore-test');
+        // const screenTexture = this._resources.get('texture-gore-test');
+        const screenTexture = this._resources.get('video-gore-test');
         const maskTexture = this._resources.get('blur-mask-test');
         const screen = this._model.scene.getObjectByName('Interaction_SCREEN');
         this._blurScreen = new BlurScreen({ blurFactor: 0.5, scenePlane: screen, maskTexture, screenTexture, renderer: this._renderer, width: this._width, height: this._height });

@@ -1,5 +1,5 @@
 // Data
-import resources from '@/resources';
+import resources from '@/resources/index';
 
 // Utils
 import { WebGLRenderer } from 'three';
