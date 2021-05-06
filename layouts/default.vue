@@ -15,7 +15,10 @@
         <!-- Preloader -->
         <Preloader ref="preloader" />
 
+        <!-- Footer -->
         <TheFooter ref="footer" />
+
+        <StopOverlay :data="globalCopy.stopConfirmation" />
     </div>
 </template>
 

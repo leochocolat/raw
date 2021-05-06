@@ -1,5 +1,5 @@
 <template>
-    <button class="button-stop">
+    <button class="button-stop" @click="clickHandler">
         Stop
     </button>
 </template>

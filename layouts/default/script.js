@@ -10,6 +10,7 @@ export default {
     data() {
         return {
             isHome: this.getRouteBaseName() === 'index',
+            globalCopy: null,
         };
     },
 
@@ -22,6 +23,16 @@ export default {
         isReady(isReady) {
             if (isReady) this.$root.webglApp.start();
         },
+
+        '$i18n.locale'() {
+            this.$fetch();
+        },
+    },
+
+    fetch() {
+        return this.$api.getEntryById('5tSa9edQQgQtt0iKf5OVGg').then((response) => {
+            this.globalCopy = response.fields;
+        });
     },
 
     computed: {
