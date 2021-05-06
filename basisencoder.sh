@@ -37,5 +37,5 @@ do
     fi
 
     # Execute encoding
-    $BASISU $TEXTURE -output_path $OUTPUT_DIRECTORY
+    $BASISU $TEXTURE -q 255 -output_path $OUTPUT_DIRECTORY
 done

@@ -78,6 +78,7 @@ class Library extends RenderTargetScene {
         const texture = this._resources.get('texture_library');
         const material = new THREE.MeshBasicMaterial({
             map: texture,
+            side: THREE.DoubleSide,
         });
 
         return material;

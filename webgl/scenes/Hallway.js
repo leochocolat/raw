@@ -99,6 +99,7 @@ class Hallway extends RenderTargetScene {
 
         const material = new THREE.MeshBasicMaterial({
             map: texture,
+            side: THREE.DoubleSide,
         });
 
         return material;

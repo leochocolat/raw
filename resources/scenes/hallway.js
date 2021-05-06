@@ -15,7 +15,7 @@ const resources = [
         name: 'texture_hallway',
         namespace: 'hallway',
         path: '/textures/basis/scene_hallway.basis',
-        // path: '/textures/scene_hallway.jpg',
+        // path: '/textures/scene_hallway.png',
         preload: false,
     },
 ];
