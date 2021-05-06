@@ -6,6 +6,10 @@ const mutations = {
     CLOSE_OVERLAY(state) {
         state.isOverlayOpen = false;
     },
+
+    STOP(state) {
+        state.isStopped = true;
+    },
 };
 
 export default mutations;

@@ -31,4 +31,10 @@ export default ({ query, store, $cookies }) => {
             maxAge: 1000 * 3600 * 24 * 30,
         });
     }
+
+    const stop = $cookies.get('stop');
+
+    if (stop) {
+        store.dispatch('stop/stop');
+    }
 };

@@ -6,6 +6,10 @@ const actions = {
     closeOverlay({ commit }) {
         commit('CLOSE_OVERLAY');
     },
+
+    stop({ commit }) {
+        commit('STOP');
+    },
 };
 
 export default actions;

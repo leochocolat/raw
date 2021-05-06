@@ -14,6 +14,7 @@ export default {
     computed: {
         ...mapGetters({
             isOpen: 'stop/isOverlayOpen',
+            isStopped: 'stop/isStopped',
         }),
     },
 
@@ -25,7 +26,7 @@ export default {
     },
 
     mounted() {
-
+        // console.log(this.isStopped);
     },
 
     methods: {
@@ -49,6 +50,13 @@ export default {
 
         clickYesHandler() {
             this.$store.dispatch('stop/closeOverlay');
+            this.$store.dispatch('stop/stop');
+
+            this.$cookies.set('stop', true, {
+                // One month
+                expires: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
+                maxAge: 1000 * 3600 * 24 * 30,
+            });
         },
     },
 };
