@@ -22,4 +22,10 @@
 
         font-size: rem-l(17px);
     }
+
+    &.is-stopped {
+        color: rgba(255, 255, 255, 0.5);
+
+        cursor: auto;
+    }
 }

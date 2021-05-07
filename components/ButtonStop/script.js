@@ -6,6 +6,7 @@ export default {
     computed: {
         ...mapGetters({
             isStopOverlayOpen: 'stop/isOverlayOpen',
+            isStopped: 'stop/isStopped',
         }),
     },
 
@@ -22,6 +23,8 @@ export default {
         },
 
         clickHandler() {
+            if (this.isStopped) return;
+
             if (!this.isStopOverlayOpen) {
                 this.$store.dispatch('stop/openOverlay');
             } else {

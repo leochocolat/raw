@@ -1,5 +1,5 @@
 <template>
-    <button class="button-stop" @click="clickHandler">
+    <button class="button-stop" :class="isStopped ? 'is-stopped' : ''" @click="clickHandler">
         Stop
     </button>
 </template>

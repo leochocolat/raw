@@ -47,8 +47,6 @@ class Library extends RenderTargetScene {
 
         if (!this._animationController) return;
         this._animationController.update(this._sceneDelta);
-
-        // console.log(this._animationController.getAnimationProgress({ animation: this._animationController.actionType.CameraMove }));
     }
 
     /**
@@ -112,8 +110,7 @@ class Library extends RenderTargetScene {
 
         const animationController = new AnimationComponent(model);
         // animationController.playAnimation({ animation: animationController.actionType.CameraMove, loopOnce: false });
-        animationController.setAnimationProgress({ animation: animationController.actionType.CameraMove, progress: 1 });
-        // console.log(animationController.actionType.CameraMove);
+        // animationController.setAnimationProgress({ animation: animationController.actionType.CameraMove, progress: 1 });
         return animationController;
     }
 
