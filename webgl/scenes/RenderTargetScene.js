@@ -10,10 +10,13 @@ import Cameras from '../objects/Cameras';
 
 // Utils
 import math from '@/utils/math';
+import bindAll from '@/utils/bindAll';
 
 class RenderTargetScene extends THREE.Scene {
     constructor(options) {
         super();
+
+        this._bindAll();
 
         this._name = options.name;
         this._id = options.id;
@@ -22,6 +25,7 @@ class RenderTargetScene extends THREE.Scene {
         this._width = options.width;
         this._height = options.height;
         this._isActive = options.isActive;
+        this._isVisible = options.isVisible;
 
         // this.background = new THREE.Color(data.colors[this._id]);
 
@@ -80,6 +84,10 @@ class RenderTargetScene extends THREE.Scene {
         return this._isActive;
     }
 
+    get isVisible() {
+        return this._isVisible;
+    }
+
     get interactionsSettings() {
         return this._interactionsSettings;
     }
@@ -87,9 +95,17 @@ class RenderTargetScene extends THREE.Scene {
     show() {
         const timelineShow = new gsap.timeline();
 
-        timelineShow.to(this._uniforms[`u_texture_alpha_${this._id}`], { value: 1, ease: 'power4.inOut' });
+        timelineShow.set(this._uniforms[`u_texture_alpha_${this._id}`], { value: 1 });
 
         return timelineShow;
+    }
+
+    hide() {
+        const timelineHide = new gsap.timeline();
+
+        timelineHide.set(this._uniforms[`u_texture_alpha_${this._id}`], { value: 0 });
+
+        return timelineHide;
     }
 
     transitionIn() {
@@ -98,9 +114,9 @@ class RenderTargetScene extends THREE.Scene {
 
         this._timelineIn = new gsap.timeline();
 
-        this._timelineIn.to(this._uniforms[`u_step_factor_${this._id}`], { value: 0, duration: 0.8, ease: 'power4.inOut' }, 0);
-        this._timelineIn.to(this._uniforms[`u_size_${this._id}`], { value: 0, duration: 0.8, ease: 'power3.inOut' }, 0);
-        this._timelineIn.to(this._uniforms[`u_scale_${this._id}`], { value: 1, duration: 0.8, ease: 'power3.inOut' }, 0);
+        this._timelineIn.set(this._uniforms[`u_step_factor_${this._id}`], { value: 0 }, 0);
+        this._timelineIn.set(this._uniforms[`u_size_${this._id}`], { value: 0 }, 0);
+        this._timelineIn.set(this._uniforms[`u_scale_${this._id}`], { value: 1 }, 0);
 
         return this._timelineIn;
     }
@@ -111,7 +127,7 @@ class RenderTargetScene extends THREE.Scene {
 
         this._timelineOut = new gsap.timeline();
 
-        this._timelineOut.to(this._uniforms[`u_step_factor_${this._id}`], { value: 1, duration: 0.8, ease: 'power4.inOut' }, 0);
+        this._timelineOut.set(this._uniforms[`u_step_factor_${this._id}`], { value: 1 }, 0);
 
         return this._timelineOut;
     }
@@ -122,42 +138,36 @@ class RenderTargetScene extends THREE.Scene {
 
         this._timelineMenu = new gsap.timeline();
 
-        this._timelineMenu.to(this._uniforms[`u_step_factor_${this._id}`], { value: 0.5, duration: 0.8, ease: 'power3.inOut' }, 0);
-        this._timelineMenu.to(this._uniforms[`u_size_${this._id}`], { value: 0.5, duration: 0.8, ease: 'power3.inOut' }, 0);
-        this._timelineMenu.to(this._uniforms[`u_scale_${this._id}`], { value: 2, duration: 0.8, ease: 'power3.inOut' }, 0);
+        this._timelineMenu.call(this._resetCameraPosition, null, 0);
+        this._timelineMenu.set(this._uniforms[`u_step_factor_${this._id}`], { value: 0.5 }, 0);
+        this._timelineMenu.set(this._uniforms[`u_size_${this._id}`], { value: 0.5 }, 0);
+        this._timelineMenu.set(this._uniforms[`u_scale_${this._id}`], { value: 2 }, 0);
 
         return this._timelineMenu;
     }
 
     setActive() {
         this._isActive = true;
-        this._cameras.setActive();
     }
 
     setInactive() {
         this._isActive = false;
+    }
 
-        // Position
-        this._cameraPosition.target.x = 0;
-        this._cameraPosition.target.y = 0;
+    setVisible() {
+        this._isVisible = true;
 
-        // Rotation
-        this._cameraRotation.target.x = 0;
-        this._cameraRotation.target.y = 0;
+        this._cameras.setActive();
+    }
+
+    setInvisible() {
+        this._isVisible = false;
 
         this._cameras.setInactive();
     }
 
     setMenuState(state) {
         this._isMenu = state;
-
-        // Position
-        this._cameraPosition.target.x = 0;
-        this._cameraPosition.target.y = 0;
-
-        // Rotation
-        this._cameraRotation.target.x = 0;
-        this._cameraRotation.target.y = 0;
 
         this._cameras.setMenuState(state);
     }
@@ -168,7 +178,7 @@ class RenderTargetScene extends THREE.Scene {
 
     // Hooks
     mousemoveHandler(e) {
-        if (!this._interactionsSettings.isEnable || !this._isActive || this._isMenu) return;
+        if (!this._interactionsSettings.isEnable || !this._isActive) return;
 
         const positionFactor = this._interactionsSettings.positionFactor;
         const rotationFactor = this._interactionsSettings.rotationFactor;
@@ -240,8 +250,19 @@ class RenderTargetScene extends THREE.Scene {
         return cameras;
     }
 
+    _resetCameraPosition() {
+        // Position
+        this._cameraPosition.target.x = 0;
+        this._cameraPosition.target.y = 0;
+
+        // Rotation
+        this._cameraRotation.target.x = 0;
+        this._cameraRotation.target.y = 0;
+    }
+
     _updateCameraPosition() {
-        if (!this._interactionsSettings.isEnable || !this._isActive) return;
+        // if (!this._interactionsSettings.isEnable || !this._isVisible) return;
+        if (!this._interactionsSettings.isEnable) return;
 
         const damping = this._interactionsSettings.damping;
 
@@ -293,6 +314,17 @@ class RenderTargetScene extends THREE.Scene {
         interactions.addInput(this._interactionsSettings, 'damping', { label: 'Damping', min: 0, max: 1 });
 
         return folder;
+    }
+
+    _bindAll() {
+        bindAll(
+            this,
+            'setActive',
+            'setInactive',
+            'setVisible',
+            'setInvisible',
+            '_resetCameraPosition',
+        );
     }
 }
 

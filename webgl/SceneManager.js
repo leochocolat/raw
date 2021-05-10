@@ -1,5 +1,6 @@
 // Vendor
 import * as THREE from 'three';
+import gsap from 'gsap';
 
 // Objects
 import ScreensContainer from '@/webgl/objects/ScreensContainer';
@@ -52,39 +53,51 @@ class SceneManager extends THREE.Scene {
     }
 
     start() {
-        this._screensContainer.showScenes();
+
     }
 
     setMenuState(state) {
         this._isMenu = state;
 
-        for (const key in this._scenes) {
-            if (state) this._scenes[key].transitionToMenu();
-            if (state) this._scenes[key].setActive();
-            this._scenes[key].setMenuState(state);
-        }
-
-        if (state) this._screensContainer.effectIn();
-
         this._activeScene = state ? {} : this._activeScene;
+
+        this.menuTimeline = new gsap.timeline();
+
+        if (state) this.menuTimeline.add(this._screensContainer.effectIn(), 0);
+
+        for (const key in this._scenes) {
+            if (state) this.menuTimeline.call(this._scenes[key].setVisible, null, 0);
+            if (state) this.menuTimeline.call(this._scenes[key].setInactive, null, 0);
+            if (state) this.menuTimeline.add(this._scenes[key].transitionToMenu(), 1);
+            if (state) this.menuTimeline.add(this._scenes[key].show(), 1);
+            this.menuTimeline.call(() => this._scenes[key].setMenuState(state), null, 1);
+        }
     }
 
     setActiveScene(sceneName) {
         if (!sceneName || sceneName === '') return;
 
-        const activeScene = this._scenes[sceneName];
-        activeScene.transitionIn();
-        activeScene.setActive();
+        this._activeScene = this._scenes[sceneName];
 
-        this._screensContainer.effectOut();
+        this.activeSceneTimeline = new gsap.timeline();
 
+        let i = 0;
         for (const key in this._scenes) {
             if (key === sceneName) continue;
-            this._scenes[key].transitionOut();
-            this._scenes[key].setInactive();
+            i += 1;
+
+            this.activeSceneTimeline.call(this._scenes[key].setInactive, null, 0);
+            this.activeSceneTimeline.call(this._scenes[key].setInvisible, null, 0);
+            this.activeSceneTimeline.add(this._scenes[key].transitionOut(), 0.1 * i);
+            this.activeSceneTimeline.add(this._scenes[key].hide(), 0.1 * i);
         }
 
-        this._activeScene = activeScene;
+        this.activeSceneTimeline.add(this._activeScene.show(), 0);
+        this.activeSceneTimeline.call(this._activeScene.setActive, null, 0);
+        this.activeSceneTimeline.call(this._activeScene.setVisible, null, 0);
+
+        this.activeSceneTimeline.add(this._activeScene.transitionIn(), 0);
+        this.activeSceneTimeline.add(this._screensContainer.effectOut(), 0);
     }
 
     mousemoveHandler(mouse) {
@@ -119,6 +132,7 @@ class SceneManager extends THREE.Scene {
     update(time, delta) {
         for (const key in this._scenes) {
             const scene = this._scenes[key];
+
             // Partial Rendering
             if (this._isMenu && this._updateIndex !== scene.sceneId) continue;
 

@@ -104,6 +104,8 @@ class Bar extends RenderTargetScene {
      * Events
      */
     _bindAll() {
+        super._bindAll();
+
         bindAll(this, '_resourcesReadyHandler');
     }
 

@@ -14,11 +14,6 @@ export default {
         });
     },
 
-    mounted() {
-        this.$store.dispatch('scenes/setActiveScene', this.$options.name);
-        this.$store.dispatch('scenes/setMenuScene', false);
-    },
-
     methods: {
         transitionInit() {
             gsap.set(this.$el, { alpha: 0 });
@@ -27,7 +22,9 @@ export default {
         firstReveal(done, routeInfos) {
             const timeline = gsap.timeline({ onComplete: done });
 
-            timeline.add(this.transitionIn, 0);
+            timeline.call(() => this.$store.dispatch('scenes/setMenuScene', false), 0);
+            timeline.call(() => this.$store.dispatch('scenes/setActiveScene', this.$options.name), 0);
+            timeline.to(this.$el, { duration: 0.5, alpha: 1, ease: 'circ.inOut' }, 2);
 
             return timeline;
         },
@@ -35,7 +32,9 @@ export default {
         transitionIn(done, routeInfos) {
             const timeline = gsap.timeline({ onComplete: done });
 
-            timeline.to(this.$el, 0.5, { alpha: 1, ease: 'circ.inOut' });
+            timeline.call(() => this.$store.dispatch('scenes/setMenuScene', false), 0);
+            timeline.call(() => this.$store.dispatch('scenes/setActiveScene', this.$options.name), 0);
+            timeline.to(this.$el, { duration: 0.5, alpha: 1, ease: 'circ.inOut' }, 0.5);
 
             return timeline;
         },
@@ -43,7 +42,7 @@ export default {
         transitionOut(done, routeInfos) {
             const timeline = gsap.timeline({ onComplete: done });
 
-            timeline.to(this.$el, 0.5, { alpha: 0, ease: 'circ.inOut' });
+            timeline.to(this.$el, { duration: 0.5, alpha: 0, ease: 'circ.inOut' });
 
             return timeline;
         },

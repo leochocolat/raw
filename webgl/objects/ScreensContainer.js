@@ -25,28 +25,22 @@ class ScreensContainer extends THREE.Mesh {
     /**
      * Public
      */
-    showScenes() {
-        const timelineShow = new gsap.timeline();
-
-        for (const key in this._scenes) {
-            timelineShow.add(this._scenes[key].show(), Math.random());
-        }
-
-        return timelineShow;
-    }
-
     effectIn() {
         this._timelineEffectOut?.kill();
 
         this._timelineEffectIn = new gsap.timeline();
-        this._timelineEffectIn.to(this.material.uniforms.u_global_intensity, { value: 1.0, duration: 2 });
+        this._timelineEffectIn.to(this.material.uniforms.u_global_intensity, { value: 1.0, duration: 1.5, ease: 'sine.out' });
+
+        return this._timelineEffectIn;
     }
 
     effectOut() {
         this._timelineEffectIn?.kill();
 
         this._timelineEffectOut = new gsap.timeline();
-        this._timelineEffectOut.to(this.material.uniforms.u_global_intensity, { value: 0.0, duration: 2 });
+        this._timelineEffectOut.to(this.material.uniforms.u_global_intensity, { value: 0.0, duration: 1.5, ease: 'sine.out' });
+
+        return this._timelineEffectOut;
     }
 
     mousemoveHandler(mouse) {}
