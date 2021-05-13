@@ -2,7 +2,7 @@
     <div class="default">
 
         <!-- Canvas Sizer -->
-        <div ref="canvasSizeHelper" class="canvas-size-helper"></div>
+        <div ref="canvasSizeHelper" class="canvas-size-helper js-canvas-size-helper"></div>
 
         <!-- WebGL -->
         <client-only>

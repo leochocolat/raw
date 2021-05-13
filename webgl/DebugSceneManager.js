@@ -37,6 +37,10 @@ class DebugSceneManager {
         this._renderer.render(this._scene, this._scene.camera);
     }
 
+    destroy() {
+        if (this._scene.destroy) this._scene.destroy();
+    }
+
     /**
      * Private
      */
@@ -54,6 +58,7 @@ class DebugSceneManager {
             width: this._width,
             height: this._height,
         });
+
         return scene;
     }
 }

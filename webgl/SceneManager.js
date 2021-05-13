@@ -188,6 +188,10 @@ class SceneManager extends THREE.Scene {
         this._camera.updateProjectionMatrix();
     }
 
+    destroy() {
+
+    }
+
     /**
      * Private
      */

@@ -1,6 +1,9 @@
 // Vendor
 import * as THREE from 'three';
 
+// Module
+import CanvasBlurEditor from '@/webgl/objects/CanvasBlurEditor';
+
 // Utils
 import { ResourceManager } from '@/utils/resource-loader';
 
@@ -15,6 +18,8 @@ class BlurEditor extends DebugScene {
 
         this._resources = this._setupResources();
         this.camera = this._createOrthoCamera();
+
+        this._controlZoom = 1;
 
         // this.orbitControls.enableZoom = false;
         this.orbitControls.enableRotate = false;
@@ -41,6 +46,14 @@ class BlurEditor extends DebugScene {
 
     update(time, delta) {
         super.update(time, delta);
+
+        // const zoom = this.orbitControls.target.distanceTo(this.orbitControls.object.position);
+        // console.log(zoom);
+    }
+
+    destroy() {
+        this._canvasBlurEditor?.destroy();
+        this._removeEventListeners();
     }
 
     /**
@@ -51,6 +64,7 @@ class BlurEditor extends DebugScene {
         this._texture.flipY = false;
 
         this._plane = this._createPlane();
+        this._canvasBlurEditor = new CanvasBlurEditor({ width: this._texture.image.width, height: this._texture.image.height });
 
         this._resizePlane();
         this._setupDebug();
@@ -82,7 +96,10 @@ class BlurEditor extends DebugScene {
 
         const width = this._width / 2;
         const height = width / (this._textureSize.x / this._textureSize.y);
+
+        this._planeSize = new THREE.Vector2(width, height);
         this._plane.scale.set(width, height);
+        this._canvasBlurEditor.resize(width, height);
     }
 
     _createOrthoCamera() {
@@ -105,6 +122,8 @@ class BlurEditor extends DebugScene {
 
         // Drawing
         const drawSettingsFolder = this._debugFolder.addFolder({ title: 'Draw Settings' });
+        console.log(this._canvasBlurEditor);
+        drawSettingsFolder.addInput(this._canvasBlurEditor, 'visible');
 
         // Export
 
@@ -115,10 +134,17 @@ class BlurEditor extends DebugScene {
     _bindAll() {
         this._loadCompleteHandler = this._loadCompleteHandler.bind(this);
         this._imageUpdateHandler = this._imageUpdateHandler.bind(this);
+        this._controlsChangeHandler = this._controlsChangeHandler.bind(this);
     }
 
     _setupEventListeners() {
         this._resources.addEventListener('complete', this._loadCompleteHandler);
+        this.orbitControls.addEventListener('change', this._controlsChangeHandler);
+    }
+
+    _removeEventListeners() {
+        this._resources.removeEventListener('complete', this._loadCompleteHandler);
+        this.orbitControls.dispose();
     }
 
     _loadCompleteHandler() {
@@ -131,6 +157,11 @@ class BlurEditor extends DebugScene {
         this._texture.needsUpdate = true;
         this._plane.material.map = this._texture;
         this._resizePlane();
+    }
+
+    _controlsChangeHandler(e) {
+        this._controlZoom = e.target.object.zoom;
+        this._canvasBlurEditor.resize(this._planeSize.x * this._controlZoom, this._planeSize.y * this._controlZoom);
     }
 }
 

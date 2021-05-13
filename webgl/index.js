@@ -70,6 +70,8 @@ class WebglApp {
     destroy() {
         this._removeEventListeners();
         this._debugger?.destroy();
+        this._sceneManager?.destroy();
+        this._debugSceneManager?.destroy();
     }
 
     /**
