@@ -57,9 +57,10 @@ class SceneManager extends THREE.Scene {
     }
 
     setMenuState(state) {
-        this._isMenu = state;
-
         this._activeScene = state ? {} : this._activeScene;
+
+        // If isMenu state is false assign directly
+        if (!state) this._isMenu = state;
 
         this.menuTimeline = new gsap.timeline();
 
@@ -72,6 +73,9 @@ class SceneManager extends THREE.Scene {
             if (state) this.menuTimeline.add(this._scenes[key].show(), 1);
             this.menuTimeline.call(() => this._scenes[key].setMenuState(state), null, 1);
         }
+
+        // If isMenu state is true assign after transition
+        if (state) this.menuTimeline.call(() => { this._isMenu = state; }, null);
     }
 
     setActiveScene(sceneName) {
