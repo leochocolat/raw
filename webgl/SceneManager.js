@@ -57,6 +57,7 @@ class SceneManager extends THREE.Scene {
     }
 
     setMenuState(state) {
+        const previousActiveScene = this._activeScene;
         this._activeScene = state ? {} : this._activeScene;
 
         // If isMenu state is false assign directly
@@ -67,11 +68,28 @@ class SceneManager extends THREE.Scene {
         if (state) this.menuTimeline.add(this._screensContainer.effectIn(), 0);
 
         for (const key in this._scenes) {
-            if (state) this.menuTimeline.call(this._scenes[key].setVisible, null, 0);
-            if (state) this.menuTimeline.call(this._scenes[key].setInactive, null, 0);
-            if (state) this.menuTimeline.add(this._scenes[key].transitionToMenu(), 1);
-            if (state) this.menuTimeline.add(this._scenes[key].show(), 1);
+            if (this._scenes[key] === previousActiveScene) continue;
+
+            const randomDelay = 0.2 * Math.random();
+
+            if (state) {
+                this.menuTimeline.call(this._scenes[key].setVisible, null, 0);
+                this.menuTimeline.call(this._scenes[key].setInactive, null, 0);
+                this.menuTimeline.add(this._scenes[key].transitionToMenu(), 1);
+                this.menuTimeline.add(this._scenes[key].show(), 1);
+            }
+
             this.menuTimeline.call(() => this._scenes[key].setMenuState(state), null, 1);
+        }
+
+        if (previousActiveScene.sceneId !== undefined) {
+            if (state) {
+                this.menuTimeline.call(previousActiveScene.setVisible, null, 0);
+                this.menuTimeline.call(previousActiveScene.setInactive, null, 0);
+                this.menuTimeline.add(previousActiveScene.transitionToMenu(), 1.1);
+            }
+
+            this.menuTimeline.call(() => previousActiveScene.setMenuState(state), null, 1);
         }
 
         // If isMenu state is true assign after transition
@@ -90,10 +108,12 @@ class SceneManager extends THREE.Scene {
             if (key === sceneName) continue;
             i += 1;
 
+            const randomDelay = 0.2 * Math.random();
+
             this.activeSceneTimeline.call(this._scenes[key].setInactive, null, 0);
             this.activeSceneTimeline.call(this._scenes[key].setInvisible, null, 0);
-            this.activeSceneTimeline.add(this._scenes[key].transitionOut(), 0.1 * i);
-            this.activeSceneTimeline.add(this._scenes[key].hide(), 0.1 * i);
+            this.activeSceneTimeline.add(this._scenes[key].transitionOut(), randomDelay);
+            this.activeSceneTimeline.add(this._scenes[key].hide(), randomDelay);
         }
 
         this.activeSceneTimeline.add(this._activeScene.show(), 0);
