@@ -75,21 +75,21 @@ class SceneManager extends THREE.Scene {
             if (state) {
                 this.menuTimeline.call(this._scenes[key].setVisible, null, 0);
                 this.menuTimeline.call(this._scenes[key].setInactive, null, 0);
-                this.menuTimeline.add(this._scenes[key].transitionToMenu(), 1);
-                this.menuTimeline.add(this._scenes[key].show(), 1);
+                this.menuTimeline.add(this._scenes[key].transitionToMenu(), randomDelay);
+                this.menuTimeline.add(this._scenes[key].show(), randomDelay);
             }
 
-            this.menuTimeline.call(() => this._scenes[key].setMenuState(state), null, 1);
+            this.menuTimeline.call(() => this._scenes[key].setMenuState(state), null, 0.2);
         }
 
         if (previousActiveScene.sceneId !== undefined) {
             if (state) {
                 this.menuTimeline.call(previousActiveScene.setVisible, null, 0);
                 this.menuTimeline.call(previousActiveScene.setInactive, null, 0);
-                this.menuTimeline.add(previousActiveScene.transitionToMenu(), 1.1);
+                this.menuTimeline.add(previousActiveScene.transitionToMenu(), 0.2 * Math.random());
             }
 
-            this.menuTimeline.call(() => previousActiveScene.setMenuState(state), null, 1);
+            this.menuTimeline.call(() => previousActiveScene.setMenuState(state), null, 0.2 * Math.random());
         }
 
         // If isMenu state is true assign after transition
