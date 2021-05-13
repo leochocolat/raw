@@ -4,6 +4,7 @@ import Tweakpane from 'tweakpane';
 // Utils
 import bindAll from './bindAll';
 import DragManager from './DragManager';
+import TweakpaneInputImage from './debugger/TweakpaneInputImage';
 
 class Debugger extends Tweakpane {
     constructor(options) {
@@ -30,6 +31,13 @@ class Debugger extends Tweakpane {
         return folder;
     }
 
+    addInputImage(image, options) {
+        return new TweakpaneInputImage(
+            image,
+            options,
+        );
+    }
+
     /**
      * Private
      */
@@ -49,7 +57,7 @@ class Debugger extends Tweakpane {
 
     __createDragButton() {
         this.__dragButton = this.addButton({ title: this._title });
-        this.__dragButtonElement = this.__dragButton.controller.view.buttonElem_;
+        this.__dragButtonElement = this.__dragButton.controller_.view.element;
         this.__dragButtonElement.style.cursor = 'grab';
     }
 

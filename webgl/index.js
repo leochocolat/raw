@@ -82,7 +82,7 @@ class WebglApp {
             alpha: false,
         });
 
-        renderer.outputEncoding = THREE.sRGBEncoding;
+        // renderer.outputEncoding = THREE.sRGBEncoding;
 
         renderer.setPixelRatio(1);
 

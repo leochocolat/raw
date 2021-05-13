@@ -27,7 +27,7 @@
         "nuxt": "^2.14.3",
         "pizzicato": "^0.6.4",
         "three": "^0.125.2",
-        "tweakpane": "^1.5.9"
+        "tweakpane": "^2.4.3"
     },
     "devDependencies": {
         "@babel/plugin-proposal-optional-chaining": "^7.13.8",

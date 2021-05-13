@@ -27,6 +27,24 @@ class DebugScene extends THREE.Scene {
         return this._camera;
     }
 
+    set camera(camera) {
+        this._camera = camera;
+        this._camera.updateProjectionMatrix();
+        this._orbitControls = this._createOrbitControls();
+    }
+
+    get orbitControls() {
+        return this._orbitControls;
+    }
+
+    get debugger() {
+        return this._debugger;
+    }
+
+    get debugFolder() {
+        return this._debugFolder;
+    }
+
     resize(width, height) {
         this._width = width;
         this._height = height;
