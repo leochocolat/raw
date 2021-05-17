@@ -19,6 +19,8 @@ class BlurScreen {
             blur: options.blurFactor * BLUR_INTENSITY_FACTOR,
         };
 
+        this._blurFactor = options.blurFactor;
+
         this._width = options.width;
         this._height = options.height;
 
@@ -26,6 +28,7 @@ class BlurScreen {
         this._screenMesh = options.scenePlane;
         this._maskTexture = options.maskTexture;
         this._screenTexture = options.screenTexture;
+        this._planeSize = options.size;
 
         this._setup();
     }
@@ -38,10 +41,39 @@ class BlurScreen {
         this._settings.blur = value * BLUR_INTENSITY_FACTOR;
     }
 
+    get blurFactor() {
+        return this._blurFactor;
+    }
+
+    set blurFactor(factor) {
+        this._blurFactor = factor;
+        this._settings.blur = factor * BLUR_INTENSITY_FACTOR;
+    }
+
+    get planeSize() {
+        return this._planeSize;
+    }
+
+    set planeSize(value) {
+        this._planeSize = value;
+        this._screenMesh.material.uniforms.u_resolution.value.set(value.x, value.y);
+    }
+
+    get screenTexture() {
+        return this._screenTexture;
+    }
+
+    set screenTexture(value) {
+        this._screenTexture = value;
+    }
+
     /**
      * Public
      */
     resize(width, height) {
+        this._width = width;
+        this._height = height;
+
         if (!this._screenMesh) return;
 
         this._resizeBuffers();
@@ -61,6 +93,8 @@ class BlurScreen {
 
         this._bufferA.resize(this._bufferWidth, this._bufferHeight);
         this._bufferB.resize(this._bufferWidth, this._bufferHeight);
+
+        this._screenMesh.material.uniforms.u_size.value.set(this._bufferWidth, this._bufferHeight);
     }
 
     _getContainerSize() {
@@ -87,7 +121,7 @@ class BlurScreen {
     _setup() {
         this._getBufferSize();
 
-        this._containerSize = this._getContainerSize();
+        this._containerSize = this._planeSize || this._getContainerSize();
 
         this._bufferA = this._createBufferA();
         this._bufferB = this._createBufferB();
@@ -160,23 +194,6 @@ class BlurScreen {
         readBuffer.plane.material.uniforms.u_texture.value = this._screenTexture;
         writeBuffer.plane.material.uniforms.u_texture.value = this._screenTexture;
     }
-
-    // _addDebugSettings() {
-    //     this._debugFolder.expanded = true;
-    //     this._debugFolder.addInput(this._settings, 'blur', { min: 0, max: 5 });
-    // }
-
-    // // Events
-    // _bindAll() {
-    //     this._loadCompleteHandler = this._loadCompleteHandler.bind(this);
-    // }
-
-    // _setupEventListeners() {
-    //     this._resources.addEventListener('complete', this._loadCompleteHandler);
-    // }
-
-    // _loadCompleteHandler() {
-    // }
 }
 
 export default BlurScreen;

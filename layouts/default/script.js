@@ -24,16 +24,16 @@ export default {
             if (isReady) this.$root.webglApp.start();
         },
 
-        '$i18n.locale'() {
-            this.$fetch();
-        },
+        // '$i18n.locale'() {
+        //     this.$fetch();
+        // },
     },
 
-    fetch() {
-        return this.$api.getEntryById('5tSa9edQQgQtt0iKf5OVGg').then((response) => {
-            this.globalCopy = response.fields;
-        });
-    },
+    // fetch() {
+    //     return this.$api.getEntryById('5tSa9edQQgQtt0iKf5OVGg').then((response) => {
+    //         this.globalCopy = response.fields;
+    //     });
+    // },
 
     computed: {
         ...mapGetters({

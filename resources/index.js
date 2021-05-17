@@ -56,6 +56,15 @@ const webgl = [
     // Test Blur
     {
         type: 'texture',
+        name: 'test-blur',
+        path: '/textures/test-blur.png',
+        preload: false,
+        options: {
+            flipY: true,
+        },
+    },
+    {
+        type: 'texture',
         name: 'blur-mask-test',
         path: '/textures/blur-mask-test.jpg',
         namespace: 'blur',

@@ -212,6 +212,12 @@ class WebglApp {
             relativePosition: this._mousePosition.relativePosition,
             normalizedPosition: this._mousePosition.normalizedPosition,
         });
+
+        this._debugSceneManager?.mousemoveHandler({
+            position: this._mousePosition.position,
+            relativePosition: this._mousePosition.relativePosition,
+            normalizedPosition: this._mousePosition.normalizedPosition,
+        });
     }
 }
 

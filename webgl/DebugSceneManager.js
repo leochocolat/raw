@@ -41,6 +41,10 @@ class DebugSceneManager {
         if (this._scene.destroy) this._scene.destroy();
     }
 
+    mousemoveHandler(e) {
+        if (this._scene.mousemove) this._scene.mousemove(e);
+    }
+
     /**
      * Private
      */
