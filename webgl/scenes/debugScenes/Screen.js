@@ -107,7 +107,6 @@ class Screen extends DebugScene {
     }
 
     _addDebugSettings() {
-        this._debugFolder.expanded = true;
         this._debugFolder.addInput(this._plane.material.uniforms.u_global_intensity, 'value', { label: 'Effect Intensity', min: 0, max: 1 });
         this._debugFolder.addInput(this._plane.material.uniforms.u_crt_bending, 'value', { label: 'CRT Bending', min: 0, max: 1 });
 
@@ -138,6 +137,8 @@ class Screen extends DebugScene {
         const animations = this._debugFolder.addFolder({ title: 'Animations' });
         animations.addButton({ title: 'Animate out' }).on('click', this._debugAnimationOutClickHandler);
         animations.addButton({ title: 'Animate in' }).on('click', this._debugAnimationInClickHandler);
+
+        this._debugFolder.expanded = true;
     }
 
     _bindAll() {

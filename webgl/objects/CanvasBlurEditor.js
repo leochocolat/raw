@@ -16,7 +16,7 @@ class CanvasBlurEditor {
 
         // Settings
         this._isVisible = true;
-        this._pencilRelativeRadius = 0.2;
+        this._pencilRelativeRadius = 0.5;
         this._pencilRadius = this._pencilRelativeRadius * this._width / 2;
         this._pencilHardness = 0.5;
         this._pencilOpacity = 0.5;
@@ -100,7 +100,7 @@ class CanvasBlurEditor {
     }
 
     update() {
-        this._draw();
+        // this._draw();
 
         this._texture.needsUpdate = true;
     }
@@ -137,6 +137,8 @@ class CanvasBlurEditor {
     mousemove(e) {
         this._mousePosition.x = e.position.x - ((this._viewportWidth - this._width) / 2);
         this._mousePosition.y = e.position.y - ((this._viewportHeight - this._height) / 2);
+
+        this._draw();
     }
 
     export(filename) {
@@ -171,7 +173,7 @@ class CanvasBlurEditor {
         canvas.style.left = 0;
         canvas.style.margin = 'auto';
         // canvas.style.zIndex = 1;
-        canvas.style.border = 'solid 1px red';
+        canvas.style.border = 'solid 1px white';
         canvas.style.pointerEvents = 'all';
         canvas.style.opacity = this._isVisible ? 1 : 0;
 
@@ -264,6 +266,8 @@ class CanvasBlurEditor {
         this._save();
 
         this._allowPaint = true;
+
+        this._draw();
     }
 
     _mouseupHandler(e) {

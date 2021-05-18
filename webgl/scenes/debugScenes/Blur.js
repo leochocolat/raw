@@ -178,8 +178,8 @@ class Blur extends DebugScene {
     }
 
     _addDebugSettings() {
-        this._debugFolder.expanded = true;
         this._debugFolder.addInput(this._settings, 'blur', { min: 0, max: 5 });
+        this._debugFolder.expanded = true;
     }
 
     // Events
