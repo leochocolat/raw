@@ -38,6 +38,12 @@ void main() {
     
     vec4 texel = initial_texel;
     texel = blur_texel;
+
+    blur_mask_texel.r *= blur_mask_texel.a;
+    blur_mask_texel.g *= blur_mask_texel.a;
+    blur_mask_texel.b *= blur_mask_texel.a;
+    blur_mask_texel.a = 1.0;
+
     // texel = blur_mask_texel;
 
     gl_FragColor = texel;

@@ -17,6 +17,11 @@ void main() {
     vec4 texel = texture2D(u_texture, vUv);
     vec4 texelAlpha = texture2D(u_alphaTexture, vUv);
 
+    texelAlpha.r *= texelAlpha.a;
+    texelAlpha.g *= texelAlpha.a;
+    texelAlpha.b *= texelAlpha.a;
+    texelAlpha.a = 1.0;
+
     // if(u_alphaTexture.r)
     vec4 blured_texel = blur(u_texture, vUv, u_resolution, u_blur_direction * texelAlpha.r);
 

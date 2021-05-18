@@ -132,6 +132,7 @@ class CanvasBlurEditor {
 
     destroy() {
         this._canvas.remove();
+        this._removeEventListeners();
     }
 
     mousemove(e) {
@@ -204,12 +205,9 @@ class CanvasBlurEditor {
 
         this._ctx.save();
 
-        const gradient = this._ctx.createRadialGradient(this._mousePosition.x, this._mousePosition.y, 0, this._mousePosition.x, this._mousePosition.y, this._pencilRadius);
-        gradient.addColorStop(0, `rgba(255, 255, 255, ${this._pencilOpacity})`);
-        gradient.addColorStop(this._pencilHardness, `rgba(255, 255, 255, ${this._pencilOpacity})`);
-        gradient.addColorStop(1, `rgba(255, 255, 255, ${0})`);
+        this._ctx.filter = `blur(${this._pencilHardness * this._pencilRadius * 0.5}px)`;
 
-        this._ctx.fillStyle = gradient;
+        this._ctx.fillStyle = `rgba(255, 255, 255, ${this._pencilOpacity})`;
 
         this._ctx.beginPath();
         this._ctx.arc(this._mousePosition.x, this._mousePosition.y, this._pencilRadius, 0, 2 * Math.PI);
@@ -230,6 +228,7 @@ class CanvasBlurEditor {
 
         const lastImage = this._history.pop();
         this._ctx.clearRect(0, 0, this._width, this._height);
+        // this._ctx.fillRect(0, 0, this._width, this._height);
         this._ctx.drawImage(lastImage, 0, 0, this._width, this._height);
     }
 
