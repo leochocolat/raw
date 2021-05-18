@@ -78,6 +78,9 @@ class BlurEditor extends DebugScene {
         this._texture = this._resources.get('test-blur');
         this._texture.flipY = false;
 
+        this._textureVideo = this._resources.get('video_test_0');
+        // this._textureVideo.flipY = false;
+
         this._plane = this._createPlane();
 
         this._canvasBlurEditor = new CanvasBlurEditor({
@@ -104,6 +107,7 @@ class BlurEditor extends DebugScene {
     _setupResources() {
         const resources = new ResourceManager();
         resources.addByName('test-blur');
+        resources.addByName('video_test_0');
 
         resources.load();
 
@@ -123,7 +127,7 @@ class BlurEditor extends DebugScene {
     _resizePlane() {
         if (!this._plane) return;
 
-        this._textureSize = new THREE.Vector2(this._texture.image.width, this._texture.image.height);
+        this._textureSize = new THREE.Vector2(this._texture.image.width || this._texture.image.videoWidth, this._texture.image.height || this._texture.image.videoHeight);
 
         const width = this._width / 2;
         const height = width / (this._textureSize.x / this._textureSize.y);
@@ -160,10 +164,20 @@ class BlurEditor extends DebugScene {
         this._debugFolder.addButton({ title: 'Export' }).on('click', this._clickExportHandler);
         this._debugFolder.addInput(this._settings, 'filename', { label: 'File Name' }).on('click', this._clickExportHandler);
 
-        // Input image
+        // Input image / Video
         const inputImageFolder = this._debugFolder.addFolder({ title: 'Input Image' });
-        const inputImage = this.debugger.addInputImage(this._texture.image, { title: 'Upload file', label: 'Image', folder: inputImageFolder });
+        const inputTabs = inputImageFolder.addTab({
+            pages: [
+                { title: 'Image' },
+                { title: 'Video' },
+            ],
+        });
+
+        const inputImage = this.debugger.addInputMedia(this._texture.image, { type: 'image', title: 'Upload file', label: 'Image', folder: inputTabs.pages[0] });
         inputImage.on('update', this._imageUpdateHandler);
+
+        const inputVideo = this.debugger.addInputMedia(this._textureVideo.image, { type: 'video', title: 'Upload file', label: 'Video', folder: inputTabs.pages[1] });
+        inputVideo.on('update', this._videoUpdateHandler);
 
         // Drawing
         const drawSettingsFolder = this._debugFolder.addFolder({ title: 'Draw Settings' });
@@ -186,6 +200,7 @@ class BlurEditor extends DebugScene {
     _bindAll() {
         this._loadCompleteHandler = this._loadCompleteHandler.bind(this);
         this._imageUpdateHandler = this._imageUpdateHandler.bind(this);
+        this._videoUpdateHandler = this._videoUpdateHandler.bind(this);
         this._controlsChangeHandler = this._controlsChangeHandler.bind(this);
         this._clickExportHandler = this._clickExportHandler.bind(this);
         this._clickClearHandler = this._clickClearHandler.bind(this);
@@ -208,6 +223,15 @@ class BlurEditor extends DebugScene {
 
     _imageUpdateHandler(image) {
         this._texture = new THREE.Texture(image);
+        this._texture.flipY = false;
+        this._texture.needsUpdate = true;
+        this._plane.material.map = this._texture;
+        this._blurScreen.screenTexture = this._texture;
+        this._resizePlane();
+    }
+
+    _videoUpdateHandler(video) {
+        this._texture = new THREE.VideoTexture(video);
         this._texture.flipY = false;
         this._texture.needsUpdate = true;
         this._plane.material.map = this._texture;

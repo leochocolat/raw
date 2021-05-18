@@ -4,7 +4,7 @@ import Tweakpane from 'tweakpane';
 // Utils
 import bindAll from './bindAll';
 import DragManager from './DragManager';
-import TweakpaneInputImage from './debugger/TweakpaneInputImage';
+import TweakpaneInputMedia from './debugger/TweakpaneInputMedia';
 
 class Debugger extends Tweakpane {
     constructor(options) {
@@ -31,9 +31,9 @@ class Debugger extends Tweakpane {
         return folder;
     }
 
-    addInputImage(image, options) {
-        return new TweakpaneInputImage(
-            image,
+    addInputMedia(media, options) {
+        return new TweakpaneInputMedia(
+            media,
             options,
         );
     }

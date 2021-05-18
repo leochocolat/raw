@@ -1,19 +1,22 @@
-class TweakpaneInputImage {
-    constructor(image, options) {
+class TweakpaneInputMedia {
+    constructor(media, options) {
         this._options = options;
 
-        this._image = image;
-        this._source = this._image.src;
-        this._image.alt = this._source.replace(/^.*[\\\/]/, '');
-        this._image.preview = '';
+        this._isVideo = options.type === 'video';
+
+        this._media = media;
+        this._source = this._media.src;
+        this._media.alt = this._source.replace(/^.*[\\\/]/, '');
+        this._media.preview = '';
 
         this._button = this._createButton();
         this._input = this._createInput();
         this._monitor = this._createMonitor();
         this._previewMonitor = this._createPreviewMonitor();
+        this._applyButton = this._createApplyButton();
         this._fileReader = this._createFileReader();
 
-        this._isOriginalImage = true;
+        this._isOriginalMedia = true;
 
         this._bindAll();
         this._setupEventListeners();
@@ -43,20 +46,26 @@ class TweakpaneInputImage {
     _createInput() {
         const input = document.createElement('input');
         input.type = 'file';
-        input.accept = 'image/png, image/jpeg, image/jpg';
+        input.accept = this._isVideo ? 'video/mp4, video/mov' : 'image/png, image/jpeg, image/jpg';
         document.body.append(input);
 
         return input;
     }
 
     _createMonitor() {
-        const monitor = this._options.folder.addMonitor(this._image, 'alt', { label: 'name' });
+        const monitor = this._options.folder.addMonitor(this._media, 'alt', { label: 'name' });
 
         return monitor;
     }
 
+    _createApplyButton() {
+        const button = this._options.folder.addButton({ title: `Apply ${this._isVideo ? 'video' : 'image'}` });
+
+        return button;
+    }
+
     _createPreviewMonitor() {
-        const monitor = this._options.folder.addMonitor(this._image, 'preview', {
+        const monitor = this._options.folder.addMonitor(this._media, 'preview', {
             bufferSize: 10,
         });
 
@@ -67,11 +76,11 @@ class TweakpaneInputImage {
         container.style.cursor = 'pointer';
         container.style.fontSize = 0;
         el.style.backgroundColor = 'white';
-        this._image.style.width = '100%';
-        this._image.style.height = 'auto';
-        this._image.style.height = 'auto';
+        this._media.style.width = '100%';
+        this._media.style.height = 'auto';
+        this._media.style.height = 'auto';
 
-        container.appendChild(this._image);
+        container.appendChild(this._media);
 
         monitor.el = container;
 
@@ -84,16 +93,18 @@ class TweakpaneInputImage {
     }
 
     _readFile() {
+        // console.log(this._input.files[0]);
         this._fileReader.readAsDataURL(this._input.files[0]);
     }
 
-    _updateImage() {
-        this._image.alt = this._input.files[0].name;
-        this._image.src = this._fileReader.result;
+    _updateMedia() {
+        this._media.alt = this._input.files[0].name;
+        this._media.src = this._fileReader.result;
     }
 
     _bindAll() {
         this._clickHandler = this._clickHandler.bind(this);
+        this._clickApplyHandler = this._clickApplyHandler.bind(this);
         this._inputHandler = this._inputHandler.bind(this);
         this._fileReadHandler = this._fileReadHandler.bind(this);
         this._loadImageHandler = this._loadImageHandler.bind(this);
@@ -104,39 +115,55 @@ class TweakpaneInputImage {
 
     _setupEventListeners() {
         this._button.on('click', this._clickHandler);
+        this._applyButton.on('click', this._clickApplyHandler);
+
         this._input.addEventListener('input', this._inputHandler);
         this._fileReader.addEventListener('load', this._fileReadHandler);
-        this._image.addEventListener('load', this._loadImageHandler);
         this._previewMonitor.el.addEventListener('mouseenter', this._previewMouseenterHandler);
         this._previewMonitor.el.addEventListener('mouseleave', this._previewMouseleaveHandler);
         this._previewMonitor.el.addEventListener('click', this._previewClickHandler);
+
+        if (!this._isVideo) this._media.addEventListener('load', this._loadImageHandler);
+        if (this._isVideo) this._media.addEventListener('canplay', this._loadImageHandler);
     }
 
     _removeEventListeners() {
         this._input.removeEventListener('input', this._inputHandler);
         this._fileReader.removeEventListener('load', this._fileReadHandler);
-        this._image.removeEventListener('load', this._loadImageHandler);
         this._previewMonitor.el.removeEventListener('mouseenter', this._previewMouseenterHandler);
         this._previewMonitor.el.removeEventListener('mouseleave', this._previewMouseleaveHandler);
         this._previewMonitor.el.removeEventListener('click', this._previewClickHandler);
+
+        if (!this._isVideo) this._media.removeEventListener('load', this._loadImageHandler);
+        if (this._isVideo) this._media.removeEventListener('canplay', this._loadImageHandler);
     }
 
     _clickHandler() {
         this._input.click();
     }
 
+    _clickApplyHandler() {
+        console.log(this._media);
+        if (this._updateCallback) {
+            this._updateCallback(this._media);
+        }
+    }
+
     _inputHandler() {
-        this._isOriginalImage = false;
+        this._isOriginalMedia = false;
         this._readFile();
     }
 
     _fileReadHandler() {
-        this._updateImage();
+        this._updateMedia();
     }
 
     _loadImageHandler() {
-        if (this._isOriginalImage) return;
-        if (this._updateCallback) this._updateCallback(this._image);
+        if (this._isOriginalMedia) return;
+        if (this._updateCallback) {
+            this._updateCallback(this._media);
+            this._updateCallback = null;
+        };
     }
 
     _previewMouseenterHandler() {
@@ -152,4 +179,4 @@ class TweakpaneInputImage {
     }
 }
 
-export default TweakpaneInputImage;
+export default TweakpaneInputMedia;
