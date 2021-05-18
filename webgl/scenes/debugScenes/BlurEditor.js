@@ -88,6 +88,7 @@ class BlurEditor extends DebugScene {
             height: this._texture.image.height,
             viewportWidth: this._width,
             viewportHeight: this._height,
+            debugger: this._debugger,
         });
 
         this._blurScreen = new BlurScreen({
@@ -186,8 +187,12 @@ class BlurEditor extends DebugScene {
         drawSettingsFolder.addInput(this._canvasBlurEditor, 'pencilRelativeRadius', { label: 'Pencil Radius', min: 0, max: 1 });
         drawSettingsFolder.addInput(this._canvasBlurEditor, 'pencilOpacity', { label: 'Pencil Opacity', min: 0, max: 1 });
         drawSettingsFolder.addInput(this._canvasBlurEditor, 'pencilHardness', { label: 'Pencil Hardness', min: 0, max: 1 });
-        drawSettingsFolder.addButton({ title: 'Revert' }).on('click', this._clickRevertHandler);
-        drawSettingsFolder.addButton({ title: 'Clear' }).on('click', this._clickClearHandler);
+        drawSettingsFolder.addButton({ title: 'Clear (Cmd+x)' }).on('click', this._clickClearHandler);
+        drawSettingsFolder.addButton({ title: 'Revert (Cmd+z)' }).on('click', this._clickRevertHandler);
+        drawSettingsFolder.addButton({ title: 'Toggle Visibility (Spacebar)' }).on('click', () => {
+            this._canvasBlurEditor.visible = !this._canvasBlurEditor.visible;
+            this._debugger.refresh();
+        });
 
         // Blur
         const blurFolder = this._debugFolder.addFolder({ title: 'Blur Effect' });

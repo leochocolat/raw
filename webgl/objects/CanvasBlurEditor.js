@@ -8,6 +8,8 @@ class CanvasBlurEditor {
         this._width = options.width;
         this._height = options.height;
 
+        this._debugger = options.debugger;
+
         this._viewportWidth = options.viewportWidth;
         this._viewportHeight = options.viewportHeight;
 
@@ -278,13 +280,29 @@ class CanvasBlurEditor {
             this.revert();
         }
 
+        if ((e.metaKey || e.ctrlKey) && e.key === 'x') {
+            this.clear();
+        }
+
         if (e.metaKey || e.ctrlKey) {
             this.allowZoom = true;
+            this._debugger.refresh();
+        }
+
+        if (e.code === 'Space') {
+            this.visible = false;
+            this._debugger.refresh();
         }
     }
 
-    _keyupHandler() {
-        this.allowZoom = false;
+    _keyupHandler(e) {
+        if (e.code === 'Space') {
+            this.visible = true;
+            this._debugger.refresh();
+        } else {
+            this.allowZoom = false;
+            this._debugger.refresh();
+        }
     }
 
     _resizeEndHandler() {
