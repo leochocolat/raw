@@ -14,13 +14,16 @@ class Hallway extends RenderTargetScene {
     constructor(options) {
         super(options);
 
-        this._bindAll();
+        this._animationsSettings = { progress: 0 };
 
         this._resources = this._setupResources();
 
         this._updateSettings();
 
+        this._bindAll();
         this._setupEventListeners();
+
+        this._setupDebug();
     }
 
     /**
@@ -108,7 +111,6 @@ class Hallway extends RenderTargetScene {
     _createAnimationController() {
         const model = this._model;
         const animationController = new AnimationComponent(model);
-        // animationController.playAnimation({ animation: animationController.actionType.CameraMove, loop: false });
 
         return animationController;
     }
@@ -133,13 +135,26 @@ class Hallway extends RenderTargetScene {
         this._debugFolder?.refresh();
     }
 
+    _setupDebug() {
+        if (!this.debugFolder) return;
+
+        const animations = this.debugFolder.addFolder({ title: 'Animation', expanded: true });
+        animations.addInput(this._animationsSettings, 'progress', { min: 0, max: 1 }).on('change', this._animationsProgressChangeHandler);
+        animations.addButton({ title: 'Play' }).on('click', this._clickPlayAnimationsHandler);
+    }
+
     /**
      * Events
      */
     _bindAll() {
         super._bindAll();
 
-        bindAll(this, '_resourcesReadyHandler');
+        bindAll(
+            this,
+            '_resourcesReadyHandler',
+            '_animationsProgressChangeHandler',
+            '_clickPlayAnimationsHandler',
+        );
     }
 
     _setupEventListeners() {
@@ -148,6 +163,14 @@ class Hallway extends RenderTargetScene {
 
     _resourcesReadyHandler() {
         this._setup();
+    }
+
+    _animationsProgressChangeHandler() {
+        this._animationController.setAnimationProgress({ animation: this._animationController.actionType.CameraMove, progress: this._animationsSettings.progress });
+    }
+
+    _clickPlayAnimationsHandler() {
+        this._animationController.playAnimation({ animation: this._animationController.actionType.CameraMove, loop: false });
     }
 }
 
