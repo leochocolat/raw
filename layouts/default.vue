@@ -10,15 +10,15 @@
         <div ref="canvasSizeHelper" class="canvas-size-helper js-canvas-size-helper"></div>
 
         <!-- Nuxt App -->
-        <!-- <Nuxt /> -->
+        <Nuxt />
 
         <!-- Preloader -->
         <Preloader ref="preloader" />
 
         <!-- Footer -->
-        <!-- <TheFooter ref="footer" /> -->
+        <TheFooter ref="footer" />
 
-        <!-- <StopOverlay :data="globalCopy.stopConfirmation" /> -->
+        <StopOverlay :data="globalCopy.stopConfirmation" />
     </div>
 </template>
 
