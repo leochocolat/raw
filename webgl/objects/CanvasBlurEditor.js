@@ -1,6 +1,9 @@
 // Vendor
 import * as THREE from 'three';
 
+// Utils
+import device from '@/utils/device';
+
 const RESIZE_DEBOUNCE_VALUE = 200;
 
 class CanvasBlurEditor {
@@ -16,8 +19,10 @@ class CanvasBlurEditor {
         this._allowPaint = false;
         this._allowZoom = false;
 
+        this._imageSrc = options.imageSrc || '';
+
         // Settings
-        this._isVisible = true;
+        this._isVisible = false;
         this._pencilRelativeRadius = 0.5;
         this._pencilRadius = this._pencilRelativeRadius * this._width / 2;
         this._pencilHardness = 0.5;
@@ -38,6 +43,8 @@ class CanvasBlurEditor {
         this._bindAll();
 
         this._setupEventListeners();
+
+        this.drawImage();
     }
 
     /**
@@ -101,6 +108,14 @@ class CanvasBlurEditor {
         }
     }
 
+    get imageSrc() {
+        return this._imageSrc;
+    }
+
+    set imageSrc(src) {
+        this._imageSrc = src;
+    }
+
     update() {
         // this._draw();
 
@@ -138,10 +153,22 @@ class CanvasBlurEditor {
     }
 
     mousemove(e) {
-        this._mousePosition.x = e.position.x - ((this._viewportWidth - this._width) / 2);
-        this._mousePosition.y = e.position.y - ((this._viewportHeight - this._height) / 2);
 
-        this._draw();
+    }
+
+    drawImage() {
+        this._save();
+
+        if (!this._imageSrc || this._imageSrc === '') {
+            this._ctx.fillRect(0, 0, this._width, this._height);
+            return;
+        }
+
+        const image = new Image();
+        image.addEventListener('load', () => {
+            this._ctx.drawImage(image, 0, 0, this._width, this._height);
+        });
+        image.src = this._imageSrc;
     }
 
     export(filename) {
@@ -239,6 +266,7 @@ class CanvasBlurEditor {
      */
     _bindAll() {
         this._mousedownHandler = this._mousedownHandler.bind(this);
+        this._mousemoveHandler = this._mousemoveHandler.bind(this);
         this._mouseupHandler = this._mouseupHandler.bind(this);
         this._keydownHandler = this._keydownHandler.bind(this);
         this._keyupHandler = this._keyupHandler.bind(this);
@@ -246,10 +274,18 @@ class CanvasBlurEditor {
     }
 
     _setupEventListeners() {
-        this._container.addEventListener('mousedown', this._mousedownHandler);
-        window.addEventListener('mouseup', this._mouseupHandler);
-        this._container.addEventListener('touchstart', this._mousedownHandler);
-        window.addEventListener('touchend', this._mouseupHandler);
+        if (device.isTouch()) {
+            this._container.addEventListener('touchstart', this._mousedownHandler);
+            window.addEventListener('touchmove', this._mousemoveHandler);
+            window.addEventListener('touchend', this._mouseupHandler);
+        }
+
+        if (!device.isTouch()) {
+            this._container.addEventListener('mousedown', this._mousedownHandler);
+            window.addEventListener('mousemove', this._mousemoveHandler);
+            window.addEventListener('mouseup', this._mouseupHandler);
+        }
+
         document.addEventListener('keydown', this._keydownHandler);
         document.addEventListener('keyup', this._keyupHandler);
     }
@@ -259,6 +295,8 @@ class CanvasBlurEditor {
         window.removeEventListener('mouseup', this._mouseupHandler);
         this._container.removeEventListener('touchstart', this._mousedownHandler);
         window.removeEventListener('touchend', this._mouseupHandler);
+        window.removeEventListener('mousemove', this._mousemoveHandler);
+
         document.removeEventListener('keydown', this._keydownHandler);
         document.removeEventListener('keyup', this._keyupHandler);
     }
@@ -266,7 +304,21 @@ class CanvasBlurEditor {
     _mousedownHandler(e) {
         this._save();
 
+        const mouseEvent = e.touches ? e.touches[0] : e;
+
+        this._mousePosition.x = mouseEvent.clientX - ((this._viewportWidth - this._width) / 2);
+        this._mousePosition.y = mouseEvent.clientY - ((this._viewportHeight - this._height) / 2);
+
         this._allowPaint = true;
+
+        this._draw();
+    }
+
+    _mousemoveHandler(e) {
+        const mouseEvent = e.touches ? e.touches[0] : e;
+
+        this._mousePosition.x = mouseEvent.clientX - ((this._viewportWidth - this._width) / 2);
+        this._mousePosition.y = mouseEvent.clientY - ((this._viewportHeight - this._height) / 2);
 
         this._draw();
     }

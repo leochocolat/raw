@@ -22,6 +22,7 @@
         "contentful-management": "^7.8.0",
         "cookie-universal-nuxt": "^2.1.4",
         "fontfaceobserver": "^2.1.0",
+        "glsl-easings": "^1.0.0",
         "glsl-fast-gaussian-blur": "^1.0.2",
         "gsap": "^3.5.0",
         "nuxt": "^2.14.3",

@@ -12,6 +12,8 @@ class Debugger extends Tweakpane {
 
         this._title = options.title;
 
+        this._customInstances = [];
+
         this.__bindAll();
         this.__setup();
     }
@@ -22,6 +24,10 @@ class Debugger extends Tweakpane {
     destroy() {
         this.dispose();
         this.__removeEventListeners();
+
+        for (let i = 0; i < this._customInstances.length; i++) {
+            if (this._customInstances[i].destroy) this._customInstances[i].destroy();
+        }
     }
 
     addFolder(options) {
@@ -32,10 +38,11 @@ class Debugger extends Tweakpane {
     }
 
     addInputMedia(media, options) {
-        return new TweakpaneInputMedia(
-            media,
-            options,
-        );
+        const inputMedia = new TweakpaneInputMedia(media, options);
+
+        this._customInstances.push(inputMedia);
+
+        return inputMedia;
     }
 
     /**

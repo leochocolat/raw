@@ -6,13 +6,14 @@ import vertex from '../shaders/blur/vertex.glsl';
 import fragment from '../shaders/blur/fragment.glsl';
 
 class BlurPlaneBuffer extends THREE.WebGLRenderTarget {
-    constructor(width, height, texture, alphaTexture) {
+    constructor(width, height, texture, alphaTexture, blurFactor) {
         super(width, height);
 
         this._width = width;
         this._height = height;
         this._texture = texture;
         this._alphaTexture = alphaTexture;
+        this._blurFactor = blurFactor;
 
         this._camera = this._createCamera();
         this._scene = this._createScene();
@@ -75,6 +76,8 @@ class BlurPlaneBuffer extends THREE.WebGLRenderTarget {
             u_texture: { value: this._texture },
             u_alphaTexture: { value: this._alphaTexture },
             u_blur_direction: { value: new THREE.Vector2(0, 0) },
+            u_blur_factor: { value: this._blurFactor },
+            u_spreading_treshold: { value: 0.05 },
             u_resolution: { value: new THREE.Vector2(this._width, this._height) },
             u_time: { value: 0.0 },
         };

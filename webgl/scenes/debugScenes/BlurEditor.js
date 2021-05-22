@@ -84,6 +84,7 @@ class BlurEditor extends DebugScene {
         this._plane = this._createPlane();
 
         this._canvasBlurEditor = new CanvasBlurEditor({
+            imageSrc: this._resources.get('blur-mask-test').image.src,
             width: this._texture.image.width,
             height: this._texture.image.height,
             viewportWidth: this._width,
@@ -109,6 +110,7 @@ class BlurEditor extends DebugScene {
         const resources = new ResourceManager();
         resources.addByName('test-blur');
         resources.addByName('video_test_0');
+        resources.addByName('blur-mask-test');
 
         resources.load();
 
@@ -174,22 +176,64 @@ class BlurEditor extends DebugScene {
             ],
         });
 
-        const inputImage = this.debugger.addInputMedia(this._texture.image, { type: 'image', title: 'Upload file', label: 'Image', folder: inputTabs.pages[0] });
+        const inputImage = this.debugger.addInputMedia(this._texture.image, {
+            type: 'image',
+            title: 'Upload file',
+            label: 'Image',
+            folder: inputTabs.pages[0],
+            options: {
+                'test-blur': this._resources.get('test-blur').image.src,
+            },
+        });
         inputImage.on('update', this._imageUpdateHandler);
 
-        const inputVideo = this.debugger.addInputMedia(this._textureVideo.image, { type: 'video', title: 'Upload file', label: 'Video', folder: inputTabs.pages[1] });
+        const inputVideo = this.debugger.addInputMedia(this._textureVideo.image, {
+            type: 'video',
+            title: 'Upload file',
+            label: 'Video',
+            folder: inputTabs.pages[1],
+            options: {
+                'video_test_0': this._resources.get('video_test_0').image.src,
+            },
+        });
         inputVideo.on('update', this._videoUpdateHandler);
 
-        // Drawing
-        const drawSettingsFolder = this._debugFolder.addFolder({ title: 'Draw Settings' });
-        drawSettingsFolder.addInput(this._canvasBlurEditor, 'visible');
-        drawSettingsFolder.addInput(this._canvasBlurEditor, 'allowZoom', { label: 'Enable Zoom' });
-        drawSettingsFolder.addInput(this._canvasBlurEditor, 'pencilRelativeRadius', { label: 'Pencil Radius', min: 0, max: 1 });
-        drawSettingsFolder.addInput(this._canvasBlurEditor, 'pencilOpacity', { label: 'Pencil Opacity', min: 0, max: 1 });
-        drawSettingsFolder.addInput(this._canvasBlurEditor, 'pencilHardness', { label: 'Pencil Hardness', min: 0, max: 1 });
-        drawSettingsFolder.addButton({ title: 'Clear (Cmd+x)' }).on('click', this._clickClearHandler);
-        drawSettingsFolder.addButton({ title: 'Revert (Cmd+z)' }).on('click', this._clickRevertHandler);
-        drawSettingsFolder.addButton({ title: 'Toggle Visibility (Spacebar)' }).on('click', () => {
+        // Mask
+        const maskFolder = this._debugFolder.addFolder({ title: 'Mask' });
+
+        const maskFolderTabs = maskFolder.addTab({
+            pages: [
+                { title: 'Select' },
+                { title: 'Draw' },
+            ],
+        });
+
+        // Select
+        // maskFolderTabs.pages[0].selected = true;
+
+        maskFolderTabs.pages[0].addInput(this._canvasBlurEditor, 'imageSrc', {
+            label: 'Options',
+            options: {
+                'None': null,
+                'Default': this._resources.get('blur-mask-test').image.src,
+            },
+        });
+
+        maskFolderTabs.pages[0].addButton({ label: 'Image', title: 'Apply' }).on('click', () => {
+            this._canvasBlurEditor.drawImage();
+        });
+
+        // Draw
+        // maskFolderTabs.pages[1].selected = true;
+
+        maskFolderTabs.pages[1].addInput(this._canvasBlurEditor, 'visible');
+        maskFolderTabs.pages[1].addInput(this._canvasBlurEditor, 'allowZoom', { label: 'Enable Zoom' });
+        maskFolderTabs.pages[1].addInput(this._canvasBlurEditor, 'pencilRelativeRadius', { label: 'Pencil Radius', min: 0, max: 1 });
+        maskFolderTabs.pages[1].addInput(this._canvasBlurEditor, 'pencilOpacity', { label: 'Pencil Opacity', min: 0, max: 1 });
+        maskFolderTabs.pages[1].addInput(this._canvasBlurEditor, 'pencilHardness', { label: 'Pencil Hardness', min: 0, max: 1 });
+        maskFolderTabs.pages[1].addButton({ title: 'Clear (Cmd+x)' }).on('click', this._clickClearHandler);
+        maskFolderTabs.pages[1].addButton({ title: 'Revert (Cmd+z)' }).on('click', this._clickRevertHandler);
+        maskFolderTabs.pages[1].addButton({ title: 'Toggle Visibility (Spacebar)' }).on('click', () => {
             this._canvasBlurEditor.visible = !this._canvasBlurEditor.visible;
             this._debugger.refresh();
         });

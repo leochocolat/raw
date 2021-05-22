@@ -130,13 +130,13 @@ class BlurScreen {
     }
 
     _createBufferA() {
-        const buffer = new BlurPlaneBuffer(this._bufferWidth, this._bufferHeight, this._screenTexture, this._maskTexture);
+        const buffer = new BlurPlaneBuffer(this._bufferWidth, this._bufferHeight, this._screenTexture, this._maskTexture, this._settings.blur);
 
         return buffer;
     }
 
     _createBufferB() {
-        const buffer = new BlurPlaneBuffer(this._bufferWidth, this._bufferHeight, this._screenTexture, this._maskTexture);
+        const buffer = new BlurPlaneBuffer(this._bufferWidth, this._bufferHeight, this._screenTexture, this._maskTexture, this._settings.blur);
 
         return buffer;
     }
@@ -167,6 +167,9 @@ class BlurScreen {
 
         let writeBuffer = this._bufferA; // Execute blur
         let readBuffer = this._bufferB; // Recieve blur
+
+        this._bufferA.plane.material.uniforms.u_blur_factor.value = this._blurFactor;
+        this._bufferB.plane.material.uniforms.u_blur_factor.value = this._blurFactor;
 
         for (let i = 0; i < iterations; i++) {
             const radius = (iterations - i - 1) * this._settings.blur;

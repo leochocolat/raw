@@ -11,6 +11,7 @@ class TweakpaneInputMedia {
 
         this._button = this._createButton();
         this._input = this._createInput();
+        this._optionsInput = this._createOptionsInput();
         this._monitor = this._createMonitor();
         this._previewMonitor = this._createPreviewMonitor();
         this._applyButton = this._createApplyButton();
@@ -31,6 +32,11 @@ class TweakpaneInputMedia {
         }
     }
 
+    destroy() {
+        this._input.remove();
+        this._removeEventListeners();
+    }
+
     /**
      * Private
      */
@@ -48,6 +54,15 @@ class TweakpaneInputMedia {
         input.type = 'file';
         input.accept = this._isVideo ? 'video/mp4, video/mov' : 'image/png, image/jpeg, image/jpg';
         document.body.append(input);
+
+        return input;
+    }
+
+    _createOptionsInput() {
+        const input = this._options.folder.addInput(this._media, 'src', {
+            label: 'options',
+            options: this._options.options,
+        });
 
         return input;
     }
@@ -93,7 +108,6 @@ class TweakpaneInputMedia {
     }
 
     _readFile() {
-        // console.log(this._input.files[0]);
         this._fileReader.readAsDataURL(this._input.files[0]);
     }
 
@@ -143,7 +157,6 @@ class TweakpaneInputMedia {
     }
 
     _clickApplyHandler() {
-        console.log(this._media);
         if (this._updateCallback) {
             this._updateCallback(this._media);
         }
