@@ -270,13 +270,13 @@ class RenderTargetScene extends THREE.Scene {
         this._cameraPosition.current.x = math.lerp(this._cameraPosition.current.x, this._cameraPosition.target.x, damping);
         this._cameraPosition.current.y = math.lerp(this._cameraPosition.current.y, this._cameraPosition.target.y, damping);
 
-        // Rotation
+        // // Rotation
         this._cameraRotation.current.x = math.lerp(this._cameraRotation.current.x, this._cameraRotation.target.x, damping);
-        this._cameraRotation.current.y = math.lerp(this._cameraRotation.current.y, this._cameraRotation.target.y, damping);
+        // this._cameraRotation.current.y = math.lerp(this._cameraRotation.current.y, this._cameraRotation.target.y, damping);
 
         this.cameras.main.position.set(this._cameraPosition.current.x, this._cameraPosition.current.y, this._cameraPosition.current.z);
         this.cameras.main.rotation.y = this._cameraRotation.current.x;
-        this.cameras.main.rotation.x = this._cameraRotation.current.y;
+        // this.cameras.main.rotation.x = this._cameraRotation.current.y;
     }
 
     _createDebugCube() {
