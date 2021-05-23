@@ -32,11 +32,13 @@ class RenderTargetScene extends THREE.Scene {
         this._cameraPosition = {
             current: new THREE.Vector3(0, 0, 0),
             target: new THREE.Vector3(0, 0, 0),
+            initial: new THREE.Vector3(0, 0, 0),
         };
 
         this._cameraRotation = {
             current: new THREE.Vector3(0, 0, 0),
             target: new THREE.Vector3(0, 0, 0),
+            initial: new THREE.Vector3(0, 0, 0),
         };
 
         this._interactionsSettings = JSON.parse(JSON.stringify(data.settings.mouseInteractions));
@@ -174,6 +176,15 @@ class RenderTargetScene extends THREE.Scene {
 
     setModelCamera(camera) {
         this.cameras.setModelCamera(camera);
+
+        this._cameraPosition.initial.set(camera.position.x, camera.position.y, camera.position.z);
+        this._cameraRotation.initial.set(camera.rotation.x, camera.rotation.y, camera.rotation.z);
+
+        this._cameraRotation.target.x = this._cameraRotation.initial.x;
+        this._cameraRotation.current.x = this._cameraRotation.initial.x;
+
+        this._cameraRotation.target.y = this._cameraRotation.initial.y;
+        this._cameraRotation.current.y = this._cameraRotation.initial.y;
     }
 
     // Hooks
@@ -188,8 +199,8 @@ class RenderTargetScene extends THREE.Scene {
         this._cameraPosition.target.y = e.normalizedPosition.y * positionFactor.y;
 
         // Rotation
-        this._cameraRotation.target.x = e.normalizedPosition.x * rotationFactor.x * (Math.PI / 180);
-        this._cameraRotation.target.y = e.normalizedPosition.y * rotationFactor.y * (Math.PI / 180);
+        this._cameraRotation.target.x = e.normalizedPosition.y * rotationFactor.y * (Math.PI / 180) + this._cameraRotation.initial.x;
+        this._cameraRotation.target.y = e.normalizedPosition.x * rotationFactor.x * (Math.PI / 180) + this._cameraRotation.initial.y;
     }
 
     update() {
@@ -252,12 +263,12 @@ class RenderTargetScene extends THREE.Scene {
 
     _resetCameraPosition() {
         // Position
-        this._cameraPosition.target.x = 0;
-        this._cameraPosition.target.y = 0;
+        this._cameraPosition.target.x = this._cameraPosition.initial.x;
+        this._cameraPosition.target.y = this._cameraPosition.initial.y;
 
         // Rotation
-        this._cameraRotation.target.x = 0;
-        this._cameraRotation.target.y = 0;
+        this._cameraRotation.target.x = this._cameraRotation.initial.x;
+        this._cameraRotation.target.y = this._cameraRotation.initial.y;
     }
 
     _updateCameraPosition() {
@@ -270,13 +281,13 @@ class RenderTargetScene extends THREE.Scene {
         this._cameraPosition.current.x = math.lerp(this._cameraPosition.current.x, this._cameraPosition.target.x, damping);
         this._cameraPosition.current.y = math.lerp(this._cameraPosition.current.y, this._cameraPosition.target.y, damping);
 
-        // // Rotation
+        // Rotation
         this._cameraRotation.current.x = math.lerp(this._cameraRotation.current.x, this._cameraRotation.target.x, damping);
-        // this._cameraRotation.current.y = math.lerp(this._cameraRotation.current.y, this._cameraRotation.target.y, damping);
+        this._cameraRotation.current.y = math.lerp(this._cameraRotation.current.y, this._cameraRotation.target.y, damping);
 
-        this.cameras.main.position.set(this._cameraPosition.current.x, this._cameraPosition.current.y, this._cameraPosition.current.z);
-        this.cameras.main.rotation.y = this._cameraRotation.current.x;
-        // this.cameras.main.rotation.x = this._cameraRotation.current.y;
+        this.cameras.main.position.set(this._cameraPosition.current.x, this._cameraPosition.current.z, this._cameraPosition.current.y);
+        this.cameras.main.rotation.x = this._cameraRotation.current.x;
+        this.cameras.main.rotation.y = this._cameraRotation.current.y;
     }
 
     _createDebugCube() {
@@ -306,8 +317,8 @@ class RenderTargetScene extends THREE.Scene {
 
         const interactions = folder.addFolder({ title: 'Interactions', expanded: true });
         interactions.addInput(this._interactionsSettings, 'isEnable', { label: 'enable' });
-        interactions.addInput(this._interactionsSettings.positionFactor, 'x', { label: 'Position X', min: 0, max: 10 });
-        interactions.addInput(this._interactionsSettings.positionFactor, 'y', { label: 'Position Y', min: 0, max: 10 });
+        interactions.addInput(this._interactionsSettings.positionFactor, 'x', { label: 'Position X', min: -10, max: 10 });
+        interactions.addInput(this._interactionsSettings.positionFactor, 'y', { label: 'Position Y', min: -10, max: 10 });
         // Degrees
         interactions.addInput(this._interactionsSettings.rotationFactor, 'x', { label: 'Rotation X', min: -90, max: 90 });
         interactions.addInput(this._interactionsSettings.rotationFactor, 'y', { label: 'Rotation Y', min: -90, max: 90 });
