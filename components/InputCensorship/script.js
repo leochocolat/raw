@@ -18,6 +18,7 @@ export default {
             // Submit
             isSubmitting: false,
             isSent: false,
+            allowSubmit: true,
             // Censorship
             newCensorshipFactor: this.$store.state.data.scenes[this.scene.id].censorshipFactor || this.scene.censorshipFactor,
             censorshipDelta: this.$store.state.data.scenes[this.scene.id].censorshipDelta || 0,
@@ -42,6 +43,10 @@ export default {
                 fr: 'La censure de ce contenu a bien été prise en compte',
                 en: 'The censorship of this content has been updated successfully',
             },
+            successMessage: {
+                fr: 'Choix validé',
+                en: 'Choice confirmed',
+            },
         };
     },
 
@@ -61,11 +66,40 @@ export default {
          * Public
          */
         transitionIn() {
-            this.$store.dispatch('setInstructions', this.scene.instruction);
+            const timeline = new gsap.timeline();
+
+            timeline.call(() => {
+                this.$store.dispatch('setInstructions', this.scene.instruction);
+                this.allowSubmit = true;
+            }, null, 0);
+
+            return timeline;
         },
 
         transitionOut() {
-            this.$store.dispatch('setInstructions', '');
+            const timeline = new gsap.timeline();
+
+            timeline.call(() => {
+                // this.$store.dispatch('setInstructions', '');
+                this.allowSubmit = false;
+            }, null, 0);
+
+            return timeline;
+        },
+
+        setComplete() {
+            const timelineComplete = new gsap.timeline();
+
+            // timelineComplete.to(this.$refs.rangeLimit, { duration: 0.5, alpha: 0 }, 0);
+            // timelineComplete.to(this.$refs.cursor, { duration: 0.5, alpha: 0 }, 0);
+            // timelineComplete.to(this.$refs.censorshipContainer, { duration: 0.5, alpha: 0 }, 0);
+            timelineComplete.to(this.$refs.range, { duration: 0.5, alpha: 0 }, 0);
+            timelineComplete.to(this.$el, { duration: 0.5, y: '-100%', ease: 'power2.out' }, 0.5);
+            timelineComplete.to(this.$refs.successMessage, { duration: 0.5, alpha: 1 }, 0.8);
+
+            timelineComplete.call(() => {
+                this.$parent.stepCompleteHandler({ id: 0 });
+            }, null);
         },
 
         /**
@@ -158,8 +192,8 @@ export default {
                     // Update store
                     this.updateStore();
 
-                    // Redirect to home
-                    this.$router.push(this.localePath('prototype'));
+                    // Set Step Complete
+                    this.setComplete();
                 })
                 .catch(() => {
                     this.isSubmitting = false;
@@ -215,6 +249,7 @@ export default {
         },
 
         keydownHandler(e) {
+            if (!this.allowSubmit) return;
             if (e.key === 'Enter') this.submit();
         },
 

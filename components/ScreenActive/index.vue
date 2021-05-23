@@ -18,7 +18,7 @@
                 </div>
             </div>
 
-            <Censorship class="censorship" :data="scene" />
+            <Censorship ref="censorship" class="censorship" :data="scene" />
 
         </div>
     </div>

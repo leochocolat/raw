@@ -31,6 +31,14 @@ export default {
         /**
          * Public
          */
+        transitionIn() {
+            return this.$refs.censorship.transitionIn();
+        },
+
+        transitionOut() {
+            return this.$refs.censorship.transitionOut();
+        },
+
         startClock() {
             this._clock = setInterval(this.clockHandler, 1000);
         },

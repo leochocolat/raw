@@ -11,6 +11,10 @@ const actions = {
         commit('SET_SCENE_CENSORSHIP_DELTA', { id, value });
     },
 
+    setSceneCensorshipMessage({ commit }, { id, message }) {
+        commit('SET_SCENE_CENSORSHIP_MESSAGE', { id, message });
+    },
+
     setSceneComplete({ commit }, { id, value }) {
         commit('SET_SCENE_COMPLETE', { id, value });
     },

@@ -21,7 +21,7 @@ export default {
     },
 
     mounted() {
-        this.$refs.inputCensorship.transitionIn();
+
     },
 
     beforeDestroy() {
@@ -29,6 +29,26 @@ export default {
     },
 
     methods: {
+        /**
+         * Public
+         */
+        transitionIn() {
+            return this.$refs.inputCensorship.transitionIn();
+        },
 
+        transitionOut() {
+            return this.$refs.inputCensorship.transitionOut();
+        },
+
+        stepCompleteHandler(e) {
+            const stepId = e.id;
+
+            if (stepId === 0) {
+                this.$refs.inputCensorshipText.transitionIn();
+            } else {
+                // Redirect to home
+                this.$router.push(this.localePath('prototype'));
+            }
+        },
     },
 };

@@ -15,6 +15,10 @@ const mutations = {
         state.scenes[id].censorshipDelta = value;
     },
 
+    SET_SCENE_CENSORSHIP_MESSAGE(state, { id, message }) {
+        state.scenes[id].message = message;
+    },
+
     SET_SCENE_COMPLETE(state, { id, value }) {
         state.scenes[id].isComplete = value;
 
