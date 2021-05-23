@@ -4,10 +4,23 @@ const resources = [
         type: 'gltf',
         name: 'hallway',
         namespace: 'hallway',
-        path: '/models/scene_hallway-d.glb',
+        path: '/models/scene_hallway_2.glb',
         preload: false,
     },
-
+    {
+        type: 'gltf',
+        name: 'LyceenHomme',
+        path: '/models/LyceenHomme.glb',
+        namespace: 'hallway',
+        preload: false,
+    },
+    {
+        type: 'gltf',
+        name: 'LyceenFemme',
+        path: '/models/LyceenFemme.glb',
+        namespace: 'hallway',
+        preload: false,
+    },
     // Hallway
     {
         type: 'basis',

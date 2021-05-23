@@ -36,13 +36,6 @@ const webgl = [
         path: '/models/CameraMovement.glb',
         preload: false,
     },
-    {
-        type: 'gltf',
-        name: 'HommeAdulte',
-        path: '/models/HommeAdulte-d.glb',
-        namespace: 'animTexture',
-        preload: false,
-    },
 
     // Test Animations
     {

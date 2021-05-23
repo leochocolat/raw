@@ -9,6 +9,7 @@ import BlurScreen from '../utils/BlurScreen';
 import AnimationComponent from '@/utils/AnimationComponent';
 import bindAll from '@/utils/bindAll';
 import { ResourceManager } from '@/utils/resource-loader';
+import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
 
 class Hallway extends RenderTargetScene {
     constructor(options) {
@@ -34,7 +35,7 @@ class Hallway extends RenderTargetScene {
 
         if (!this._animationController) return;
 
-        this._animationController.playAnimation({ animation: this._animationController.actionType.CameraMove, loop: false });
+        this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_CameraMovement, loop: false });
     }
 
     setCensorship(censorshipFactor) {
@@ -50,6 +51,11 @@ class Hallway extends RenderTargetScene {
 
         if (!this._animationController) return;
         this._animationController.update(this._sceneDelta);
+
+        if (!this._humanAnimationControllers.length < 0) return;
+        for (let index = 0; index < this._humanAnimationControllers.length; index++) {
+            this._humanAnimationControllers[index].update(this._sceneDelta);
+        }
     }
 
     /**
@@ -72,6 +78,9 @@ class Hallway extends RenderTargetScene {
 
         this._animationController = this._createAnimationController();
         this._modelCamera = this._createModelCameraAnimation();
+        this._modelCamera = this._createHumanModels();
+
+        // this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_CameraMovement, loop: false });
     }
 
     _createModel() {
@@ -93,7 +102,7 @@ class Hallway extends RenderTargetScene {
         const screenTexture = this._resources.get('video-gore-test');
         const maskTexture = this._resources.get('blur-mask-test');
 
-        const screen = this._model.scene.getObjectByName('Interaction_SCREEN');
+        const screen = this._model.scene.getObjectByName('Interaction_Screen');
         this._blurScreen = new BlurScreen({ blurFactor: 0.5, scenePlane: screen, maskTexture, screenTexture, renderer: this._renderer, width: this._width, height: this._height });
     }
 
@@ -121,6 +130,30 @@ class Hallway extends RenderTargetScene {
         this.cameras.setModelCamera(this._model.cameras[0]);
 
         return this._model.cameras[0];
+    }
+
+    _createHumanModels() {
+        this._humanAnimationControllers = [];
+        const modelMan = this._resources.get('LyceenHomme');
+        const modelGirl = this._resources.get('LyceenFemme');
+        this.add(modelGirl.scene);
+
+        this._modelsCount = this._model.scene.getObjectByName('ModelsPositions').children.length;
+
+        this._modelsPositions = [...this._model.scene.getObjectByName('ModelsPositions').children];
+
+        const animations = ['LyceenHomme_Phone', 'LyceenHomme_TalkArmPush'];
+
+        for (let index = 0; index < this._modelsCount; index++) {
+            const skinnedModelCloned = cloneSkinnedMesh(modelMan);
+            skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
+
+            const animationController = new AnimationComponent(skinnedModelCloned);
+            animationController.playAnimation({ animation: animationController.actionType[animations[index]], loop: false });
+
+            this._humanAnimationControllers.push(animationController);
+            this.add(skinnedModelCloned.scene);
+        }
     }
 
     _updateSettings() {
@@ -166,11 +199,11 @@ class Hallway extends RenderTargetScene {
     }
 
     _animationsProgressChangeHandler() {
-        this._animationController.setAnimationProgress({ animation: this._animationController.actionType.CameraMove, progress: this._animationsSettings.progress });
+        this._animationController.setAnimationProgress({ animation: this._animationController.actionType.TRACK_CameraMovement, progress: this._animationsSettings.progress });
     }
 
     _clickPlayAnimationsHandler() {
-        this._animationController.playAnimation({ animation: this._animationController.actionType.CameraMove, loop: false });
+        this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_CameraMovement, loop: false });
     }
 }
 
