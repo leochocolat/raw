@@ -50,5 +50,13 @@ export default {
                 this.$router.push(this.localePath('prototype'));
             }
         },
+
+        showMessages() {
+            this.$refs.censorshipMessages.transitionIn();
+        },
+
+        hideMessages() {
+            this.$refs.censorshipMessages.transitionOut();
+        },
     },
 };

@@ -3,6 +3,12 @@
 
         <div class="container">
 
+            <CensorshipMessages
+                ref="censorshipMessages"
+                class="censorshipMessages"
+                :scene="data"
+            />
+
             <div class="form">
 
                 <InputCensorship

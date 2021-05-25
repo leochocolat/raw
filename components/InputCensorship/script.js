@@ -158,6 +158,7 @@ export default {
             if (this.hasStartedDraging) return;
             if (this.censorshipDelta !== 0) {
                 this.hasStartedDraging = true;
+                this.$parent.showMessages();
                 this.$store.dispatch('setInstructions', this.validationInstruction[this.lang]);
             }
         },

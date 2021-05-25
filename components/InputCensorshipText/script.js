@@ -124,6 +124,10 @@ export default {
             const timelineComplete = new gsap.timeline();
 
             timelineComplete.call(() => {
+                this.$parent.hideMessages();
+            }, null);
+
+            timelineComplete.call(() => {
                 this.$parent.stepCompleteHandler({ id: 1 });
             }, null);
         },
