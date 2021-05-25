@@ -37,7 +37,11 @@
 }
 
 .messages-list {
-    
+    padding: 0 vw(8px);
+
+    @include respond-to('large') {
+        padding: 0 vw-l(8px);
+    }
 }
 
 .messages-list-item {

@@ -17,8 +17,8 @@ const getters = {
         };
     },
 
-    isStopped(state) {
-        return state.isStopped;
+    isComplete(state) {
+        return state.isComplete;
     },
 };
 

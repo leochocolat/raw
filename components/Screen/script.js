@@ -29,6 +29,8 @@ export default {
         ...mapGetters({
             isSceneComplete: 'data/isSceneComplete',
             sceneCensorshipFactor: 'data/sceneCensorshipFactor',
+            isFullComplete: 'data/isComplete',
+            isStopped: 'stop/isStopped',
         }),
 
         censorshipFactor() {

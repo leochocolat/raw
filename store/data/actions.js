@@ -18,10 +18,6 @@ const actions = {
     setSceneComplete({ commit }, { id, value }) {
         commit('SET_SCENE_COMPLETE', { id, value });
     },
-
-    stop({ commit }) {
-        commit('SET_STOPPED');
-    },
 };
 
 export default actions;

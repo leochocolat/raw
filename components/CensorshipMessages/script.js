@@ -41,8 +41,9 @@ export default {
         this.cloneMessages();
         this.setupEventListeners();
 
-        window.transitionIn = this.transitionIn;
-        window.transitionOut = this.transitionOut;
+        // Debug
+        // window.transitionIn = this.transitionIn;
+        // window.transitionOut = this.transitionOut;
     },
 
     beforeDestroy() {
@@ -179,18 +180,9 @@ export default {
         /**
          * Utils
          */
-        number(index) {
-            let number = index;
-
-            if (index < 10) {
-                number = `00${index}`;
-            }
-
-            if (index >= 10 && index < 100) {
-                number = `0${index}`;
-            }
-
-            return number;
+        userId(index) {
+            const zeroFilled = ('000' + index).substr(-3);
+            return zeroFilled;
         },
     },
 };

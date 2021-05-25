@@ -9,10 +9,6 @@
 
             <Frame ref="frame" />
 
-            <div v-if="isComplete" class="message-complete">
-                {{ lang === 'fr' ? 'Terminé' : 'Done' }}
-            </div>
-
             <!-- Scene is not completed -->
             <div v-if="!isComplete" class="screen-footer">
                 <div class="call-to-action">
@@ -23,12 +19,30 @@
                 </div>
             </div>
 
-            <!-- Scene is completed -->
-            <div v-else class="screen-footer">
+            <!-- Displayed when the scenario is completed -->
+            <div v-if="isComplete && !isFullComplete" class="message-complete">
+                {{ lang === 'fr' ? 'Terminé' : 'Done' }}
+            </div>
+
+            <!-- Displayed when the scenario is completed -->
+            <div v-if="isComplete && !isFullComplete" class="screen-footer">
                 <div class="call-to-action">
                     <span>{{ resultTitle[lang] }}<ArrowDown class="arrow-down" /> </span><br /><span>{{ Math.round(censorshipFactor * 100) }}%</span>
                 </div>
                 <div class="name">
+                    {{ data.name }}
+                </div>
+            </div>
+
+            <!-- Displayed only when every scenerio is completed -->
+            <Stats v-if="isFullComplete || isStopped" :id="id" ref="stats" :data="data" />
+
+            <!-- Displayed only when every scenerio is completed -->
+            <div v-if="isFullComplete" class="screen-footer">
+                <div class="call-to-action">
+                </div>
+                <div class="name">
+                    <br>
                     {{ data.name }}
                 </div>
             </div>

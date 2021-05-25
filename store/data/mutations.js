@@ -29,10 +29,6 @@ const mutations = {
 
         state.isComplete = true;
     },
-
-    SET_STOPPED(state) {
-        state.isStopped = true;
-    },
 };
 
 export default mutations;
