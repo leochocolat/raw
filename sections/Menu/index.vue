@@ -1,6 +1,8 @@
 <template>
     <div class="menu">
         <div class="screens-container">
+            <div class="vertical"></div>
+            <div class="horizontal"></div>
             <Screen
                 :id="sceneEntries['hallway'].id"
                 :data="sceneEntries['hallway']"

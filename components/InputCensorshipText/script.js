@@ -47,7 +47,7 @@ export default {
         transitionIn() {
             const timeline = new gsap.timeline();
 
-            timeline.to(this.$el, { duration: 0.5, alpha: 1 });
+            timeline.to(this.$el, { duration: 0.5, autoAlpha: 1 });
             timeline.call(this.focus, null, 0.5);
             timeline.call(() => {
                 this.$store.dispatch('setInstructions', this.scene.instruction2);
