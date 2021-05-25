@@ -30,6 +30,13 @@ const data = {
         'purple',
         //
     ],
+
+    seconds: {
+        hallway: 2,
+        library: 48,
+        supermarket: 21,
+        bar: 33,
+    },
 };
 
 export default data;
