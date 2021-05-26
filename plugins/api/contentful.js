@@ -177,6 +177,9 @@ export default function({ i18n, error, store }) {
             }
             const newFactor = sumFactor / newData.length;
 
+            // Set new censorship to the store
+            store.dispatch('data/setSceneCensorshipNewFactor', { id: response.fields.id, value: newFactor });
+
             // Update censorship data
             updateEntry(sysId, {
                 [FIELD_CENSORSHIP_DATA]: {

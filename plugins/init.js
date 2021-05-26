@@ -1,4 +1,6 @@
-export default ({ query, store, $cookies }) => {
+export default (context) => {
+    const { query, store, $cookies, $api } = context;
+
     /**
      * Context
      */
@@ -18,23 +20,41 @@ export default ({ query, store, $cookies }) => {
     /**
      * User
      */
-    const data = $cookies.get('data');
-
-    if (data) {
-        // Send datas to store
-        store.dispatch('data/setFromCookies', data);
-    } else {
-        // Set initial datas
-        $cookies.set('data', store.state.data, {
-            // One month
-            expires: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
-            maxAge: 1000 * 3600 * 24 * 30,
-        });
-    }
-
     const stop = $cookies.get('stop');
 
     if (stop) {
         store.dispatch('stop/stop');
     }
+
+    const promise = new Promise((resolve) => {
+        /**
+         * If Cookies are already provided,
+         * dispatch into the store and resolve promise
+         */
+        if ($cookies.get('data')) {
+            store.dispatch('data/setFromCookies', $cookies.get('data'));
+            resolve();
+        } else {
+            // Fetch Scene entries
+            $api.getScenesEntries().then((response) => {
+                // Dispatch data into the store
+                for (const key in response) {
+                    const scene = response[key];
+                    store.dispatch('data/setSceneCensorshipInitialFactor', { id: key, value: scene.censorshipFactor });
+                }
+
+                console.log(store.state.data);
+
+                $cookies.set('data', store.state.data, {
+                    // One month
+                    expires: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
+                    maxAge: 1000 * 3600 * 24 * 30,
+                });
+
+                resolve();
+            });
+        }
+    });
+
+    return promise;
 };

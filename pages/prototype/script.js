@@ -16,9 +16,12 @@ export default {
         ];
 
         return Promise.all(promises).then((responses) => {
+            const homeEntry = responses[0];
+            const sceneEntries = responses[1];
+
             return {
-                home: responses[0],
-                sceneEntries: responses[1],
+                home: homeEntry,
+                sceneEntries,
             };
         });
     },
@@ -38,7 +41,7 @@ export default {
         firstReveal(done, routeInfos) {
             const timeline = gsap.timeline({ onComplete: done });
 
-            timeline.to(this.$el, { duration: 0.5, alpha: 1, ease: 'circ.inOut' });
+            timeline.to(this.$el, { duration: 0.1, alpha: 1, ease: 'circ.inOut' });
             timeline.add(this.$refs.menu.transitionIn());
             timeline.call(() => this.$store.dispatch('scenes/setMenuScene', true), null, 0);
             timeline.call(() => this.$store.dispatch('scenes/setActiveScene', ''), null, 0);
@@ -49,7 +52,7 @@ export default {
         transitionIn(done, routeInfos) {
             const timeline = gsap.timeline({ onComplete: done });
 
-            timeline.to(this.$el, 1, { alpha: 1, ease: 'circ.inOut' }, 1);
+            timeline.to(this.$el, { duration: 0.1, alpha: 1, ease: 'circ.inOut' }, 1);
             timeline.add(this.$refs.menu.transitionIn());
             timeline.call(() => this.$store.dispatch('scenes/setMenuScene', true), null, 0);
             timeline.call(() => this.$store.dispatch('scenes/setActiveScene', ''), null, 0);

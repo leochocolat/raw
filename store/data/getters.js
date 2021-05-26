@@ -1,4 +1,10 @@
 const getters = {
+    sceneData(state) {
+        return (id) => {
+            return state.scenes[id];
+        };
+    },
+
     sceneCensorshipFactor(state) {
         return (id) => {
             return state.scenes[id].censorshipFactor;

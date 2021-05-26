@@ -27,6 +27,10 @@ export default {
                 fr: 'Votre message a bien été enregistré',
                 en: 'Your message has been sent successfully',
             },
+            successMessage: {
+                fr: 'Envoyé avec succès',
+                en: 'Successfully sent',
+            },
             // Input
             message: '',
         };
@@ -123,13 +127,10 @@ export default {
         setComplete() {
             const timelineComplete = new gsap.timeline();
 
-            timelineComplete.call(() => {
-                this.$parent.hideMessages();
-            }, null);
-
-            timelineComplete.call(() => {
-                this.$parent.stepCompleteHandler({ id: 1 });
-            }, null);
+            timelineComplete.to(this.$refs.textarea, { duration: 0.1, alpha: 0 });
+            timelineComplete.to(this.$refs.successMessage, { duration: 0.1, alpha: 1 }, 0.3);
+            timelineComplete.call(() => { this.$parent.hideMessages(); }, null);
+            timelineComplete.call(() => { this.$parent.stepCompleteHandler({ id: 1 }); }, null);
         },
 
         setupEventListeners() {

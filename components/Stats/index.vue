@@ -19,7 +19,7 @@
                     </div>
 
                     <div class="stat" :class="index === 3 ? 'red' : ''">
-                        {{ stats[index] }}%
+                        {{ stats[index] }}
                     </div>
                 </div>
 

@@ -1,5 +1,5 @@
 <template>
-    <div :class="`screen ${isComplete ? 'is-complete' : ''} ${isDisable ? 'is-disable' : ''}`">
+    <div :class="`screen ${isComplete || isStopped ? 'is-complete' : ''} ${isDisable ? 'is-disable' : ''}`">
 
         <div class="container">
 

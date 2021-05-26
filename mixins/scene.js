@@ -24,7 +24,7 @@ export default {
 
             timeline.call(() => this.$store.dispatch('scenes/setMenuScene', false), 0);
             timeline.call(() => this.$store.dispatch('scenes/setActiveScene', this.$options.name), 0);
-            timeline.to(this.$el, { duration: 0.5, alpha: 1, ease: 'circ.inOut' }, 2);
+            timeline.to(this.$el, { duration: 0.1, alpha: 1, ease: 'circ.inOut' }, 2);
             timeline.add(this.$refs.screenActive.transitionIn(), 2);
 
             return timeline;
@@ -35,7 +35,7 @@ export default {
 
             timeline.call(() => this.$store.dispatch('scenes/setMenuScene', false), 0);
             timeline.call(() => this.$store.dispatch('scenes/setActiveScene', this.$options.name), 0);
-            timeline.to(this.$el, { duration: 0.5, alpha: 1, ease: 'circ.inOut' }, 0.5);
+            timeline.to(this.$el, { duration: 0.1, alpha: 1, ease: 'circ.inOut' }, 0.5);
             timeline.add(this.$refs.screenActive.transitionIn(), 0.5);
 
             return timeline;
@@ -44,7 +44,7 @@ export default {
         transitionOut(done, routeInfos) {
             const timeline = gsap.timeline({ onComplete: done });
 
-            timeline.to(this.$el, { duration: 0.5, alpha: 0, ease: 'circ.inOut' });
+            timeline.to(this.$el, { duration: 0.1, alpha: 0, ease: 'circ.inOut' });
             timeline.add(this.$refs.screenActive.transitionOut(), 0);
 
             return timeline;

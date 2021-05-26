@@ -48,8 +48,8 @@ export default {
     plugins: [
         '@/plugins/listeners.client.js',
         '@/plugins/init.client.js',
-        '@/plugins/init.js',
         '@/plugins/api/index',
+        '@/plugins/init.js',
     ],
 
     /*

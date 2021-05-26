@@ -5,6 +5,13 @@
         <div class="label">
             <ArrowDown class="arrow-down" /><br>
             <label for="censorship-text">{{ label2 }}</label>
+
+            <!-- successMessage -->
+            <div ref="successMessage" class="success-message-container">
+                <div class="success-message-content">
+                    <span>{{ successMessage[lang] }}</span>
+                </div>
+            </div>
         </div>
 
         <div class="text-area-container">
