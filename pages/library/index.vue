@@ -1,7 +1,7 @@
 <template>
     <div class="page-library">
 
-        <ScreenActive :scene="scene" />
+        <ScreenActive ref="screenActive" :scene="scene" />
 
     </div>
 </template>

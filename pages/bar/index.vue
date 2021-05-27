@@ -1,7 +1,7 @@
 <template>
     <div class="page-bar">
 
-        <ScreenActive :scene="scene" />
+        <ScreenActive ref="screenActive" :scene="scene" />
 
     </div>
 </template>

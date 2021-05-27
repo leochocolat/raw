@@ -12,6 +12,7 @@ const configManagment = {
 };
 
 const FIELD_CENSORSHIP_DATA = 'censorshipData';
+const FIELD_CENSORSHIP_MESSAGES = 'censorshipMessages';
 const FIELD_CENSORSHIP_FACTOR = 'censorshipFactor';
 
 export default function({ i18n, error, store }) {
@@ -176,6 +177,9 @@ export default function({ i18n, error, store }) {
             }
             const newFactor = sumFactor / newData.length;
 
+            // Set new censorship to the store
+            store.dispatch('data/setSceneCensorshipNewFactor', { id: response.fields.id, value: newFactor });
+
             // Update censorship data
             updateEntry(sysId, {
                 [FIELD_CENSORSHIP_DATA]: {
@@ -185,6 +189,32 @@ export default function({ i18n, error, store }) {
                 },
                 [FIELD_CENSORSHIP_FACTOR]: {
                     'fr-FR': newFactor,
+                },
+            }).then((response) => {
+                response.publish();
+            });
+        });
+    }
+
+    /**
+     * Add censorship message for a specific scene entry
+     * @param {String} name
+     * @param {Number} value
+     * @return {Promise}
+     */
+    function addSceneCensorshipMessage(sysId, message) {
+        return getEntryById(sysId).then((response) => {
+            const data = response.fields[FIELD_CENSORSHIP_MESSAGES];
+
+            const newData = data && data.messages ? data.messages : [];
+            newData.push(message);
+
+            // // Update censorship data
+            updateEntry(sysId, {
+                [FIELD_CENSORSHIP_MESSAGES]: {
+                    'fr-FR': {
+                        messages: newData,
+                    },
                 },
             }).then((response) => {
                 response.publish();
@@ -202,5 +232,6 @@ export default function({ i18n, error, store }) {
         // Custom
         getScenesEntries,
         updateSceneCensorship,
+        addSceneCensorshipMessage,
     };
 }

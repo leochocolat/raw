@@ -7,12 +7,24 @@ const mutations = {
         state.isComplete = data.isComplete;
     },
 
+    SET_SCENE_CENSORSHIP_INITIAL_FACTOR(state, { id, value }) {
+        state.scenes[id].initalCensorshipFactor = value;
+    },
+
     SET_SCENE_CENSORSHIP_FACTOR(state, { id, value }) {
         state.scenes[id].censorshipFactor = value;
     },
 
+    SET_SCENE_CENSORSHIP_NEW_FACTOR(state, { id, value }) {
+        state.scenes[id].censorshipNewFactor = value;
+    },
+
     SET_SCENE_CENSORSHIP_DELTA(state, { id, value }) {
         state.scenes[id].censorshipDelta = value;
+    },
+
+    SET_SCENE_CENSORSHIP_MESSAGE(state, { id, message }) {
+        state.scenes[id].message = message;
     },
 
     SET_SCENE_COMPLETE(state, { id, value }) {
@@ -24,10 +36,6 @@ const mutations = {
         }
 
         state.isComplete = true;
-    },
-
-    SET_STOPPED(state) {
-        state.isStopped = true;
     },
 };
 

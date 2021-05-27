@@ -113,7 +113,6 @@ class DragManager {
 
     // Mouse
     _mousedownHandler(e) {
-        console.log(e);
         this._isDraging = true;
 
         const position = {

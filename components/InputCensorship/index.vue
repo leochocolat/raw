@@ -5,11 +5,18 @@
         <div class="label">
             <ArrowDown class="arrow-down" /><br>
             {{ label1 }}
+
+            <div ref="successMessage" class="success-message-container">
+                <div class="success-message-content">
+                    <span>{{ successMessage[lang] }}</span>
+                    <span>[{{ Math.round(newCensorshipFactor * 100) }}%]</span>
+                </div>
+            </div>
         </div>
 
         <div ref="range" class="censorship-range">
 
-            <div class="censorship-progress-container">
+            <div ref="censorshipContainer" class="censorship-progress-container">
                 <div class="censorship-progress" :style="`width: ${dragPosition}px;`"></div>
             </div>
 
@@ -18,7 +25,7 @@
                 <span class="current-censorship"> {{ Math.round(newCensorshipFactor * 100) }}%</span>
             </div>
 
-            <div class="cursor" :style="`transform: translateX(${dragPosition}px)`">
+            <div ref="cursor" class="cursor" :style="`transform: translateX(${dragPosition}px)`">
                 <CursorCensorship />
             </div>
 

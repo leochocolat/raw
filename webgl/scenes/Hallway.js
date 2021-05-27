@@ -133,7 +133,7 @@ class Hallway extends RenderTargetScene {
     _createModelCameraAnimation() {
         if (!this._model.cameras) return;
 
-        this.cameras.setModelCamera(this._model.cameras[0]);
+        this.setModelCamera(this._model.cameras[0]);
 
         return this._model.cameras[0];
     }

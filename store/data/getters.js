@@ -1,4 +1,10 @@
 const getters = {
+    sceneData(state) {
+        return (id) => {
+            return state.scenes[id];
+        };
+    },
+
     sceneCensorshipFactor(state) {
         return (id) => {
             return state.scenes[id].censorshipFactor;
@@ -17,8 +23,8 @@ const getters = {
         };
     },
 
-    isStopped(state) {
-        return state.isStopped;
+    isComplete(state) {
+        return state.isComplete;
     },
 };
 

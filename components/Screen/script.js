@@ -5,6 +5,9 @@ import ArrowDown from '@/assets/icons/arrow-down.svg?inline';
 import gsap from 'gsap';
 import { mapGetters } from 'vuex';
 
+// Data
+import data from '@/webgl/data';
+
 export default {
     props: ['id', 'data'],
 
@@ -29,6 +32,8 @@ export default {
         ...mapGetters({
             isSceneComplete: 'data/isSceneComplete',
             sceneCensorshipFactor: 'data/sceneCensorshipFactor',
+            isFullComplete: 'data/isComplete',
+            isStopped: 'stop/isStopped',
         }),
 
         censorshipFactor() {
@@ -41,7 +46,7 @@ export default {
 
         time() {
             const date = new Date(this.data.startTime);
-            date.setSeconds(date.getSeconds() + this.duration);
+            date.setSeconds(date.getSeconds() + data.seconds[this.id] + this.duration);
             return date.toLocaleTimeString('en-GB');
         },
 

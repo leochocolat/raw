@@ -6,7 +6,6 @@ const state = () => ({
         bar: {},
     },
     isComplete: false,
-    isStopped: false,
 });
 
 export default state;

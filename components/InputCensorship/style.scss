@@ -1,4 +1,10 @@
 .input-censorship {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+
     font-size: rem(21px);
 
     @include respond-to('large') {
@@ -20,10 +26,41 @@
 }
 
 .label {
-    margin-bottom: vw(50px);
+    display: inline-block;
+    // margin-bottom: vw(50px);
+
+    // @include respond-to('large') {
+    //     margin-bottom: vw-l(60px);
+    // }
+}
+
+.success-message-container {
+    opacity: 0;
+
+    margin-top: vw(10px);
+
+    padding: vw(3px);
+
+    color: $color-black;
+
+    background-color: $color-white;
 
     @include respond-to('large') {
-        margin-bottom: vw-l(60px);
+        margin-top: vw-l(10px);
+
+        padding: vw-l(3px);
+    }
+}
+
+.success-message-content {
+    display: flex;
+
+    justify-content: space-between;
+
+    font-size: rem(21px);
+
+    @include respond-to('large') {
+        font-size: rem-l(21px);
     }
 }
 
@@ -31,6 +68,8 @@
     position: relative;
 
     height: vw(20px);
+
+    margin-top: vw(50px);
 
     padding: 1px;
 
@@ -40,6 +79,8 @@
 
     @include respond-to('large') {
         height: vw-l(30px);
+
+        margin-top: vw-l(25px);
     }
 }
 

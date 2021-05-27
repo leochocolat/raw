@@ -3,6 +3,12 @@
 
         <div class="container">
 
+            <CensorshipMessages
+                ref="censorshipMessages"
+                class="censorshipMessages"
+                :scene="data"
+            />
+
             <div class="form">
 
                 <InputCensorship
@@ -14,37 +20,16 @@
                     :max-range="data.censorshipRange"
                 />
 
+                <InputCensorshipText
+                    ref="inputCensorshipText"
+                    class="input-censorship-text"
+                    :scene="data"
+                    :label1="data.callToAction"
+                    :label2="data.callToAction2"
+                />
+
             </div>
 
-            <!-- <div class="image-container">
-                <img
-                    ref="image"
-                    src="https://i.picsum.photos/id/692/600/700.jpg?hmac=jmB3mH356VFvuJbVxDtTZfr-9aPpwJg4XEfFhohU7oU"
-                    alt=""
-                    :style="`filter: blur(${newCensorshipFactor * 10}px)`"
-                />
-            </div> -->
-
-            <!-- <div ref="container" class="vote-container">
-                <div class="caption">
-                    {{ data.callToAction }}
-                </div>
-                <div class="control">
-                    <span ref="cursor" class="cursor"></span>
-                </div>
-                <span class="value">{{ newCensorshipFactor.toFixed(2) }}</span>
-                <div class="message">
-                    {{ isSent ? 'success' : '' }}
-                </div>
-                <button
-                    ref="buttonSubmit"
-                    class="button-submit"
-                    :disabled="isSent"
-                    @click="clickSubmitHandler"
-                >
-                    {{ lang === 'fr' ? 'Valider' : 'Submit' }}
-                </button>
-            </div> -->
         </div>
 
     </div>

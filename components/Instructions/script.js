@@ -17,6 +17,7 @@ export default {
 
     watch: {
         instructions(instructions) {
+            if (instructions === '') instructions = 'instructions';
             this.content = instructions;
         },
     },
