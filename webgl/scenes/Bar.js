@@ -17,6 +17,8 @@ class Bar extends RenderTargetScene {
 
         this._resources = this._setupResources();
 
+        this._updateSettings();
+
         this._bindAll();
         this._setupEventListeners();
 
@@ -46,8 +48,10 @@ class Bar extends RenderTargetScene {
     _setupResources() {
         const resources = new ResourceManager({
             name: 'bar',
+            namespace: 'bar',
+
         });
-        resources.addByName('CameraMovement');
+        // resources.addByName('CameraMovement');
         resources.load();
 
         return resources;
@@ -56,20 +60,12 @@ class Bar extends RenderTargetScene {
     _setup() {
         this._material = this._createMaterial();
         this._model = this._createModel();
-        this._animationController = this._createAnimationController();
+        // this._animationController = this._createAnimationController();
         this._modelCamera = this._createModelCameraAnimation();
     }
 
-    _createMaterial() {
-        const material = new THREE.MeshNormalMaterial({
-            side: THREE.DoubleSide,
-        });
-
-        return material;
-    }
-
     _createModel() {
-        const model = this._resources.get('CameraMovement');
+        const model = this._resources.get('bar');
         const clone = model;
         this.add(clone.scene);
         clone.scene.traverse((child) => {
@@ -79,6 +75,17 @@ class Bar extends RenderTargetScene {
         });
 
         return clone;
+    }
+
+    _createMaterial() {
+        const texture = this._resources.get('texture_bar');
+
+        const material = new THREE.MeshBasicMaterial({
+            map: texture,
+            side: THREE.DoubleSide,
+        });
+
+        return material;
     }
 
     _createAnimationController() {
@@ -93,7 +100,7 @@ class Bar extends RenderTargetScene {
         if (!this._model.cameras) return;
 
         super.cameras.setModelCamera(this._model.cameras[0]);
-
+        console.log(this._cameras, this._model.cameras[0]);
         return this._model.cameras[0];
     }
 
@@ -109,6 +116,18 @@ class Bar extends RenderTargetScene {
         const animations = this.debugFolder.addFolder({ title: 'Animation', expanded: true });
         animations.addInput(this._animationsSettings, 'progress', { min: 0, max: 1 }).on('change', this._animationsProgressChangeHandler);
         animations.addButton({ title: 'Play' }).on('click', this._clickPlayAnimationsHandler);
+    }
+
+    _updateSettings() {
+        this.interactionsSettings.isEnable = true;
+
+        this.interactionsSettings.positionFactor.x = 0;
+        this.interactionsSettings.positionFactor.y = 0;
+
+        this.interactionsSettings.rotationFactor.x = -10;
+        this.interactionsSettings.rotationFactor.y = 10;
+
+        this._debugFolder?.refresh();
     }
 
     /**
@@ -134,11 +153,11 @@ class Bar extends RenderTargetScene {
     }
 
     _animationsProgressChangeHandler() {
-        this._animationController.setAnimationProgress({ animation: this._animationController.actionType.CameraMove, progress: this._animationsSettings.progress });
+        // this._animationController.setAnimationProgress({ animation: this._animationController.actionType.CameraMove, progress: this._animationsSettings.progress });
     }
 
     _clickPlayAnimationsHandler() {
-        this._animationController.playAnimation({ animation: this._animationController.actionType.CameraMove, loop: false });
+        // this._animationController.playAnimation({ animation: this._animationController.actionType.CameraMove, loop: false });
     }
 }
 

@@ -84,8 +84,7 @@ class Hallway extends RenderTargetScene {
 
         this._animationController = this._createAnimationController();
         this._modelCamera = this._createModelCameraAnimation();
-        this._modelCamera = this._createHumanModels();
-
+        this._createHumanModels();
         // this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_CameraMovement, loop: false });
     }
 
@@ -153,7 +152,7 @@ class Hallway extends RenderTargetScene {
             skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
 
             const animationController = new AnimationComponent(skinnedModelCloned);
-            console.log(animationController);
+
             this._humanAnimationControllers.push(animationController);
             this.add(skinnedModelCloned.scene);
         }
