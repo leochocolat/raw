@@ -151,12 +151,14 @@ class BlurScreen {
             u_time: { value: 0.0 },
         };
 
+        // add skinning shader
         const material = new THREE.ShaderMaterial({
             uniforms,
             fragmentShader: fragment,
             vertexShader: vertex,
             side: THREE.DoubleSide,
             transparent: true,
+            skinning: true,
         });
 
         this._screenMesh.material = material;

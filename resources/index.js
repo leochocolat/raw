@@ -42,7 +42,14 @@ const webgl = [
         type: 'texture',
         name: 'tex1',
         path: '/textures/tex1.jpg',
-        namespace: 'animTexture',
+        namespace: 'hallway',
+        preload: false,
+    },
+    {
+        type: 'texture',
+        name: 'tex2',
+        path: '/textures/tex2.jpg',
+        namespace: 'hallway',
         preload: false,
     },
 

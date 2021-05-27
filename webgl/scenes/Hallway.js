@@ -19,6 +19,8 @@ class Hallway extends RenderTargetScene {
 
         this._resources = this._setupResources();
 
+        this._humanAnimations = ['LyceenHomme_Phone', 'LyceenHomme_TalkArmPush'];
+
         this._updateSettings();
 
         this._bindAll();
@@ -34,8 +36,12 @@ class Hallway extends RenderTargetScene {
         super.transitionIn();
 
         if (!this._animationController) return;
-
         this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_CameraMovement, loop: false });
+        this._animationController.playAnimation({ animation: this._animationController.actionType.Phone, loop: false });
+
+        for (let index = 0; index < this._modelsCount; index++) {
+            this._humanAnimationControllers[index].playAnimation({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], loop: false });
+        }
     }
 
     setCensorship(censorshipFactor) {
@@ -47,7 +53,7 @@ class Hallway extends RenderTargetScene {
         super.update();
 
         if (!this._blurScreen) return;
-        this._blurScreen.update(this._sceneDelta);
+        // this._blurScreen.update(this._sceneDelta);
 
         if (!this._animationController) return;
         this._animationController.update(this._sceneDelta);
@@ -89,7 +95,7 @@ class Hallway extends RenderTargetScene {
         this.add(clone.scene);
 
         clone.scene.traverse((child) => {
-            if (child.isMesh) {
+            if (child.isMesh && child.name === 'scene_hallway1') {
                 child.material = this._material;
             }
         });
@@ -142,15 +148,12 @@ class Hallway extends RenderTargetScene {
 
         this._modelsPositions = [...this._model.scene.getObjectByName('ModelsPositions').children];
 
-        const animations = ['LyceenHomme_Phone', 'LyceenHomme_TalkArmPush'];
-
         for (let index = 0; index < this._modelsCount; index++) {
             const skinnedModelCloned = cloneSkinnedMesh(modelMan);
             skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
 
             const animationController = new AnimationComponent(skinnedModelCloned);
-            animationController.playAnimation({ animation: animationController.actionType[animations[index]], loop: false });
-
+            console.log(animationController);
             this._humanAnimationControllers.push(animationController);
             this.add(skinnedModelCloned.scene);
         }
@@ -200,10 +203,19 @@ class Hallway extends RenderTargetScene {
 
     _animationsProgressChangeHandler() {
         this._animationController.setAnimationProgress({ animation: this._animationController.actionType.TRACK_CameraMovement, progress: this._animationsSettings.progress });
+        this._animationController.setAnimationProgress({ animation: this._animationController.actionType.Phone, progress: this._animationsSettings.progress });
+        for (let index = 0; index < this._modelsCount; index++) {
+            this._humanAnimationControllers[index].setAnimationProgress({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], progress: this._animationsSettings.progress });
+        }
     }
 
     _clickPlayAnimationsHandler() {
         this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_CameraMovement, loop: false });
+        this._animationController.playAnimation({ animation: this._animationController.actionType.Phone, loop: false });
+
+        for (let index = 0; index < this._modelsCount; index++) {
+            this._humanAnimationControllers[index].playAnimation({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], loop: false });
+        }
     }
 }
 

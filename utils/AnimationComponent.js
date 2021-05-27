@@ -23,12 +23,16 @@ class AnimationComponent {
      */
     playAnimation(options) {
         this.currentAnim = options.animation.getClip();
-        options.animation.play();
 
         if (!options.loop) {
             options.animation.clampWhenFinished = true;
             options.animation.loop = THREE.LoopOnce;
         }
+
+        this._setWeight(options.animation, 1.0);
+
+        options.animation.paused = false;
+        options.animation.play();
     }
 
     pauseAnimation(action) {
@@ -62,6 +66,9 @@ class AnimationComponent {
     }
 
     setAnimationProgress(options) {
+        options.animation.play();
+        options.animation.paused = true;
+
         const duration = this.currentAnim ? this.currentAnim.duration : options.animation.getClip().duration;
         const progress = duration * options.progress;
         options.animation.time = progress;
@@ -101,6 +108,8 @@ class AnimationComponent {
     _activateAllActions(action, actionWeight) {
         this.actions.forEach((action) => {
             this._setWeight(action, 1.0);
+            // action.play();
+            // this._setWeight(action, 0.0);
         });
     }
 }
