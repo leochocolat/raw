@@ -31,6 +31,20 @@ uniform sampler2D u_texture_1;
 uniform sampler2D u_texture_2;
 uniform sampler2D u_texture_3;
 
+uniform float u_noise_alpha_0;
+uniform float u_noise_alpha_1;
+uniform float u_noise_alpha_2;
+uniform float u_noise_alpha_3;
+
+uniform float u_completed_0;
+uniform float u_completed_1;
+uniform float u_completed_2;
+uniform float u_completed_3;
+
+uniform float u_completed_alpha_0;
+uniform float u_completed_alpha_1;
+uniform float u_completed_alpha_2;
+uniform float u_completed_alpha_3;
 
 // Old screen effect uniforms
 
@@ -56,10 +70,30 @@ uniform float u_noise_intensity;
 // Vignette
 uniform float u_vignette_scale;
 uniform float u_vignette_intensity;
+// Completed
+uniform float u_distortion_intensity;
+uniform float u_wobble_intensity;
+uniform float u_line_intensity;
+
+const float PI = 3.14159265;
 
 // Utils
 float rand(vec2 co) {
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+// https://www.shadertoy.com/view/4djSRW
+// float rand(vec2 p) {
+//     vec3 p3  = fract(vec3(p.xyx) * 443.8975);
+//     p3 += dot(p3, p3.yzx + 19.19);
+//     return fract((p3.x + p3.y) * p3.z);
+// }
+
+float sample_noise()
+{
+    vec2 uv = mod(gl_FragCoord.xy + vec2(0.0, 100. * u_time), u_resolution.xy);
+    float value = rand(uv);
+    return pow(value, 7.); //  sharper ramp
 }
 
 vec3 scanline(float coord, vec3 screen, float speed, float intensity) {
@@ -115,17 +149,77 @@ vec4 splitScreens(vec2 uv) {
     uv_3.y += u_size_3;
     uv_3.x -= u_size_3;
 
-    vec4 texel_0 = texture2D(u_texture_0, uv_0);
-    vec4 texel_1 = texture2D(u_texture_1, uv_1);
-    vec4 texel_2 = texture2D(u_texture_2, uv_2);
-    vec4 texel_3 = texture2D(u_texture_3, uv_3);
+    // wobble
+    vec2 wobbl = vec2((u_wobble_intensity / 100.0) * rand(vec2(u_time, gl_FragCoord.y)), 0.);
+
+    //  band distortion
+    float t_val = tan(0.25 * u_time + vUv.y * PI * .67);
+    vec2 tan_off = vec2(wobbl.x * min(0., t_val), 0.) * u_distortion_intensity;
+
+    vec4 texel_0 = texture2D(u_texture_0, uv_0 + ((wobbl + tan_off) * u_completed_0));
+    vec4 texel_1 = texture2D(u_texture_1, uv_1 + ((wobbl + tan_off) * u_completed_1));
+    vec4 texel_2 = texture2D(u_texture_2, uv_2 + ((wobbl + tan_off) * u_completed_2));
+    vec4 texel_3 = texture2D(u_texture_3, uv_3 + ((wobbl + tan_off) * u_completed_3));
 
     // Apply RGBShift
-    texel_0 = RGBShift(uv_0, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_0) * u_texture_alpha_0;
-    texel_1 = RGBShift(uv_1, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_1) * u_texture_alpha_1;
-    texel_2 = RGBShift(uv_2, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_2) * u_texture_alpha_2;
-    texel_3 = RGBShift(uv_3, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_3) * u_texture_alpha_3;
+    texel_0 = RGBShift(uv_0 + ((wobbl + tan_off) * u_completed_0), u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_0) * u_texture_alpha_0;
+    texel_1 = RGBShift(uv_1 + ((wobbl + tan_off) * u_completed_1), u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_1) * u_texture_alpha_1;
+    texel_2 = RGBShift(uv_2 + ((wobbl + tan_off) * u_completed_2), u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_2) * u_texture_alpha_2;
+    texel_3 = RGBShift(uv_3 + ((wobbl + tan_off) * u_completed_3), u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture_3) * u_texture_alpha_3;
 
+    // Apply Noise
+    vec4 noise_texel_0 = vec4(vec3(rand(vUv * u_time)), 1.0);
+    texel_0 = mix(texel_0, noise_texel_0, u_noise_alpha_0);
+
+    vec4 noise_texel_1 = vec4(vec3(rand(vUv * u_time)), 1.0);
+    texel_1 = mix(texel_1, noise_texel_1, u_noise_alpha_1);
+    
+    vec4 noise_texel_2 = vec4(vec3(rand(vUv * u_time)), 1.0);
+    texel_2 = mix(texel_2, noise_texel_2, u_noise_alpha_2);
+
+    vec4 noise_texel_3 = vec4(vec3(rand(vUv * u_time)), 1.0);
+    texel_3 = mix(texel_3, noise_texel_3, u_noise_alpha_3);
+
+    // Apply completed alpha
+    texel_0.r *= u_completed_alpha_0;
+    texel_0.g *= u_completed_alpha_0;
+    texel_0.b *= u_completed_alpha_0;
+
+    texel_1.r *= u_completed_alpha_1;
+    texel_1.g *= u_completed_alpha_1;
+    texel_1.b *= u_completed_alpha_1;
+
+    texel_2.r *= u_completed_alpha_2;
+    texel_2.g *= u_completed_alpha_2;
+    texel_2.b *= u_completed_alpha_2;
+
+    texel_3.r *= u_completed_alpha_3;
+    texel_3.g *= u_completed_alpha_3;
+    texel_3.b *= u_completed_alpha_3;
+
+    //  Noise lines
+    float ival = u_resolution.y / 4.;
+    float r = rand(vec2(u_time, gl_FragCoord.y));
+    float on = floor(float(int(gl_FragCoord.y + (u_time * r * 1000.)) % int(ival + u_line_intensity)) / ival);
+    float wh = sample_noise() * on;
+
+    texel_0.r += wh * u_completed_0;
+    texel_0.g += wh * u_completed_0;
+    texel_0.b += wh * u_completed_0;
+
+    texel_1.r += wh * u_completed_1;
+    texel_1.g += wh * u_completed_1;
+    texel_1.b += wh * u_completed_1;
+
+    texel_2.r += wh * u_completed_2;
+    texel_2.g += wh * u_completed_2;
+    texel_2.b += wh * u_completed_2;
+
+    texel_3.r += wh * u_completed_3;
+    texel_3.g += wh * u_completed_3;
+    texel_3.b += wh * u_completed_3;
+
+    // Split
     float factore_0 = step(-1. + u_step_factor_0, -vUv.x) * step(u_step_factor_0, vUv.y);
     texel_0 *= factore_0;
 

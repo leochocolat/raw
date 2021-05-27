@@ -8,6 +8,7 @@ import Supermarket from './Supermarket';
 import Blur from './debugScenes/Blur';
 import BlurEditor from './debugScenes/BlurEditor';
 import Screen from './debugScenes/Screen';
+import ScreenComplete from './debugScenes/ScreenComplete';
 import AnimTexture from './debugScenes/AnimTexture';
 
 export default {
@@ -20,5 +21,6 @@ export default {
     'blur': Blur,
     'blur-editor': BlurEditor,
     'screen': Screen,
+    'screen-complete': ScreenComplete,
     'animTexture': AnimTexture,
 };

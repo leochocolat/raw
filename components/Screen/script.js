@@ -22,7 +22,7 @@ export default {
                 en: ['select', 'this camera'],
             },
             resultTitle: {
-                fr: 'facteur de censure',
+                fr: 'Facteur de censure',
                 en: 'Censorship factor',
             },
         };
@@ -63,6 +63,22 @@ export default {
         /**
          * Public
          */
+        transitionIn() {
+            const timeline = new gsap.timeline();
+
+            if (this.isComplete) {
+                timeline.add(this.$root.webglApp.sceneManager?.scenes[this.id].setComplete(), 0);
+            }
+
+            return timeline;
+        },
+
+        transitionOut() {
+            const timeline = new gsap.timeline();
+
+            return timeline;
+        },
+
         startClock() {
             this._clock = setInterval(this.clockHandler, 1000);
         },
@@ -83,6 +99,7 @@ export default {
             this.timelineLeave?.kill();
             this.timelineEnter = new gsap.timeline();
             this.timelineEnter.to(this.$refs.frame.$el, { duration: 0.5, scaleY: 0.95, ease: 'circ.out' });
+            this.timelineEnter.add(this.$root.webglApp.sceneManager?.scenes[this.id].mouseenter(), 0);
         },
 
         mouseleaveHandler() {
@@ -91,6 +108,7 @@ export default {
             this.timelineEnter?.kill();
             this.timelineLeave = new gsap.timeline();
             this.timelineLeave.to(this.$refs.frame.$el, { duration: 0.5, scaleY: 1, ease: 'circ.out' });
+            this.timelineLeave.add(this.$root.webglApp.sceneManager?.scenes[this.id].mouseleave(), 0);
         },
 
         clockHandler() {

@@ -20,7 +20,7 @@
             </div>
 
             <!-- Displayed when the scenario is completed -->
-            <div v-if="isComplete && !isFullComplete" class="message-complete">
+            <div v-if="isComplete && (!isFullComplete && !isStopped)" class="message-complete">
                 {{ lang === 'fr' ? 'Terminé' : 'Done' }}
             </div>
 
@@ -51,7 +51,7 @@
 
         <!-- Link -->
         <nuxt-link
-            v-if="!isDisable && !isComplete"
+            v-if="!isDisable && !isComplete && !isStopped"
             :to="localePath(id)"
             class="link"
             @mouseenter.native="mouseenterHandler"
