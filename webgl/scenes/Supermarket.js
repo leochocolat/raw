@@ -76,7 +76,9 @@ class Supermarket extends RenderTargetScene {
     _createAnimationController() {
         const model = this._model;
         const animationController = new AnimationComponent(model);
-        animationController.playAnimation({ animation: animationController.actionType.CameraMove, loop: false });
+        this.animationControllers.push(animationController);
+
+        // animationController.playAnimation({ animation: animationController.actionType.CameraMove, loop: false });
 
         return animationController;
     }

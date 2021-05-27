@@ -10,6 +10,7 @@ export default {
             isDebug: 'context/isDebug',
             activeScene: 'scenes/active',
             menuState: 'scenes/menu',
+            isStopped: 'stop/isStopped',
         }),
     },
 
@@ -21,6 +22,10 @@ export default {
 
         menuState(newValue) {
             this.$root.webglApp.sceneManager?.setMenuState(newValue);
+        },
+
+        isStopped(isStopped) {
+            if (isStopped) this.$root.webglApp.sceneManager?.setScenesComplete();
         },
     },
 

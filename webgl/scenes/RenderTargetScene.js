@@ -43,6 +43,8 @@ class RenderTargetScene extends THREE.Scene {
 
         this._interactionsSettings = JSON.parse(JSON.stringify(data.settings.mouseInteractions));
 
+        this._animationControllers = [];
+
         this._clock = new THREE.Clock();
         this._sceneFps = 0;
         this._sceneDelta = 0;
@@ -53,6 +55,9 @@ class RenderTargetScene extends THREE.Scene {
         this._debugFolder = this._createDebugFolder();
         this._cameras = this._createCameras();
         this._uniforms = this._createUniforms();
+
+        // Debug
+        window[`_resetAnimationProgress_${this._id}`] = this._resetAnimationProgress;
     }
 
     /**
@@ -92,6 +97,10 @@ class RenderTargetScene extends THREE.Scene {
 
     get interactionsSettings() {
         return this._interactionsSettings;
+    }
+
+    get animationControllers() {
+        return this._animationControllers;
     }
 
     show() {
@@ -152,6 +161,7 @@ class RenderTargetScene extends THREE.Scene {
         this._timelineMenu = new gsap.timeline();
 
         this._timelineMenu.call(this._resetCameraPosition, null, 0);
+        this._timelineMenu.call(this._resetAnimationProgress, null, 0);
         this._timelineMenu.set(this._uniforms[`u_step_factor_${this._id}`], { value: 0.5 }, 0);
         this._timelineMenu.set(this._uniforms[`u_size_${this._id}`], { value: 0.5 }, 0);
         this._timelineMenu.set(this._uniforms[`u_scale_${this._id}`], { value: 2 }, 0);
@@ -321,6 +331,25 @@ class RenderTargetScene extends THREE.Scene {
         this._cameraRotation.target.y = this._cameraRotation.initial.y;
     }
 
+    _resetAnimationProgress() {
+        const timelineProgress = new gsap.timeline();
+
+        if (!this._animationControllers) return timelineProgress;
+
+        for (let i = 0; i < this._animationControllers.length; i++) {
+            const animationController = this._animationControllers[i];
+
+            for (const key in animationController.actionType) {
+                const animationAction = animationController.actionType[key];
+                animationAction.paused = true;
+
+                timelineProgress.to(animationAction, { duration: 1, time: 0 }, 0);
+            }
+        }
+
+        return timelineProgress;
+    }
+
     _updateCameraPosition() {
         // if (!this._interactionsSettings.isEnable || !this._isVisible) return;
         if (!this._interactionsSettings.isEnable) return;
@@ -385,6 +414,7 @@ class RenderTargetScene extends THREE.Scene {
             'setVisible',
             'setInvisible',
             '_resetCameraPosition',
+            '_resetAnimationProgress',
         );
     }
 }

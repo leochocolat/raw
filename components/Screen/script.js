@@ -66,7 +66,7 @@ export default {
         transitionIn() {
             const timeline = new gsap.timeline();
 
-            if (this.isComplete) {
+            if (this.isComplete || this.isStopped) {
                 timeline.add(this.$root.webglApp.sceneManager?.scenes[this.id].setComplete(), 0);
             }
 

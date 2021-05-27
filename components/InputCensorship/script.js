@@ -25,6 +25,7 @@ export default {
             // Drag
             dragRelativePosition: this.$store.state.data.scenes[this.scene.id].censorshipFactor || this.scene.censorshipFactor,
             dragPosition: this.$store.state.data.scenes[this.scene.id].censorshipFactor || this.scene.censorshipFactor,
+            clampedDragPosition: this.$store.state.data.scenes[this.scene.id].censorshipFactor || this.scene.censorshipFactor,
             minFactor: math.clamp((this.$store.state.data.scenes[this.scene.id].censorshipFactor || this.scene.censorshipFactor) - this.maxRange, 0, 1),
             maxFactor: math.clamp((this.$store.state.data.scenes[this.scene.id].censorshipFactor || this.scene.censorshipFactor) + this.maxRange, 0, 1),
             // Visual
@@ -114,6 +115,8 @@ export default {
 
         initDragPosition() {
             this.dragPosition = this.dragRelativePosition * this.rangeBounds.width;
+            this.dragRelativePosition = math.clamp(this.dragPosition / this.rangeBounds.width, this.minFactor, this.maxFactor);
+            this.clampedDragPosition = this.dragRelativePosition * this.rangeBounds.width;
         },
 
         updateDragPosition(mousePositionX) {
@@ -122,6 +125,9 @@ export default {
 
             // Relative Drag position is clamped to min and max values
             this.dragRelativePosition = math.clamp(this.dragPosition / this.rangeBounds.width, this.minFactor, this.maxFactor);
+
+            // Clamped drag position clamped to min and max values
+            this.clampedDragPosition = this.dragRelativePosition * this.rangeBounds.width;
 
             this.watchOffRange();
             this.updateCensorshipFactor();

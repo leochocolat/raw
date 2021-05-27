@@ -53,7 +53,7 @@ class Hallway extends RenderTargetScene {
         super.update();
 
         if (!this._blurScreen) return;
-        // this._blurScreen.update(this._sceneDelta);
+        this._blurScreen.update(this._sceneDelta);
 
         if (!this._animationController) return;
         this._animationController.update(this._sceneDelta);
@@ -127,6 +127,8 @@ class Hallway extends RenderTargetScene {
         const model = this._model;
         const animationController = new AnimationComponent(model);
 
+        this.animationControllers.push(animationController);
+
         return animationController;
     }
 
@@ -153,9 +155,10 @@ class Hallway extends RenderTargetScene {
             skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
 
             const animationController = new AnimationComponent(skinnedModelCloned);
-            console.log(animationController);
             this._humanAnimationControllers.push(animationController);
             this.add(skinnedModelCloned.scene);
+
+            this.animationControllers.push(animationController);
         }
     }
 
@@ -204,6 +207,7 @@ class Hallway extends RenderTargetScene {
     _animationsProgressChangeHandler() {
         this._animationController.setAnimationProgress({ animation: this._animationController.actionType.TRACK_CameraMovement, progress: this._animationsSettings.progress });
         this._animationController.setAnimationProgress({ animation: this._animationController.actionType.Phone, progress: this._animationsSettings.progress });
+
         for (let index = 0; index < this._modelsCount; index++) {
             this._humanAnimationControllers[index].setAnimationProgress({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], progress: this._animationsSettings.progress });
         }

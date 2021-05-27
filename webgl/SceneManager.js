@@ -192,6 +192,13 @@ class SceneManager extends THREE.Scene {
 
     }
 
+    setScenesComplete() {
+        for (const key in this._scenes) {
+            const scene = this._scenes[key];
+            scene.setComplete();
+        }
+    }
+
     /**
      * Private
      */
