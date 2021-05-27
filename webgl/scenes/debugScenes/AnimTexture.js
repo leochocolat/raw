@@ -2,8 +2,8 @@
 import * as THREE from 'three';
 
 // Shader
-import vertex from '../../shaders/customBasicMaterial/vert.glsl';
-import fragment from '../../shaders/customBasicMaterial/frag.glsl';
+import vertex from '../../shaders/customBasicMaterial/vertex.glsl';
+import fragment from '../../shaders/customBasicMaterial/fragment.glsl';
 
 // Utils
 import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
@@ -23,7 +23,7 @@ class AnimTexture extends DebugScene {
         this._isReady = false;
         this._resources = this._setupResources();
 
-        this._modelsCount = 1;
+        this._modelsCount = 2;
 
         this._addDebugSettings();
         this._setupEventListeners();
@@ -38,7 +38,6 @@ class AnimTexture extends DebugScene {
 
     update(time, delta) {
         if (!this._isReady) return;
-
         for (let i = 0, il = this._animationControllers.length; i < il; i++) {
             this._animationControllers[0].mixer._root.parent.updateMatrixWorld();
             this._animationControllers[i].update(delta);
@@ -47,7 +46,6 @@ class AnimTexture extends DebugScene {
                 this._offsetMatrix.multiplyMatrices(this._skeleton.bones[j].matrixWorld, this._skeleton.boneInverses[j]);
                 this._offsetMatrix.toArray(this._skeleton.boneMatrices, j * 16 + i * this._skeleton.boneTexture.image.width * this._skeleton.boneTexture.image.height * 4);
             }
-
             this._skeleton.boneTexture.needsUpdate = true;
         }
 
@@ -60,11 +58,9 @@ class AnimTexture extends DebugScene {
 
     _setupResources() {
         const resources = new ResourceManager({
-            name: 'animTexture',
-            namespace: 'animTexture',
+            name: 'hallway',
+            namespace: 'hallway',
         });
-
-        resources.addByName('library');
 
         resources.load();
 
@@ -75,8 +71,7 @@ class AnimTexture extends DebugScene {
         this._animationControllers = [];
 
         const texture1 = this._resources.get('tex1');
-
-        const hallway = this._resources.get('library');
+        const texture2 = this._resources.get('tex2');
 
         // this._modelsCount = hallway.scene.getObjectByName('Humans').children.length;
 
@@ -85,7 +80,7 @@ class AnimTexture extends DebugScene {
         this._uniforms = {
             time: { value: 0.0 },
             textures: {
-                value: [texture1, texture1, texture1],
+                value: [texture1, texture2],
             },
         };
 
@@ -122,11 +117,12 @@ class AnimTexture extends DebugScene {
     }
 
     _setupSkinnedModel() {
-        const model = this._resources.get('HommeAdulte');
+        const modelMan = this._resources.get('LyceenHomme');
+
         // const clone = cloneSkinnedMesh(model);
         // console.log(model);
         // this.add(model.scene);
-        return model;
+        return modelMan;
     }
 
     _createAnimationController(skinnedMesh) {
@@ -137,7 +133,11 @@ class AnimTexture extends DebugScene {
     }
 
     _setupMesh() {
-        const mesh = this._skinnedModel.scene.getObjectByName('HommeAdulte');
+        console.log(this._skinnedModel);
+        const mesh = this._skinnedModel.scene.getObjectByName('skinned_mesh');
+        // const mesh = this._skinnedModel.scene.getObjectByName('vanguard_Mesh');
+
+        mesh.frustumCulled = false;
         const material = new THREE.ShaderMaterial({
             skinning: true,
             vertexShader: vertex,
@@ -164,10 +164,10 @@ class AnimTexture extends DebugScene {
         const tmp = new THREE.Object3D();
 
         for (let i = 0; i < this._modelsCount; i++) {
-            // tmp.position.set((Math.random() - 0.5) * 10.0, (Math.random() - 0.5) * 10.0, -10);
-            tmp.position.set(0, 0, 0);
+            tmp.position.set(1 + i, 10 + i, 10 + i);
+            // tmp.position.set(0, 0, 0);
 
-            tmp.rotation.set(0, 0, Math.random() * 2.0 * Math.PI);
+            tmp.rotation.set(0, 0, 0);
 
             // tmp.scale.set(1, 1, 1).multiplyScalar(Math.random() * 0.75 + 0.25);
             // tmp.scale.set(1, 1, 1).multiplyScalar(0.25);
@@ -258,7 +258,7 @@ class AnimTexture extends DebugScene {
     _createSkeleton() {
         const skeleton = this._mesh.skeleton;
         const bones = skeleton.bones;
-
+        // console.log(skeleton.bones);
         let size = Math.sqrt(bones.length * 4);
         size = THREE.Math.ceilPowerOfTwo(size);
         size = Math.max(size, 4);
@@ -267,6 +267,7 @@ class AnimTexture extends DebugScene {
         boneMatrices.set(skeleton.boneMatrices);
 
         const boneTexture = new THREE.DataTexture2DArray(boneMatrices, size, size, this._modelsCount);
+        console.log(boneTexture);
         boneTexture.format = THREE.RGBAFormat;
         boneTexture.type = THREE.FloatType;
         boneTexture.needsUpdate = true;
@@ -282,9 +283,11 @@ class AnimTexture extends DebugScene {
         const instanceSpeeds = [];
 
         const parent = this._mesh.parent;
-        parent.scale.multiplyScalar(0.5);
+        // parent.scale.multiplyScalar(0.5);
 
         const skinnedMesh = new THREE.SkinnedMesh(this._instancedGeometry, this._mesh.material);
+        skinnedMesh.frustumCulled = false;
+
         skinnedMesh.bind(this._skeleton, this._mesh.matrixWorld);
 
         skinnedMesh.add(parent.children[0]);
@@ -296,22 +299,21 @@ class AnimTexture extends DebugScene {
         parent.add(skinnedMesh);
         this.add(parent);
 
+        // const material = new THREE.MeshBasicMaterial({ map: this._skeleton.boneTexture });
+        // const planeMesh = new THREE.PlaneGeometry(1, 1, 1);
+        // const mesh = new THREE.Mesh(planeMesh, material);
+        // console.log(material);
+        // this.add(mesh);
+
         // TPOSE is making models jumping
-        // const animations = [...this._skinnedModel.animations];
-        // const animations = [THREE.AnimationClip.findByName(this._skinnedModel.animations, 'Idle'), THREE.AnimationClip.findByName(this._skinnedModel.animations, 'Walk'), THREE.AnimationClip.findByName(this._skinnedModel.animations, 'Run')];
-        const animations = [THREE.AnimationClip.findByName(this._skinnedModel.animations, 'AnimTest')];
-        // console.log(this._skinnedModel.animations);
-        // const animationTypes = [0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2];
-        const animationTypes = [0];
-
-        for (let i = 0; i < this._modelsCount; i++) {
+        const animations = ['LyceenHomme_TalkArmPush', 'LyceenHomme_Phone'];
+        // const animations = ['left', 'right'];
+        for (let index = 0; index < this._modelsCount; index++) {
             const animationController = new AnimationComponent(this._skinnedModel, skinnedMesh);
-            const animationType = animationTypes[(Math.random() * animationTypes.length) | 0];
-            this._animationControllers.push(animationController);
 
-            animationController.playAnimation({ animation: animationController.actionType[animations[animationType].name], loopOnce: false });
+            this._animationControllers.push(animationController);
+            animationController.playAnimation({ animation: animationController.actionType[animations[index]], loop: false });
         }
-        // this._instancedGeometry.setAttribute('instanceSpeed', new THREE.InstancedBufferAttribute(new Float32Array(instanceSpeeds), 1));
     }
 
     _addDebugSettings() {
