@@ -17,7 +17,7 @@
         <div ref="range" class="censorship-range">
 
             <div ref="censorshipContainer" class="censorship-progress-container">
-                <div class="censorship-progress" :style="`width: ${dragPosition}px;`"></div>
+                <div class="censorship-progress" :style="`transform: scaleX(${dragRelativePosition});`"></div>
             </div>
 
             <div ref="rangeLimit" class="range-limit" :style="`width: ${(maxRange * 2) * 100}%; left: ${minFactor * 100}%`">

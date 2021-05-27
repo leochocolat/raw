@@ -21,6 +21,11 @@ export default {
                 this.$store.dispatch('setInstructions', this.data.instructionsMenu);
             }, null);
 
+            timeline.add(this.$refs.screen0.transitionIn(), 0);
+            timeline.add(this.$refs.screen1.transitionIn(), 0);
+            timeline.add(this.$refs.screen2.transitionIn(), 0);
+            timeline.add(this.$refs.screen3.transitionIn(), 0);
+
             return timeline;
         },
     },

@@ -90,7 +90,7 @@ export default {
         setComplete() {
             const timelineComplete = new gsap.timeline();
 
-            timelineComplete.to(this.$refs.range, { duration: 0.1, alpha: 0 }, 0);
+            timelineComplete.to(this.$refs.range, { duration: 0.1, autoAlpha: 0 }, 0);
             timelineComplete.to(this.$el, { duration: 0.3, y: '-100%', ease: 'power2.out' }, 0.2);
             timelineComplete.to(this.$refs.successMessage, { duration: 0.1, alpha: 1 }, 0.5);
 

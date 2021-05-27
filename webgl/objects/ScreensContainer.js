@@ -106,6 +106,10 @@ class ScreensContainer extends THREE.Mesh {
             // Noise
             u_vignette_intensity: { value: 22.0 },
             u_vignette_scale: { value: 0.15 },
+            // Completed
+            u_wobble_intensity: { value: 0.2 },
+            u_line_intensity: { value: 2.0 },
+            u_distortion_intensity: { value: 0.04 },
         };
 
         const uniforms = {
@@ -166,6 +170,11 @@ class ScreensContainer extends THREE.Mesh {
         const animations = debugFolder.addFolder({ title: 'Animations' });
         animations.addButton({ title: 'Animate out' }).on('click', this._debugAnimationOutClickHandler);
         animations.addButton({ title: 'Animate in' }).on('click', this._debugAnimationInClickHandler);
+
+        const completed = debugFolder.addFolder({ title: 'Completed' });
+        completed.addInput(this.material.uniforms.u_wobble_intensity, 'value', { label: 'Wobble', min: 0, max: 1.0 });
+        completed.addInput(this.material.uniforms.u_line_intensity, 'value', { label: 'Line', min: 0, max: 10 });
+        completed.addInput(this.material.uniforms.u_distortion_intensity, 'value', { label: 'scan distortion', min: 0, max: 10 });
 
         return debugFolder;
     }

@@ -114,11 +114,15 @@ class RenderTargetScene extends THREE.Scene {
         this._timelineOut?.kill();
         this._timelineMenu?.kill();
 
+        this.timelineMouseleave?.kill();
+        this.timelineMouseenter?.kill();
+
         this._timelineIn = new gsap.timeline();
 
         this._timelineIn.set(this._uniforms[`u_step_factor_${this._id}`], { value: 0 }, 0);
         this._timelineIn.set(this._uniforms[`u_size_${this._id}`], { value: 0 }, 0);
         this._timelineIn.set(this._uniforms[`u_scale_${this._id}`], { value: 1 }, 0);
+        this._timelineIn.set(this._uniforms[`u_noise_alpha_${this._id}`], { value: 0 }, 0);
 
         return this._timelineIn;
     }
@@ -127,9 +131,13 @@ class RenderTargetScene extends THREE.Scene {
         this._timelineIn?.kill();
         this._timelineMenu?.kill();
 
+        this.timelineMouseleave?.kill();
+        this.timelineMouseenter?.kill();
+
         this._timelineOut = new gsap.timeline();
 
         this._timelineOut.set(this._uniforms[`u_step_factor_${this._id}`], { value: 1 }, 0);
+        this._timelineOut.set(this._uniforms[`u_noise_alpha_${this._id}`], { value: 0 }, 0);
 
         return this._timelineOut;
     }
@@ -138,12 +146,16 @@ class RenderTargetScene extends THREE.Scene {
         this._timelineOut?.kill();
         this._timelineIn?.kill();
 
+        this.timelineMouseleave?.kill();
+        this.timelineMouseenter?.kill();
+
         this._timelineMenu = new gsap.timeline();
 
         this._timelineMenu.call(this._resetCameraPosition, null, 0);
         this._timelineMenu.set(this._uniforms[`u_step_factor_${this._id}`], { value: 0.5 }, 0);
         this._timelineMenu.set(this._uniforms[`u_size_${this._id}`], { value: 0.5 }, 0);
         this._timelineMenu.set(this._uniforms[`u_scale_${this._id}`], { value: 2 }, 0);
+        this._timelineMenu.set(this._uniforms[`u_noise_alpha_${this._id}`], { value: 0 }, 0);
 
         return this._timelineMenu;
     }
@@ -185,6 +197,39 @@ class RenderTargetScene extends THREE.Scene {
 
         this._cameraRotation.target.y = this._cameraRotation.initial.y;
         this._cameraRotation.current.y = this._cameraRotation.initial.y;
+    }
+
+    mouseenter() {
+        this.timelineMouseleave?.kill();
+        this.timelineMouseenter = new gsap.timeline();
+        this.timelineMouseenter.to(this._uniforms[`u_noise_alpha_${this._id}`], { duration: 0.5, value: 0.35, ease: 'expo.out' });
+        this.timelineMouseenter.to(this._uniforms[`u_noise_alpha_${this._id}`], { duration: 0.6, value: 0.28, ease: 'sine.inOut' });
+
+        return this.timelineMouseenter;
+    }
+
+    mouseleave() {
+        this.timelineMouseenter?.kill();
+        this.timelineMouseleave = new gsap.timeline();
+        this.timelineMouseleave.to(this._uniforms[`u_noise_alpha_${this._id}`], { duration: 0.5, value: 0, ease: 'sine.inOut' });
+
+        return this.timelineMouseleave;
+    }
+
+    setComplete() {
+        this.timelineComplete = new gsap.timeline();
+        this.timelineComplete.to(this._uniforms[`u_completed_${this._id}`], { duration: 0.05, value: 1 });
+        this.timelineComplete.to(this._uniforms[`u_completed_alpha_${this._id}`], { duration: 0.05, value: 0.3 });
+
+        return this.timelineComplete;
+    }
+
+    removeComplete() {
+        this.timelineComplete = new gsap.timeline();
+        this.timelineComplete.to(this._uniforms[`u_completed_${this._id}`], { duration: 0.05, value: 0 });
+        this.timelineComplete.to(this._uniforms[`u_completed_alpha_${this._id}`], { duration: 0.05, value: 1 });
+
+        return this.timelineComplete;
     }
 
     // Hooks
@@ -242,6 +287,11 @@ class RenderTargetScene extends THREE.Scene {
         uniforms[`u_step_factor_${this._id}`] = { value: 0.5 };
         uniforms[`u_size_${this._id}`] = { value: 0.5 };
         uniforms[`u_scale_${this._id}`] = { value: 2 };
+        // Hover
+        uniforms[`u_noise_alpha_${this._id}`] = { value: 0 };
+        // Completed
+        uniforms[`u_completed_${this._id}`] = { value: 0.0 };
+        uniforms[`u_completed_alpha_${this._id}`] = { value: 1.0 };
 
         return uniforms;
     }
