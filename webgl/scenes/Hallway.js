@@ -38,7 +38,6 @@ class Hallway extends RenderTargetScene {
         if (!this._animationController) return;
         this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_CameraMovement, loop: false });
         this._animationController.playAnimation({ animation: this._animationController.actionType.Phone, loop: false });
-
         for (let index = 0; index < this._modelsCount; index++) {
             this._humanAnimationControllers[index].playAnimation({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], loop: false });
         }
@@ -85,8 +84,6 @@ class Hallway extends RenderTargetScene {
         this._animationController = this._createAnimationController();
         this._modelCamera = this._createModelCameraAnimation();
         this._modelCamera = this._createHumanModels();
-
-        // this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_CameraMovement, loop: false });
     }
 
     _createModel() {
@@ -125,7 +122,7 @@ class Hallway extends RenderTargetScene {
 
     _createAnimationController() {
         const model = this._model;
-        const animationController = new AnimationComponent(model);
+        const animationController = new AnimationComponent({ model, animations: model.animations });
 
         this.animationControllers.push(animationController);
 
@@ -153,8 +150,8 @@ class Hallway extends RenderTargetScene {
         for (let index = 0; index < this._modelsCount; index++) {
             const skinnedModelCloned = cloneSkinnedMesh(modelMan);
             skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
+            const animationController = new AnimationComponent({ model: skinnedModelCloned, animations: skinnedModelCloned.animations[index] });
 
-            const animationController = new AnimationComponent(skinnedModelCloned);
             this._humanAnimationControllers.push(animationController);
             this.add(skinnedModelCloned.scene);
 

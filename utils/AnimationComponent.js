@@ -1,18 +1,22 @@
 import * as THREE from 'three';
 
 class AnimationComponent {
-    constructor(model, skinnedMesh) {
-        this.model = model;
-        this.animations = this.model.animations;
+    constructor(options) {
+        this.model = options.model;
+        this.animations = options.animations;
         this.actions = [];
         this.actionType = {};
         this.mixer = null;
         this.currentAnim = null;
-        this._setupMixer(skinnedMesh);
+        this._setupMixer(options.skinnedMesh);
 
-        for (let index = 0; index < this.animations.length; index++) {
-            const animation = this.animations[index];
-            this._setupAnimations(animation, animation.name, index);
+        if (this.animations.length > 0) {
+            for (let index = 0; index < this.animations.length; index++) {
+                const animation = this.animations[index];
+                this._setupMultipleAnimations(animation, animation.name, index);
+            }
+        } else {
+            this._setupSingleAnimation(this.animations, this.animations.name);
         }
 
         this._activateAllActions();
@@ -94,8 +98,13 @@ class AnimationComponent {
         this.mixer = new THREE.AnimationMixer(skinnedMesh || this.model.scene);
     }
 
-    _setupAnimations(action, actionName, animationNumber) {
+    _setupMultipleAnimations(action, actionName, animationNumber) {
         this.actionType[actionName] = this.mixer.clipAction(this.animations[animationNumber]);
+        this.actions.push(this.actionType[actionName]);
+    }
+
+    _setupSingleAnimation(action, actionName) {
+        this.actionType[actionName] = this.mixer.clipAction(this.animations);
         this.actions.push(this.actionType[actionName]);
     }
 
@@ -108,8 +117,8 @@ class AnimationComponent {
     _activateAllActions(action, actionWeight) {
         this.actions.forEach((action) => {
             this._setWeight(action, 1.0);
-            // action.play();
-            // this._setWeight(action, 0.0);
+            action.play();
+            action.paused = true;
         });
     }
 }
