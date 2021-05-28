@@ -257,6 +257,11 @@ class RenderTargetScene extends THREE.Scene {
             }
         }
 
+        timelineProgress.to(this._uniforms[`u_rewind_${this._id}`], { duration: 0.05, value: 1.0 }, 0);
+
+        // Reset to 0 at timeline end
+        timelineProgress.to(this._uniforms[`u_rewind_${this._id}`], { duration: 0.05, value: 0.0 });
+
         return timelineProgress;
     }
 
@@ -320,6 +325,8 @@ class RenderTargetScene extends THREE.Scene {
         // Completed
         uniforms[`u_completed_${this._id}`] = { value: 0.0 };
         uniforms[`u_completed_alpha_${this._id}`] = { value: 1.0 };
+        // Rewind
+        uniforms[`u_rewind_${this._id}`] = { value: 0.0 };
 
         return uniforms;
     }

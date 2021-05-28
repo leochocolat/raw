@@ -37,6 +37,13 @@ const data = {
         supermarket: 21,
         bar: 33,
     },
+
+    animations: {
+        hallway: { duration: 26 },
+        library: { duration: 10 },
+        supermarket: { duration: 1 },
+        bar: { duration: 1 },
+    },
 };
 
 export default data;

@@ -4,6 +4,9 @@ import ArrowsRewind from '@/assets/icons/arrows-rewind.svg?inline';
 // Vendor
 import gsap from 'gsap';
 
+// Data
+import data from '@/webgl/data';
+
 export default {
     props: ['scene'],
 
@@ -20,7 +23,7 @@ export default {
     computed: {
         time() {
             const date = new Date(this.scene.startTime);
-            date.setSeconds(date.getSeconds() + this.duration);
+            date.setSeconds(date.getSeconds() + data.seconds[this.id] + this.duration);
             return date.toLocaleTimeString('en-GB');
         },
     },
@@ -38,7 +41,11 @@ export default {
          * Public
          */
         transitionIn() {
-            return this.$refs.censorship.transitionIn();
+            const timeline = new gsap.timeline();
+
+            timeline.add(this.$refs.censorship.transitionIn(), data.animations[this.id].duration);
+
+            return timeline;
         },
 
         transitionOut() {
@@ -63,6 +70,18 @@ export default {
             this.timelineHideRewind.to(this.$refs.rewindIcon, { duration: 0.1, alpha: 0 }, 0);
 
             return this.timelineHideRewind;
+        },
+
+        rewindClock() {
+            const tweenObject = { duration_: this.duration };
+            return gsap.to(tweenObject, {
+                duration: 1,
+                duration_: 0,
+                onUpdate: () => {
+                    this.duration = Math.round(tweenObject.duration_);
+                    console.log(this.duration);
+                },
+            });
         },
 
         startClock() {

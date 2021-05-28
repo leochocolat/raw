@@ -60,6 +60,7 @@ export default {
             if (!this.isComplete) {
                 delay = 1;
                 timeline.add(this.$refs.screenActive.showRewindArrow(), 0);
+                timeline.add(this.$refs.screenActive.rewindClock(), 0);
                 timeline.add(this.$root.webglApp.sceneManager.scenes[this.scene.id].resetAnimationProgress(), 0);
                 timeline.add(this.$refs.screenActive.hideRewindArrow());
             }

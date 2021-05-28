@@ -9,6 +9,7 @@ import Blur from './debugScenes/Blur';
 import BlurEditor from './debugScenes/BlurEditor';
 import Screen from './debugScenes/Screen';
 import ScreenComplete from './debugScenes/ScreenComplete';
+import ScreenRewind from './debugScenes/ScreenRewind';
 import AnimTexture from './debugScenes/AnimTexture';
 
 export default {
@@ -22,5 +23,6 @@ export default {
     'blur-editor': BlurEditor,
     'screen': Screen,
     'screen-complete': ScreenComplete,
+    'screen-rewind': ScreenRewind,
     'animTexture': AnimTexture,
 };

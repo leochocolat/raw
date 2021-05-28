@@ -110,6 +110,11 @@ class ScreensContainer extends THREE.Mesh {
             u_wobble_intensity: { value: 0.2 },
             u_line_intensity: { value: 2.0 },
             u_distortion_intensity: { value: 0.04 },
+            // Rewind
+            u_rewind_wobble_intensity: { value: 0.6 },
+            u_rewind_distortion_size: { value: 0.05 },
+            u_rewind_distortion_speed: { value: 1.5 },
+            u_rewind_distortion_intensity: { value: 0.02 },
         };
 
         const uniforms = {
@@ -175,6 +180,12 @@ class ScreensContainer extends THREE.Mesh {
         completed.addInput(this.material.uniforms.u_wobble_intensity, 'value', { label: 'Wobble', min: 0, max: 1.0 });
         completed.addInput(this.material.uniforms.u_line_intensity, 'value', { label: 'Line', min: 0, max: 10 });
         completed.addInput(this.material.uniforms.u_distortion_intensity, 'value', { label: 'scan distortion', min: 0, max: 10 });
+
+        const rewind = debugFolder.addFolder({ title: 'Rewind' });
+        rewind.addInput(this.material.uniforms.u_rewind_wobble_intensity, 'value', { label: 'Wooble', min: 0, max: 1 });
+        rewind.addInput(this.material.uniforms.u_rewind_distortion_intensity, 'value', { label: 'Distortion Speed', min: 0, max: 0.5 });
+        rewind.addInput(this.material.uniforms.u_rewind_distortion_speed, 'value', { label: 'Distortion Speed', min: 0, max: 5 });
+        rewind.addInput(this.material.uniforms.u_rewind_distortion_size, 'value', { label: 'Distortion Size Y', min: 0, max: 0.1 });
 
         return debugFolder;
     }
