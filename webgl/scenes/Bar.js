@@ -102,7 +102,6 @@ class Bar extends RenderTargetScene {
         if (!this._model.cameras) return;
 
         super.cameras.setModelCamera(this._model.cameras[0]);
-        console.log(this._cameras, this._model.cameras[0]);
         return this._model.cameras[0];
     }
 

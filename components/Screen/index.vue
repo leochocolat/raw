@@ -7,6 +7,10 @@
                 {{ time }}
             </div>
 
+            <div class="rewind-icon">
+                <ArrowsRewind />
+            </div>
+
             <Frame ref="frame" />
 
             <!-- Scene is not completed -->

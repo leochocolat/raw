@@ -7,6 +7,10 @@
                 {{ time }}
             </div>
 
+            <div ref="rewindIcon" class="rewind-icon">
+                <ArrowsRewind />
+            </div>
+
             <Frame ref="frame" />
 
             <div class="screen-footer">

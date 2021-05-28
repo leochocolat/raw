@@ -1,5 +1,6 @@
 // Assets
 import ArrowDown from '@/assets/icons/arrow-down.svg?inline';
+import ArrowsRewind from '@/assets/icons/arrows-rewind.svg?inline';
 
 // Vendor
 import gsap from 'gsap';
@@ -119,5 +120,6 @@ export default {
 
     components: {
         ArrowDown,
+        ArrowsRewind,
     },
 };

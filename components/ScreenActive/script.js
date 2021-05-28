@@ -1,3 +1,9 @@
+// Assets
+import ArrowsRewind from '@/assets/icons/arrows-rewind.svg?inline';
+
+// Vendor
+import gsap from 'gsap';
+
 export default {
     props: ['scene'],
 
@@ -39,6 +45,26 @@ export default {
             return this.$refs.censorship.transitionOut();
         },
 
+        showRewindArrow() {
+            this.timelineShowRewind = new gsap.timeline({
+                repeat: -1,
+                yoyo: true,
+            });
+
+            this.timelineShowRewind.to(this.$refs.rewindIcon, { duration: 0.2, alpha: 1 });
+
+            return this.timelineShowRewind;
+        },
+
+        hideRewindArrow() {
+            this.timelineHideRewind = new gsap.timeline();
+
+            this.timelineHideRewind.call(() => { this.timelineShowRewind?.kill(); }, null, 0);
+            this.timelineHideRewind.to(this.$refs.rewindIcon, { duration: 0.1, alpha: 0 }, 0);
+
+            return this.timelineHideRewind;
+        },
+
         startClock() {
             this._clock = setInterval(this.clockHandler, 1000);
         },
@@ -59,7 +85,7 @@ export default {
         },
     },
 
-    // components: {
-    //     ArrowDown,
-    // },
+    components: {
+        ArrowsRewind,
+    },
 };

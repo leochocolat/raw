@@ -69,6 +69,8 @@ export default {
         transitionIn() {
             const timeline = new gsap.timeline();
 
+            timeline.to(this.$el, { duration: 0.1, alpha: 1 });
+
             timeline.call(() => {
                 this.$store.dispatch('setInstructions', this.scene.instruction);
                 this.allowSubmit = true;
@@ -79,6 +81,8 @@ export default {
 
         transitionOut() {
             const timeline = new gsap.timeline();
+
+            timeline.to(this.$el, { duration: 0.1, alpha: 0 });
 
             timeline.call(() => {
                 // this.$store.dispatch('setInstructions', '');

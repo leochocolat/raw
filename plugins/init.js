@@ -43,8 +43,6 @@ export default (context) => {
                     store.dispatch('data/setSceneCensorshipInitialFactor', { id: key, value: scene.censorshipFactor });
                 }
 
-                console.log(store.state.data);
-
                 $cookies.set('data', store.state.data, {
                     // One month
                     expires: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),

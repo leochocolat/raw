@@ -1,4 +1,5 @@
 // Vendor
+import gsap from 'gsap';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -33,10 +34,20 @@ export default {
          * Public
          */
         transitionIn() {
-            return this.$refs.inputCensorship.transitionIn();
+            const timeline = new gsap.timeline();
+
+            timeline.add(this.$refs.inputCensorship.transitionIn(), 0);
+
+            return timeline;
         },
 
         transitionOut() {
+            const timeline = new gsap.timeline();
+
+            timeline.add(this.$refs.inputCensorship.transitionOut(), 0);
+            timeline.add(this.$refs.inputCensorshipText.transitionOut(), 0);
+            timeline.add(this.$refs.censorshipMessages.transitionOut(), 0);
+
             return this.$refs.inputCensorship.transitionOut();
         },
 
