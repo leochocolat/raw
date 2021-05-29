@@ -84,6 +84,10 @@ class Hallway extends RenderTargetScene {
         this._animationController = this._createAnimationController();
         this._modelCamera = this._createModelCameraAnimation();
         this._modelCamera = this._createHumanModels();
+
+        // Debug
+        // this._animationsSettings.progress = 1;
+        // this._animationsProgressChangeHandler();
     }
 
     _createModel() {
@@ -106,7 +110,26 @@ class Hallway extends RenderTargetScene {
         const maskTexture = this._resources.get('blur-mask-test');
 
         const screen = this._model.scene.getObjectByName('Interaction_Screen');
-        this._blurScreen = new BlurScreen({ blurFactor: 0.5, scenePlane: screen, maskTexture, screenTexture, renderer: this._renderer, width: this._width, height: this._height });
+        const container = new THREE.Box3().setFromObject(screen);
+        const size = new THREE.Vector3();
+        container.getSize(size);
+
+        const width = size.z * 0.4;
+        const height = size.x;
+
+        size.x = width;
+        size.y = height;
+
+        this._blurScreen = new BlurScreen({
+            blurFactor: 0.5,
+            scenePlane: screen,
+            maskTexture,
+            screenTexture,
+            renderer: this._renderer,
+            width: this._width,
+            height: this._height,
+            size,
+        });
     }
 
     _createMaterial() {
@@ -122,7 +145,10 @@ class Hallway extends RenderTargetScene {
 
     _createAnimationController() {
         const model = this._model;
-        const animationController = new AnimationComponent({ model, animations: model.animations });
+        const animationController = new AnimationComponent({
+            model,
+            animations: model.animations,
+        });
 
         this.animationControllers.push(animationController);
 

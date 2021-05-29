@@ -15,6 +15,11 @@ vec2 resized_uv(vec2 inital_uv, vec2 aspect_ratio)
       min((u_resolution.y / u_resolution.x) / (aspect_ratio.y / aspect_ratio.x), 1.0)
     );
 
+    // ratio = vec2(
+    //   (u_resolution.x / u_resolution.y) / (aspect_ratio.x / aspect_ratio.y),
+    //   (u_resolution.y / u_resolution.x) / (aspect_ratio.y / aspect_ratio.x)
+    // );
+
     vec2 new_uv = vec2(
       inital_uv.x * ratio.x + (1.0 - ratio.x) * 0.5,
       inital_uv.y * ratio.y + (1.0 - ratio.y) * 0.5
@@ -47,4 +52,6 @@ void main() {
     // texel = blur_mask_texel;
 
     gl_FragColor = texel;
+
+    // gl_FragColor = vec4(vec3(v_uv.x), 1.0);
 }

@@ -36,7 +36,6 @@ export default {
     },
 
     mounted() {
-        console.log(this.instructions);
         this.setupEventListeners();
     },
 
@@ -84,7 +83,10 @@ export default {
         clickYesHandler() {
             this.$store.dispatch('stop/closeOverlay');
             this.$store.dispatch('stop/stop');
-            this.$store.dispatch('data/stop');
+
+            if (this.getRouteBaseName() !== 'prototype') {
+                this.$router.push(this.localePath('prototype'));
+            }
 
             this.$cookies.set('stop', true, {
                 // One month

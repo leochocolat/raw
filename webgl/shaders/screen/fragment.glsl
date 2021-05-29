@@ -46,6 +46,11 @@ uniform float u_completed_alpha_1;
 uniform float u_completed_alpha_2;
 uniform float u_completed_alpha_3;
 
+uniform float u_rewind_0;
+uniform float u_rewind_1;
+uniform float u_rewind_2;
+uniform float u_rewind_3;
+
 // Old screen effect uniforms
 
 uniform float u_global_intensity;
@@ -74,6 +79,11 @@ uniform float u_vignette_intensity;
 uniform float u_distortion_intensity;
 uniform float u_wobble_intensity;
 uniform float u_line_intensity;
+// Rewind
+uniform float u_rewind_wobble_intensity;
+uniform float u_rewind_distortion_size;
+uniform float u_rewind_distortion_speed;
+uniform float u_rewind_distortion_intensity;
 
 const float PI = 3.14159265;
 
@@ -131,6 +141,30 @@ vec2 crt(vec2 coord, float bend) {
 	return coord;
 }
 
+float vertical_bar(float uv_y, float offset_intensity, float speed, float offset)
+{
+    float pos = mod(u_time * speed * u_rewind_distortion_speed + offset, 1.0);
+    float displacement = sin(1.0 - tan(u_time * 0.24 + offset));
+    displacement *= offset_intensity;
+
+    float edge0 = (pos - u_rewind_distortion_size);
+    float edge1 = (pos + u_rewind_distortion_size);
+
+    float x = smoothstep(edge0, pos, uv_y) * displacement;
+    x -= smoothstep(pos, edge1, uv_y) * displacement;
+
+    return x;
+}
+
+vec2 vertical_bars(vec2 uv, float rewind_value) {
+    uv.x += vertical_bar(uv.y, u_rewind_distortion_intensity, 1.0, 405.00) * rewind_value;
+    uv.x += vertical_bar(uv.y, u_rewind_distortion_intensity, -0.1, 1000.0) * rewind_value;
+    uv.x += vertical_bar(uv.y, u_rewind_distortion_intensity, 0.8, 87.0) * rewind_value;
+    uv.x += vertical_bar(uv.y, u_rewind_distortion_intensity, 0.5, 87.0) * rewind_value;
+
+    return uv;
+}
+
 // Split Screens
 vec4 splitScreens(vec2 uv) {
     vec2 centeredUv = uv - 0.5;
@@ -155,6 +189,14 @@ vec4 splitScreens(vec2 uv) {
     //  band distortion
     float t_val = tan(0.25 * u_time + vUv.y * PI * .67);
     vec2 tan_off = vec2(wobbl.x * min(0., t_val), 0.) * u_distortion_intensity;
+
+    // Apply rewind
+    vec2 rewind_wobble = vec2((u_rewind_wobble_intensity / 100.0) * rand(vec2(u_time, gl_FragCoord.y)), 0.);
+
+    uv_0 = vertical_bars(uv_0, u_rewind_0) + rewind_wobble * u_rewind_0;
+    uv_1 = vertical_bars(uv_1, u_rewind_1) + rewind_wobble * u_rewind_1;
+    uv_2 = vertical_bars(uv_2, u_rewind_2) + rewind_wobble * u_rewind_2;
+    uv_3 = vertical_bars(uv_3, u_rewind_3) + rewind_wobble * u_rewind_3;
 
     vec4 texel_0 = texture2D(u_texture_0, uv_0 + ((wobbl + tan_off) * u_completed_0));
     vec4 texel_1 = texture2D(u_texture_1, uv_1 + ((wobbl + tan_off) * u_completed_1));

@@ -21,7 +21,7 @@
                 <div class="censorship-progress" :style="`width: calc(${dragRelativePosition} * 100%)`"></div>
             </div>
 
-            <div ref="rangeLimit" class="range-limit" :style="`width: ${(maxRange * 2) * 100}%; left: ${minFactor * 100}%`">
+            <div ref="rangeLimit" class="range-limit" :style="`width: ${(maxFactor - minFactor) * 100}%; left: ${minFactor * 100}%`">
                 <Frame />
                 <span class="current-censorship"> {{ Math.round(newCensorshipFactor * 100) }}%</span>
             </div>

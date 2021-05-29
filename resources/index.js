@@ -109,6 +109,13 @@ const webgl = [
             playsinline: true,
         },
     },
+    // Screen effects
+    {
+        type: 'texture',
+        name: 'screen-rewind-displacement',
+        path: '/textures/screen-rewind-displacement.png',
+        preload: false,
+    },
 ];
 
 const resources = [...fonts, ...webgl];

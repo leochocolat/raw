@@ -18,7 +18,7 @@ export default {
             // Submit
             isSubmitting: false,
             isSent: false,
-            allowSubmit: true,
+            allowSubmit: false,
             // Censorship
             newCensorshipFactor: this.$store.state.data.scenes[this.scene.id].censorshipFactor || this.scene.censorshipFactor,
             censorshipDelta: this.$store.state.data.scenes[this.scene.id].censorshipDelta || 0,
@@ -67,25 +67,33 @@ export default {
          * Public
          */
         transitionIn() {
-            const timeline = new gsap.timeline();
+            this.timelineOut?.kill();
 
-            timeline.call(() => {
+            this.timelineIn = new gsap.timeline();
+
+            this.timelineIn.to(this.$el, { duration: 0.1, alpha: 1 });
+
+            this.timelineIn.call(() => {
                 this.$store.dispatch('setInstructions', this.scene.instruction);
                 this.allowSubmit = true;
             }, null, 0);
 
-            return timeline;
+            return this.timelineIn;
         },
 
         transitionOut() {
-            const timeline = new gsap.timeline();
+            this.timelineIn?.kill();
 
-            timeline.call(() => {
+            this.timelineOut = new gsap.timeline();
+
+            this.timelineOut.to(this.$el, { duration: 0.1, alpha: 0 });
+
+            this.timelineOut.call(() => {
                 // this.$store.dispatch('setInstructions', '');
                 this.allowSubmit = false;
             }, null, 0);
 
-            return timeline;
+            return this.timelineOut;
         },
 
         setComplete() {

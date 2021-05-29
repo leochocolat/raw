@@ -1,3 +1,12 @@
+// Assets
+import ArrowsRewind from '@/assets/icons/arrows-rewind.svg?inline';
+
+// Vendor
+import gsap from 'gsap';
+
+// Data
+import data from '@/webgl/data';
+
 export default {
     props: ['scene'],
 
@@ -14,7 +23,7 @@ export default {
     computed: {
         time() {
             const date = new Date(this.scene.startTime);
-            date.setSeconds(date.getSeconds() + this.duration);
+            date.setSeconds(date.getSeconds() + data.seconds[this.id] + this.duration);
             return date.toLocaleTimeString('en-GB');
         },
     },
@@ -32,11 +41,46 @@ export default {
          * Public
          */
         transitionIn() {
-            return this.$refs.censorship.transitionIn();
+            const timeline = new gsap.timeline();
+
+            timeline.add(this.$refs.censorship.transitionIn(), data.animations[this.id].duration);
+
+            return timeline;
         },
 
         transitionOut() {
             return this.$refs.censorship.transitionOut();
+        },
+
+        showRewindArrow() {
+            this.timelineShowRewind = new gsap.timeline({
+                repeat: -1,
+                yoyo: true,
+            });
+
+            this.timelineShowRewind.to(this.$refs.rewindIcon, { duration: 0.2, alpha: 1 });
+
+            return this.timelineShowRewind;
+        },
+
+        hideRewindArrow() {
+            this.timelineHideRewind = new gsap.timeline();
+
+            this.timelineHideRewind.call(() => { this.timelineShowRewind?.kill(); }, null, 0);
+            this.timelineHideRewind.to(this.$refs.rewindIcon, { duration: 0.1, alpha: 0 }, 0);
+
+            return this.timelineHideRewind;
+        },
+
+        rewindClock() {
+            const tweenObject = { duration_: this.duration };
+            return gsap.to(tweenObject, {
+                duration: 1,
+                duration_: 0,
+                onUpdate: () => {
+                    this.duration = Math.round(tweenObject.duration_);
+                },
+            });
         },
 
         startClock() {
@@ -59,7 +103,7 @@ export default {
         },
     },
 
-    // components: {
-    //     ArrowDown,
-    // },
+    components: {
+        ArrowsRewind,
+    },
 };

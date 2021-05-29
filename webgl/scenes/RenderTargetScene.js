@@ -57,7 +57,7 @@ class RenderTargetScene extends THREE.Scene {
         this._uniforms = this._createUniforms();
 
         // Debug
-        window[`_resetAnimationProgress_${this._id}`] = this._resetAnimationProgress;
+        window[`resetAnimationProgress_${this._id}`] = this.resetAnimationProgress;
     }
 
     /**
@@ -161,7 +161,6 @@ class RenderTargetScene extends THREE.Scene {
         this._timelineMenu = new gsap.timeline();
 
         this._timelineMenu.call(this._resetCameraPosition, null, 0);
-        this._timelineMenu.call(this._resetAnimationProgress, null, 0);
         this._timelineMenu.set(this._uniforms[`u_step_factor_${this._id}`], { value: 0.5 }, 0);
         this._timelineMenu.set(this._uniforms[`u_size_${this._id}`], { value: 0.5 }, 0);
         this._timelineMenu.set(this._uniforms[`u_scale_${this._id}`], { value: 2 }, 0);
@@ -242,6 +241,30 @@ class RenderTargetScene extends THREE.Scene {
         return this.timelineComplete;
     }
 
+    resetAnimationProgress() {
+        const timelineProgress = new gsap.timeline();
+
+        if (!this._animationControllers) return timelineProgress;
+
+        for (let i = 0; i < this._animationControllers.length; i++) {
+            const animationController = this._animationControllers[i];
+
+            for (const key in animationController.actionType) {
+                const animationAction = animationController.actionType[key];
+                animationAction.paused = true;
+
+                timelineProgress.to(animationAction, { duration: 1, time: 0 }, 0);
+            }
+        }
+
+        timelineProgress.to(this._uniforms[`u_rewind_${this._id}`], { duration: 0.05, value: 1.0 }, 0);
+
+        // Reset to 0 at timeline end
+        timelineProgress.to(this._uniforms[`u_rewind_${this._id}`], { duration: 0.05, value: 0.0 });
+
+        return timelineProgress;
+    }
+
     // Hooks
     mousemoveHandler(e) {
         if (!this._interactionsSettings.isEnable || !this._isActive) return;
@@ -302,6 +325,8 @@ class RenderTargetScene extends THREE.Scene {
         // Completed
         uniforms[`u_completed_${this._id}`] = { value: 0.0 };
         uniforms[`u_completed_alpha_${this._id}`] = { value: 1.0 };
+        // Rewind
+        uniforms[`u_rewind_${this._id}`] = { value: 0.0 };
 
         return uniforms;
     }
@@ -329,25 +354,6 @@ class RenderTargetScene extends THREE.Scene {
         // Rotation
         this._cameraRotation.target.x = this._cameraRotation.initial.x;
         this._cameraRotation.target.y = this._cameraRotation.initial.y;
-    }
-
-    _resetAnimationProgress() {
-        const timelineProgress = new gsap.timeline();
-
-        if (!this._animationControllers) return timelineProgress;
-
-        for (let i = 0; i < this._animationControllers.length; i++) {
-            const animationController = this._animationControllers[i];
-
-            for (const key in animationController.actionType) {
-                const animationAction = animationController.actionType[key];
-                animationAction.paused = true;
-
-                timelineProgress.to(animationAction, { duration: 1, time: 0 }, 0);
-            }
-        }
-
-        return timelineProgress;
     }
 
     _updateCameraPosition() {
@@ -414,7 +420,7 @@ class RenderTargetScene extends THREE.Scene {
             'setVisible',
             'setInvisible',
             '_resetCameraPosition',
-            '_resetAnimationProgress',
+            'resetAnimationProgress',
         );
     }
 }
