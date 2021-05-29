@@ -127,13 +127,12 @@ class AnimTexture extends DebugScene {
 
     _createAnimationController(skinnedMesh) {
         const model = this._skinnedModel;
-        const animationController = new AnimationComponent(model, skinnedMesh);
+        const animationController = new AnimationComponent({ model, animations: model.animations, skinnedMesh });
 
         return animationController;
     }
 
     _setupMesh() {
-        console.log(this._skinnedModel);
         const mesh = this._skinnedModel.scene.getObjectByName('skinned_mesh');
         // const mesh = this._skinnedModel.scene.getObjectByName('vanguard_Mesh');
 
@@ -306,12 +305,14 @@ class AnimTexture extends DebugScene {
         // this.add(mesh);
 
         // TPOSE is making models jumping
-        const animations = ['LyceenHomme_TalkArmPush', 'LyceenHomme_Phone'];
+        const animations = ['LyceenHomme_Phone', 'LyceenHomme_TalkArmPush'];
         // const animations = ['left', 'right'];
         for (let index = 0; index < this._modelsCount; index++) {
-            const animationController = new AnimationComponent(this._skinnedModel, skinnedMesh);
+            // const animationController = new AnimationComponent(this._skinnedModel, skinnedMesh);
+            const animationController = new AnimationComponent({ model: this._skinnedModel, animations: this._skinnedModel.animations[index], skinnedMesh });
 
             this._animationControllers.push(animationController);
+            // animationController.playAnimation({ animation: animationController.actionType[animations[index]], loop: false });
             animationController.playAnimation({ animation: animationController.actionType[animations[index]], loop: false });
         }
     }
