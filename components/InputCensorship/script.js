@@ -67,29 +67,33 @@ export default {
          * Public
          */
         transitionIn() {
-            const timeline = new gsap.timeline();
+            this.timelineOut?.kill();
 
-            timeline.to(this.$el, { duration: 0.1, alpha: 1 });
+            this.timelineIn = new gsap.timeline();
 
-            timeline.call(() => {
+            this.timelineIn.to(this.$el, { duration: 0.1, alpha: 1 });
+
+            this.timelineIn.call(() => {
                 this.$store.dispatch('setInstructions', this.scene.instruction);
                 this.allowSubmit = true;
             }, null, 0);
 
-            return timeline;
+            return this.timelineIn;
         },
 
         transitionOut() {
-            const timeline = new gsap.timeline();
+            this.timelineIn?.kill();
 
-            timeline.to(this.$el, { duration: 0.1, alpha: 0 });
+            this.timelineOut = new gsap.timeline();
 
-            timeline.call(() => {
+            this.timelineOut.to(this.$el, { duration: 0.1, alpha: 0 });
+
+            this.timelineOut.call(() => {
                 // this.$store.dispatch('setInstructions', '');
                 this.allowSubmit = false;
             }, null, 0);
 
-            return timeline;
+            return this.timelineOut;
         },
 
         setComplete() {

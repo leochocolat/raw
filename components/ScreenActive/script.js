@@ -79,7 +79,6 @@ export default {
                 duration_: 0,
                 onUpdate: () => {
                     this.duration = Math.round(tweenObject.duration_);
-                    console.log(this.duration);
                 },
             });
         },

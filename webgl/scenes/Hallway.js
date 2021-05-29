@@ -85,8 +85,9 @@ class Hallway extends RenderTargetScene {
         this._modelCamera = this._createModelCameraAnimation();
         this._modelCamera = this._createHumanModels();
 
-        this._animationsSettings.progress = 1;
-        this._animationsProgressChangeHandler();
+        // Debug
+        // this._animationsSettings.progress = 1;
+        // this._animationsProgressChangeHandler();
     }
 
     _createModel() {
@@ -113,7 +114,7 @@ class Hallway extends RenderTargetScene {
         const size = new THREE.Vector3();
         container.getSize(size);
 
-        const width = size.z * 0.52;
+        const width = size.z * 0.4;
         const height = size.x;
 
         size.x = width;
