@@ -18,7 +18,7 @@ export default {
             // Submit
             isSubmitting: false,
             isSent: false,
-            allowSubmit: true,
+            allowSubmit: false,
             // Censorship
             newCensorshipFactor: this.$store.state.data.scenes[this.scene.id].censorshipFactor || this.scene.censorshipFactor,
             censorshipDelta: this.$store.state.data.scenes[this.scene.id].censorshipDelta || 0,

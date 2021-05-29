@@ -6,6 +6,16 @@ import { mapGetters } from 'vuex';
 import page from '@/mixins/page';
 
 export default {
+    data() {
+        return {
+            lang: this.$i18n.locale,
+            instruction: {
+                en: 'Move your mouse to look around',
+                fr: 'Bouger la souris pour regarder autour de vous',
+            },
+        };
+    },
+
     mixins: [page],
 
     asyncData({ $api, route }) {
@@ -33,6 +43,7 @@ export default {
         firstReveal(done, routeInfos) {
             const timeline = gsap.timeline({ onComplete: done });
 
+            timeline.call(this.setInstructions, 0);
             timeline.call(() => this.$store.dispatch('scenes/setMenuScene', false), 0);
             timeline.call(() => this.$store.dispatch('scenes/setActiveScene', this.$options.name), 0);
             timeline.to(this.$el, { duration: 0.1, alpha: 1, ease: 'circ.inOut' }, 2);
@@ -44,6 +55,7 @@ export default {
         transitionIn(done, routeInfos) {
             const timeline = gsap.timeline({ onComplete: done });
 
+            timeline.call(this.setInstructions, 0);
             timeline.call(() => this.$store.dispatch('scenes/setMenuScene', false), 0);
             timeline.call(() => this.$store.dispatch('scenes/setActiveScene', this.$options.name), 0);
             timeline.to(this.$el, { duration: 0.1, alpha: 1, ease: 'circ.inOut' }, 0.5);
@@ -71,6 +83,13 @@ export default {
             timeline.call(done, null);
 
             return timeline;
+        },
+
+        /**
+         * Private
+         */
+        setInstructions() {
+            this.$store.dispatch('setInstructions', this.instruction[this.lang]);
         },
     },
 };
