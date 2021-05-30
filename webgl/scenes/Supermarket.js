@@ -8,6 +8,7 @@ import RenderTargetScene from './RenderTargetScene';
 import AnimationComponent from '@/utils/AnimationComponent';
 import { ResourceManager } from '@/utils/resource-loader';
 import bindAll from '@/utils/bindAll';
+import AudioManager from '@/utils/AudioManager';
 
 class Supermarket extends RenderTargetScene {
     constructor(options) {
@@ -28,15 +29,15 @@ class Supermarket extends RenderTargetScene {
     /**
      * Public
      */
-    /**
-     * Public
-     */
     transitionIn() {
         super.transitionIn();
 
         if (!this._animationController) return;
 
         this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_CameraMovement, loop: false });
+
+        AudioManager.add('audio_supermarket', this._resources.get('audio_supermarket'));
+        AudioManager.play('audio_supermarket', { loop: true });
     }
 
     setCensorship(censorshipFactor) {

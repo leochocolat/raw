@@ -10,6 +10,7 @@ import AnimationComponent from '@/utils/AnimationComponent';
 import bindAll from '@/utils/bindAll';
 import { ResourceManager } from '@/utils/resource-loader';
 import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
+import AudioManager from '@/utils/AudioManager';
 
 class Hallway extends RenderTargetScene {
     constructor(options) {
@@ -41,6 +42,8 @@ class Hallway extends RenderTargetScene {
         for (let index = 0; index < this._modelsCount; index++) {
             this._humanAnimationControllers[index].playAnimation({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], loop: false });
         }
+        AudioManager.add('audio_hallway', this._resources.get('audio_hallway'));
+        AudioManager.play('audio_hallway', { loop: true });
     }
 
     setCensorship(censorshipFactor) {

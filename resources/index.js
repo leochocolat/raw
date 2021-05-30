@@ -19,6 +19,21 @@ const fonts = [
     },
 ];
 
+// Sounds
+
+const audios = [
+    // Scenes
+    ...hallway,
+    ...library,
+    ...supermarket,
+    ...bar,
+    {
+        type: 'audio',
+        name: 'audio_main',
+        path: '/audio/audio_main.mp3',
+        preload: true,
+    },
+];
 /**
  * WebGL
  */
@@ -118,6 +133,6 @@ const webgl = [
     },
 ];
 
-const resources = [...fonts, ...webgl];
+const resources = [...fonts, ...webgl, ...audios];
 
 export default resources;

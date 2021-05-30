@@ -21,6 +21,7 @@ class AudioManager {
 
     play(name, options) {
         const next = this._tracks[name];
+
         if (this._current === next) return;
 
         if (this._current) {
@@ -33,6 +34,21 @@ class AudioManager {
         this._current.attack = 0.5;
         this._current.release = 2;
         this._current.play();
+    }
+
+    pause(name, options) {
+        console.log('gello');
+        const next = this._tracks[name];
+
+        // if (this._current === next) return;
+
+        // if (this._current) {
+        //     this._current.pause();
+        // }
+
+        next.pause();
+
+        gsap.to(next, { volume: 0, duration: 1 });
     }
 
     playEffect(name) {
@@ -60,13 +76,13 @@ class AudioManager {
     mute() {
         if (this._isMuted) return;
         this._isMuted = true;
-        gsap.to(Pizzicato, 1, { volume: 0 });
+        gsap.to(Pizzicato, { volume: 0, duration: 1 });
     }
 
     unmute() {
         if (!this._isMuted) return;
         this._isMuted = false;
-        gsap.to(Pizzicato, 1, { volume: VOLUME });
+        gsap.to(Pizzicato, { volume: VOLUME, duration: 1 });
     }
 }
 
