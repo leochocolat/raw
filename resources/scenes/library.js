@@ -16,6 +16,15 @@ const resources = [
         path: '/textures/basis/scene_library.basis',
         preload: false,
     },
+
+    // Sounds
+    // {
+    //     type: 'audio',
+    //     name: 'audio_library',
+    //     namespace: 'library',
+    //     path: '/audio/audio_library.mp3',
+    //     preload: false,
+    // },
 ];
 
 export default resources;

@@ -16,6 +16,14 @@ const resources = [
         path: '/textures/basis/scene_supermarket.basis',
         preload: false,
     },
+    // Sounds
+    {
+        type: 'audio',
+        name: 'audio_supermarket',
+        namespace: 'supermarket',
+        path: '/audio/audio_supermarket.mp3',
+        preload: false,
+    },
 ];
 
 export default resources;

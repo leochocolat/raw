@@ -3,6 +3,7 @@ import gsap from 'gsap';
 
 // Utils
 import math from '@/utils/math';
+import AudioManager from '@/utils/AudioManager';
 
 export default {
     data() {
@@ -51,7 +52,6 @@ export default {
             this.activeScreen = this.screens[this.index];
             this.$store.dispatch('preloader/setStep', this.steps[this.index]);
             this.activeScreen.transitionIn();
-            // this.startTimer();
         },
 
         restart() {
@@ -71,6 +71,7 @@ export default {
             this.index++;
             this.goToIndex(this.index);
             this.startTimer();
+            this.startAudio();
         },
 
         /**
@@ -83,6 +84,11 @@ export default {
         killTimer() {
             if (!this.interval) return;
             clearInterval(this.interval);
+        },
+
+        startAudio() {
+            // AudioManager.add('audio_hallway', this._resources.get('audio_hallway'));
+            // AudioManager.play('audio_hallway', { loop: true });
         },
 
         goToIndex(index) {

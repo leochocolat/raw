@@ -11,7 +11,6 @@ const resources = [
         type: 'gltf',
         name: 'LyceenHomme',
         path: '/models/LyceenHomme.glb',
-        // path: '/models/Soldier.glb',
         namespace: 'hallway',
         preload: false,
     },
@@ -22,16 +21,24 @@ const resources = [
         namespace: 'hallway',
         preload: false,
     },
-    // Hallway
+    // Textures
     {
         type: 'basis',
-        // type: 'texture',
         name: 'texture_hallway',
         namespace: 'hallway',
         path: '/textures/basis/scene_hallway.basis',
-        // path: '/textures/scene_hallway.png',
         preload: false,
     },
+
+    // Sounds
+    {
+        type: 'audio',
+        name: 'audio_hallway',
+        namespace: 'hallway',
+        path: '/audio/audio_hallway.mp3',
+        preload: false,
+    },
+
 ];
 
 export default resources;
