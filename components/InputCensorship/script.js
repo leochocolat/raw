@@ -129,7 +129,7 @@ export default {
 
         updateDragPosition(mousePositionX) {
             // Drag position is clamped to full range bounds
-            this.dragPosition = math.clamp(mousePositionX - this.rangeBounds.x, 0, this.rangeBounds.width - 2);
+            this.dragPosition = math.clamp(mousePositionX - this.rangeBounds.x, 0, this.rangeBounds.width);
 
             // Relative Drag position is clamped to min and max values
             this.dragRelativePosition = math.clamp(this.dragPosition / this.rangeBounds.width, this.minFactor, this.maxFactor);

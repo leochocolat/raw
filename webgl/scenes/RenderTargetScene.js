@@ -201,8 +201,6 @@ class RenderTargetScene extends THREE.Scene {
         this._cameraPosition.initial.set(camera.position.x, camera.position.y, camera.position.z);
         this._cameraRotation.initial.set(camera.rotation.x, camera.rotation.y, camera.rotation.z);
 
-        console.log(this._cameraRotation.initial, this._name);
-
         this._cameraRotation.target.x = this._cameraRotation.initial.x;
         this._cameraRotation.current.x = this._cameraRotation.initial.x;
 

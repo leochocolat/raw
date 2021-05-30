@@ -38,14 +38,20 @@ export default {
          * Public
          */
         start() {
-            this.screens = [this.$refs.cookies, this.$refs.warning, this.$refs.intro, this.$refs.instructions, this.$refs.stop];
-            this.steps = ['cookies', 'warning', 'intro', 'instructions', 'stop'];
+            this.screens = [this.$refs.cookies, ...this.$refs.context, this.$refs.warning, this.$refs.intro, this.$refs.instructions, this.$refs.stop];
+
+            const contextSteps = [];
+            for (let i = 0; i < this.$refs.context.length; i++) {
+                contextSteps.push('context');
+            }
+
+            this.steps = ['cookies', ...contextSteps, 'warning', 'intro', 'instructions', 'stop'];
             this.activeIndex = 0;
             this.index = 0;
             this.activeScreen = this.screens[this.index];
             this.$store.dispatch('preloader/setStep', this.steps[this.index]);
             this.activeScreen.transitionIn();
-            this.startTimer();
+            // this.startTimer();
         },
 
         restart() {
@@ -59,6 +65,12 @@ export default {
             this.$el.style.display = 'none';
             this.intervalTime = 1000;
             this.restart();
+        },
+
+        cookiesClickHandler() {
+            this.index++;
+            this.goToIndex(this.index);
+            this.startTimer();
         },
 
         /**

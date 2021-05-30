@@ -1,5 +1,5 @@
-.cookies {
-    opacity: 0;
+.context {
+    // opacity: 0;
     
     display: flex;
 
@@ -23,14 +23,14 @@
 }
 
 .container {
-    width: vw(200px);
+    width: vw(180px);
 
     margin: auto;
 
     text-align: center;
     
     @include respond-to('large') {
-        width: vw-l(600px);
+        width: vw-l(650px);
     }
 }
 
@@ -39,23 +39,5 @@
         b {
             color: red;
         }
-    }
-}
-
-.button {
-    margin-top: 1em;
-
-    font-size: rem(14px);
-    color: $color-grey;
-    text-transform: uppercase;
-
-    cursor: pointer;
-
-    &:hover {
-        color: white;
-    }
-
-    @include respond-to('large') {
-        font-size: rem-l(25px);
     }
 }
