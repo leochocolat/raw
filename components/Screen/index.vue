@@ -14,7 +14,7 @@
             <Frame ref="frame" />
 
             <!-- Scene is not completed -->
-            <div v-if="!isComplete" class="screen-footer">
+            <div v-if="!isComplete && !isStopped" class="screen-footer">
                 <div class="call-to-action">
                     <span>{{ callToAction[lang][0] }}<ArrowDown class="arrow-down" /> </span><br /><span>{{ callToAction[lang][1] }}</span>
                 </div>
