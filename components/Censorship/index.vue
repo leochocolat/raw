@@ -9,6 +9,12 @@
                 :scene="data"
             />
 
+            <CensorshipRangeError
+                ref="censorshipRangeError"
+                class="censorshipRangeError"
+                :scene="data"
+            />
+
             <div class="form">
 
                 <InputCensorship

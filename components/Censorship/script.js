@@ -47,8 +47,17 @@ export default {
             timeline.add(this.$refs.inputCensorship.transitionOut(), 0);
             timeline.add(this.$refs.inputCensorshipText.transitionOut(), 0);
             timeline.add(this.$refs.censorshipMessages.transitionOut(), 0);
+            timeline.add(this.$refs.censorshipRangeError.transitionOut(), 0);
 
             return this.$refs.inputCensorship.transitionOut();
+        },
+
+        showRangeError() {
+            this.$refs.censorshipRangeError.transitionIn();
+        },
+
+        showMessages() {
+            this.$refs.censorshipMessages.transitionIn();
         },
 
         stepCompleteHandler(e) {
@@ -60,14 +69,6 @@ export default {
                 // Redirect to home
                 this.$router.push(this.localePath('prototype'));
             }
-        },
-
-        showMessages() {
-            this.$refs.censorshipMessages.transitionIn();
-        },
-
-        hideMessages() {
-            this.$refs.censorshipMessages.transitionOut();
         },
     },
 };

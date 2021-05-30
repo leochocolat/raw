@@ -47,7 +47,7 @@ class Hallway extends RenderTargetScene {
     }
 
     setCensorship(censorshipFactor) {
-        this._blurScreen.blur = censorshipFactor;
+        if (this._blurScreen) this._blurScreen.blur = censorshipFactor;
     }
 
     // Hooks

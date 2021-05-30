@@ -145,6 +145,7 @@ export default {
         watchOffRange() {
             if (this.dragPosition < (this.rangeLimitBounds.x - this.rangeBounds.x - 1) || this.dragPosition > this.rangeLimitBounds.width + (this.rangeLimitBounds.x - this.rangeBounds.x + 1)) {
                 this.isOffRange = true;
+                this.offRangeHandler();
             } else {
                 this.isOffRange = false;
             }
@@ -283,6 +284,12 @@ export default {
             this.throwTween?.kill();
             this.updateDragPosition(e.position.x);
             this.throw();
+        },
+
+        offRangeHandler() {
+            if (this.isOffRangeMessageVisible) return;
+            this.isOffRangeMessageVisible = true;
+            this.$parent.showRangeError();
         },
     },
 
