@@ -66,7 +66,7 @@ class Supermarket extends RenderTargetScene {
             namespace: 'supermarket',
 
         });
-        // resources.addByName('CameraMovement');
+
         resources.load();
 
         return resources;
@@ -106,7 +106,6 @@ class Supermarket extends RenderTargetScene {
     _createAnimationController() {
         const model = this._model;
         const animationController = new AnimationComponent({ model, animations: model.animations });
-        console.log(model);
         this.animationControllers.push(animationController);
 
         // animationController.playAnimation({ animation: animationController.actionType.CameraMove, loop: false });
@@ -117,7 +116,7 @@ class Supermarket extends RenderTargetScene {
     _createModelCameraAnimation() {
         if (!this._model.cameras) return;
 
-        super.cameras.setModelCamera(this._model.cameras[0]);
+        this.setModelCamera(this._model.cameras[0]);
 
         return this._model.cameras[0];
     }
@@ -171,11 +170,11 @@ class Supermarket extends RenderTargetScene {
     }
 
     _animationsProgressChangeHandler() {
-        // this._animationController.setAnimationProgress({ animation: this._animationController.actionType.CameraMove, progress: this._animationsSettings.progress });
+        this._animationController.setAnimationProgress({ animation: this._animationController.actionType.TRACK_CameraMovement, progress: this._animationsSettings.progress });
     }
 
     _clickPlayAnimationsHandler() {
-        // this._animationController.playAnimation({ animation: this._animationController.actionType.CameraMove, loop: false });
+        this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_CameraMovement, loop: false });
     }
 }
 
