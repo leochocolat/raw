@@ -71,7 +71,7 @@ export default {
             this.index++;
             this.goToIndex(this.index);
             this.startTimer();
-            this.startAudio();
+            // this.startAudio();
         },
 
         /**

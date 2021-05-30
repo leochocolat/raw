@@ -20,28 +20,28 @@
         <Warning
             ref="warning"
             class="screen"
-            :class="activeIndex === data.context.length + 1 ? 'is-enable' : ''"
+            :class="data.context && activeIndex === data.context.length + 1 ? 'is-enable' : ''"
             :data="data.warning"
         />
 
         <Tutorial
             ref="intro"
             class="screen"
-            :class="activeIndex === data.context.length + 2 ? 'is-enable' : ''"
+            :class="data.context && activeIndex === data.context.length + 2 ? 'is-enable' : ''"
             :data="data.tutorial1"
         />
 
         <Tutorial
             ref="instructions"
             class="screen"
-            :class="activeIndex === data.context.length + 3 ? 'is-enable' : ''"
+            :class="data.context && activeIndex === data.context.length + 3 ? 'is-enable' : ''"
             :data="data.tutorial2"
         />
 
         <Tutorial
             ref="stop"
             class="screen"
-            :class="activeIndex === data.context.length + 4 ? 'is-enable' : ''"
+            :class="data.context && activeIndex === data.context.length + 4 ? 'is-enable' : ''"
             :data="data.tutorial3"
         />
 
