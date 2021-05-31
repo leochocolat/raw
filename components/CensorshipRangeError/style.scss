@@ -1,7 +1,5 @@
 .censorship-range-error {
-    position: absolute;
-    top: vw(65px);
-    left: 0;
+    position: relative;
 
     width: 100%;
     height: auto;
@@ -11,7 +9,8 @@
     padding: vw(13px) vw(16px);
 
     @include respond-to('large') {
-        top: vw-l(65px);
+        position: absolute;
+        top: 0;
         left: vw-l(41px);
 
         width: vw-l(550px);

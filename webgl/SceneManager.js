@@ -52,6 +52,10 @@ class SceneManager extends THREE.Scene {
         return this._scenes;
     }
 
+    get screensContainer() {
+        return this._screensContainer;
+    }
+
     start() {
 
     }

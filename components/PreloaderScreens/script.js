@@ -58,6 +58,7 @@ export default {
             this.killTimer();
             this.activeScreen.transitionOut();
             this.start();
+            this.cookiesClickHandler();
         },
 
         disable() {

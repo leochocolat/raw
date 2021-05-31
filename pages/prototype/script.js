@@ -1,5 +1,6 @@
 // Vendor
 import gsap from 'gsap';
+import { mapGetters } from 'vuex';
 
 // Mixins
 import page from '@/mixins/page';
@@ -26,8 +27,19 @@ export default {
         });
     },
 
-    mounted() {
+    computed: {
+        ...mapGetters({
+            isStopped: 'stop/isStopped',
+            isComplete: 'data/isComplete',
+        }),
+    },
 
+    mounted() {
+        this.setupEventListeners();
+    },
+
+    beforeDestroy() {
+        this.removeEventListeners();
     },
 
     methods: {
@@ -71,5 +83,16 @@ export default {
         /**
          * Private
          */
+        setupEventListeners() {
+            window.addEventListener('scroll', this.scrollHandler);
+        },
+
+        removeEventListeners() {
+            window.removeEventListener('scroll', this.scrollHandler);
+        },
+
+        scrollHandler() {
+            this.$root.webglApp.scrollY = window.scrollY;
+        },
     },
 };

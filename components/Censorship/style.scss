@@ -18,6 +18,23 @@
     }
 }
 
+.header {
+    display: flex;
+    flex-direction: column;
+
+    position: absolute;
+    top: vw(65px);
+    left: 0;
+
+    width: 100%;
+
+    @include respond-to('large') {
+        display: block;
+
+        top: vw-l(65px);
+    }
+}
+
 .container {
     position: relative;
 

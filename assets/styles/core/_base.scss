@@ -4,12 +4,18 @@ html {
     color: white;
 
     background-color: black;
+
+    overscroll-behavior-y: none;
 }
 
 body {
+    overflow-y: scroll;
+
     font-size: rem-l(30px);
 
     background-color: black;
+    
+    overscroll-behavior-y: none;
 }
 
 * {

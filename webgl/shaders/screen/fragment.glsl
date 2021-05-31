@@ -1,11 +1,10 @@
 // Varyings
 varying vec2 vUv;
 
-// Split Screens uniforms
-
 uniform vec3 u_resolution;
 uniform float u_time;
 
+// Split Screens uniforms
 uniform float u_step_factor_0;
 uniform float u_step_factor_1;
 uniform float u_step_factor_2;
@@ -51,8 +50,6 @@ uniform float u_rewind_1;
 uniform float u_rewind_2;
 uniform float u_rewind_3;
 
-// Old screen effect uniforms
-
 uniform float u_global_intensity;
 // Color filter
 uniform float u_red_filter_intensity;
@@ -84,6 +81,8 @@ uniform float u_rewind_wobble_intensity;
 uniform float u_rewind_distortion_size;
 uniform float u_rewind_distortion_speed;
 uniform float u_rewind_distortion_intensity;
+// Scroll
+uniform float u_scroll_offset;
 
 const float PI = 3.14159265;
 
@@ -171,17 +170,19 @@ vec4 splitScreens(vec2 uv) {
     
     vec2 uv_0 = centeredUv * u_scale_0 + 0.5;
     uv_0.x += u_size_0;
-    uv_0.y -= u_size_0;
+    uv_0.y -= u_size_0 + u_scroll_offset * 2.0;
 
     vec2 uv_1 = centeredUv * u_scale_1 + 0.5;
-    uv_1.xy -= u_size_1;
+    uv_1.x -= u_size_1;
+    uv_1.y -= u_size_1 + u_scroll_offset * 2.0;
 
     vec2 uv_2 = centeredUv * u_scale_2 + 0.5;
-    uv_2.xy += u_size_2;
+    uv_2.x += u_size_2;
+    uv_2.y += u_size_2 - u_scroll_offset * 2.0;
 
     vec2 uv_3 = centeredUv * u_scale_3 + 0.5;
-    uv_3.y += u_size_3;
     uv_3.x -= u_size_3;
+    uv_3.y += u_size_3 - u_scroll_offset * 2.0;
 
     // wobble
     vec2 wobbl = vec2((u_wobble_intensity / 100.0) * rand(vec2(u_time, gl_FragCoord.y)), 0.);
@@ -197,6 +198,12 @@ vec4 splitScreens(vec2 uv) {
     uv_1 = vertical_bars(uv_1, u_rewind_1) + rewind_wobble * u_rewind_1;
     uv_2 = vertical_bars(uv_2, u_rewind_2) + rewind_wobble * u_rewind_2;
     uv_3 = vertical_bars(uv_3, u_rewind_3) + rewind_wobble * u_rewind_3;
+
+    // Scroll
+    // uv_0.y -= u_scroll_offset * 2.0;
+    // uv_1.y -= u_scroll_offset * 2.0;
+    // uv_2.y -= u_scroll_offset * 2.0;
+    // uv_3.y -= u_scroll_offset * 2.0;
 
     vec4 texel_0 = texture2D(u_texture_0, uv_0 + ((wobbl + tan_off) * u_completed_0));
     vec4 texel_1 = texture2D(u_texture_1, uv_1 + ((wobbl + tan_off) * u_completed_1));
@@ -261,17 +268,20 @@ vec4 splitScreens(vec2 uv) {
     texel_3.g += wh * u_completed_3;
     texel_3.b += wh * u_completed_3;
 
+    vec2 plane_uv = vUv;
+    // plane_uv.y -= u_scroll_offset;
+
     // Split
-    float factore_0 = step(-1. + u_step_factor_0, -vUv.x) * step(u_step_factor_0, vUv.y);
+    float factore_0 = step(-1. + u_step_factor_0, -plane_uv.x) * step(u_step_factor_0, plane_uv.y);
     texel_0 *= factore_0;
 
-    float factore_1 = step(u_step_factor_1, vUv.x) * step(u_step_factor_1, vUv.y);
+    float factore_1 = step(u_step_factor_1, plane_uv.x) * step(u_step_factor_1, plane_uv.y);
     texel_1 *= factore_1;
 
-    float factore_2 = step(-1. + u_step_factor_2, -vUv.x) * step(-1. + u_step_factor_2, -vUv.y);
+    float factore_2 = step(-1. + u_step_factor_2, -plane_uv.x) * step(-1. + u_step_factor_2, -plane_uv.y);
     texel_2 *= factore_2;
 
-    float factore_3 = step(u_step_factor_3, vUv.x) * step(-1. + u_step_factor_3, -vUv.y);
+    float factore_3 = step(u_step_factor_3, plane_uv.x) * step(-1. + u_step_factor_3, -plane_uv.y);
     texel_3 *= factore_3;
 
     vec4 blended = texel_0 + texel_1 + texel_2 + texel_3;
@@ -316,15 +326,17 @@ vec4 applyVignettage(vec4 texel, vec2 uv) {
 }
 
 void main() {
+    vec2 uv = vUv;
+
     // UV Displacement
-    vec2 crt_uv = crt(vUv, u_crt_bending * u_global_intensity);
+    vec2 crt_uv = crt(uv, u_crt_bending * u_global_intensity);
 
     // Screens + RGBShift
     gl_FragColor = splitScreens(crt_uv);
 
     // Old Screen effect
-    gl_FragColor = applyScanlines(gl_FragColor, vUv);
+    gl_FragColor = applyScanlines(gl_FragColor, uv);
     gl_FragColor = applyColorFilter(gl_FragColor);
-    gl_FragColor = applyWhiteNoise(gl_FragColor, vUv);
-    gl_FragColor = applyVignettage(gl_FragColor, vUv);
+    gl_FragColor = applyWhiteNoise(gl_FragColor, uv);
+    gl_FragColor = applyVignettage(gl_FragColor, uv);
 }

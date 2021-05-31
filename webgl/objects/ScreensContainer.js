@@ -15,6 +15,8 @@ class ScreensContainer extends THREE.Mesh {
         this._width = options.width;
         this._height = options.height;
 
+        this._scrollY = 0;
+
         this._bindAll();
 
         this.geometry = this._createGeometry();
@@ -25,6 +27,15 @@ class ScreensContainer extends THREE.Mesh {
     /**
      * Public
      */
+    get scrollY() {
+        return this._scrollY;
+    }
+
+    set scrollY(value) {
+        this.material.uniforms.u_scroll_offset.value = value / this._height;
+        this._scrollY = value;
+    }
+
     effectIn() {
         this._timelineEffectOut?.kill();
 
@@ -115,6 +126,8 @@ class ScreensContainer extends THREE.Mesh {
             u_rewind_distortion_size: { value: 0.05 },
             u_rewind_distortion_speed: { value: 1.5 },
             u_rewind_distortion_intensity: { value: 0.02 },
+            // Scroll
+            u_scroll_offset: { value: 0.0 },
         };
 
         const uniforms = {
@@ -148,44 +161,47 @@ class ScreensContainer extends THREE.Mesh {
         debugFolder.addInput(this.material.uniforms.u_global_intensity, 'value', { label: 'Effect Intensity', min: 0, max: 1 });
         debugFolder.addInput(this.material.uniforms.u_crt_bending, 'value', { label: 'CRT Bending', min: 0, max: 1 });
 
-        const colorFilter = debugFolder.addFolder({ title: 'Color filter' });
+        const colorFilter = debugFolder.addFolder({ title: 'Color filter', expanded: false });
         colorFilter.addInput(this.material.uniforms.u_red_filter_intensity, 'value', { label: 'Red', min: -1, max: 1 });
         colorFilter.addInput(this.material.uniforms.u_green_filter_intensity, 'value', { label: 'Green', min: -1, max: 1 });
         colorFilter.addInput(this.material.uniforms.u_blue_filter_intensity, 'value', { label: 'Blue', min: -1, max: 1 });
 
-        const scanline = debugFolder.addFolder({ title: 'Scanline' });
+        const scanline = debugFolder.addFolder({ title: 'Scanline', expanded: false });
         scanline.addInput(this.material.uniforms.u_scanline_vertical, 'value', { label: 'Vertical' });
         scanline.addInput(this.material.uniforms.u_scanline_speed, 'value', { label: 'Speed', min: 0, max: 100 });
         scanline.addInput(this.material.uniforms.u_scanline_amount_factor, 'value', { label: 'Amount factor', min: 1, max: 3 });
         scanline.addInput(this.material.uniforms.u_scanline_min_intensity, 'value', { label: 'Min intensity', min: 0, max: 1 });
         scanline.addInput(this.material.uniforms.u_scanline_max_intensity, 'value', { label: 'Max intensity', min: 0, max: 1 });
 
-        const RGBShift = debugFolder.addFolder({ title: 'RGB Shift' });
+        const RGBShift = debugFolder.addFolder({ title: 'RGB Shift', expanded: false });
         RGBShift.addInput(this.material.uniforms.u_rgb_shift_amount, 'value', { label: 'amount', min: 0, max: 0.1 });
         RGBShift.addInput(this.material.uniforms.u_rgb_shift_angle, 'value', { label: 'angle' });
 
-        const noise = debugFolder.addFolder({ title: 'Noise' });
+        const noise = debugFolder.addFolder({ title: 'Noise', expanded: false });
         noise.addInput(this.material.uniforms.u_noise_intensity, 'value', { label: 'intensity', min: 0, max: 0.5 });
         noise.addInput(this.material.uniforms.u_noise_scale, 'value', { label: 'scale', min: 10, max: 500 });
 
-        const vignette = debugFolder.addFolder({ title: 'Vignette' });
+        const vignette = debugFolder.addFolder({ title: 'Vignette', expanded: false });
         vignette.addInput(this.material.uniforms.u_vignette_intensity, 'value', { label: 'intensity', min: 0, max: 50 });
         vignette.addInput(this.material.uniforms.u_vignette_scale, 'value', { label: 'scale', min: 0, max: 2 });
 
-        const animations = debugFolder.addFolder({ title: 'Animations' });
+        const animations = debugFolder.addFolder({ title: 'Animations', expanded: false });
         animations.addButton({ title: 'Animate out' }).on('click', this._debugAnimationOutClickHandler);
         animations.addButton({ title: 'Animate in' }).on('click', this._debugAnimationInClickHandler);
 
-        const completed = debugFolder.addFolder({ title: 'Completed' });
+        const completed = debugFolder.addFolder({ title: 'Completed', expanded: false });
         completed.addInput(this.material.uniforms.u_wobble_intensity, 'value', { label: 'Wobble', min: 0, max: 1.0 });
         completed.addInput(this.material.uniforms.u_line_intensity, 'value', { label: 'Line', min: 0, max: 10 });
         completed.addInput(this.material.uniforms.u_distortion_intensity, 'value', { label: 'scan distortion', min: 0, max: 10 });
 
-        const rewind = debugFolder.addFolder({ title: 'Rewind' });
+        const rewind = debugFolder.addFolder({ title: 'Rewind', expanded: false });
         rewind.addInput(this.material.uniforms.u_rewind_wobble_intensity, 'value', { label: 'Wooble', min: 0, max: 1 });
         rewind.addInput(this.material.uniforms.u_rewind_distortion_intensity, 'value', { label: 'Distortion Speed', min: 0, max: 0.5 });
         rewind.addInput(this.material.uniforms.u_rewind_distortion_speed, 'value', { label: 'Distortion Speed', min: 0, max: 5 });
         rewind.addInput(this.material.uniforms.u_rewind_distortion_size, 'value', { label: 'Distortion Size Y', min: 0, max: 0.1 });
+
+        const scroll = debugFolder.addFolder({ title: 'Scroll' });
+        scroll.addInput(this.material.uniforms.u_scroll_offset, 'value', { label: 'Wooble', min: 0, max: 1 });
 
         return debugFolder;
     }

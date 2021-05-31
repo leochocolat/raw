@@ -25,6 +25,8 @@ class WebglApp {
         this._clock = new THREE.Clock();
         this._fps = 0;
 
+        this._scrollY = 0;
+
         this._mousePosition = {
             position: new THREE.Vector2(this._width / 2, this._height / 2),
             relativePosition: new THREE.Vector2(0.5, 0.5),
@@ -55,6 +57,15 @@ class WebglApp {
     /**
      * Public
      */
+    get scrollY() {
+        return this._scrollY;
+    }
+
+    set scrollY(value) {
+        this._scrollY = value;
+        this._sceneManager.screensContainer.scrollY = value;
+    }
+
     get sceneManager() {
         return this._sceneManager;
     }

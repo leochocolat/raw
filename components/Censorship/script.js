@@ -61,6 +61,10 @@ export default {
             this.$refs.censorshipMessages.transitionIn();
         },
 
+        hideMessages() {
+            this.$refs.censorshipMessages.transitionOut();
+        },
+
         setOffRange() {
             this.$refs.censorshipRangeError.setOffRange();
         },

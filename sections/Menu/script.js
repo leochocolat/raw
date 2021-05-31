@@ -1,5 +1,6 @@
 // Vendor
 import gsap from 'gsap';
+import { mapGetters } from 'vuex';
 
 export default {
     data() {
@@ -10,6 +11,13 @@ export default {
 
     props: ['data', 'scene-entries'],
 
+    computed: {
+        ...mapGetters({
+            isFullComplete: 'data/isComplete',
+            isStopped: 'stop/isStopped',
+        }),
+    },
+
     methods: {
         /**
          * Public
@@ -18,7 +26,8 @@ export default {
             const timeline = new gsap.timeline();
 
             timeline.call(() => {
-                this.$store.dispatch('setInstructions', this.data.instructionsMenu);
+                const instructions = (this.isFullComplete || this.isStopped) ? this.data.instructionsComplete : this.data.instructionsMenu;
+                this.$store.dispatch('setInstructions', instructions);
             }, null);
 
             timeline.add(this.$refs.screen0.transitionIn(), 0);
@@ -28,5 +37,9 @@ export default {
 
             return timeline;
         },
+
+        /**
+         * Private
+         */
     },
 };

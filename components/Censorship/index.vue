@@ -3,18 +3,22 @@
 
         <div class="container">
 
-            <CensorshipMessages
-                ref="censorshipMessages"
-                class="censorshipMessages"
-                :scene="data"
-            />
+            <div class="header">
 
-            <CensorshipRangeError
-                ref="censorshipRangeError"
-                class="censorshipRangeError"
-                :class="isOffRange ? 'is-off-range' : ''"
-                :scene="data"
-            />
+                <CensorshipMessages
+                    ref="censorshipMessages"
+                    class="censorshipMessages"
+                    :scene="data"
+                />
+
+                <CensorshipRangeError
+                    ref="censorshipRangeError"
+                    class="censorshipRangeError"
+                    :class="isOffRange ? 'is-off-range' : ''"
+                    :scene="data"
+                />
+
+            </div>
 
             <div class="form">
 

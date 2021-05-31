@@ -29,7 +29,7 @@
             </div>
 
             <!-- Displayed when the scenario is completed -->
-            <div v-if="isComplete && !isFullComplete" class="screen-footer">
+            <div v-if="isComplete && !isFullComplete && !isStopped" class="screen-footer">
                 <div class="call-to-action">
                     <span>{{ resultTitle[lang] }}<ArrowDown class="arrow-down" /> </span><br /><span>{{ Math.round(censorshipFactor * 100) }}%</span>
                 </div>

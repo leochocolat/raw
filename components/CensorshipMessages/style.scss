@@ -1,19 +1,22 @@
 .censorship-messages {
-    position: absolute;
-    top: vw(65px);
-    right: 0;
+    position: relative;
 
     width: 100%;
-    height: 25%;
+    height: vw(200px);
 
     overflow: hidden;
 
+    margin-bottom: vw(10px);
+
     @include respond-to('large') {
-        top: vw-l(65px);
+        position: absolute;
+        top: 0;
         right: vw-l(41px);
 
         width: vw-l(516px);
         height: vw-l(417px);
+
+        margin-bottom: vw-l(10px);
     }
 }
 

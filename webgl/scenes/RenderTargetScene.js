@@ -55,9 +55,6 @@ class RenderTargetScene extends THREE.Scene {
         this._debugFolder = this._createDebugFolder();
         this._cameras = this._createCameras();
         this._uniforms = this._createUniforms();
-
-        // Debug
-        window[`resetAnimationProgress_${this._id}`] = this.resetAnimationProgress;
     }
 
     /**
