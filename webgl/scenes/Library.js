@@ -1,5 +1,6 @@
 // Vendor
 import * as THREE from 'three';
+import gsap from 'gsap';
 
 // Components
 import RenderTargetScene from './RenderTargetScene';
@@ -9,6 +10,10 @@ import BlurScreen from '../utils/BlurScreen';
 import AnimationComponent from '@/utils/AnimationComponent';
 import bindAll from '@/utils/bindAll';
 import { ResourceManager } from '@/utils/resource-loader';
+
+// Shader
+import vertex from '../shaders/isolationScreen/vertex.glsl';
+import fragment from '../shaders/isolationScreen/fragment.glsl';
 
 class Library extends RenderTargetScene {
     constructor(options) {
@@ -67,19 +72,29 @@ class Library extends RenderTargetScene {
     }
 
     _setup() {
-        this._material = this._createMaterial();
+        this._sceneMaterial = this._createMaterial();
         this._model = this._createModel();
         this._interactionScreen = this._setupInteractionScreen();
 
         this._animationController = this._createAnimationController();
         this._modelCamera = this._createModelCameraAnimation();
+
+        this._animationController.onAnimationComplete(() => this._setScreenIsolation());
     }
 
     _createMaterial() {
         const texture = this._resources.get('texture_library');
-        const material = new THREE.MeshBasicMaterial({
-            map: texture,
+
+        const uniforms = {
+            u_scene_texture: { value: texture },
+            u_alpha: { value: 1.0 },
+        };
+
+        const material = new THREE.ShaderMaterial({
             side: THREE.DoubleSide,
+            uniforms,
+            vertexShader: vertex,
+            fragmentShader: fragment,
         });
 
         return material;
@@ -93,7 +108,7 @@ class Library extends RenderTargetScene {
 
         clone.scene.traverse((child) => {
             if (child.isMesh) {
-                child.material = this._material;
+                child.material = this._sceneMaterial;
             }
         });
 
@@ -127,6 +142,10 @@ class Library extends RenderTargetScene {
         this.setModelCamera(this._model.cameras[0]);
 
         return this._model.cameras[0];
+    }
+
+    _setScreenIsolation() {
+        gsap.to(this._sceneMaterial.uniforms.u_alpha, { value: 0.1, duration: 0.5 });
     }
 
     _updateSettings() {

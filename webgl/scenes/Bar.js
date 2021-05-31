@@ -1,5 +1,6 @@
 // Vendor
 import * as THREE from 'three';
+import gsap from 'gsap';
 
 // Component
 import RenderTargetScene from './RenderTargetScene';
@@ -9,6 +10,10 @@ import AnimationComponent from '@/utils/AnimationComponent';
 import { ResourceManager } from '@/utils/resource-loader';
 import bindAll from '@/utils/bindAll';
 import AudioManager from '@/utils/AudioManager';
+
+// Shader
+import vertex from '../shaders/isolationScreen/vertex.glsl';
+import fragment from '../shaders/isolationScreen/fragment.glsl';
 
 class Bar extends RenderTargetScene {
     constructor(options) {
@@ -70,10 +75,11 @@ class Bar extends RenderTargetScene {
     }
 
     _setup() {
-        this._material = this._createMaterial();
+        this._sceneMaterial = this._createMaterial();
         this._model = this._createModel();
         // this._animationController = this._createAnimationController();
         this._modelCamera = this._createModelCameraAnimation();
+        // this._animationController.onAnimationComplete(() => this._setScreenIsolation());
     }
 
     _createModel() {
@@ -82,7 +88,7 @@ class Bar extends RenderTargetScene {
         this.add(clone.scene);
         clone.scene.traverse((child) => {
             if (child.isMesh) {
-                child.material = this._material;
+                child.material = this._sceneMaterial;
             }
         });
 
@@ -92,9 +98,16 @@ class Bar extends RenderTargetScene {
     _createMaterial() {
         const texture = this._resources.get('texture_bar');
 
-        const material = new THREE.MeshBasicMaterial({
-            map: texture,
+        const uniforms = {
+            u_scene_texture: { value: texture },
+            u_alpha: { value: 1.0 },
+        };
+
+        const material = new THREE.ShaderMaterial({
             side: THREE.DoubleSide,
+            uniforms,
+            vertexShader: vertex,
+            fragmentShader: fragment,
         });
 
         return material;
@@ -121,6 +134,10 @@ class Bar extends RenderTargetScene {
     _updateAnimationController() {
         if (!this._animationController) return;
         this._animationController.update(this._sceneDelta);
+    }
+
+    _setScreenIsolation() {
+        gsap.to(this._sceneMaterial.uniforms.u_alpha, { value: 0.1, duration: 0.5 });
     }
 
     _setupDebug() {
