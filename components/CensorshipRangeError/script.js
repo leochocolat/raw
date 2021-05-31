@@ -37,5 +37,21 @@ export default {
 
             return this.timelineOut;
         },
+
+        setOffRange(bool) {
+            const timeline = new gsap.timeline();
+
+            timeline.to(this.$refs.content, { duration: 0.1, color: 'red', ease: 'power0.none' }, 0);
+            timeline.to(this.$refs.square, { duration: 0.1, borderColor: 'red', ease: 'power0.none' }, 0);
+
+            timeline.to(this.$refs.content, { duration: 0.1, color: 'white', ease: 'power0.none' }, 0.1);
+            timeline.to(this.$refs.square, { duration: 0.1, borderColor: 'white', ease: 'power0.none' }, 0.1);
+
+            timeline.to(this.$refs.content, { duration: 0.1, color: 'red', ease: 'power0.none' }, 0.2);
+            timeline.to(this.$refs.square, { duration: 0.1, borderColor: 'red', ease: 'power0.none' }, 0.2);
+
+            timeline.to(this.$refs.content, { duration: 0.1, color: 'white', ease: 'power0.none' }, 0.3);
+            timeline.to(this.$refs.square, { duration: 0.1, borderColor: 'white', ease: 'power0.none' }, 0.3);
+        },
     },
 };

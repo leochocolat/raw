@@ -144,10 +144,14 @@ export default {
 
         watchOffRange() {
             if (this.dragPosition < (this.rangeLimitBounds.x - this.rangeBounds.x - 1) || this.dragPosition > this.rangeLimitBounds.width + (this.rangeLimitBounds.x - this.rangeBounds.x + 1)) {
+                if (this.isOffRange === true) return;
                 this.isOffRange = true;
                 this.offRangeHandler();
+                this.$parent.setOffRange();
+                this.$parent.offRangeHandler(true);
             } else {
                 this.isOffRange = false;
+                this.$parent.offRangeHandler(false);
             }
         },
 

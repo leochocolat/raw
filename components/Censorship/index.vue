@@ -12,6 +12,7 @@
             <CensorshipRangeError
                 ref="censorshipRangeError"
                 class="censorshipRangeError"
+                :class="isOffRange ? 'is-off-range' : ''"
                 :scene="data"
             />
 
