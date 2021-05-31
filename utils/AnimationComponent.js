@@ -20,6 +20,7 @@ class AnimationComponent {
         }
 
         this._activateAllActions();
+        this._setupEventListeners();
     }
 
     /**
@@ -90,6 +91,10 @@ class AnimationComponent {
         this.mixer.update(delta);
     }
 
+    onAnimationComplete(func) {
+        this.completeCallback = func;
+    }
+
     /**
      * Private
      */
@@ -119,6 +124,14 @@ class AnimationComponent {
             this._setWeight(action, 1.0);
             action.play();
             action.paused = true;
+        });
+    }
+
+    _setupEventListeners() {
+        this.mixer.addEventListener('finished', (anim) => {
+            if (this.completeCallback) {
+                this.completeCallback();
+            }
         });
     }
 }
