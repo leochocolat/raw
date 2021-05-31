@@ -8,6 +8,7 @@ export default {
     data() {
         return {
             lang: this.$i18n.locale,
+            isOffRange: false,
         };
     },
 
@@ -58,6 +59,14 @@ export default {
 
         showMessages() {
             this.$refs.censorshipMessages.transitionIn();
+        },
+
+        setOffRange() {
+            this.$refs.censorshipRangeError.setOffRange();
+        },
+
+        offRangeHandler(bool) {
+            this.isOffRange = bool;
         },
 
         stepCompleteHandler(e) {
