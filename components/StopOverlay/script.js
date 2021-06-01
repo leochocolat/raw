@@ -49,7 +49,7 @@ export default {
             this.timelineOpen = new gsap.timeline();
 
             this.timelineOpen.to(this.$el, 0.1, { autoAlpha: 1 }, 0);
-            this.timelineOpen.call(this.showInstructions, null);
+            this.timelineOpen.call(this.showInstructions, null, 0);
         },
 
         close() {
@@ -57,7 +57,7 @@ export default {
             this.timelineClose = new gsap.timeline();
 
             this.timelineClose.to(this.$el, 0.1, { autoAlpha: 0 }, 0);
-            this.timelineClose.call(this.hideInstructions, null);
+            this.timelineClose.call(this.hideInstructions, null, 0);
         },
 
         showInstructions() {
@@ -65,6 +65,7 @@ export default {
         },
 
         hideInstructions() {
+            if (this.previousInstructions === this.instruction[this.lang]) return;
             this.$store.dispatch('setInstructions', this.previousInstructions);
         },
 
@@ -88,11 +89,11 @@ export default {
                 this.$router.push(this.localePath('prototype'));
             }
 
-            this.$cookies.set('stop', true, {
-                // One month
-                expires: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
-                maxAge: 1000 * 3600 * 24 * 30,
-            });
+            // this.$cookies.set('stop', true, {
+            //     // One month
+            //     expires: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
+            //     maxAge: 1000 * 3600 * 24 * 30,
+            // });
         },
 
         keydownHandler(e) {

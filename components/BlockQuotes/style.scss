@@ -1,0 +1,50 @@
+.block-quotes {
+    text-transform: uppercase;
+
+    &.right {
+        .content {
+            margin-right: 0;
+            margin-left: auto;
+        }
+    }
+}
+
+.heading {
+    width: 100%;
+
+    margin-bottom: vw(100px);
+
+    font-size: rem(50px);
+
+    @include respond-to('large') {
+        width: vw-l(675px);
+
+        margin-bottom: vw-l(100px);
+
+        font-size: rem-l(50px);
+    }
+}
+
+.content {
+    width: 100%;
+
+    font-size: rem(25px);
+
+    @include respond-to('large') {
+        width: vw-l(675px);
+
+        font-size: rem-l(25px);
+    }
+}
+
+.quotes-list-item {
+    margin-bottom: vw(80px);
+
+    @include respond-to('large') {
+        margin-bottom: vw-l(152px);
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}

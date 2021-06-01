@@ -32,6 +32,7 @@ export default function({ i18n, error, store }) {
         try {
             res = await clientDelivery.getEntries({
                 locale: i18n.localeProperties.name,
+                include: 10,
             });
         } catch (err) {
             res = err.response;
@@ -53,6 +54,7 @@ export default function({ i18n, error, store }) {
             res = await clientDelivery.getEntries({
                 content_type: name,
                 locale: i18n.localeProperties.name,
+                include: 10,
             });
         } catch (err) {
             res = err.response;
@@ -76,6 +78,7 @@ export default function({ i18n, error, store }) {
         try {
             res = await clientDelivery.getEntry(id, {
                 locale: i18n.localeProperties.name,
+                include: 10,
             });
         } catch (err) {
             res = err.response;

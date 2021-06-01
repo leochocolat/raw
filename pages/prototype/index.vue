@@ -1,15 +1,13 @@
 <template>
     <div class="page-home">
 
-        <div class="content"></div>
-
         <Menu
             ref="menu"
             :data="home.fields"
             :scene-entries="sceneEntries"
         />
 
-        <TheEnd v-if="isComplete || isStopped" :data="home.fields" :scene-entries="sceneEntries" />
+        <TheEnd v-if="isComplete || isStopped" :data="home.fields.sectionEnd.fields" :scene-entries="sceneEntries" />
 
     </div>
 </template>

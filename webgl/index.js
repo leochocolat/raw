@@ -63,7 +63,7 @@ class WebglApp {
 
     set scrollY(value) {
         this._scrollY = value;
-        this._sceneManager.screensContainer.scrollY = value;
+        // this._sceneManager.screensContainer.scrollY = value;
     }
 
     get sceneManager() {
