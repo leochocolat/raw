@@ -206,10 +206,6 @@ class Hallway extends RenderTargetScene {
         AudioManager.play('audio_hallway', { loop: true });
     }
 
-    _setScreenIsolation() {
-        gsap.to(this._sceneMaterial.uniforms.u_alpha, { value: 0.1, duration: 0.5 });
-    }
-
     _updateSettings() {
         this.interactionsSettings.isEnable = true;
 

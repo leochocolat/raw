@@ -144,10 +144,6 @@ class Supermarket extends RenderTargetScene {
         this._animationController.update(this._sceneDelta);
     }
 
-    _setScreenIsolation() {
-        gsap.to(this._sceneMaterial.uniforms.u_alpha, { value: 0.1, duration: 0.5 });
-    }
-
     _setupDebug() {
         if (!this.debugFolder) return;
 

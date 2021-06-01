@@ -148,10 +148,6 @@ class Library extends RenderTargetScene {
         return this._model.cameras[0];
     }
 
-    _setScreenIsolation(alpha) {
-        gsap.to(this._sceneMaterial.uniforms.u_alpha, { value: alpha, duration: 0.5 });
-    }
-
     _updateSettings() {
         this.interactionsSettings.isEnable = true;
 
