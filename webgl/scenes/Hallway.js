@@ -38,6 +38,10 @@ class Hallway extends RenderTargetScene {
     /**
      * Public
      */
+    get sceneMaterial() {
+        return this._sceneMaterial;
+    }
+
     transitionIn() {
         super.transitionIn();
 
@@ -47,8 +51,7 @@ class Hallway extends RenderTargetScene {
         for (let index = 0; index < this._modelsCount; index++) {
             this._humanAnimationControllers[index].playAnimation({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], loop: false });
         }
-        AudioManager.add('audio_hallway', this._resources.get('audio_hallway'));
-        AudioManager.play('audio_hallway', { loop: true });
+        this._playAudios();
     }
 
     setCensorship(censorshipFactor) {
@@ -93,9 +96,9 @@ class Hallway extends RenderTargetScene {
         this._modelCamera = this._createModelCameraAnimation();
         this._createHumanModels();
 
-        this._animationController.onAnimationComplete(() => this._setScreenIsolation());
+        this._animationController.onAnimationComplete(() => this.setScreenIsolation());
 
-        // Debug
+        // Debug;
         // this._animationsSettings.progress = 1;
         // this._animationsProgressChangeHandler();
     }
@@ -147,7 +150,7 @@ class Hallway extends RenderTargetScene {
 
         const uniforms = {
             u_scene_texture: { value: texture },
-            u_alpha: { value: 1.0 },
+            u_isolation_alpha: { value: 1.0 },
         };
 
         const material = new THREE.ShaderMaterial({
@@ -186,10 +189,6 @@ class Hallway extends RenderTargetScene {
         const modelGirl = this._resources.get('LyceenFemme');
         this.add(modelGirl.scene);
 
-        this._modelsCount = this._model.scene.getObjectByName('ModelsPositions').children.length;
-
-        this._modelsPositions = [...this._model.scene.getObjectByName('ModelsPositions').children];
-
         for (let index = 0; index < this._modelsCount; index++) {
             const skinnedModelCloned = cloneSkinnedMesh(modelMan);
             skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
@@ -200,6 +199,11 @@ class Hallway extends RenderTargetScene {
 
             this.animationControllers.push(animationController);
         }
+    }
+
+    _playAudios() {
+        AudioManager.add('audio_hallway', this._resources.get('audio_hallway'));
+        AudioManager.play('audio_hallway', { loop: true });
     }
 
     _setScreenIsolation() {

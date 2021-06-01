@@ -10,6 +10,7 @@ import AnimationComponent from '@/utils/AnimationComponent';
 import { ResourceManager } from '@/utils/resource-loader';
 import bindAll from '@/utils/bindAll';
 import AudioManager from '@/utils/AudioManager';
+import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
 
 // Shader
 import vertex from '../shaders/isolationScreen/vertex.glsl';
@@ -34,15 +35,18 @@ class Bar extends RenderTargetScene {
     /**
      * Public
      */
+    get sceneMaterial() {
+        return this._sceneMaterial;
+    }
+
     transitionIn() {
         super.transitionIn();
 
-        // if (!this._animationController) return;
+        if (!this._animationController) return;
+        this._animationController.playAnimation({ animation: this._animationController.actionType.CameraMovement, loop: false });
 
-        // this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_CameraMovement, loop: false });
-
-        AudioManager.add('audio_bar', this._resources.get('audio_bar'));
-        AudioManager.play('audio_bar', { loop: true });
+        // AudioManager.add('audio_bar', this._resources.get('audio_bar'));
+        // AudioManager.play('audio_bar', { loop: true });
     }
 
     setMenuState(state) {
@@ -77,8 +81,10 @@ class Bar extends RenderTargetScene {
     _setup() {
         this._sceneMaterial = this._createMaterial();
         this._model = this._createModel();
-        // this._animationController = this._createAnimationController();
+        this._animationController = this._createAnimationController();
         this._modelCamera = this._createModelCameraAnimation();
+        this._createHumanModels();
+
         // this._animationController.onAnimationComplete(() => this._setScreenIsolation());
     }
 
@@ -100,7 +106,7 @@ class Bar extends RenderTargetScene {
 
         const uniforms = {
             u_scene_texture: { value: texture },
-            u_alpha: { value: 1.0 },
+            u_isolation_alpha: { value: 1.0 },
         };
 
         const material = new THREE.ShaderMaterial({
@@ -126,8 +132,28 @@ class Bar extends RenderTargetScene {
     _createModelCameraAnimation() {
         if (!this._model.cameras) return;
 
-        super.cameras.setModelCamera(this._model.cameras[0]);
+        this.setModelCamera(this._model.cameras[0]);
         return this._model.cameras[0];
+    }
+
+    _createHumanModels() {
+        this._humanAnimationControllers = [];
+        const modelMan = this._resources.get('BarHomme');
+
+        const modelGirl = this._resources.get('BarFemme');
+        this.add(modelGirl.scene);
+
+        for (let index = 0; index < 1; index++) {
+            const skinnedModelCloned = cloneSkinnedMesh(modelMan);
+            skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
+            const animationController = new AnimationComponent({ model: skinnedModelCloned, animations: skinnedModelCloned.animations[index] });
+
+            this._humanAnimationControllers.push(animationController);
+            this.add(skinnedModelCloned.scene);
+            console.log(skinnedModelCloned.scene);
+
+            this.animationControllers.push(animationController);
+        }
     }
 
     // On Tick
@@ -183,11 +209,11 @@ class Bar extends RenderTargetScene {
     }
 
     _animationsProgressChangeHandler() {
-        // this._animationController.setAnimationProgress({ animation: this._animationController.actionType.CameraMove, progress: this._animationsSettings.progress });
+        this._animationController.setAnimationProgress({ animation: this._animationController.actionType.CameraMovement, progress: this._animationsSettings.progress });
     }
 
     _clickPlayAnimationsHandler() {
-        // this._animationController.playAnimation({ animation: this._animationController.actionType.CameraMove, loop: false });
+        this._animationController.playAnimation({ animation: this._animationController.actionType.CameraMovement, loop: false });
     }
 }
 

@@ -67,18 +67,18 @@ export default {
         transitionOut(done, routeInfos) {
             const timeline = gsap.timeline();
 
-            let delay = 0;
+            timeline.add(this.$refs.screenActive.showRewindArrow(), 0);
+            timeline.add(this.$refs.screenActive.rewindClock(), 0);
+            timeline.add(this.$root.webglApp.sceneManager.scenes[this.scene.id].resetAnimationProgress(), 0);
 
-            if (!this.isComplete) {
-                delay = 1;
-                timeline.add(this.$refs.screenActive.showRewindArrow(), 0);
-                timeline.add(this.$refs.screenActive.rewindClock(), 0);
-                timeline.add(this.$root.webglApp.sceneManager.scenes[this.scene.id].resetAnimationProgress(), 0);
-                timeline.add(this.$refs.screenActive.hideRewindArrow());
+            if (this.isComplete) {
+                timeline.add(this.$root.webglApp.sceneManager.scenes[this.scene.id].resetScreenIsolation(), 0);
             }
 
+            timeline.add(this.$refs.screenActive.hideRewindArrow());
+
             timeline.add(this.$refs.screenActive.transitionOut(), 0);
-            timeline.to(this.$el, { duration: 0.1, alpha: 0, ease: 'circ.inOut' }, delay);
+            timeline.to(this.$el, { duration: 0.1, alpha: 0, ease: 'circ.inOut' }, 1);
 
             timeline.call(done, null);
 
