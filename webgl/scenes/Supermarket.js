@@ -34,6 +34,10 @@ class Supermarket extends RenderTargetScene {
     /**
      * Public
      */
+    get sceneMaterial() {
+        return this._sceneMaterial;
+    }
+
     transitionIn() {
         super.transitionIn();
 
@@ -103,7 +107,7 @@ class Supermarket extends RenderTargetScene {
 
         const uniforms = {
             u_scene_texture: { value: texture },
-            u_alpha: { value: 1.0 },
+            u_isolation_alpha: { value: 1.0 },
         };
 
         const material = new THREE.ShaderMaterial({

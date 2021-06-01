@@ -43,6 +43,8 @@ class RenderTargetScene extends THREE.Scene {
 
         this._interactionsSettings = JSON.parse(JSON.stringify(data.settings.mouseInteractions));
 
+        this._sceneModelsCount = JSON.parse(JSON.stringify(data.settings.mouseInteractions));
+
         this._animationControllers = [];
 
         this._clock = new THREE.Clock();
@@ -262,6 +264,14 @@ class RenderTargetScene extends THREE.Scene {
         return timelineProgress;
     }
 
+    setScreenIsolation() {
+        gsap.to(this.sceneMaterial.uniforms.u_isolation_alpha, { value: 0.3, duration: 0.5 });
+    }
+
+    resetScreenIsolation() {
+        gsap.to(this.sceneMaterial.uniforms.u_isolation_alpha, { value: 1, duration: 0.5 });
+    }
+
     // Hooks
     mousemoveHandler(e) {
         if (!this._interactionsSettings.isEnable || !this._isActive) return;
@@ -324,6 +334,8 @@ class RenderTargetScene extends THREE.Scene {
         uniforms[`u_completed_alpha_${this._id}`] = { value: 1.0 };
         // Rewind
         uniforms[`u_rewind_${this._id}`] = { value: 0.0 };
+        // scene alpha isolation
+        uniforms.u_alpha = { value: 1.0 };
 
         return uniforms;
     }
@@ -418,6 +430,8 @@ class RenderTargetScene extends THREE.Scene {
             'setInvisible',
             '_resetCameraPosition',
             'resetAnimationProgress',
+            'resetScreenIsolation',
+
         );
     }
 }

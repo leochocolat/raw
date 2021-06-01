@@ -34,6 +34,10 @@ class Library extends RenderTargetScene {
     /**
      * Public
      */
+    get sceneMaterial() {
+        return this._sceneMaterial;
+    }
+
     transitionIn() {
         super.transitionIn();
 
@@ -87,7 +91,7 @@ class Library extends RenderTargetScene {
 
         const uniforms = {
             u_scene_texture: { value: texture },
-            u_alpha: { value: 1.0 },
+            u_isolation_alpha: { value: 1.0 },
         };
 
         const material = new THREE.ShaderMaterial({
@@ -144,8 +148,8 @@ class Library extends RenderTargetScene {
         return this._model.cameras[0];
     }
 
-    _setScreenIsolation() {
-        gsap.to(this._sceneMaterial.uniforms.u_alpha, { value: 0.1, duration: 0.5 });
+    _setScreenIsolation(alpha) {
+        gsap.to(this._sceneMaterial.uniforms.u_alpha, { value: alpha, duration: 0.5 });
     }
 
     _updateSettings() {

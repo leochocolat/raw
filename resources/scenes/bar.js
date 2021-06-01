@@ -8,6 +8,27 @@ const resources = [
         preload: false,
     },
 
+    {
+        type: 'gltf',
+        name: 'BarHomme',
+        path: '/models/BarHomme.glb',
+        namespace: 'bar',
+        preload: false,
+    },
+    {
+        type: 'gltf',
+        name: 'BarFemme',
+        path: '/models/BarFemme.glb',
+        namespace: 'bar',
+        preload: false,
+    },
+    {
+        type: 'gltf',
+        name: 'BarVieux',
+        path: '/models/BarVieux.glb',
+        namespace: 'bar',
+        preload: false,
+    },
     // Textures
     {
         type: 'basis',
