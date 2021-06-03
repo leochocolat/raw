@@ -73,6 +73,7 @@ export default {
 
             if (this.isComplete) {
                 timeline.add(this.$root.webglApp.sceneManager.scenes[this.scene.id].resetScreenIsolation(), 0);
+                timeline.add(this.$root.webglApp.sceneManager.scenes[this.scene.id].resetCameraFOV(), 0);
             }
 
             timeline.add(this.$refs.screenActive.hideRewindArrow());

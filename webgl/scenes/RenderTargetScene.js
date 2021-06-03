@@ -11,6 +11,7 @@ import Cameras from '../objects/Cameras';
 // Utils
 import math from '@/utils/math';
 import bindAll from '@/utils/bindAll';
+import AudioManager from '@/utils/AudioManager';
 
 class RenderTargetScene extends THREE.Scene {
     constructor(options) {
@@ -43,7 +44,7 @@ class RenderTargetScene extends THREE.Scene {
 
         this._interactionsSettings = JSON.parse(JSON.stringify(data.settings.mouseInteractions));
 
-        this._sceneModelsCount = JSON.parse(JSON.stringify(data.settings.mouseInteractions));
+        this._sceneModelsCount = JSON.parse(JSON.stringify(data.sceneModelsCount));
 
         this._animationControllers = [];
 
@@ -100,6 +101,10 @@ class RenderTargetScene extends THREE.Scene {
 
     get animationControllers() {
         return this._animationControllers;
+    }
+
+    get sceneModelsCount() {
+        return this._sceneModelsCount;
     }
 
     show() {
@@ -207,6 +212,14 @@ class RenderTargetScene extends THREE.Scene {
         this._cameraRotation.current.y = this._cameraRotation.initial.y;
     }
 
+    setCameraFOV(options) {
+        this.cameras.updateCameraFOV({ camera: options.camera, fov: options.fov });
+    }
+
+    resetCameraFOV(options) {
+        this.cameras.updateCameraFOV({ fov: 65.5 });
+    }
+
     mouseenter() {
         this.timelineMouseleave?.kill();
         this.timelineMouseenter = new gsap.timeline();
@@ -309,6 +322,14 @@ class RenderTargetScene extends THREE.Scene {
 
         this._renderTarget.setSize(this._width, this._height);
         this._cameras.resize(width, height);
+    }
+
+    playAudio(audioName, options) {
+        AudioManager.play(audioName, { loop: options.loop });
+    }
+
+    pauseAudio(audioName) {
+        AudioManager.pause(audioName);
     }
 
     /**

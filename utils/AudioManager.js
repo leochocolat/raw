@@ -22,6 +22,7 @@ class AudioManager {
     play(name, options) {
         const next = this._tracks[name];
 
+        if (!next) return;
         if (this._current === next) return;
 
         if (this._current) {
@@ -37,18 +38,14 @@ class AudioManager {
     }
 
     pause(name, options) {
-        console.log('gello');
+        if (!this._tracks[name]) return;
         const next = this._tracks[name];
-
-        // if (this._current === next) return;
-
-        // if (this._current) {
-        //     this._current.pause();
-        // }
 
         next.pause();
 
-        gsap.to(next, { volume: 0, duration: 1 });
+        gsap.to(next, { volume: 0, duration: 0.1 });
+
+        this._current = null;
     }
 
     playEffect(name) {

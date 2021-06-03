@@ -24,8 +24,10 @@ class Hallway extends RenderTargetScene {
         this._animationsSettings = { progress: 0 };
 
         this._resources = this._setupResources();
+        this._modelsCount = this.sceneModelsCount.hallway;
 
         this._humanAnimations = ['LyceenHomme_Phone', 'LyceenHomme_TalkArmPush'];
+        this._mainAnimations = ['TRACK_CameraMovement', 'Phone'];
 
         this._updateSettings();
 
@@ -46,9 +48,12 @@ class Hallway extends RenderTargetScene {
         super.transitionIn();
 
         if (!this._animationController) return;
-        this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_CameraMovement, loop: false });
-        this._animationController.playAnimation({ animation: this._animationController.actionType.Phone, loop: false });
-        for (let index = 0; index < this._modelsCount; index++) {
+
+        for (let index = 0; index < this._mainAnimations.length; index++) {
+            this._mainAnimationControllers.playAnimation({ animation: this._mainAnimationControllers.actionType[index].actionType[this._humanAnimations[index]], loop: false });
+        }
+
+        for (let index = 0; index < this._humanAnimations.length; index++) {
             this._humanAnimationControllers[index].playAnimation({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], loop: false });
         }
         this._playAudios();
@@ -65,13 +70,7 @@ class Hallway extends RenderTargetScene {
         if (!this._blurScreen) return;
         this._blurScreen.update(this._sceneDelta);
 
-        if (!this._animationController) return;
-        this._animationController.update(this._sceneDelta);
-
-        if (!this._humanAnimationControllers.length < 0) return;
-        for (let index = 0; index < this._humanAnimationControllers.length; index++) {
-            this._humanAnimationControllers[index].update(this._sceneDelta);
-        }
+        this._updateAnimationController();
     }
 
     /**
@@ -109,7 +108,7 @@ class Hallway extends RenderTargetScene {
         this.add(clone.scene);
 
         clone.scene.traverse((child) => {
-            if (child.isMesh && child.name === 'scene_hallway1') {
+            if (child.isMesh && child.name === 'scene_hallway') {
                 child.material = this._sceneMaterial;
             }
         });
@@ -206,8 +205,12 @@ class Hallway extends RenderTargetScene {
         AudioManager.play('audio_hallway', { loop: true });
     }
 
-    _setScreenIsolation() {
-        gsap.to(this._sceneMaterial.uniforms.u_alpha, { value: 0.1, duration: 0.5 });
+    // On Tick
+    _updateAnimationController() {
+        if (!this.animationControllers.length < 0) return;
+        for (let index = 0; index < this.animationControllers.length; index++) {
+            this.animationControllers[index].update(this._sceneDelta);
+        }
     }
 
     _updateSettings() {
@@ -256,7 +259,7 @@ class Hallway extends RenderTargetScene {
         this._animationController.setAnimationProgress({ animation: this._animationController.actionType.TRACK_CameraMovement, progress: this._animationsSettings.progress });
         this._animationController.setAnimationProgress({ animation: this._animationController.actionType.Phone, progress: this._animationsSettings.progress });
 
-        for (let index = 0; index < this._modelsCount; index++) {
+        for (let index = 0; index < this._humanAnimationControllers.length; index++) {
             this._humanAnimationControllers[index].setAnimationProgress({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], progress: this._animationsSettings.progress });
         }
     }
@@ -265,7 +268,7 @@ class Hallway extends RenderTargetScene {
         this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_CameraMovement, loop: false });
         this._animationController.playAnimation({ animation: this._animationController.actionType.Phone, loop: false });
 
-        for (let index = 0; index < this._modelsCount; index++) {
+        for (let index = 0; index < this._humanAnimationControllers.length; index++) {
             this._humanAnimationControllers[index].playAnimation({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], loop: false });
         }
     }
