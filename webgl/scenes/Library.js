@@ -79,9 +79,10 @@ class Library extends RenderTargetScene {
         this._model = this._createModel();
         this._interactionScreen = this._setupInteractionScreen();
 
-        this._animationController = this._createAnimationController();
         this._modelCamera = this._createModelCameraAnimation();
 
+        // setup animations
+        this._animationController = this._createAnimationController();
         this._animationController.onAnimationComplete(() => this.setScreenIsolation());
     }
 
