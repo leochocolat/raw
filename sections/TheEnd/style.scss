@@ -1,3 +1,88 @@
 .the-end {
-    
+    position: relative;
+
+    min-height: 100vh;
+
+    margin-top: 100vh;
+
+    padding: content-padding();
+    padding-top: 0;
+    padding-bottom: 0;
+
+    background-color: $color-black;
+
+    @include respond-to('large') {
+        padding-right: vw-l(450px);
+        padding-left: vw-l(339px);
+    }
+}
+
+.introduction {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    height: 100vh;
+}
+
+.title {
+    font-size: rem(50px);
+    text-transform: uppercase;
+
+    @include respond-to('large') {
+        font-size: rem-l(50px);
+    }
+
+    &::v-deep {
+        b {
+            color: red;
+        }
+    }
+}
+
+.blocks-list {
+    // padding-top: vw(80px);
+    // padding-bottom: vw(80px);
+
+    // @include respond-to('large') {
+    //     padding-top: vw-l(120px);
+    //     padding-bottom: vw-l(120px);
+    // }
+}
+
+.blocks-list-item {
+    margin-bottom: vw(200px);
+
+    @include respond-to('large') {
+        margin-bottom: vw-l(400px);
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.conclusion {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    height: 100vh;
+}
+
+.conclusion-content {
+    font-size: rem(50px);
+    text-transform: uppercase;
+
+    @include respond-to('large') {
+        font-size: rem-l(50px);
+    }
+
+    &::v-deep {
+        b {
+            color: red;
+        }
+    }
 }

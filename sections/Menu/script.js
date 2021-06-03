@@ -16,6 +16,22 @@ export default {
             isFullComplete: 'data/isComplete',
             isStopped: 'stop/isStopped',
         }),
+
+        instruction() {
+            const instruction = (this.isFullComplete || this.isStopped) ? this.data.instructionsComplete : this.data.instructionsMenu;
+            return instruction;
+        },
+    },
+
+    watch: {
+        isStopped(isStopped) {
+            console.log('Hello');
+            if (isStopped) this.$store.dispatch('setInstructions', this.instruction);
+        },
+
+        isFullComplete(isFullComplete) {
+            if (isFullComplete) this.$store.dispatch('setInstructions', this.instruction);
+        },
     },
 
     methods: {
@@ -26,8 +42,7 @@ export default {
             const timeline = new gsap.timeline();
 
             timeline.call(() => {
-                const instructions = (this.isFullComplete || this.isStopped) ? this.data.instructionsComplete : this.data.instructionsMenu;
-                this.$store.dispatch('setInstructions', instructions);
+                this.$store.dispatch('setInstructions', this.instruction);
             }, null);
 
             timeline.add(this.$refs.screen0.transitionIn(), 0);
