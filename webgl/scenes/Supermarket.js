@@ -87,6 +87,8 @@ class Supermarket extends RenderTargetScene {
         this._model = this._createModel();
         this._animationController = this._createAnimationController();
         this._modelCamera = this._createModelCameraAnimation();
+
+        this._animationController.onAnimationComplete(() => this.setScreenIsolation());
     }
 
     _createModel() {
@@ -142,6 +144,11 @@ class Supermarket extends RenderTargetScene {
     _updateAnimationController() {
         if (!this._animationController) return;
         this._animationController.update(this._sceneDelta);
+
+        // if (!this._humanAnimationControllers.length < 0) return;
+        // for (let index = 0; index < this._humanAnimationControllers.length; index++) {
+        //     this._humanAnimationControllers[index].update(this._sceneDelta);
+        // }
     }
 
     _setupDebug() {

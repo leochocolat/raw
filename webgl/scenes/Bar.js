@@ -11,6 +11,7 @@ import { ResourceManager } from '@/utils/resource-loader';
 import bindAll from '@/utils/bindAll';
 import AudioManager from '@/utils/AudioManager';
 import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
+import BlurScreen from '../utils/BlurScreen';
 
 // Shader
 import vertex from '../shaders/isolationScreen/vertex.glsl';
@@ -23,6 +24,11 @@ class Bar extends RenderTargetScene {
         this._animationsSettings = { progress: 0 };
 
         this._resources = this._setupResources();
+
+        this._humanAnimations = ['BarHomme_Sleep', 'BarHomme_Talk'];
+        this._oldManAnimations = ['BarVieux_Comptoir', 'BarVieux_Drink'];
+        this._mainAnimations = ['TRACK_Camera', 'Torchon', 'Remote', 'Pinte_Vieux', 'Pinte_Mains', 'Mains_BarMaid'];
+        this._animationComplete = false;
 
         this._updateSettings();
 
@@ -43,8 +49,17 @@ class Bar extends RenderTargetScene {
         super.transitionIn();
 
         if (!this._animationController) return;
-        this._animationController.playAnimation({ animation: this._animationController.actionType.CameraMovement, loop: false });
+        for (let index = 0; index < this._mainAnimations.length; index++) {
+            this._animationController.playAnimation({ animation: this._animationController.actionType[this._mainAnimations[index]], loop: false });
+        }
 
+        for (let index = 0; index < this._humanAnimations.length; index++) {
+            this._humanAnimationControllers[index].playAnimation({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], loop: false });
+        }
+
+        for (let index = 0; index < this._oldManAnimations.length; index++) {
+            this._oldManAnimationsControllers[index].playAnimation({ animation: this._oldManAnimationsControllers[index].actionType[this._oldManAnimations[index]], loop: false });
+        }
         // AudioManager.add('audio_bar', this._resources.get('audio_bar'));
         // AudioManager.play('audio_bar', { loop: true });
     }
@@ -70,9 +85,10 @@ class Bar extends RenderTargetScene {
         const resources = new ResourceManager({
             name: 'bar',
             namespace: 'bar',
-
         });
-        // resources.addByName('CameraMovement');
+        resources.addByName('blur-mask-test');
+        resources.addByName('texture-gore-test');
+        resources.addByName('video-gore-test');
         resources.load();
 
         return resources;
@@ -81,11 +97,22 @@ class Bar extends RenderTargetScene {
     _setup() {
         this._sceneMaterial = this._createMaterial();
         this._model = this._createModel();
+        this._interactionScreen = this._setupInteractionScreen();
+
         this._animationController = this._createAnimationController();
         this._modelCamera = this._createModelCameraAnimation();
         this._createHumanModels();
 
-        // this._animationController.onAnimationComplete(() => this._setScreenIsolation());
+        this._animationController.onAnimationComplete(() => {
+            if (!this._animationComplete) {
+                this._animationComplete = true;
+                this._setCameraZoom();
+                this.setScreenIsolation();
+            }
+        });
+        for (let index = 0; index < this._humanAnimations.length; index++) {
+            this._humanAnimationControllers[index].playAnimation({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], loop: false });
+        }
     }
 
     _createModel() {
@@ -93,12 +120,41 @@ class Bar extends RenderTargetScene {
         const clone = model;
         this.add(clone.scene);
         clone.scene.traverse((child) => {
-            if (child.isMesh) {
+            child.frustumCulled = false;
+            if (child.isMesh && child.name === 'scene_bar') {
                 child.material = this._sceneMaterial;
             }
         });
 
         return clone;
+    }
+
+    _setupInteractionScreen() {
+        // const screenTexture = this._resources.get('texture-gore-test');
+        const screenTexture = this._resources.get('video-gore-test');
+        const maskTexture = this._resources.get('blur-mask-test');
+
+        const screen = this._model.scene.getObjectByName('Interaction_Screen');
+        const container = new THREE.Box3().setFromObject(screen);
+        const size = new THREE.Vector3();
+        container.getSize(size);
+
+        const width = size.z * 0.4;
+        const height = size.x;
+
+        size.x = width;
+        size.y = height;
+
+        this._blurScreen = new BlurScreen({
+            blurFactor: 0.5,
+            scenePlane: screen,
+            maskTexture,
+            screenTexture,
+            renderer: this._renderer,
+            width: this._width,
+            height: this._height,
+            size,
+        });
     }
 
     _createMaterial() {
@@ -124,8 +180,6 @@ class Bar extends RenderTargetScene {
         const animationController = new AnimationComponent({ model, animations: model.animations });
         this.animationControllers.push(animationController);
 
-        // animationController.playAnimation({ animation: animationController.actionType.CameraMove, loop: false });
-
         return animationController;
     }
 
@@ -138,28 +192,30 @@ class Bar extends RenderTargetScene {
 
     _createHumanModels() {
         this._humanAnimationControllers = [];
-        const modelMan = this._resources.get('BarHomme');
+        this._oldManAnimationsControllers = [];
 
+        const modelMan = this._resources.get('BarHomme');
+        const modelOldMan = this._resources.get('BarVieux');
         const modelGirl = this._resources.get('BarFemme');
+
         this.add(modelGirl.scene);
 
-        for (let index = 0; index < 1; index++) {
-            const skinnedModelCloned = cloneSkinnedMesh(modelMan);
-            skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
-            const animationController = new AnimationComponent({ model: skinnedModelCloned, animations: skinnedModelCloned.animations[index] });
-
-            this._humanAnimationControllers.push(animationController);
-            this.add(skinnedModelCloned.scene);
-            console.log(skinnedModelCloned.scene);
-
-            this.animationControllers.push(animationController);
+        for (let index = 0; index < this._humanAnimations.length; index++) {
+            const animatedMesh = this._createAnimatedMesh(modelMan, index);
+            this._humanAnimationControllers.push(animatedMesh);
+        }
+        for (let index = 0; index < this._oldManAnimations.length; index++) {
+            const animatedMesh = this._createAnimatedMesh(modelOldMan, index);
+            this._oldManAnimationsControllers.push(animatedMesh);
         }
     }
 
     // On Tick
     _updateAnimationController() {
-        if (!this._animationController) return;
-        this._animationController.update(this._sceneDelta);
+        if (!this.animationControllers.length < 0) return;
+        for (let index = 0; index < this.animationControllers.length; index++) {
+            this.animationControllers[index].update(this._sceneDelta);
+        }
     }
 
     _setupDebug() {
@@ -180,6 +236,31 @@ class Bar extends RenderTargetScene {
         this.interactionsSettings.rotationFactor.y = 10;
 
         this._debugFolder?.refresh();
+    }
+
+    _setCameraZoom() {
+        gsap.to(this._modelCamera, {
+            fov: 8,
+            duration: 1,
+            ease: 'sine.inOut',
+            onUpdate: () => {
+                this.updateCameraFOV({ camera: this._model.cameras[0], fov: 0.95 });
+            },
+        });
+
+        this.interactionsSettings.rotationFactor.x = -0.5;
+        this.interactionsSettings.rotationFactor.y = 0.5;
+    }
+
+    _createAnimatedMesh(model, index) {
+        const skinnedModelCloned = cloneSkinnedMesh(model);
+        skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
+        const animationController = new AnimationComponent({ model: skinnedModelCloned, animations: skinnedModelCloned.animations[index] });
+        this.add(skinnedModelCloned.scene);
+
+        this.animationControllers.push(animationController);
+
+        return animationController;
     }
 
     /**
@@ -205,11 +286,31 @@ class Bar extends RenderTargetScene {
     }
 
     _animationsProgressChangeHandler() {
-        this._animationController.setAnimationProgress({ animation: this._animationController.actionType.CameraMovement, progress: this._animationsSettings.progress });
+        for (let index = 0; index < this._mainAnimations.length; index++) {
+            this._animationController.setAnimationProgress({ animation: this._animationController.actionType[this._mainAnimations[index]], progress: this._animationsSettings.progress });
+        }
+
+        for (let index = 0; index < this._humanAnimations.length; index++) {
+            this._humanAnimationControllers[index].setAnimationProgress({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], progress: this._animationsSettings.progress });
+        }
+
+        for (let index = 0; index < this._oldManAnimations.length; index++) {
+            this._oldManAnimationsControllers[index].setAnimationProgress({ animation: this._oldManAnimationsControllers[index].actionType[this._oldManAnimations[index]], progress: this._animationsSettings.progress });
+        }
     }
 
     _clickPlayAnimationsHandler() {
-        this._animationController.playAnimation({ animation: this._animationController.actionType.CameraMovement, loop: false });
+        for (let index = 0; index < this._mainAnimations.length; index++) {
+            this._animationController.playAnimation({ animation: this._animationController.actionType[this._mainAnimations[index]], progress: this._animationsSettings.progress });
+        }
+
+        for (let index = 0; index < this._humanAnimations.length; index++) {
+            this._humanAnimationControllers[index].playAnimation({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], progress: this._animationsSettings.progress });
+        }
+
+        for (let index = 0; index < this._oldManAnimations.length; index++) {
+            this._oldManAnimationsControllers[index].playAnimation({ animation: this._oldManAnimationsControllers[index].actionType[this._oldManAnimations[index]], progress: this._animationsSettings.progress });
+        }
     }
 }
 

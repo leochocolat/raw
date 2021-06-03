@@ -42,7 +42,14 @@ const data = {
         hallway: { duration: 26 },
         library: { duration: 10 },
         supermarket: { duration: 1 },
-        bar: { duration: 1 },
+        bar: { duration: 26 },
+    },
+
+    sceneModelsCount: {
+        hallway: 2,
+        library: 2,
+        supermarket: 2,
+        bar: 2,
     },
 };
 

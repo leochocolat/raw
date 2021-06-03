@@ -71,18 +71,23 @@ class Cameras {
         this._setActiveCamera();
     }
 
+    updateCameraFOV(camera) {
+        this._active.fov = camera.fov;
+        this._active.updateProjectionMatrix();
+    }
+
     /**
      * Private
      */
     _createMainCamera() {
-        const camera = new THREE.PerspectiveCamera(75, this._width / this._height, 0.1, 10000);
+        const camera = new THREE.PerspectiveCamera(75, this._width / this._height, 0.01, 10000);
         camera.position.z = 2;
 
         return camera;
     }
 
     _createDebugCamera() {
-        const camera = new THREE.PerspectiveCamera(75, this._width / this._height, 0.1, 10000);
+        const camera = new THREE.PerspectiveCamera(75, this._width / this._height, 0.01, 10000);
         camera.position.z = 2;
 
         return camera;

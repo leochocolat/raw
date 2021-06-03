@@ -43,7 +43,7 @@ class RenderTargetScene extends THREE.Scene {
 
         this._interactionsSettings = JSON.parse(JSON.stringify(data.settings.mouseInteractions));
 
-        this._sceneModelsCount = JSON.parse(JSON.stringify(data.settings.mouseInteractions));
+        this._sceneModelsCount = JSON.parse(JSON.stringify(data.sceneModelsCount));
 
         this._animationControllers = [];
 
@@ -100,6 +100,10 @@ class RenderTargetScene extends THREE.Scene {
 
     get animationControllers() {
         return this._animationControllers;
+    }
+
+    get sceneModelsCount() {
+        return this._sceneModelsCount;
     }
 
     show() {
@@ -205,6 +209,14 @@ class RenderTargetScene extends THREE.Scene {
 
         this._cameraRotation.target.y = this._cameraRotation.initial.y;
         this._cameraRotation.current.y = this._cameraRotation.initial.y;
+    }
+
+    updateCameraFOV(options) {
+        this.cameras.updateCameraFOV(options.camera, options.fov);
+    }
+
+    resetCameraFOV(options) {
+        this.cameras.updateCameraFOV(options.camera, options.fov);
     }
 
     mouseenter() {
