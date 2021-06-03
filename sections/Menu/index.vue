@@ -1,6 +1,6 @@
 <template>
     <div class="menu">
-        <div class="screens-container">
+        <div ref="container" class="screens-container">
             <Screen
                 :id="sceneEntries['hallway'].id"
                 ref="screen0"

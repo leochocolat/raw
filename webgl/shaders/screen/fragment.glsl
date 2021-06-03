@@ -91,6 +91,12 @@ float rand(vec2 co) {
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
+float hash12(vec2 p) {
+	vec3 p3  = fract(vec3(p.xyx) * .1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    return fract((p3.x + p3.y) * p3.z);
+}
+
 // https://www.shadertoy.com/view/4djSRW
 // float rand(vec2 p) {
 //     vec3 p3  = fract(vec3(p.xyx) * 443.8975);
@@ -98,8 +104,7 @@ float rand(vec2 co) {
 //     return fract((p3.x + p3.y) * p3.z);
 // }
 
-float sample_noise()
-{
+float sample_noise() {
     vec2 uv = mod(gl_FragCoord.xy + vec2(0.0, 100. * u_time), u_resolution.xy);
     float value = rand(uv);
     return pow(value, 7.); //  sharper ramp

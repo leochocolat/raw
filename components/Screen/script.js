@@ -65,19 +65,31 @@ export default {
          * Public
          */
         transitionIn() {
-            const timeline = new gsap.timeline();
+            this.timelineIn = new gsap.timeline();
+
+            if (this.timelineOut) this.timelineIn.call(this.timelineOut.kill, null, 0);
+            this.timelineIn.to(this.$el, { duration: 0.1, alpha: 1 });
+            this.timelineIn.to(this.$el, { duration: 0.1, alpha: 0 });
+            this.timelineIn.to(this.$el, { duration: 0.1, alpha: 1 });
+            this.timelineIn.to(this.$el, { duration: 0.1, alpha: 0 });
+            this.timelineIn.to(this.$el, { duration: 0.1, alpha: 1 });
 
             if (this.isComplete || this.isStopped) {
-                timeline.add(this.$root.webglApp.sceneManager?.scenes[this.id].setComplete(), 0);
+                this.timelineIn.add(this.$root.webglApp.sceneManager?.scenes[this.id].setComplete(), 0);
             }
 
-            return timeline;
+            return this.timelineIn;
         },
 
         transitionOut() {
-            const timeline = new gsap.timeline();
+            this.timelineOut = new gsap.timeline();
 
-            return timeline;
+            if (this.timelineIn) this.timelineIn.call(this.timelineIn.kill, null, 0);
+            this.timelineOut.to(this.$el, { duration: 0.1, alpha: 0 });
+            this.timelineOut.to(this.$el, { duration: 0.1, alpha: 1 });
+            this.timelineOut.to(this.$el, { duration: 0.1, alpha: 0 });
+
+            return this.timelineOut;
         },
 
         startClock() {

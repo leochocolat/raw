@@ -1,7 +1,7 @@
 <template>
     <div class="block-quotes">
 
-        <p class="heading">
+        <p ref="heading" class="heading">
             {{ data.fields.title }}
         </p>
 
@@ -10,7 +10,7 @@
             <ul class="quotes-list">
 
                 <li v-for="(item, index) in data.fields.quotes" :key="index" class="quotes-list-item">
-                    <BlockQuote :data="item.fields" />
+                    <BlockQuote ref="blockQuote" :data="item.fields" />
                 </li>
 
             </ul>

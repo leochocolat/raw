@@ -20,8 +20,6 @@
 
     margin-bottom: vw(65px);
 
-    background-color: red;
-
     @include respond-to('large') {
         width: vw-l(277px);
         height: vw-l(92px);
@@ -30,6 +28,8 @@
     }
 
     span {
+        opacity: 0;
+
         position: absolute;
 
         right: 0;
@@ -38,9 +38,8 @@
         margin-left: vw(163px);
 
         @include respond-to('large') {
+            right: vw-l(25px);
             bottom: vw-l(16px);
-
-            margin-left: vw-l(163px);
         }
     }
 }
@@ -51,6 +50,18 @@
     @include respond-to('large') {
         padding-left: vw-l(163px);
     }
+}
+
+.contrubutors-list-item {
+    
+}
+
+.contributor-name {
+    opacity: 0;
+
+    display: inline-block;
+
+    position: relative;
 }
 
 .contributor-roles-list {
@@ -64,5 +75,29 @@
         margin-bottom: vw-l(10px);
 
         padding-left: vw-l(103px);
+    }
+}
+
+.contributor-role {
+    display: inline-block;
+    position: relative;
+
+    color: transparent;
+
+    &::v-deep {
+        .highlight {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background-color: $color-white;
+
+            transform: scaleX(0);
+
+            transform-origin: left top;
+        }
     }
 }

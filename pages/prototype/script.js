@@ -64,7 +64,6 @@ export default {
         transitionIn(done, routeInfos) {
             const timeline = gsap.timeline({ onComplete: done });
 
-            timeline.to(this.$el, { duration: 0.1, alpha: 1, ease: 'circ.inOut' }, 1);
             timeline.add(this.$refs.menu.transitionIn());
             timeline.call(() => this.$store.dispatch('scenes/setMenuScene', true), null, 0);
             timeline.call(() => this.$store.dispatch('scenes/setActiveScene', ''), null, 0);
@@ -75,9 +74,18 @@ export default {
         transitionOut(done, routeInfos) {
             const timeline = gsap.timeline({ onComplete: done });
 
-            timeline.to(this.$el, 0.5, { alpha: 0, ease: 'circ.inOut' });
+            timeline.add(this.$refs.menu.transitionIn());
 
             return timeline;
+        },
+
+        setIsScrolling(bool) {
+            if (bool === this.isScrolling) return;
+
+            if (this.isScrolling) this.$refs.menu.transitionIn();
+            if (!this.isScrolling) this.$refs.menu.transitionOut();
+
+            this.isScrolling = bool;
         },
 
         /**

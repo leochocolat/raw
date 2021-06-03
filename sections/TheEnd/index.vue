@@ -3,7 +3,7 @@
 
         <div class="introduction">
 
-            <h1 class="title">
+            <h1 ref="introductionTitle" class="title">
                 <RichText :document="data.introduction" />
             </h1>
 
@@ -11,9 +11,11 @@
 
         <ul class="blocks-list">
 
-            <li v-for="(item, index) in data.blocksQuotes" :key="index" class="blocks-list-item">
+            <li v-for="(item, index) in data.blocksQuotes" :key="index" ref="blocks" class="blocks-list-item">
 
-                <BlockQuotes :data="item" :class="index % 2 === 0 ? '' : 'right' " />
+                <BlockQuotes ref="blocksQuotes" :data="item" :class="index % 2 === 0 ? '' : 'right' " />
+
+                <img class="image" src="https://picsum.photos/id/237/200/300" alt="">
 
             </li>
 
@@ -21,7 +23,7 @@
 
         <div class="conclusion">
 
-            <div class="conclusion-content">
+            <div ref="conclusionContent" class="conclusion-content">
                 <RichText :document="data.conclusion" />
             </div>
 
@@ -29,7 +31,7 @@
 
         <div class="credits-container">
 
-            <Credits :data="data.credits.fields" />
+            <Credits ref="credits" :data="data.credits.fields" />
 
         </div>
 
