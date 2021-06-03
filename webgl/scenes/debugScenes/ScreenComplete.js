@@ -18,6 +18,8 @@ class ScreenComplete extends DebugScene {
 
         this._resources = this._setupResources();
 
+        this._isPlaying = false;
+
         this._bindAll();
         this._setupEventListeners();
     }
@@ -36,6 +38,7 @@ class ScreenComplete extends DebugScene {
         super.update(time, delta);
 
         if (!this._plane) return;
+        if (!this._isPlaying) return;
         this._plane.material.uniforms.u_time.value = time;
     }
 
@@ -57,6 +60,7 @@ class ScreenComplete extends DebugScene {
             u_wobble_intensity: { value: 0.2 },
             u_line_intensity: { value: 2.0 },
             u_distortion_intensity: { value: 0.0 },
+            u_texture_alpha: { value: 0.0 },
         };
 
         const material = new THREE.ShaderMaterial({
@@ -92,6 +96,9 @@ class ScreenComplete extends DebugScene {
         noise.addInput(this._plane.material.uniforms.u_wobble_intensity, 'value', { label: 'Wobble', min: 0, max: 1.0 });
         noise.addInput(this._plane.material.uniforms.u_line_intensity, 'value', { label: 'Line', min: 0, max: 10 });
         noise.addInput(this._plane.material.uniforms.u_distortion_intensity, 'value', { label: 'scan distortion', min: 0, max: 10 });
+        noise.addInput(this._plane.material.uniforms.u_texture_alpha, 'value', { label: 'Texture alpha', min: 0, max: 1 });
+        noise.addInput(this._plane.material.uniforms.u_time, 'value', { label: 'Time', min: 0, max: 10 });
+        noise.addInput(this, '_isPlaying', { label: 'autoplay' });
 
         this._debugFolder.expanded = true;
     }
