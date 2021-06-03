@@ -21,7 +21,7 @@ class Bar extends RenderTargetScene {
     constructor(options) {
         super(options);
 
-        this._animationsSettings = { progress: 0, fov: 65 };
+        this._animationsSettings = { progress: 0, fov: 8 };
 
         this._resources = this._setupResources();
 
@@ -60,8 +60,14 @@ class Bar extends RenderTargetScene {
         for (let index = 0; index < this._oldManAnimations.length; index++) {
             this._oldManAnimationsControllers[index].playAnimation({ animation: this._oldManAnimationsControllers[index].actionType[this._oldManAnimations[index]], loop: false });
         }
-        // AudioManager.add('audio_bar', this._resources.get('audio_bar'));
-        // AudioManager.play('audio_bar', { loop: true });
+
+        AudioManager.play('audio_bar', { loop: true });
+    }
+
+    transitionToMenu() {
+        super.transitionToMenu();
+
+        AudioManager.pause('audio_bar');
     }
 
     setMenuState(state) {
@@ -99,10 +105,14 @@ class Bar extends RenderTargetScene {
         this._model = this._createModel();
         this._interactionScreen = this._setupInteractionScreen();
 
-        this._animationController = this._createAnimationController();
         this._modelCamera = this._createModelCameraAnimation();
         this._createHumanModels();
 
+        // setup audios
+        AudioManager.add('audio_bar', this._resources.get('audio_bar'));
+
+        // setup animations
+        this._animationController = this._createAnimationController();
         this._animationController.onAnimationComplete(() => {
             if (!this._animationComplete) {
                 this._animationComplete = true;

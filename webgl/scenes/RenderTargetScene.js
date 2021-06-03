@@ -11,6 +11,7 @@ import Cameras from '../objects/Cameras';
 // Utils
 import math from '@/utils/math';
 import bindAll from '@/utils/bindAll';
+import AudioManager from '@/utils/AudioManager';
 
 class RenderTargetScene extends THREE.Scene {
     constructor(options) {
@@ -321,6 +322,14 @@ class RenderTargetScene extends THREE.Scene {
 
         this._renderTarget.setSize(this._width, this._height);
         this._cameras.resize(width, height);
+    }
+
+    playAudio(audioName, options) {
+        AudioManager.play(audioName, { loop: options.loop });
+    }
+
+    pauseAudio(audioName) {
+        AudioManager.pause(audioName);
     }
 
     /**
