@@ -211,12 +211,12 @@ class RenderTargetScene extends THREE.Scene {
         this._cameraRotation.current.y = this._cameraRotation.initial.y;
     }
 
-    updateCameraFOV(options) {
-        this.cameras.updateCameraFOV(options.camera, options.fov);
+    setCameraFOV(options) {
+        this.cameras.updateCameraFOV({ camera: options.camera, fov: options.fov });
     }
 
     resetCameraFOV(options) {
-        this.cameras.updateCameraFOV(options.camera, options.fov);
+        this.cameras.updateCameraFOV({ fov: 65.5 });
     }
 
     mouseenter() {

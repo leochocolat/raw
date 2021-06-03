@@ -21,7 +21,7 @@ class Bar extends RenderTargetScene {
     constructor(options) {
         super(options);
 
-        this._animationsSettings = { progress: 0 };
+        this._animationsSettings = { progress: 0, fov: 65 };
 
         this._resources = this._setupResources();
 
@@ -223,6 +223,7 @@ class Bar extends RenderTargetScene {
 
         const animations = this.debugFolder.addFolder({ title: 'Animation', expanded: true });
         animations.addInput(this._animationsSettings, 'progress', { min: 0, max: 1 }).on('change', this._animationsProgressChangeHandler);
+        animations.addInput(this._animationsSettings, 'fov', { min: 0.1, max: 80 }).on('change', this._cameraFovChangeHandler);
         animations.addButton({ title: 'Play' }).on('click', this._clickPlayAnimationsHandler);
     }
 
@@ -240,15 +241,14 @@ class Bar extends RenderTargetScene {
 
     _setCameraZoom() {
         gsap.to(this._modelCamera, {
-            fov: 8,
+            fov: this._animationsSettings.fov,
             duration: 1,
             ease: 'sine.inOut',
             onUpdate: () => {
-                this.updateCameraFOV({ camera: this._model.cameras[0], fov: 0.95 });
+                this.setCameraFOV({ camera: this._model.cameras[0] });
             },
         });
-
-        this.interactionsSettings.rotationFactor.x = -0.5;
+        this.interactionsSettings.rotationFactor.x = -1;
         this.interactionsSettings.rotationFactor.y = 0.5;
     }
 
@@ -273,6 +273,7 @@ class Bar extends RenderTargetScene {
             this,
             '_resourcesReadyHandler',
             '_animationsProgressChangeHandler',
+            '_cameraFovChangeHandler',
             '_clickPlayAnimationsHandler',
         );
     }
@@ -283,6 +284,11 @@ class Bar extends RenderTargetScene {
 
     _resourcesReadyHandler() {
         this._setup();
+    }
+
+    _cameraFovChangeHandler() {
+        this._modelCamera.fov = this._animationsSettings.fov;
+        this.setCameraFOV({ camera: this._model.cameras[0] });
     }
 
     _animationsProgressChangeHandler() {

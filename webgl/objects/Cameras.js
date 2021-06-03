@@ -71,8 +71,8 @@ class Cameras {
         this._setActiveCamera();
     }
 
-    updateCameraFOV(camera) {
-        this._active.fov = camera.fov;
+    updateCameraFOV(options) {
+        this._active.fov = options.camera ? options.camera.fov : options.fov;
         this._active.updateProjectionMatrix();
     }
 
