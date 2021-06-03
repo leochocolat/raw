@@ -10,6 +10,8 @@ import AnimationComponent from '@/utils/AnimationComponent';
 import { ResourceManager } from '@/utils/resource-loader';
 import bindAll from '@/utils/bindAll';
 import AudioManager from '@/utils/AudioManager';
+import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
+import BlurScreen from '../utils/BlurScreen';
 
 // Shader
 import vertex from '../shaders/isolationScreen/vertex.glsl';
@@ -19,9 +21,12 @@ class Supermarket extends RenderTargetScene {
     constructor(options) {
         super(options);
 
-        this._animationsSettings = { progress: 0 };
+        const zoomFOV = 8;
+        this._animationsSettings = { progress: 0, fov: zoomFOV };
 
         this._resources = this._setupResources();
+
+        this._mainAnimations = ['TRACK_Camera', 'MainsPere', 'Caddie_Movement', 'Cereal_Box'];
 
         this._updateSettings();
 
@@ -42,10 +47,9 @@ class Supermarket extends RenderTargetScene {
         super.transitionIn();
 
         if (!this._animationController) return;
-
-        this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_CameraMovement, loop: false });
-
-        AudioManager.add('audio_supermarket', this._resources.get('audio_supermarket'));
+        for (let index = 0; index < this._mainAnimations.length; index++) {
+            this._animationController.playAnimation({ animation: this._animationController.actionType[this._mainAnimations[index]], loop: false });
+        }
         AudioManager.play('audio_supermarket', { loop: true });
     }
 
@@ -64,6 +68,9 @@ class Supermarket extends RenderTargetScene {
     update() {
         super.update();
 
+        if (!this._blurScreen) return;
+        this._blurScreen.update(this._sceneDelta);
+
         this._updateAnimationController();
     }
 
@@ -77,6 +84,9 @@ class Supermarket extends RenderTargetScene {
 
         });
 
+        resources.addByName('blur-mask-test');
+        resources.addByName('texture-gore-test');
+        resources.addByName('video-gore-test');
         resources.load();
 
         return resources;
@@ -85,9 +95,14 @@ class Supermarket extends RenderTargetScene {
     _setup() {
         this._sceneMaterial = this._createMaterial();
         this._model = this._createModel();
-        this._animationController = this._createAnimationController();
+        this._interactionScreen = this._setupInteractionScreen();
         this._modelCamera = this._createModelCameraAnimation();
 
+        // setup audios
+        AudioManager.add('audio_supermarket', this._resources.get('audio_supermarket'));
+
+        // setup animations
+        this._animationController = this._createAnimationController();
         this._animationController.onAnimationComplete(() => this.setScreenIsolation());
     }
 
@@ -96,12 +111,41 @@ class Supermarket extends RenderTargetScene {
         const clone = model;
         this.add(clone.scene);
         clone.scene.traverse((child) => {
-            if (child.isMesh) {
+            child.frustumCulled = false;
+            if (child.isMesh && child.name === 'scene_supermarket') {
                 child.material = this._sceneMaterial;
             }
         });
 
         return clone;
+    }
+
+    _setupInteractionScreen() {
+        // const screenTexture = this._resources.get('texture-gore-test');
+        const screenTexture = this._resources.get('video-gore-test');
+        const maskTexture = this._resources.get('blur-mask-test');
+
+        const screen = this._model.scene.getObjectByName('Interaction_Screen');
+        const container = new THREE.Box3().setFromObject(screen);
+        const size = new THREE.Vector3();
+        container.getSize(size);
+
+        const width = size.z * 0.4;
+        const height = size.x;
+
+        size.x = width;
+        size.y = height;
+
+        this._blurScreen = new BlurScreen({
+            blurFactor: 0.5,
+            scenePlane: screen,
+            maskTexture,
+            screenTexture,
+            renderer: this._renderer,
+            width: this._width,
+            height: this._height,
+            size,
+        });
     }
 
     _createMaterial() {
@@ -156,6 +200,7 @@ class Supermarket extends RenderTargetScene {
 
         const animations = this.debugFolder.addFolder({ title: 'Animation', expanded: true });
         animations.addInput(this._animationsSettings, 'progress', { min: 0, max: 1 }).on('change', this._animationsProgressChangeHandler);
+        animations.addInput(this._animationsSettings, 'fov', { min: 0.1, max: 80 }).on('change', this._cameraFovChangeHandler);
         animations.addButton({ title: 'Play' }).on('click', this._clickPlayAnimationsHandler);
     }
 
@@ -181,6 +226,7 @@ class Supermarket extends RenderTargetScene {
             this,
             '_resourcesReadyHandler',
             '_animationsProgressChangeHandler',
+            '_cameraFovChangeHandler',
             '_clickPlayAnimationsHandler',
         );
     }
@@ -193,12 +239,37 @@ class Supermarket extends RenderTargetScene {
         this._setup();
     }
 
+    _cameraFovChangeHandler() {
+        this._modelCamera.fov = this._animationsSettings.fov;
+        this.setCameraFOV({ camera: this._model.cameras[0] });
+    }
+
     _animationsProgressChangeHandler() {
-        this._animationController.setAnimationProgress({ animation: this._animationController.actionType.TRACK_CameraMovement, progress: this._animationsSettings.progress });
+        for (let index = 0; index < this._mainAnimations.length; index++) {
+            this._animationController.setAnimationProgress({ animation: this._animationController.actionType[this._mainAnimations[index]], progress: this._animationsSettings.progress });
+        }
+
+        // for (let index = 0; index < this._humanAnimations.length; index++) {
+        //     this._humanAnimationControllers[index].setAnimationProgress({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], progress: this._animationsSettings.progress });
+        // }
+
+        // for (let index = 0; index < this._oldManAnimations.length; index++) {
+        //     this._oldManAnimationsControllers[index].setAnimationProgress({ animation: this._oldManAnimationsControllers[index].actionType[this._oldManAnimations[index]], progress: this._animationsSettings.progress });
+        // }
     }
 
     _clickPlayAnimationsHandler() {
-        this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_CameraMovement, loop: false });
+        for (let index = 0; index < this._mainAnimations.length; index++) {
+            this._animationController.playAnimation({ animation: this._animationController.actionType[this._mainAnimations[index]], progress: this._animationsSettings.progress });
+        }
+
+        // for (let index = 0; index < this._humanAnimations.length; index++) {
+        //     this._humanAnimationControllers[index].playAnimation({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], progress: this._animationsSettings.progress });
+        // }
+
+        // for (let index = 0; index < this._oldManAnimations.length; index++) {
+        //     this._oldManAnimationsControllers[index].playAnimation({ animation: this._oldManAnimationsControllers[index].actionType[this._oldManAnimations[index]], progress: this._animationsSettings.progress });
+        // }
     }
 }
 

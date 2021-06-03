@@ -50,7 +50,7 @@ class Hallway extends RenderTargetScene {
         if (!this._animationController) return;
 
         for (let index = 0; index < this._mainAnimations.length; index++) {
-            this._mainAnimationControllers.playAnimation({ animation: this._mainAnimationControllers.actionType[index].actionType[this._humanAnimations[index]], loop: false });
+            this._animationController.playAnimation({ animation: this._animationController.actionType[this._mainAnimations[index]], loop: false });
         }
 
         for (let index = 0; index < this._humanAnimations.length; index++) {
@@ -91,11 +91,14 @@ class Hallway extends RenderTargetScene {
         this._model = this._createModel();
         this._interactionScreen = this._setupInteractionScreen();
 
-        this._animationController = this._createAnimationController();
         this._modelCamera = this._createModelCameraAnimation();
         this._createHumanModels();
 
+        // setup animations
+        this._animationController = this._createAnimationController();
         this._animationController.onAnimationComplete(() => this.setScreenIsolation());
+
+        AudioManager.add('audio_hallway', this._resources.get('audio_hallway'));
 
         // Debug;
         // this._animationsSettings.progress = 1;
@@ -108,7 +111,7 @@ class Hallway extends RenderTargetScene {
         this.add(clone.scene);
 
         clone.scene.traverse((child) => {
-            if (child.isMesh && child.name === 'scene_hallway') {
+            if (child.isMesh && child.name === 'scene_hallway1') {
                 child.material = this._sceneMaterial;
             }
         });
@@ -201,7 +204,6 @@ class Hallway extends RenderTargetScene {
     }
 
     _playAudios() {
-        AudioManager.add('audio_hallway', this._resources.get('audio_hallway'));
         AudioManager.play('audio_hallway', { loop: true });
     }
 

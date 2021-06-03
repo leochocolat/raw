@@ -21,7 +21,8 @@ class Bar extends RenderTargetScene {
     constructor(options) {
         super(options);
 
-        this._animationsSettings = { progress: 0, fov: 8 };
+        const zoomFOV = 8;
+        this._animationsSettings = { progress: 0, fov: zoomFOV };
 
         this._resources = this._setupResources();
 
@@ -81,6 +82,9 @@ class Bar extends RenderTargetScene {
     update() {
         super.update();
 
+        if (!this._blurScreen) return;
+        this._blurScreen.update(this._sceneDelta);
+
         this._updateAnimationController();
     }
 
@@ -120,9 +124,6 @@ class Bar extends RenderTargetScene {
                 this.setScreenIsolation();
             }
         });
-        for (let index = 0; index < this._humanAnimations.length; index++) {
-            this._humanAnimationControllers[index].playAnimation({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], loop: false });
-        }
     }
 
     _createModel() {
@@ -266,7 +267,7 @@ class Bar extends RenderTargetScene {
         const skinnedModelCloned = cloneSkinnedMesh(model);
         skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
         const animationController = new AnimationComponent({ model: skinnedModelCloned, animations: skinnedModelCloned.animations[index] });
-        this.add(skinnedModelCloned.scene);
+        // this.add(skinnedModelCloned.scene);
 
         this.animationControllers.push(animationController);
 
