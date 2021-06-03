@@ -4,6 +4,7 @@ import gsap from 'gsap';
 
 // Objects
 import ScreensContainer from '@/webgl/objects/ScreensContainer';
+import UILayer from '@/webgl/objects/UILayer';
 
 // Scenes
 import scenesData from '@/webgl/scenes';
@@ -35,6 +36,7 @@ class SceneManager extends THREE.Scene {
         this._camera = this._createCamera();
         this._scenes = this._createScenes();
         this._screensContainer = this._createScreensContainer();
+        // this._UILayer = this._createUILayer();
     }
 
     /**
@@ -245,11 +247,20 @@ class SceneManager extends THREE.Scene {
             isActive: false,
         });
 
-        screensContainer.position.z = 1;
-
         this.add(screensContainer);
 
         return screensContainer;
+    }
+
+    _createUILayer() {
+        const layer = new UILayer({
+            renderer: this._renderer,
+            debugger: this._debugger,
+            width: this._width,
+            height: this._height,
+        });
+
+        this.add(layer);
     }
 
     _createDebugger() {

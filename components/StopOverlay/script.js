@@ -89,11 +89,11 @@ export default {
                 this.$router.push(this.localePath('prototype'));
             }
 
-            // this.$cookies.set('stop', true, {
-            //     // One month
-            //     expires: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
-            //     maxAge: 1000 * 3600 * 24 * 30,
-            // });
+            this.$cookies.set('stop', true, {
+                // One month
+                expires: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
+                maxAge: 1000 * 3600 * 24 * 30,
+            });
         },
 
         keydownHandler(e) {

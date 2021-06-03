@@ -3,16 +3,16 @@
 
         <div class="header">
 
-            <div class="title">
+            <div ref="title" class="title">
                 {{ data.authorName }},<br>
                 {{ data.authorProfession }}
             </div>
 
-            <div class="line"></div>
+            <div ref="line" class="line"></div>
 
         </div>
 
-        <RichText class="text" :document="data.content" />
+        <RichText ref="text" class="text" :document="data.content" />
 
     </div>
 </template>

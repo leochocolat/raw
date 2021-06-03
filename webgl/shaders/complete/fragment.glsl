@@ -8,6 +8,7 @@ uniform sampler2D u_texture;
 uniform float u_distortion_intensity;
 uniform float u_wobble_intensity;
 uniform float u_line_intensity;
+uniform float u_texture_alpha;
 
 const float PI = 3.14159265;
 
@@ -33,7 +34,7 @@ void main()
 
     // Texture
     vec4 color = texture2D(u_texture, vUv + wobbl + tan_off);
-    color *= 0.2;
+    color *= u_texture_alpha;
     // vec4 color = texture2D(u_texture, vUv + wobbl);
 
     //  noise lines
