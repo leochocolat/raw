@@ -175,6 +175,7 @@ export default {
         blockQuotesTransitionIn(trigger) {
             const index = this.$refs.blocks.indexOf(trigger.el);
             this.$refs.blocksQuotes[index].transitionIn();
+            this.$refs.imageWebGl[index].transitionIn();
         },
 
         setupEventListeners() {

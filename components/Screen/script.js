@@ -84,9 +84,7 @@ export default {
         transitionOut() {
             this.timelineOut = new gsap.timeline();
 
-            if (this.timelineIn) this.timelineIn.call(this.timelineIn.kill, null, 0);
-            this.timelineOut.to(this.$el, { duration: 0.1, alpha: 0 });
-            this.timelineOut.to(this.$el, { duration: 0.1, alpha: 1 });
+            if (this.timelineIn) this.timelineOut.call(this.timelineIn.kill, null, 0);
             this.timelineOut.to(this.$el, { duration: 0.1, alpha: 0 });
 
             return this.timelineOut;

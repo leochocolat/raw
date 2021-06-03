@@ -36,7 +36,7 @@ class SceneManager extends THREE.Scene {
         this._camera = this._createCamera();
         this._scenes = this._createScenes();
         this._screensContainer = this._createScreensContainer();
-        // this._UILayer = this._createUILayer();
+        this._UILayer = this._createUILayer();
     }
 
     /**
@@ -56,6 +56,10 @@ class SceneManager extends THREE.Scene {
 
     get screensContainer() {
         return this._screensContainer;
+    }
+
+    get UILayer() {
+        return this._UILayer;
     }
 
     start() {
@@ -148,9 +152,9 @@ class SceneManager extends THREE.Scene {
             // Stop Rendering inactive scenes
             if (this._activeScene.sceneId !== undefined && this._activeScene.sceneId !== scene.sceneId) continue;
 
-            this._renderer.setRenderTarget(scene.renderTarget);
-            this._renderer.render(scene, scene.camera);
-            this._renderer.setRenderTarget(null);
+            // this._renderer.setRenderTarget(scene.renderTarget);
+            // this._renderer.render(scene, scene.camera);
+            // this._renderer.setRenderTarget(null);
         }
 
         this._renderer.render(this, this._camera);
@@ -261,6 +265,8 @@ class SceneManager extends THREE.Scene {
         });
 
         this.add(layer);
+
+        return layer;
     }
 
     _createDebugger() {

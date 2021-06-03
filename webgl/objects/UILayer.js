@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 
 // Objects
-import UIPlane from '@/webgl/objects/UIPlane';
+import UIPlaneImage from '@/webgl/objects/UIPlaneImage';
 
 class UILayer extends THREE.Object3D {
     constructor(options = {}) {
@@ -15,41 +15,37 @@ class UILayer extends THREE.Object3D {
 
         this._images = [];
         this._planes = [];
-
-        // Debug
-        const images = [
-            {
-                width: 500,
-                height: 900,
-                x: 100,
-                y: 300,
-            },
-        ];
-
-        this.createImages(images);
     }
 
     /**
      * Public
      */
-    createImages(images) {
-        this._images = images;
+    createImage(image) {
+        this._images.push(image);
 
-        for (let i = 0; i < this._images.length; i++) {
-            const image = this._images[i];
-            const plane = new UIPlane({
-                width: image.width,
-                height: image.height,
-                x: image.x,
-                y: image.y,
-            });
-            this._planes.push(plane);
-            this.add(plane);
-        }
+        const plane = new UIPlaneImage({
+            name: image.name,
+            side: image.side,
+            containerBounds: image.containerBounds,
+            canvasWidth: this._width,
+            canvasHeight: this._height,
+        });
+
+        this._planes.push(plane);
+        this.add(plane);
+
+        return plane;
     }
 
-    resizeImages() {
+    resize(width, height) {
+        this._width = width;
+        this._height = height;
 
+        for (let i = 0; i < this._planes.length; i++) {
+            const plane = this._planes[i];
+            plane.canvasWidth = this._width;
+            plane.canvasHeight = this._height;
+        }
     }
 }
 

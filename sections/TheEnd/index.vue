@@ -15,7 +15,7 @@
 
                 <BlockQuotes ref="blocksQuotes" :data="item" :class="index % 2 === 0 ? '' : 'right' " />
 
-                <img class="image" src="https://picsum.photos/id/237/200/300" alt="">
+                <ImageWebGl ref="imageWebGl" :name="item.fields.imageName" :side="index % 2 === 0 ? 'left' : 'right'" />
 
             </li>
 
