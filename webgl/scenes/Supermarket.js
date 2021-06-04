@@ -103,7 +103,13 @@ class Supermarket extends RenderTargetScene {
 
         // setup animations
         this._animationController = this._createAnimationController();
-        this._animationController.onAnimationComplete(() => this.setScreenIsolation());
+        this._animationController.onAnimationComplete(() => {
+            if (!this._animationComplete) {
+                this._animationComplete = true;
+                this._setCameraZoom();
+                this.setScreenIsolation();
+            }
+        });
     }
 
     _createSceneMaterial() {
@@ -216,6 +222,30 @@ class Supermarket extends RenderTargetScene {
         this._debugFolder?.refresh();
     }
 
+    _setCameraZoom() {
+        gsap.to(this._modelCamera, {
+            fov: this._animationsSettings.fov,
+            duration: 1,
+            ease: 'sine.inOut',
+            onUpdate: () => {
+                this.setCameraFOV({ fov: this._model.cameras[0].fov });
+            },
+        });
+        this.interactionsSettings.rotationFactor.x = -1;
+        this.interactionsSettings.rotationFactor.y = 0.5;
+    }
+
+    _createAnimatedMesh(model, index) {
+        const skinnedModelCloned = cloneSkinnedMesh(model);
+        skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
+        const animationController = new AnimationComponent({ model: skinnedModelCloned, animations: skinnedModelCloned.animations[index] });
+        this.add(skinnedModelCloned.scene);
+
+        this.animationControllers.push(animationController);
+
+        return animationController;
+    }
+
     /**
      * Events
      */
@@ -241,7 +271,7 @@ class Supermarket extends RenderTargetScene {
 
     _cameraFovChangeHandler() {
         this._modelCamera.fov = this._animationsSettings.fov;
-        this.setCameraFOV({ camera: this._model.cameras[0] });
+        this.setCameraFOV({ fov: this._model.cameras[0].fov });
     }
 
     _animationsProgressChangeHandler() {

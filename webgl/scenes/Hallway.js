@@ -21,7 +21,7 @@ class Hallway extends RenderTargetScene {
     constructor(options) {
         super(options);
 
-        const zoomFOV = 8;
+        const zoomFOV = 3.57;
         this._animationsSettings = { progress: 0, fov: zoomFOV };
 
         this._resources = this._setupResources();
@@ -246,7 +246,7 @@ class Hallway extends RenderTargetScene {
             duration: 1,
             ease: 'sine.inOut',
             onUpdate: () => {
-                this.setCameraFOV({ camera: this._model.cameras[0] });
+                this.setCameraFOV({ fov: this._model.cameras[0].fov });
             },
         });
         this.interactionsSettings.rotationFactor.x = -1;
@@ -289,7 +289,7 @@ class Hallway extends RenderTargetScene {
 
     _cameraFovChangeHandler() {
         this._modelCamera.fov = this._animationsSettings.fov;
-        this.setCameraFOV({ camera: this._model.cameras[0] });
+        this.setCameraFOV({ fov: this._model.cameras[0].fov });
     }
 
     _animationsProgressChangeHandler() {

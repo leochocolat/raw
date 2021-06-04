@@ -238,7 +238,7 @@ class Library extends RenderTargetScene {
             duration: 1,
             ease: 'sine.inOut',
             onUpdate: () => {
-                this.setCameraFOV({ camera: this._model.cameras[0] });
+                this.setCameraFOV({ fov: this._model.cameras[0].fov });
             },
         });
         this.interactionsSettings.rotationFactor.x = -1;
@@ -281,7 +281,7 @@ class Library extends RenderTargetScene {
 
     _cameraFovChangeHandler() {
         this._modelCamera.fov = this._animationsSettings.fov;
-        this.setCameraFOV({ camera: this._model.cameras[0] });
+        this.setCameraFOV({ fov: this._model.cameras[0].fov });
     }
 
     _animationsProgressChangeHandler() {

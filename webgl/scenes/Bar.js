@@ -308,7 +308,7 @@ class Bar extends RenderTargetScene {
 
     _cameraFovChangeHandler() {
         this._modelCamera.fov = this._animationsSettings.fov;
-        this.setCameraFOV({ camera: this._model.cameras[0] });
+        this.setCameraFOV({ fov: this._model.cameras[0].fov });
     }
 
     _animationsProgressChangeHandler() {
