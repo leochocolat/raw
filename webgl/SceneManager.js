@@ -152,9 +152,9 @@ class SceneManager extends THREE.Scene {
             // Stop Rendering inactive scenes
             if (this._activeScene.sceneId !== undefined && this._activeScene.sceneId !== scene.sceneId) continue;
 
-            // this._renderer.setRenderTarget(scene.renderTarget);
-            // this._renderer.render(scene, scene.camera);
-            // this._renderer.setRenderTarget(null);
+            this._renderer.setRenderTarget(scene.renderTarget);
+            this._renderer.render(scene, scene.camera);
+            this._renderer.setRenderTarget(null);
         }
 
         this._renderer.render(this, this._camera);
@@ -177,6 +177,7 @@ class SceneManager extends THREE.Scene {
         }
 
         this._screensContainer.update(time, delta);
+        this._UILayer.update(time, delta);
 
         // Partial Rendering
         this._updateIndex = (this._updateIndex + 1) % 4;
