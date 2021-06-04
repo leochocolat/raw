@@ -14,14 +14,15 @@ export default {
 
         this.setupSplitText();
         this.setupTriggers();
-        this.setupIntersectionObserver();
+
+        this.setupScrollTrigger();
+        this.detectElements();
 
         this.setupEventListeners();
     },
 
     beforeDestroy() {
         this.removeEventListeners();
-        this.intersectionObserver?.disconnect();
     },
 
     methods: {
@@ -99,26 +100,54 @@ export default {
 
         setupTriggers() {
             this.triggers = [
-                { el: this.$refs.introductionTitle, callback: this.introductionTransitionIn, isTriggered: false },
-                { el: this.$refs.conclusionContent, callback: this.conclusionTransitionIn, isTriggered: false },
-                { el: this.$refs.credits.$el, callback: this.creditsTransitionIn, isTriggered: false },
+                { el: this.$refs.introductionTitle, callbackIn: this.introductionTransitionIn },
+                { el: this.$refs.conclusionContent, callbackIn: this.conclusionTransitionIn },
+                { el: this.$refs.credits.$el, callbackIn: this.creditsTransitionIn },
             ];
 
             for (let i = 0; i < this.$refs.blocks.length; i++) {
                 const element = this.$refs.blocks[i];
-                const trigger = { el: element, callback: this.blockQuotesTransitionIn, isTriggered: false };
+                const trigger = { el: element, callbackIn: this.blockQuotesTransitionIn, callbackOut: this.blockQuotesTransitionOut, repeat: true, offset: 0.5 };
                 this.triggers.push(trigger);
             }
         },
 
-        setupIntersectionObserver() {
-            const options = { threshold: 0.2 };
+        setupScrollTrigger() {
+            for (let i = 0; i < this.triggers.length; i++) {
+                const trigger = this.triggers[i];
+                const triggerOffset = trigger.offset || 0.2;
+                const bounds = trigger.el.getBoundingClientRect();
+                const offset = bounds.height * triggerOffset;
+                const top = bounds.top + this.scrollPosition + offset;
+                const bottom = bounds.bottom + this.scrollPosition - offset;
 
-            this.intersectionObserver = new IntersectionObserver(this.observerHandler, options);
+                trigger.top = top;
+                trigger.bottom = bottom;
+            }
+        },
+
+        detectElements() {
+            const scrollTop = this.scrollPosition;
+            const scrollBottom = scrollTop + WindowResizeObserver.height;
 
             for (let i = 0; i < this.triggers.length; i++) {
                 const trigger = this.triggers[i];
-                this.intersectionObserver.observe(trigger.el);
+
+                if (!trigger.inView) {
+                    if ((scrollBottom >= trigger.top) && (scrollTop < trigger.bottom)) {
+                        trigger.inView = true;
+                        if (trigger.callbackIn) trigger.callbackIn(trigger);
+                        if (!trigger.repeat) trigger.callbackIn = null;
+                    }
+                }
+
+                if (trigger.inView) {
+                    if ((scrollBottom < trigger.top) || (scrollTop > trigger.bottom)) {
+                        trigger.inView = false;
+                        if (trigger.callbackOut) trigger.callbackOut(trigger);
+                        if (!trigger.repeat) trigger.callbackOut = null;
+                    }
+                }
             }
         },
 
@@ -174,8 +203,14 @@ export default {
 
         blockQuotesTransitionIn(trigger) {
             const index = this.$refs.blocks.indexOf(trigger.el);
-            this.$refs.blocksQuotes[index].transitionIn();
+            if (!trigger.isTriggeredOnce) this.$refs.blocksQuotes[index].transitionIn();
             this.$refs.imageWebGl[index].transitionIn();
+            trigger.isTriggeredOnce = true;
+        },
+
+        blockQuotesTransitionOut(trigger) {
+            const index = this.$refs.blocks.indexOf(trigger.el);
+            this.$refs.imageWebGl[index].transitionOut();
         },
 
         setupEventListeners() {
@@ -191,6 +226,8 @@ export default {
         scrollHandler() {
             this.scrollPosition = window.scrollY;
 
+            this.detectElements();
+
             if (this.scrollPosition !== 0) {
                 this.$store.dispatch('setInstructions', '');
             }
@@ -202,22 +239,11 @@ export default {
             }
         },
 
-        observerHandler(entries) {
-            const entry = entries[0];
-            if (entry.isIntersecting) {
-                for (let i = 0; i < this.triggers.length; i++) {
-                    const trigger = this.triggers[i];
-                    if (trigger.el === entry.target && !trigger.isTriggered) {
-                        trigger.isTriggered = true;
-                        trigger.callback(trigger);
-                    }
-                }
-            }
-        },
-
         resizeHandler() {
             // revert split text
             this.revertSplitText();
+            this.setupScrollTrigger();
+            this.detectElements();
         },
     },
 };

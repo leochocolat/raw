@@ -152,9 +152,9 @@ class SceneManager extends THREE.Scene {
             // Stop Rendering inactive scenes
             if (this._activeScene.sceneId !== undefined && this._activeScene.sceneId !== scene.sceneId) continue;
 
-            this._renderer.setRenderTarget(scene.renderTarget);
-            this._renderer.render(scene, scene.camera);
-            this._renderer.setRenderTarget(null);
+            // this._renderer.setRenderTarget(scene.renderTarget);
+            // this._renderer.render(scene, scene.camera);
+            // this._renderer.setRenderTarget(null);
         }
 
         this._renderer.render(this, this._camera);

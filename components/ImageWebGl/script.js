@@ -13,6 +13,7 @@ export default {
 
     watch: {
         isReady(isReady) {
+            // On First load
             if (isReady) this.createWebGLImage();
         },
     },
@@ -20,6 +21,9 @@ export default {
     mounted() {
         this.getBounds();
         this.setupEventListeners();
+
+        // On Full complete
+        if (this.isReady) this.createWebGLImage();
     },
 
     beforeDestroy() {
@@ -63,7 +67,7 @@ export default {
 
         resizeHandler() {
             this.getBounds();
-            this.webglImage.resize(this.containerBounds);
+            this.webglImage?.resize(this.containerBounds);
         },
     },
 };
