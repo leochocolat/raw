@@ -324,14 +324,6 @@ class RenderTargetScene extends THREE.Scene {
         this._cameras.resize(width, height);
     }
 
-    playAudio(audioName, options) {
-        AudioManager.play(audioName, { loop: options.loop });
-    }
-
-    pauseAudio(audioName) {
-        AudioManager.pause(audioName);
-    }
-
     /**
      * Private
      */

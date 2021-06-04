@@ -95,7 +95,6 @@ class WebglApp {
             alpha: false,
         });
 
-        console.log(renderer.info);
         // renderer.outputEncoding = THREE.sRGBEncoding;
 
         renderer.setPixelRatio(1);
@@ -147,6 +146,7 @@ class WebglApp {
         const delta = this._clock.getDelta();
         const time = this._clock.getElapsedTime();
         const fps = Math.round(1 / delta);
+        if (fps < 0 || fps === Infinity) return;
         this._fps = fps;
 
         this._sceneManager?.update(time, delta, fps);

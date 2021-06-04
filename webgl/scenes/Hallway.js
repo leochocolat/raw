@@ -21,7 +21,8 @@ class Hallway extends RenderTargetScene {
     constructor(options) {
         super(options);
 
-        this._animationsSettings = { progress: 0 };
+        const zoomFOV = 3.57;
+        this._animationsSettings = { progress: 0, fov: zoomFOV };
 
         this._resources = this._setupResources();
         this._modelsCount = this.sceneModelsCount.hallway;
@@ -56,6 +57,7 @@ class Hallway extends RenderTargetScene {
         for (let index = 0; index < this._humanAnimations.length; index++) {
             this._humanAnimationControllers[index].playAnimation({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], loop: false });
         }
+
         this._playAudios();
     }
 
@@ -77,7 +79,10 @@ class Hallway extends RenderTargetScene {
      * Private
      */
     _setupResources() {
-        const resources = new ResourceManager({ name: 'hallway', namespace: 'hallway' });
+        const resources = new ResourceManager({
+            name: 'hallway',
+            namespace: 'hallway',
+        });
         resources.addByName('blur-mask-test');
         resources.addByName('texture-gore-test');
         resources.addByName('video-gore-test');
@@ -94,15 +99,36 @@ class Hallway extends RenderTargetScene {
         this._modelCamera = this._createModelCameraAnimation();
         this._createHumanModels();
 
-        // setup animations
-        this._animationController = this._createAnimationController();
-        this._animationController.onAnimationComplete(() => this.setScreenIsolation());
-
+        // setup audios
         AudioManager.add('audio_hallway', this._resources.get('audio_hallway'));
 
-        // Debug;
-        // this._animationsSettings.progress = 1;
-        // this._animationsProgressChangeHandler();
+        // setup animations
+        this._animationController = this._createAnimationController();
+        this._animationController.onAnimationComplete(() => {
+            if (!this._animationComplete) {
+                this._animationComplete = true;
+                this._setCameraZoom();
+                this.setScreenIsolation();
+            }
+        });
+    }
+
+    _createSceneMaterial() {
+        const texture = this._resources.get('texture_hallway');
+
+        const uniforms = {
+            u_scene_texture: { value: texture },
+            u_isolation_alpha: { value: 1.0 },
+        };
+
+        const material = new THREE.ShaderMaterial({
+            side: THREE.DoubleSide,
+            uniforms,
+            vertexShader: vertex,
+            fragmentShader: fragment,
+        });
+
+        return material;
     }
 
     _createModel() {
@@ -147,30 +173,9 @@ class Hallway extends RenderTargetScene {
         });
     }
 
-    _createSceneMaterial() {
-        const texture = this._resources.get('texture_hallway');
-
-        const uniforms = {
-            u_scene_texture: { value: texture },
-            u_isolation_alpha: { value: 1.0 },
-        };
-
-        const material = new THREE.ShaderMaterial({
-            side: THREE.DoubleSide,
-            uniforms,
-            vertexShader: vertex,
-            fragmentShader: fragment,
-        });
-
-        return material;
-    }
-
     _createAnimationController() {
         const model = this._model;
-        const animationController = new AnimationComponent({
-            model,
-            animations: model.animations,
-        });
+        const animationController = new AnimationComponent({ model, animations: model.animations });
 
         this.animationControllers.push(animationController);
 
@@ -179,7 +184,6 @@ class Hallway extends RenderTargetScene {
 
     _createModelCameraAnimation() {
         if (!this._model.cameras) return;
-
         this.setModelCamera(this._model.cameras[0]);
 
         return this._model.cameras[0];
@@ -232,7 +236,32 @@ class Hallway extends RenderTargetScene {
 
         const animations = this.debugFolder.addFolder({ title: 'Animation', expanded: true });
         animations.addInput(this._animationsSettings, 'progress', { min: 0, max: 1 }).on('change', this._animationsProgressChangeHandler);
+        animations.addInput(this._animationsSettings, 'fov', { min: 0.1, max: 80 }).on('change', this._cameraFovChangeHandler);
         animations.addButton({ title: 'Play' }).on('click', this._clickPlayAnimationsHandler);
+    }
+
+    _setCameraZoom() {
+        gsap.to(this._modelCamera, {
+            fov: this._animationsSettings.fov,
+            duration: 1,
+            ease: 'sine.inOut',
+            onUpdate: () => {
+                this.setCameraFOV({ fov: this._model.cameras[0].fov });
+            },
+        });
+        this.interactionsSettings.rotationFactor.x = -1;
+        this.interactionsSettings.rotationFactor.y = 0.5;
+    }
+
+    _createAnimatedMesh(model, index) {
+        const skinnedModelCloned = cloneSkinnedMesh(model);
+        skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
+        const animationController = new AnimationComponent({ model: skinnedModelCloned, animations: skinnedModelCloned.animations[index] });
+        // this.add(skinnedModelCloned.scene);
+
+        this.animationControllers.push(animationController);
+
+        return animationController;
     }
 
     /**
@@ -245,6 +274,7 @@ class Hallway extends RenderTargetScene {
             this,
             '_resourcesReadyHandler',
             '_animationsProgressChangeHandler',
+            '_cameraFovChangeHandler',
             '_clickPlayAnimationsHandler',
         );
     }
@@ -255,6 +285,11 @@ class Hallway extends RenderTargetScene {
 
     _resourcesReadyHandler() {
         this._setup();
+    }
+
+    _cameraFovChangeHandler() {
+        this._modelCamera.fov = this._animationsSettings.fov;
+        this.setCameraFOV({ fov: this._model.cameras[0].fov });
     }
 
     _animationsProgressChangeHandler() {
