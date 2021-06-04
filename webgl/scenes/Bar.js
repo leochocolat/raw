@@ -22,6 +22,8 @@ class Bar extends RenderTargetScene {
         super(options);
 
         const zoomFOV = 8;
+        this._originalFOV = 0;
+
         this._animationsSettings = { progress: 0, fov: zoomFOV };
 
         this._resources = this._setupResources();
@@ -50,6 +52,7 @@ class Bar extends RenderTargetScene {
         super.transitionIn();
 
         if (!this._animationController) return;
+
         for (let index = 0; index < this._mainAnimations.length; index++) {
             this._animationController.playAnimation({ animation: this._animationController.actionType[this._mainAnimations[index]], loop: false });
         }
@@ -62,21 +65,21 @@ class Bar extends RenderTargetScene {
             this._oldManAnimationsControllers[index].playAnimation({ animation: this._oldManAnimationsControllers[index].actionType[this._oldManAnimations[index]], loop: false });
         }
 
-        AudioManager.play('audio_bar', { loop: true });
+        this._playAudios();
     }
 
     transitionToMenu() {
         super.transitionToMenu();
 
+        if (this._modelCamera) {
+            this.setCameraFOV({ fov: this._originalFOV });
+        }
+
         AudioManager.pause('audio_bar');
     }
 
-    setMenuState(state) {
-        super.setMenuState(state);
-    }
-
-    setInactive(state) {
-        super.setInactive(state);
+    setCensorship(censorshipFactor) {
+        if (this._blurScreen) this._blurScreen.blur = censorshipFactor;
     }
 
     update() {
@@ -105,7 +108,7 @@ class Bar extends RenderTargetScene {
     }
 
     _setup() {
-        this._sceneMaterial = this._createMaterial();
+        this._sceneMaterial = this._createSceneMaterial();
         this._model = this._createModel();
         this._interactionScreen = this._setupInteractionScreen();
 
@@ -126,10 +129,29 @@ class Bar extends RenderTargetScene {
         });
     }
 
+    _createSceneMaterial() {
+        const texture = this._resources.get('texture_bar');
+
+        const uniforms = {
+            u_scene_texture: { value: texture },
+            u_isolation_alpha: { value: 1.0 },
+        };
+
+        const material = new THREE.ShaderMaterial({
+            side: THREE.DoubleSide,
+            uniforms,
+            vertexShader: vertex,
+            fragmentShader: fragment,
+        });
+
+        return material;
+    }
+
     _createModel() {
         const model = this._resources.get('bar');
         const clone = model;
         this.add(clone.scene);
+
         clone.scene.traverse((child) => {
             child.frustumCulled = false;
             if (child.isMesh && child.name === 'scene_bar') {
@@ -168,24 +190,6 @@ class Bar extends RenderTargetScene {
         });
     }
 
-    _createMaterial() {
-        const texture = this._resources.get('texture_bar');
-
-        const uniforms = {
-            u_scene_texture: { value: texture },
-            u_isolation_alpha: { value: 1.0 },
-        };
-
-        const material = new THREE.ShaderMaterial({
-            side: THREE.DoubleSide,
-            uniforms,
-            vertexShader: vertex,
-            fragmentShader: fragment,
-        });
-
-        return material;
-    }
-
     _createAnimationController() {
         const model = this._model;
         const animationController = new AnimationComponent({ model, animations: model.animations });
@@ -196,8 +200,9 @@ class Bar extends RenderTargetScene {
 
     _createModelCameraAnimation() {
         if (!this._model.cameras) return;
-
         this.setModelCamera(this._model.cameras[0]);
+        this._originalFOV = this._model.cameras[0].fov;
+
         return this._model.cameras[0];
     }
 
@@ -221,21 +226,16 @@ class Bar extends RenderTargetScene {
         }
     }
 
+    _playAudios() {
+        AudioManager.play('audio_bar', { loop: true });
+    }
+
     // On Tick
     _updateAnimationController() {
         if (!this.animationControllers.length < 0) return;
         for (let index = 0; index < this.animationControllers.length; index++) {
             this.animationControllers[index].update(this._sceneDelta);
         }
-    }
-
-    _setupDebug() {
-        if (!this.debugFolder) return;
-
-        const animations = this.debugFolder.addFolder({ title: 'Animation', expanded: true });
-        animations.addInput(this._animationsSettings, 'progress', { min: 0, max: 1 }).on('change', this._animationsProgressChangeHandler);
-        animations.addInput(this._animationsSettings, 'fov', { min: 0.1, max: 80 }).on('change', this._cameraFovChangeHandler);
-        animations.addButton({ title: 'Play' }).on('click', this._clickPlayAnimationsHandler);
     }
 
     _updateSettings() {
@@ -250,13 +250,22 @@ class Bar extends RenderTargetScene {
         this._debugFolder?.refresh();
     }
 
+    _setupDebug() {
+        if (!this.debugFolder) return;
+
+        const animations = this.debugFolder.addFolder({ title: 'Animation', expanded: true });
+        animations.addInput(this._animationsSettings, 'progress', { min: 0, max: 1 }).on('change', this._animationsProgressChangeHandler);
+        animations.addInput(this._animationsSettings, 'fov', { min: 0.1, max: 80 }).on('change', this._cameraFovChangeHandler);
+        animations.addButton({ title: 'Play' }).on('click', this._clickPlayAnimationsHandler);
+    }
+
     _setCameraZoom() {
         gsap.to(this._modelCamera, {
             fov: this._animationsSettings.fov,
             duration: 1,
             ease: 'sine.inOut',
             onUpdate: () => {
-                this.setCameraFOV({ camera: this._model.cameras[0] });
+                this.setCameraFOV({ fov: this._model.cameras[0].fov });
             },
         });
         this.interactionsSettings.rotationFactor.x = -1;
@@ -267,7 +276,7 @@ class Bar extends RenderTargetScene {
         const skinnedModelCloned = cloneSkinnedMesh(model);
         skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
         const animationController = new AnimationComponent({ model: skinnedModelCloned, animations: skinnedModelCloned.animations[index] });
-        // this.add(skinnedModelCloned.scene);
+        this.add(skinnedModelCloned.scene);
 
         this.animationControllers.push(animationController);
 

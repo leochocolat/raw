@@ -41,8 +41,8 @@ const data = {
     animations: {
         hallway: { duration: 26 },
         library: { duration: 10 },
-        supermarket: { duration: 1 },
-        bar: { duration: 26 },
+        supermarket: { duration: 23 },
+        bar: { duration: 24 },
     },
 
     sceneModelsCount: {

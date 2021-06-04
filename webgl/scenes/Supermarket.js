@@ -93,7 +93,7 @@ class Supermarket extends RenderTargetScene {
     }
 
     _setup() {
-        this._sceneMaterial = this._createMaterial();
+        this._sceneMaterial = this._createSceneMaterial();
         this._model = this._createModel();
         this._interactionScreen = this._setupInteractionScreen();
         this._modelCamera = this._createModelCameraAnimation();
@@ -104,6 +104,24 @@ class Supermarket extends RenderTargetScene {
         // setup animations
         this._animationController = this._createAnimationController();
         this._animationController.onAnimationComplete(() => this.setScreenIsolation());
+    }
+
+    _createSceneMaterial() {
+        const texture = this._resources.get('texture_supermarket');
+
+        const uniforms = {
+            u_scene_texture: { value: texture },
+            u_isolation_alpha: { value: 1.0 },
+        };
+
+        const material = new THREE.ShaderMaterial({
+            side: THREE.DoubleSide,
+            uniforms,
+            vertexShader: vertex,
+            fragmentShader: fragment,
+        });
+
+        return material;
     }
 
     _createModel() {
@@ -146,24 +164,6 @@ class Supermarket extends RenderTargetScene {
             height: this._height,
             size,
         });
-    }
-
-    _createMaterial() {
-        const texture = this._resources.get('texture_supermarket');
-
-        const uniforms = {
-            u_scene_texture: { value: texture },
-            u_isolation_alpha: { value: 1.0 },
-        };
-
-        const material = new THREE.ShaderMaterial({
-            side: THREE.DoubleSide,
-            uniforms,
-            vertexShader: vertex,
-            fragmentShader: fragment,
-        });
-
-        return material;
     }
 
     _createAnimationController() {
