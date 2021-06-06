@@ -6,9 +6,10 @@ import math from '@/utils/math';
 import AudioManager from '@/utils/AudioManager';
 
 export default {
+    props: ['data'],
+
     data() {
         return {
-            data: {},
             activeIndex: 0,
             intervalTime: 5500,
             isDisable: false,
@@ -17,21 +18,12 @@ export default {
         };
     },
 
-    watch: {
-        '$i18n.locale'() {
-            this.$fetch();
-            this.restart();
-        },
-    },
-
-    fetch() {
-        return this.$api.getEntryById('5rjWV266TXZKdTaYcuht6i').then((response) => {
-            this.data = response.fields;
-        });
-    },
-
     beforeDestroy() {
         this.killTimer();
+    },
+
+    mounted() {
+        this.start();
     },
 
     methods: {
@@ -54,9 +46,17 @@ export default {
             this.activeScreen.transitionIn();
         },
 
+        refresh() {
+            for (let i = 0; i < this.screens.length; i++) {
+                const screen = this.screens[i];
+                if (screen.refresh) screen.refresh();
+            }
+        },
+
         restart() {
             this.killTimer();
             this.activeScreen.transitionOut();
+            this.refresh();
             this.start();
             this.cookiesClickHandler();
         },

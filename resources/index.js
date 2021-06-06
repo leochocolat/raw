@@ -12,7 +12,7 @@ const fonts = [
         type: 'font',
         name: 'Default Sans',
         path: '/',
-        preload: true,
+        preload: false,
         options: {
             weight: 300,
         },

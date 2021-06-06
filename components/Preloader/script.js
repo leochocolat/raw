@@ -12,13 +12,28 @@ import { ThreeGltfDracoLoader, ThreeBasisTextureLoader, ThreeTextureLoader, Font
 export default {
     data() {
         return {
+            data: {},
+            isFontReady: false,
             isDisable: false,
         };
+    },
+
+    fetch() {
+        return this.$api.getEntryById('5rjWV266TXZKdTaYcuht6i').then((response) => {
+            this.data = response.fields;
+        });
     },
 
     computed: {
         lang() {
             return this.$i18n.locale;
+        },
+    },
+
+    watch: {
+        lang() {
+            this.$fetch();
+            this.$refs.preloaderScreens?.restart();
         },
     },
 
@@ -57,11 +72,13 @@ export default {
             this.resourceLoader.add({ resources, preload: false });
             this.resourceLoader.preload();
 
-            // Start preloader
             this.showLoadingMessage();
-
             this.$store.dispatch('preloader/start');
-            this.$refs.preloaderScreens.start();
+
+            ResourceLoader.load('Default Sans').then((response) => {
+                // Start preloader
+                this.isFontReady = true;
+            });
         },
 
         start() {
@@ -113,6 +130,10 @@ export default {
             if (this.$refs.preloaderScreens.isComplete || this.$refs.preloaderScreens.isDisable) {
                 this.start();
             }
+        },
+
+        preloaderScreenMountedHandler() {
+            // this.$nextTick(this.$refs.preloaderScreens.start);
         },
     },
 };

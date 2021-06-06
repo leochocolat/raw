@@ -19,6 +19,11 @@ export default {
         /**
          * Public
          */
+        refresh() {
+            this.revertSplitText();
+            this.setupSplitText();
+        },
+
         transitionIn() {
             this.timelineIn = new gsap.timeline();
 
