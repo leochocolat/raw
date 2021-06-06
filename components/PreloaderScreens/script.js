@@ -1,5 +1,6 @@
 // Vendor
 import gsap from 'gsap';
+import { mapGetters } from 'vuex';
 
 // Utils
 import math from '@/utils/math';
@@ -10,6 +11,7 @@ export default {
 
     data() {
         return {
+            isHome: this.getRouteBaseName() === 'index',
             activeIndex: 0,
             intervalTime: 5500,
             isDisable: false,
@@ -18,12 +20,25 @@ export default {
         };
     },
 
+    computed: {
+        ...mapGetters({
+            isReady: 'preloader/isReady',
+            isDebug: 'context/isDebug',
+            isDevelopment: 'context/isDevelopment',
+            isProduction: 'context/isProduction',
+        }),
+    },
+
     beforeDestroy() {
         this.killTimer();
     },
 
     mounted() {
-        this.start();
+        if (this.isHome || this.isDebug || !this.isProduction) {
+            this.disable();
+        } else {
+            this.start();
+        }
     },
 
     methods: {
@@ -47,6 +62,7 @@ export default {
         },
 
         refresh() {
+            if (!this.screens) return;
             for (let i = 0; i < this.screens.length; i++) {
                 const screen = this.screens[i];
                 if (screen.refresh) screen.refresh();
@@ -55,7 +71,7 @@ export default {
 
         restart() {
             this.killTimer();
-            this.activeScreen.transitionOut();
+            this.activeScreen?.transitionOut();
             this.refresh();
             this.start();
             this.cookiesClickHandler();

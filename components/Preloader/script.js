@@ -52,7 +52,6 @@ export default {
          */
         disable() {
             this.isDisable = true;
-            this.$refs.preloaderScreens.disable();
         },
 
         /**
@@ -75,8 +74,7 @@ export default {
             this.showLoadingMessage();
             this.$store.dispatch('preloader/start');
 
-            ResourceLoader.load('Default Sans').then((response) => {
-                // Start preloader
+            ResourceLoader.load('Default Sans').then(() => {
                 this.isFontReady = true;
             });
         },
