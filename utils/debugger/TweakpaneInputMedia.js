@@ -108,6 +108,7 @@ class TweakpaneInputMedia {
     }
 
     _readFile() {
+        if (!this._input.files[0]) return;
         this._fileReader.readAsDataURL(this._input.files[0]);
     }
 

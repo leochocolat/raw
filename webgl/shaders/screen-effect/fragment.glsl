@@ -3,6 +3,8 @@ varying vec2 vUv;
 
 // Uniforms
 uniform vec2 u_resolution;
+uniform vec2 u_plane_size;
+uniform vec2 u_aspect_ratio;
 uniform float u_time;
 
 uniform sampler2D u_texture;
@@ -73,9 +75,26 @@ vec2 crt(vec2 coord, float bend)
 	return coord;
 }
 
+vec2 resized_uv(vec2 inital_uv, vec2 aspect_ratio)
+{
+    vec2 ratio = vec2(
+      min((u_plane_size.x / u_plane_size.y) / (aspect_ratio.x / aspect_ratio.y), 1.0),
+      min((u_plane_size.y / u_plane_size.x) / (aspect_ratio.y / aspect_ratio.x), 1.0)
+    );
+
+    vec2 new_uv = vec2(
+      inital_uv.x * ratio.x + (1.0 - ratio.x) * 0.5,
+      inital_uv.y * ratio.y + (1.0 - ratio.y) * 0.5
+    );
+
+    return new_uv;
+}
+
 void main()
 {
-    vec2 crt_uv = crt(vUv, u_crt_bending * u_global_intensity);
+    vec2 r_uv = resized_uv(vUv, u_aspect_ratio);
+
+    vec2 crt_uv = crt(r_uv, u_crt_bending * u_global_intensity);
 
     vec4 base_color = RGBShift(crt_uv, u_rgb_shift_angle, u_rgb_shift_amount * u_global_intensity, u_texture);
 
@@ -108,6 +127,4 @@ void main()
     vig = pow(vig, u_vignette_scale * u_global_intensity); // change pow for modifying the extend of the vignette
 
     gl_FragColor = (base_color + noise_color) * vig;
-    // gl_FragColor = vec4(vig * vig);
-
 }

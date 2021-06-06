@@ -44,16 +44,29 @@ class Screen extends DebugScene {
      * Private
      */
     _setup() {
+        this._texture = this._resources.get('test-blur');
+        this._textureVideo = this._resources.get('video_test_0');
+
+        this._textureAspectRatio = this._getTextureAspectRatio(this._textureVideo);
+
         this._material = this._createMaterial();
         this._plane = this._createPlane();
         this._addDebugSettings();
+    }
+
+    _getTextureAspectRatio(texture) {
+        const textureAspectRatio = new THREE.Vector2(texture.image.width || texture.image.videoWidth, texture.image.height || texture.image.videoHeight);
+
+        return textureAspectRatio;
     }
 
     _createMaterial() {
         const uniforms = {
             u_time: { value: 0.0 },
             u_resolution: { value: new THREE.Vector2(this._width, this._height) },
-            u_texture: { value: this._resources.get('video_test_0') },
+            u_plane_size: { value: new THREE.Vector2(this._width, this._height) },
+            u_texture: { value: this._textureVideo },
+            u_aspect_ratio: { value: this._textureAspectRatio },
             u_global_intensity: { value: 1 },
             // Color filter
             u_red_filter_intensity: { value: -0.1 },
@@ -94,6 +107,8 @@ class Screen extends DebugScene {
         mesh.scale.x = 2;
         mesh.scale.y = 1.1;
 
+        this._material.uniforms.u_plane_size.value.set(2, 1.1);
+
         this.add(mesh);
 
         return mesh;
@@ -101,6 +116,7 @@ class Screen extends DebugScene {
 
     _setupResources() {
         const resources = new ResourceManager({ name: 'screen', namespace: 'screen' });
+        resources.addByName('test-blur');
         resources.load();
 
         return resources;
@@ -109,6 +125,38 @@ class Screen extends DebugScene {
     _addDebugSettings() {
         this._debugFolder.addInput(this._plane.material.uniforms.u_global_intensity, 'value', { label: 'Effect Intensity', min: 0, max: 1 });
         this._debugFolder.addInput(this._plane.material.uniforms.u_crt_bending, 'value', { label: 'CRT Bending', min: 0, max: 1 });
+
+        // Input image / Video
+        const inputImageFolder = this._debugFolder.addFolder({ title: 'Input Image' });
+
+        const inputTabs = inputImageFolder.addTab({
+            pages: [
+                { title: 'Image' },
+                { title: 'Video' },
+            ],
+        });
+
+        const inputImage = this.debugger.addInputMedia(this._texture.image, {
+            type: 'image',
+            title: 'Upload file',
+            label: 'Image',
+            folder: inputTabs.pages[0],
+            options: {
+                'test-blur': this._resources.get('test-blur').image.src,
+            },
+        });
+        inputImage.on('update', this._imageUpdateHandler);
+
+        const inputVideo = this.debugger.addInputMedia(this._textureVideo.image, {
+            type: 'video',
+            title: 'Upload file',
+            label: 'Video',
+            folder: inputTabs.pages[1],
+            options: {
+                'video_test_0': this._resources.get('video_test_0').image.src,
+            },
+        });
+        inputVideo.on('update', this._videoUpdateHandler);
 
         const colorFilter = this._debugFolder.addFolder({ title: 'Color filter' });
         colorFilter.addInput(this._plane.material.uniforms.u_red_filter_intensity, 'value', { label: 'Red', min: -1, max: 1 });
@@ -142,7 +190,7 @@ class Screen extends DebugScene {
     }
 
     _bindAll() {
-        bindAll(this, '_resourcesReadyHandler', '_debugAnimationOutClickHandler', '_debugAnimationInClickHandler');
+        bindAll(this, '_resourcesReadyHandler', '_debugAnimationOutClickHandler', '_debugAnimationInClickHandler', '_imageUpdateHandler', '_videoUpdateHandler');
     }
 
     _setupEventListeners() {
@@ -171,6 +219,20 @@ class Screen extends DebugScene {
         this._timelineIn.to(this.camera.position, { z: 2, duration: 2 }, 0);
 
         return this._timelineIn;
+    }
+
+    _imageUpdateHandler(image) {
+        this._texture = new THREE.Texture(image);
+        this._texture.needsUpdate = true;
+        this._plane.material.uniforms.u_texture.value = this._texture;
+        this._plane.material.uniforms.u_aspect_ratio.value = this._getTextureAspectRatio(this._texture);
+    }
+
+    _videoUpdateHandler(video) {
+        this._textureVideo = new THREE.VideoTexture(video);
+        this._textureVideo.needsUpdate = true;
+        this._plane.material.uniforms.u_texture.value = this._textureVideo;
+        this._plane.material.uniforms.u_aspect_ratio.value = this._getTextureAspectRatio(this._textureVideo);
     }
 }
 
