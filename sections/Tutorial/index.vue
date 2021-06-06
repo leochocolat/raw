@@ -1,7 +1,7 @@
 <template>
     <div class="tutorial">
         <div class="container">
-            <div class="paragraph">
+            <div ref="paragraph" class="paragraph">
                 <RichText :document="data" />
             </div>
         </div>

@@ -1,11 +1,11 @@
 <template>
     <div class="cookies">
         <div class="container">
-            <div class="paragraph">
+            <div ref="paragraph" class="paragraph">
                 {{ data }}
             </div>
 
-            <button class="button" @click="clickHandler">
+            <button ref="button" class="button" @click="clickHandler">
                 {{ lang === 'fr' ? `J'accepte` : 'Agreed' }}
             </button>
         </div>

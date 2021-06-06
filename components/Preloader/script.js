@@ -1,3 +1,6 @@
+// Vendor
+import gsap from 'gsap';
+
 // Data
 import resources from '@/resources/index';
 
@@ -11,6 +14,12 @@ export default {
         return {
             isDisable: false,
         };
+    },
+
+    computed: {
+        lang() {
+            return this.$i18n.locale;
+        },
     },
 
     mounted() {
@@ -49,12 +58,38 @@ export default {
             this.resourceLoader.preload();
 
             // Start preloader
+            this.showLoadingMessage();
+
             this.$store.dispatch('preloader/start');
             this.$refs.preloaderScreens.start();
         },
 
         start() {
             this.$store.dispatch('preloader/setReady');
+            this.removePreloader();
+            this.hideLoadingMessage();
+        },
+
+        showLoadingMessage() {
+            const timeline = new gsap.timeline();
+
+            timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 1, ease: 'power0.none' });
+            timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 0, ease: 'power0.none' });
+            timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 1, ease: 'power0.none' });
+            timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 0, ease: 'power0.none' });
+            timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 1, ease: 'power0.none' });
+        },
+
+        hideLoadingMessage() {
+            const timeline = new gsap.timeline();
+
+            timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 0, ease: 'power0.none' });
+            timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 1, ease: 'power0.none' });
+            timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 0, ease: 'power0.none' });
+        },
+
+        removePreloader() {
+            this.$el.style.display = 'none';
         },
 
         /**
@@ -72,6 +107,8 @@ export default {
             this.$store.dispatch('preloader/setComplete');
 
             this.$refs.preloaderScreens.isPreloaderComplete = true;
+
+            // this.hideLoadingMessage();
 
             if (this.$refs.preloaderScreens.isComplete || this.$refs.preloaderScreens.isDisable) {
                 this.start();

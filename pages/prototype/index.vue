@@ -7,7 +7,7 @@
             :scene-entries="sceneEntries"
         />
 
-        <TheEnd v-if="isComplete || isStopped" :data="home.fields.sectionEnd.fields" :scene-entries="sceneEntries" />
+        <TheEnd v-if="isComplete || isStopped && isReady" :data="home.fields.sectionEnd.fields" :scene-entries="sceneEntries" />
 
     </div>
 </template>

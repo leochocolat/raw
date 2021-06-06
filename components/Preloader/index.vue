@@ -3,6 +3,10 @@
 
         <PreloaderScreens ref="preloaderScreens" />
 
+        <div ref="loadingMessage" class="loading-message">
+            {{ lang === 'fr' ? 'Chargement...' : 'Loading...' }}
+        </div>
+
     </div>
 </template>
 

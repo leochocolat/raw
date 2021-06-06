@@ -14,9 +14,21 @@ export default {
     },
 
     methods: {
-        setupLottie() {
-            const intervalTime = 1000;
+        /**
+         * Public
+         */
+        play() {
+            this.lottie.goToAndPlay(0, true);
+        },
 
+        stop() {
+
+        },
+
+        /**
+         * Private
+         */
+        setupLottie() {
             this.lottie = lottie.loadAnimation({
                 container: this.$el,
                 renderer: 'svg',
@@ -26,6 +38,7 @@ export default {
             });
 
             if (this.autoplay) {
+                const intervalTime = 1000;
                 this.playInterval = setInterval(() => {
                     this.lottie.goToAndPlay(0, true);
                 }, intervalTime);

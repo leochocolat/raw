@@ -1,7 +1,7 @@
 <template>
     <div class="context">
         <div class="container">
-            <div class="paragraph" v-html="data">
+            <div ref="paragraph" class="paragraph" v-html="data">
             </div>
         </div>
     </div>

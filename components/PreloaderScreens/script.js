@@ -10,7 +10,7 @@ export default {
         return {
             data: {},
             activeIndex: 0,
-            intervalTime: 4500,
+            intervalTime: 5500,
             isDisable: false,
             isComplete: false,
             isPreloaderComplete: false,
@@ -39,14 +39,14 @@ export default {
          * Public
          */
         start() {
-            this.screens = [this.$refs.cookies, ...this.$refs.context, this.$refs.warning, this.$refs.intro, this.$refs.instructions, this.$refs.stop];
+            this.screens = [this.$refs.cookies, ...this.$refs.context, this.$refs.warning, this.$refs.intro, this.$refs.instructions, this.$refs.stop, this.$refs.screenLogo];
 
             const contextSteps = [];
             for (let i = 0; i < this.$refs.context.length; i++) {
                 contextSteps.push('context');
             }
 
-            this.steps = ['cookies', ...contextSteps, 'warning', 'intro', 'instructions', 'stop'];
+            this.steps = ['cookies', ...contextSteps, 'warning', 'intro', 'instructions', 'stop', 'logo'];
             this.activeIndex = 0;
             this.index = 0;
             this.activeScreen = this.screens[this.index];

@@ -1,6 +1,4 @@
-.tutorial {
-    opacity: 0;
-    
+.tutorial {    
     display: flex;
 
     position: absolute;
@@ -37,7 +35,29 @@
 .paragraph {
     &::v-deep {
         b {
-            color: red;
+            color: transparent;
+        }
+
+        .line {
+            display: inline-block;
+            position: relative;
+
+            color: transparent;
+        }
+
+        .highlight {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 1em;
+
+            background-color: $color-white;
+
+            transform: scaleX(0);
+
+            transform-origin: left top;
         }
     }
 }

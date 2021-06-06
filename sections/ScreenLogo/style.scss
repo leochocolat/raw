@@ -1,0 +1,31 @@
+.screen-logo {
+    display: flex;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: content-height();
+
+    padding: content-padding();
+
+    @include respond-to('large') {
+        height: content-height-l();
+
+        padding: content-padding-l();
+    }
+}
+
+.logo-container {
+    opacity: 0;
+    
+    width: vw(300px);
+
+    @include respond-to('large') {
+        width: vw-l(321px);
+    }
+}

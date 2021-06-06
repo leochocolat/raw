@@ -21,6 +21,7 @@ class ScreensContainer extends THREE.Mesh {
 
         this.geometry = this._createGeometry();
         this.material = this._createMaterial();
+
         this._debugFolder = this._createDebugFolder();
     }
 

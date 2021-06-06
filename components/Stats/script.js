@@ -1,4 +1,5 @@
 // Vendor
+import gsap from 'gsap';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -6,6 +7,7 @@ export default {
 
     data() {
         return {
+            isVisible: false,
             lang: this.$i18n.locale,
             title: {
                 en: 'Statistics',
@@ -58,6 +60,56 @@ export default {
             const stat4 = influence ? Math.sign(influence) * ('00' + influence).substr(-2) + '%' : '00%';
 
             return [stat1, stat2, stat3, stat4];
+        },
+    },
+
+    methods: {
+        /**
+         * Public
+         */
+        transitionIn() {
+            const timelineShow = new gsap.timeline();
+            const delay = Math.random() * 0.5;
+
+            timelineShow.call(() => {
+                this.isVisible = true;
+            }, null, 0);
+
+            timelineShow.to(this.$refs.title, { duration: 0.1, alpha: 1 }, delay);
+            timelineShow.to(this.$refs.subtitle, { duration: 0.1, alpha: 1 }, delay);
+
+            timelineShow.to(this.$refs.title, { duration: 0.1, alpha: 0 }, delay + 0.1);
+            timelineShow.to(this.$refs.subtitle, { duration: 0.1, alpha: 0 }, delay + 0.1);
+
+            timelineShow.to(this.$refs.title, { duration: 0.1, alpha: 1 }, delay + 0.2);
+            timelineShow.to(this.$refs.subtitle, { duration: 0.1, alpha: 1 }, delay + 0.2);
+
+            const stagger = 0.15;
+
+            for (let i = 0; i < this.$refs.highlight.length; i++) {
+                const timeline = gsap.timeline();
+
+                const title = this.$refs.statTitle[i];
+                const stat = this.$refs.stat[i];
+                const highlight = this.$refs.highlight[i];
+
+                timeline.to(highlight, { duration: 0.3, scaleX: 1, ease: 'power0.none' });
+
+                timeline.set(title, { color: 'white' });
+
+                if (stat.classList.contains('red')) {
+                    timeline.set(stat, { color: 'red' });
+                } else {
+                    timeline.set(stat, { color: 'white' });
+                }
+
+                timeline.set(highlight, { transformOrigin: 'right top' });
+                timeline.to(highlight, { duration: 0.3, scaleX: 0, ease: 'power0.none' });
+
+                timelineShow.add(timeline, stagger * i + delay);
+            }
+
+            return timelineShow;
         },
     },
 };

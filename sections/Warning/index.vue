@@ -1,10 +1,10 @@
 <template>
     <div class="warning">
         <div class="container">
-            <div class="heading">
+            <div ref="heading" class="heading">
                 {{ locale === 'fr' ? 'Avertissement' : 'Warning' }}
             </div>
-            <div class="paragraph">
+            <div ref="paragraph" class="paragraph">
                 {{ data }}
             </div>
         </div>
