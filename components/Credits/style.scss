@@ -1,15 +1,26 @@
 .credits {
-    padding-bottom: vw(150px);
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+
+    padding-bottom: $footer-height;
 
     font-size: rem(25px);
 
     text-transform: uppercase;
 
     @include respond-to('large') {
-        padding-bottom: vw-l(260px);
+        padding-bottom: $footer-height-l;
 
         font-size: rem-l(25px);
     }
+}
+
+.container {
+
 }
 
 .title {

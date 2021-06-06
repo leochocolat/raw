@@ -68,21 +68,23 @@ export default {
          * Public
          */
         transitionIn() {
-            const timelineShow = new gsap.timeline();
+            // this.timalineIn?.kill();
+
+            this.timalineIn = new gsap.timeline();
             const delay = Math.random() * 0.5;
 
-            timelineShow.call(() => {
+            this.timalineIn.call(() => {
                 this.isVisible = true;
             }, null, 0);
 
-            timelineShow.to(this.$refs.title, { duration: 0.1, alpha: 1 }, delay);
-            timelineShow.to(this.$refs.subtitle, { duration: 0.1, alpha: 1 }, delay);
+            this.timalineIn.to(this.$refs.title, { duration: 0.1, alpha: 1 }, delay);
+            this.timalineIn.to(this.$refs.subtitle, { duration: 0.1, alpha: 1 }, delay);
 
-            timelineShow.to(this.$refs.title, { duration: 0.1, alpha: 0 }, delay + 0.1);
-            timelineShow.to(this.$refs.subtitle, { duration: 0.1, alpha: 0 }, delay + 0.1);
+            this.timalineIn.to(this.$refs.title, { duration: 0.1, alpha: 0 }, delay + 0.1);
+            this.timalineIn.to(this.$refs.subtitle, { duration: 0.1, alpha: 0 }, delay + 0.1);
 
-            timelineShow.to(this.$refs.title, { duration: 0.1, alpha: 1 }, delay + 0.2);
-            timelineShow.to(this.$refs.subtitle, { duration: 0.1, alpha: 1 }, delay + 0.2);
+            this.timalineIn.to(this.$refs.title, { duration: 0.1, alpha: 1 }, delay + 0.2);
+            this.timalineIn.to(this.$refs.subtitle, { duration: 0.1, alpha: 1 }, delay + 0.2);
 
             const stagger = 0.15;
 
@@ -106,10 +108,10 @@ export default {
                 timeline.set(highlight, { transformOrigin: 'right top' });
                 timeline.to(highlight, { duration: 0.3, scaleX: 0, ease: 'power0.none' });
 
-                timelineShow.add(timeline, stagger * i + delay);
+                this.timalineIn.add(timeline, stagger * i + delay);
             }
 
-            return timelineShow;
+            return this.timalineIn;
         },
     },
 };
