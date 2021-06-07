@@ -8,6 +8,12 @@ import WindowResizeObserver from '@/utils/WindowResizeObserver';
 export default {
     props: ['data'],
 
+    data() {
+        return {
+            scrollPosition: 0,
+        };
+    },
+
     mounted() {
         this.scrollPosition = window.scrollY;
         this.scrollTriggerOffset = 0.2;
@@ -227,10 +233,6 @@ export default {
             this.scrollPosition = window.scrollY;
 
             this.detectElements();
-
-            if (this.scrollPosition !== 0) {
-                this.$store.dispatch('setInstructions', '');
-            }
 
             if (this.scrollPosition >= WindowResizeObserver.height * this.scrollTriggerOffset) {
                 this.$parent.setIsScrolling(true);

@@ -12,6 +12,7 @@ export default {
     computed: {
         ...mapGetters({
             instructions: 'instructions',
+            isFinalInstruction: 'isFinalInstruction',
         }),
     },
 
@@ -20,6 +21,15 @@ export default {
             if (instructions === '') instructions = 'instructions';
             this.content = instructions;
         },
+
+        isFinalInstruction(isFinalInstruction) {
+            if (isFinalInstruction) this.blink();
+            else this.stopBlink();
+        },
+    },
+
+    mounted() {
+        // this.blink();
     },
 
     methods: {
@@ -27,11 +37,41 @@ export default {
          * Public
          */
         transitionIn() {
-            gsap.to(this.$el, { duration: 0.5, alpha: 1 });
+            this.timelineIn = new gsap.timeline();
+            this.timelineIn.to(this.$el, { duration: 0.1, alpha: 1 });
+            this.timelineIn.to(this.$el, { duration: 0.1, alpha: 0 });
+            this.timelineIn.to(this.$el, { duration: 0.1, alpha: 1 });
         },
 
         transitionOut() {
-            gsap.to(this.$el, { duration: 0.5, alpha: 0 });
+            gsap.to(this.$el, { duration: 0.1, alpha: 0 });
+        },
+
+        /**
+         * Private
+         */
+        blink() {
+            this.timelineIn?.kill();
+
+            this.timelineShowBlink = new gsap.timeline();
+            this.timelineShowBlink.to(this.$el, { duration: 0.1, alpha: 0 });
+            this.timelineShowBlink.to(this.$el, { duration: 0.1, alpha: 1, color: 'red' });
+            this.timelineShowBlink.to(this.$el, { duration: 0.1, alpha: 0 });
+            this.timelineShowBlink.to(this.$el, { duration: 0.1, alpha: 1 });
+            this.timelineShowBlink.to(this.$el, { duration: 0.1, alpha: 0 });
+            this.timelineShowBlink.to(this.$el, { duration: 0.1, alpha: 1, color: 'white' });
+
+            this.timelineBlink = new gsap.timeline({ repeat: -1 });
+            this.timelineBlink.to(this.$el, { duration: 0.1, color: 'white' }, 0);
+            this.timelineBlink.to(this.$el, { duration: 0.1, color: 'red' }, 0.5);
+            this.timelineBlink.to(this.$el, { duration: 0.1, color: 'red' }, 1);
+
+            this.timelineShowBlink.add(this.timelineBlink);
+        },
+
+        stopBlink() {
+            this.timelineBlink?.kill();
+            gsap.to(this.$el, { duration: 0.1, alpha: 1, color: 'white' });
         },
     },
 };

@@ -1,4 +1,7 @@
-.tutorial {    
+.tutorial { 
+    opacity: 0;
+    visibility: hidden;
+    
     display: flex;
 
     position: absolute;

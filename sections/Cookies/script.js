@@ -63,15 +63,31 @@ export default {
             this.timelineIn.to(this.$refs.button, { duration: 0.1, alpha: 0 });
             this.timelineIn.to(this.$refs.button, { duration: 0.1, alpha: 1 });
 
+            this.timelineIn.add(this.$refs.langSwitch.transitionIn(), 0.5);
+
             return this.timelineIn;
         },
 
         transitionOut() {
             this.timelineOut = new gsap.timeline();
 
+            this.timelineOut.add(this.$refs.langSwitch.transitionOut(), 0);
             this.timelineOut.to(this.$el, { duration: 0.1, alpha: 0 });
             this.timelineOut.to(this.$el, { duration: 0.1, alpha: 1 });
-            this.timelineOut.to(this.$el, { duration: 0.1, alpha: 0 });
+            this.timelineOut.to(this.$el, { duration: 0.1, autoAlpha: 0 });
+
+            for (let i = 0; i < this.lines.length; i++) {
+                const line = this.lines[i];
+                const highlight = this.highlightings[i];
+                const b = line.querySelectorAll('b');
+
+                this.timelineOut.set(line, { color: 'transparent' });
+                this.timelineOut.set(highlight, { transformOrigin: 'left top', scaleX: 0 });
+
+                if (b.length > 0) {
+                    this.timelineOut.set(b, { color: 'transparent' });
+                }
+            }
 
             return this.timelineOut;
         },

@@ -5,7 +5,6 @@ export default {
     computed: {
         ...mapGetters({
             preloaderStep: 'preloader/step',
-            isReady: 'preloader/isReady',
         }),
     },
 
@@ -19,10 +18,6 @@ export default {
                 this.showInstructions();
             }
         },
-
-        isReady(isReady) {
-            if (isReady) this.showButtonSound();
-        },
     },
 
     methods: {
@@ -35,11 +30,6 @@ export default {
 
         showInstructions() {
             this.$refs.instructions.transitionIn();
-        },
-
-        showButtonSound() {
-            this.$refs.langSwitch.transitionOut();
-            this.$refs.buttonSound.transitionIn();
         },
     },
 };

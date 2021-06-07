@@ -13,42 +13,36 @@
             :key="index"
             ref="context"
             class="screen"
-            :class="activeIndex === (index + 1) ? 'is-enable' : ''"
             :data="item"
         />
 
         <Warning
             ref="warning"
             class="screen"
-            :class="data.context && activeIndex === data.context.length + 1 ? 'is-enable' : ''"
             :data="data.warning"
         />
 
         <Tutorial
             ref="intro"
             class="screen"
-            :class="data.context && activeIndex === data.context.length + 2 ? 'is-enable' : ''"
             :data="data.tutorial1"
         />
 
         <Tutorial
             ref="instructions"
             class="screen"
-            :class="data.context && activeIndex === data.context.length + 3 ? 'is-enable' : ''"
             :data="data.tutorial2"
         />
 
         <Tutorial
             ref="stop"
             class="screen"
-            :class="data.context && activeIndex === data.context.length + 4 ? 'is-enable' : ''"
             :data="data.tutorial3"
         />
 
         <ScreenLogo
             ref="screenLogo"
             class="screen"
-            :class="data.context && activeIndex === data.context.length + 5 ? 'is-enable' : ''"
         />
 
     </div>
