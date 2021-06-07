@@ -2,10 +2,6 @@
     opacity: 1;
     visibility: visible;
 
-    position: absolute;
-    top: 0;
-    left: $padding-left;
-
     height: 100%;
 
     font-size: rem(13px);
@@ -22,8 +18,6 @@
     }
 
     @include respond-to('large') {
-        left: $padding-left-l;
-
         height: 100%;
 
         font-size: rem-l(17px);

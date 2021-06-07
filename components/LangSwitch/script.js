@@ -18,7 +18,7 @@ export default {
         },
 
         transitionOut() {
-            gsap.to(this.$el, { duration: 0.5, alpha: 0 });
+            gsap.to(this.$el, { duration: 0.1, alpha: 0 });
         },
     },
 };

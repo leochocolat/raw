@@ -94,14 +94,26 @@ export default {
             timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 1, ease: 'power0.none' });
             timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 0, ease: 'power0.none' });
             timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 1, ease: 'power0.none' });
+            timeline.add(this.loadingMessageBlink());
         },
 
         hideLoadingMessage() {
             const timeline = new gsap.timeline();
 
+            this.timelineLoadingBlink?.kill();
+
             timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 0, ease: 'power0.none' });
             timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 1, ease: 'power0.none' });
             timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 0, ease: 'power0.none' });
+        },
+
+        loadingMessageBlink() {
+            this.timelineLoadingBlink = new gsap.timeline({ repeat: -1, repeatDelay: 0.4 });
+
+            const dots = this.$el.querySelectorAll('.point');
+
+            this.timelineLoadingBlink.to(dots, { duration: 0.1, alpha: 0, ease: 'power0.none' });
+            this.timelineLoadingBlink.to(dots, { duration: 0.1, stagger: 0.4, alpha: 1, ease: 'power0.none' }, 0.4);
         },
 
         removePreloader() {

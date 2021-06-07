@@ -71,6 +71,7 @@ export default {
         transitionOut() {
             this.timelineOut = new gsap.timeline();
 
+            this.timelineOut.add(this.$refs.langSwitch.transitionOut(), 0);
             this.timelineOut.to(this.$el, { duration: 0.1, alpha: 0 });
             this.timelineOut.to(this.$el, { duration: 0.1, alpha: 1 });
             this.timelineOut.to(this.$el, { duration: 0.1, autoAlpha: 0 });
