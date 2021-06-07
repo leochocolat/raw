@@ -69,6 +69,10 @@ class Library extends RenderTargetScene {
     transitionToMenu() {
         super.transitionToMenu();
 
+        if (this._modelCamera) {
+            this.setCameraFOV({ fov: this._animationsSettings.originalFOV });
+        }
+
         // AudioManager.pause('audio_library');
     }
 
@@ -144,7 +148,7 @@ class Library extends RenderTargetScene {
 
         const clone = model;
         this.add(clone.scene);
-        console.log(model);
+
         clone.scene.traverse((child) => {
             child.frustumCulled = false;
             if (child.isMesh && child.name === 'scene_library') {

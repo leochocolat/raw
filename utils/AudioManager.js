@@ -41,9 +41,13 @@ class AudioManager {
         if (!this._tracks[name]) return;
         const next = this._tracks[name];
 
-        next.pause();
-
-        gsap.to(next, { volume: 0, duration: 0.1 });
+        gsap.to(next, {
+            volume: 0,
+            duration: 0.6,
+            onComplete: () => {
+                next.pause();
+            },
+        });
 
         this._current = null;
     }

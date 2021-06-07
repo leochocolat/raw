@@ -7,6 +7,21 @@ const resources = [
         path: '/models/scene_supermarket_2.glb',
         preload: false,
     },
+    {
+        type: 'gltf',
+        name: 'AdulteHomme',
+        namespace: 'supermarket',
+        path: '/models/supermarket/AdulteHomme.glb',
+        preload: false,
+    },
+    {
+        type: 'gltf',
+        name: 'AdulteVieux',
+        namespace: 'supermarket',
+        path: '/models/supermarket/AdulteVieux.glb',
+        preload: false,
+    },
+
     // Textures
     {
         type: 'basis',
@@ -21,7 +36,7 @@ const resources = [
         name: 'audio_supermarket',
         namespace: 'supermarket',
         path: '/audio/audio_supermarket.mp3',
-        preload: false,
+        preload: true,
     },
 ];
 

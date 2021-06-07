@@ -42,7 +42,7 @@ const resources = [
         name: 'audio_bar',
         namespace: 'bar',
         path: '/audio/audio_bar.mp3',
-        preload: false,
+        preload: true,
     },
 ];
 
