@@ -4,7 +4,21 @@ const resources = [
         type: 'gltf',
         name: 'library',
         namespace: 'library',
-        path: '/models/scene_library-d.glb',
+        path: '/models/scene_library.glb',
+        preload: false,
+    },
+    {
+        type: 'gltf',
+        name: 'LibraryFemme',
+        namespace: 'library',
+        path: '/models/library/LibraryFemme.glb',
+        preload: false,
+    },
+    {
+        type: 'gltf',
+        name: 'LibraryVieux',
+        namespace: 'library',
+        path: '/models/library/LibraryVieux.glb',
         preload: false,
     },
 

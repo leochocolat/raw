@@ -22,7 +22,9 @@ class Supermarket extends RenderTargetScene {
         super(options);
 
         const zoomFOV = 16.6;
-        this._animationsSettings = { progress: 0, fov: zoomFOV };
+        const originalFOV = 50.5;
+
+        this._animationsSettings = { progress: 0, zoomFOV, originalFOV };
 
         this._resources = this._setupResources();
 
@@ -186,6 +188,7 @@ class Supermarket extends RenderTargetScene {
         if (!this._model.cameras) return;
 
         this.setModelCamera(this._model.cameras[0]);
+        this.setCameraFOV({ fov: this._animationsSettings.originalFOV });
 
         return this._model.cameras[0];
     }
@@ -206,7 +209,7 @@ class Supermarket extends RenderTargetScene {
 
         const animations = this.debugFolder.addFolder({ title: 'Animation', expanded: true });
         animations.addInput(this._animationsSettings, 'progress', { min: 0, max: 1 }).on('change', this._animationsProgressChangeHandler);
-        animations.addInput(this._animationsSettings, 'fov', { min: 0.1, max: 80 }).on('change', this._cameraFovChangeHandler);
+        animations.addInput(this._animationsSettings, 'zoomFOV', { min: 0.1, max: 80 }).on('change', this._cameraFovChangeHandler);
         animations.addButton({ title: 'Play' }).on('click', this._clickPlayAnimationsHandler);
     }
 
@@ -224,7 +227,7 @@ class Supermarket extends RenderTargetScene {
 
     _setCameraZoom() {
         gsap.to(this._modelCamera, {
-            fov: this._animationsSettings.fov,
+            fov: this._animationsSettings.zoomFOV,
             duration: 1,
             ease: 'sine.inOut',
             onUpdate: () => {
@@ -270,7 +273,7 @@ class Supermarket extends RenderTargetScene {
     }
 
     _cameraFovChangeHandler() {
-        this._modelCamera.fov = this._animationsSettings.fov;
+        this._modelCamera.fov = this._animationsSettings.zoomFOV;
         this.setCameraFOV({ fov: this._model.cameras[0].fov });
     }
 
