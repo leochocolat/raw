@@ -7,6 +7,7 @@ export default {
     data() {
         return {
             locale: this.$i18n.locale,
+            duration: 7,
         };
     },
 
@@ -33,6 +34,7 @@ export default {
         transitionIn() {
             this.timelineIn = new gsap.timeline();
 
+            this.timelineIn.set(this.$el, { autoAlpha: 1 });
             this.timelineIn.set(this.$refs.paragraph, { alpha: 1 });
 
             const stagger = 0.15;
@@ -63,7 +65,9 @@ export default {
         transitionOut() {
             this.timelineOut = new gsap.timeline();
 
-            this.timelineOut.to(this.$el, 0.1, { alpha: 0 });
+            this.timelineOut.to(this.$el, { duration: 0.1, alpha: 0 });
+            this.timelineOut.to(this.$el, { duration: 0.1, alpha: 1 });
+            this.timelineOut.to(this.$el, { duration: 0.1, autoAlpha: 0 });
 
             return this.timelineOut;
         },
@@ -99,7 +103,7 @@ export default {
             WindowResizeObserver.addEventListener('resize', this.resizeHandler);
         },
 
-        removeEventListener() {
+        removeEventListeners() {
             WindowResizeObserver.removeEventListener('resize', this.resizeHandler);
         },
 

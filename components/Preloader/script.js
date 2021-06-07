@@ -15,6 +15,7 @@ export default {
             data: {},
             isFontReady: false,
             isDisable: false,
+            key: 0,
         };
     },
 
@@ -32,8 +33,7 @@ export default {
 
     watch: {
         lang() {
-            this.$fetch();
-            this.$refs.preloaderScreens?.restart();
+            this.key += 1;
         },
     },
 
@@ -128,10 +128,6 @@ export default {
             if (this.$refs.preloaderScreens.isComplete || this.$refs.preloaderScreens.isDisable) {
                 this.start();
             }
-        },
-
-        preloaderScreenMountedHandler() {
-            // this.$nextTick(this.$refs.preloaderScreens.start);
         },
     },
 };

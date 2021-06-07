@@ -8,7 +8,7 @@ import BlurPlaneBuffer from '../buffers/BlurPlaneBuffer';
 import vertex from '../shaders/censorship/vertex.glsl';
 import fragment from '../shaders/censorship/fragment.glsl';
 
-const BLUR_INTENSITY_FACTOR = 3.5;
+const BLUR_INTENSITY_FACTOR = 1;
 
 // Reduce to improve performances
 const BUFFER_QUALITY_FACTOR = 0.4;

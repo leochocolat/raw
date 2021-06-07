@@ -6,6 +6,12 @@ import WindowResizeObserver from '@/utils/WindowResizeObserver';
 export default {
     props: ['data'],
 
+    data() {
+        return {
+            duration: 8,
+        };
+    },
+
     mounted() {
         this.setupSplitText();
         this.setupEventListeners();
@@ -26,6 +32,8 @@ export default {
 
         transitionIn() {
             this.timelineIn = new gsap.timeline();
+
+            this.timelineIn.set(this.$el, { autoAlpha: 1 });
 
             const stagger = 0.15;
 
@@ -56,6 +64,8 @@ export default {
             this.timelineOut = new gsap.timeline();
 
             this.timelineOut.to(this.$el, { duration: 0.1, alpha: 0 });
+            this.timelineOut.to(this.$el, { duration: 0.1, alpha: 1 });
+            this.timelineOut.to(this.$el, { duration: 0.1, autoAlpha: 0 });
 
             return this.timelineOut;
         },
