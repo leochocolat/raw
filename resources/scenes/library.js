@@ -21,7 +21,6 @@ const resources = [
         path: '/models/library/LibraryVieux.glb',
         preload: false,
     },
-
     // Textures
     {
         type: 'basis',
@@ -30,7 +29,6 @@ const resources = [
         path: '/textures/basis/scene_library.basis',
         preload: false,
     },
-
     // Sounds
     // {
     //     type: 'audio',

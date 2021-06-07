@@ -17,7 +17,7 @@ class PizzicatoAudioLoader extends Loader {
                 },
                 () => {
                     resolve(sound);
-                }
+                },
             );
         });
 

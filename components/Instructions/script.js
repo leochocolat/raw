@@ -41,6 +41,8 @@ export default {
             this.timelineIn.to(this.$el, { duration: 0.1, alpha: 1 });
             this.timelineIn.to(this.$el, { duration: 0.1, alpha: 0 });
             this.timelineIn.to(this.$el, { duration: 0.1, alpha: 1 });
+            this.timelineIn.to(this.$el, { duration: 0.1, alpha: 0 });
+            this.timelineIn.to(this.$el, { duration: 0.1, alpha: 1 });
         },
 
         transitionOut() {

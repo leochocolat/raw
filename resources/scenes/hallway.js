@@ -38,7 +38,6 @@ const resources = [
         path: '/audio/audio_hallway.mp3',
         preload: false,
     },
-
 ];
 
 export default resources;

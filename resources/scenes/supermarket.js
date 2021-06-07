@@ -7,7 +7,6 @@ const resources = [
         path: '/models/scene_supermarket_2.glb',
         preload: false,
     },
-
     // Textures
     {
         type: 'basis',

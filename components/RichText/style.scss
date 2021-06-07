@@ -1,18 +1,17 @@
 .rich-text {
     &::v-deep {
+        h1, h2, h3 {
+            margin-top: vw-l(80px);
+            margin-bottom: vw-l(80px);
+        }
+
         p {
+            min-height: 1em;
+
             margin-bottom: 1em;
 
             &:last-child {
                 margin-bottom: 0;
-            }
-        }
-
-        a {
-            color: rgba(255, 0, 0, 1);
-
-            &:hover {
-                color: rgba(180, 0, 0, 1);
             }
         }
     }

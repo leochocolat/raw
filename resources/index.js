@@ -19,14 +19,16 @@ const fonts = [
     },
 ];
 
-// Sounds
-
+/**
+ * Sounds
+ */
 const audios = [
     // Scenes
     ...hallway,
     ...library,
     ...supermarket,
     ...bar,
+    // Main
     {
         type: 'audio',
         name: 'audio_main',
@@ -34,6 +36,7 @@ const audios = [
         preload: true,
     },
 ];
+
 /**
  * WebGL
  */
@@ -43,14 +46,6 @@ const webgl = [
     ...library,
     ...supermarket,
     ...bar,
-
-    // Global
-    {
-        type: 'gltf',
-        name: 'CameraMovement',
-        path: '/models/CameraMovement.glb',
-        preload: false,
-    },
 
     // Test Animations
     {
@@ -123,13 +118,6 @@ const webgl = [
             muted: true,
             playsinline: true,
         },
-    },
-    // Screen effects
-    {
-        type: 'texture',
-        name: 'screen-rewind-displacement',
-        path: '/textures/screen-rewind-displacement.png',
-        preload: false,
     },
 ];
 

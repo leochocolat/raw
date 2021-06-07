@@ -22,11 +22,12 @@
             :data="data.warning"
         />
 
-        <Tutorial
+        <!--  !! Make sure to add the ref and step in script line 48 and 55 if unquote !! -->
+        <!-- <Tutorial
             ref="intro"
             class="screen"
             :data="data.tutorial1"
-        />
+        /> -->
 
         <Tutorial
             ref="instructions"

@@ -45,14 +45,14 @@ export default {
          * Public
          */
         start() {
-            this.screens = [...this.$refs.context, this.$refs.warning, this.$refs.intro, this.$refs.instructions, this.$refs.stop, this.$refs.screenLogo];
+            this.screens = [...this.$refs.context, this.$refs.warning, this.$refs.instructions, this.$refs.stop, this.$refs.screenLogo];
 
             const contextSteps = [];
             for (let i = 0; i < this.$refs.context.length; i++) {
                 contextSteps.push('context');
             }
 
-            this.steps = [...contextSteps, 'warning', 'intro', 'instructions', 'stop', 'logo'];
+            this.steps = [...contextSteps, 'warning', 'instructions', 'stop', 'logo'];
 
             this.$refs.cookies.transitionIn();
             this.$store.dispatch('preloader/setStep', 'cookies');

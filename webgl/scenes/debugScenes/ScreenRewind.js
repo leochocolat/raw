@@ -53,7 +53,6 @@ class ScreenRewind extends DebugScene {
             u_time: { value: 0.0 },
             u_resolution: { value: new THREE.Vector2(this._width, this._height) },
             u_texture: { value: this._resources.get('video_test_0') },
-            u_texture_displacement: { value: this._resources.get('screen-rewind-displacement') },
             u_wobble_intensity: { value: 0.5 },
             u_distortion_intensity: { value: 0.02 },
             u_distortion_speed: { value: 1.0 },
@@ -96,20 +95,11 @@ class ScreenRewind extends DebugScene {
         this._debugFolder.addInput(this._plane.material.uniforms.u_distortion_speed, 'value', { label: 'Distortion Speed', min: 0, max: 5 });
         this._debugFolder.addInput(this._plane.material.uniforms.u_distortion_size, 'value', { label: 'Distortion Size Y', min: 0, max: 0.1 });
 
-        const inputImage = this.debugger.addInputMedia(this._resources.get('screen-rewind-displacement').image, {
-            type: 'image',
-            title: 'Upload file',
-            label: 'Image',
-            folder: this._debugFolder,
-        });
-
-        inputImage.on('update', this._imageUpdateHandler);
-
         this._debugFolder.expanded = true;
     }
 
     _bindAll() {
-        bindAll(this, '_resourcesReadyHandler', '_imageUpdateHandler');
+        bindAll(this, '_resourcesReadyHandler');
     }
 
     _setupEventListeners() {
@@ -118,11 +108,6 @@ class ScreenRewind extends DebugScene {
 
     _resourcesReadyHandler() {
         this._setup();
-    }
-
-    _imageUpdateHandler(image) {
-        this._plane.material.uniforms.u_texture_displacement.value = new THREE.Texture(image);
-        this._plane.material.uniforms.u_texture_displacement.value.needsUpdate = true;
     }
 }
 
