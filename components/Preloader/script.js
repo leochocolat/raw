@@ -22,6 +22,7 @@ export default {
     fetch() {
         return this.$api.getEntryById('5rjWV266TXZKdTaYcuht6i').then((response) => {
             this.data = response.fields;
+            this.key += 1;
         });
     },
 
@@ -33,7 +34,7 @@ export default {
 
     watch: {
         lang() {
-            this.key += 1;
+            this.$fetch();
         },
     },
 

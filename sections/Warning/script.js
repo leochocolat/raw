@@ -6,12 +6,17 @@ import gsap from 'gsap';
 export default {
     data() {
         return {
-            locale: this.$i18n.locale,
             duration: 7,
         };
     },
 
     props: ['data'],
+
+    computed: {
+        locale() {
+            return this.$i18n.locale;
+        },
+    },
 
     mounted() {
         this.setupSplitText();

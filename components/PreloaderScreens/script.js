@@ -2,9 +2,6 @@
 import gsap from 'gsap';
 import { mapGetters } from 'vuex';
 
-// Utils
-import math from '@/utils/math';
-
 export default {
     props: ['data'],
 
