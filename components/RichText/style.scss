@@ -7,5 +7,14 @@
                 margin-bottom: 0;
             }
         }
+
+        a {
+            color: rgba(255, 0, 0, 1);
+
+            &:hover {
+                color: rgba(180, 0, 0, 1);
+            }
+        }
     }
+
 }
