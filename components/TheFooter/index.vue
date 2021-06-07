@@ -1,6 +1,6 @@
 <template>
     <div class="footer">
-        <LangSwitch ref="langSwitch" />
+        <!-- <LangSwitch ref="langSwitch" /> -->
         <ButtonSound ref="buttonSound" />
         <Instructions ref="instructions" class="instructions" />
         <ButtonStop ref="buttonStop" />

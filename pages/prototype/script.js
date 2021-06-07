@@ -10,6 +10,12 @@ export default {
 
     mixins: [page],
 
+    data() {
+        return {
+            isScrolling: false,
+        };
+    },
+
     asyncData({ $api }) {
         const promises = [
             $api.getEntryById('5rjWV266TXZKdTaYcuht6i'),
@@ -82,6 +88,7 @@ export default {
         setIsScrolling(bool) {
             if (bool === this.isScrolling) return;
 
+            this.$refs.menu.setIsScrolling(bool);
             if (this.isScrolling) this.$refs.menu.transitionIn();
             if (!this.isScrolling) this.$refs.menu.transitionOut();
 

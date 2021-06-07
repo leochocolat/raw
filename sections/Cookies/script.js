@@ -63,6 +63,8 @@ export default {
             this.timelineIn.to(this.$refs.button, { duration: 0.1, alpha: 0 });
             this.timelineIn.to(this.$refs.button, { duration: 0.1, alpha: 1 });
 
+            this.timelineIn.add(this.$refs.langSwitch.transitionIn(), 0.5);
+
             return this.timelineIn;
         },
 

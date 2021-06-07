@@ -6,6 +6,8 @@ export default {
     data() {
         return {
             locale: this.$i18n.locale,
+            isScrolling: false,
+            hasScrolled: false,
         };
     },
 
@@ -18,8 +20,13 @@ export default {
         }),
 
         instruction() {
-            const instruction = (this.isFullComplete || this.isStopped) ? this.data.instructionsComplete : this.data.instructionsMenu;
+            let instruction = (this.isFullComplete || this.isStopped) ? this.data.instructionsComplete : this.data.instructionsMenu;
+            if ((this.isFullComplete || this.isStopped) && (this.isScrolling || this.hasScrolled)) instruction = '';
             return instruction;
+        },
+
+        isFinalInstruction() {
+            return (this.isFullComplete || this.isStopped);
         },
     },
 
@@ -30,6 +37,10 @@ export default {
 
         isFullComplete(isFullComplete) {
             if (isFullComplete) this.$store.dispatch('setInstructions', this.instruction);
+        },
+
+        isFinalInstruction(isFinalInstruction) {
+            if (isFinalInstruction) this.$store.dispatch('setFinalInstructions', true);
         },
     },
 
@@ -44,6 +55,7 @@ export default {
 
             this.timelineIn.call(() => {
                 this.$store.dispatch('setInstructions', this.instruction);
+                if (this.isFinalInstruction && !this.hasScrolled) this.$store.dispatch('setFinalInstructions', true);
             }, null);
 
             this.timelineIn.to(this.$refs.container, { duration: 0.1, alpha: 1 });
@@ -57,6 +69,7 @@ export default {
 
         transitionOut() {
             this.timelineIn?.kill();
+            this.timelineOut?.kill();
 
             this.timelineOut = new gsap.timeline();
 
@@ -64,8 +77,17 @@ export default {
             this.timelineOut.add(this.$refs.screen1.transitionOut(), 0.2);
             this.timelineOut.add(this.$refs.screen2.transitionOut(), 0);
             this.timelineOut.add(this.$refs.screen3.transitionOut(), 0.1);
+            this.timelineOut.call(() => { this.$store.dispatch('setFinalInstructions', false); }, null, 0);
 
             return this.timelineOut;
+        },
+
+        setIsScrolling(bool) {
+            this.isScrolling = bool;
+
+            if (!this.hasScrolled && bool) this.hasScrolled = true;
+
+            if (bool) this.$store.dispatch('setInstructions', '');
         },
 
         /**

@@ -7,7 +7,14 @@ export default {
          * Public
          */
         transitionIn() {
-            gsap.to(this.$el, { duration: 0.5, alpha: 1 });
+            const timeline = new gsap.timeline();
+            timeline.to(this.$el, { duration: 0.1, alpha: 1 });
+            timeline.to(this.$el, { duration: 0.1, alpha: 0 });
+            timeline.to(this.$el, { duration: 0.1, alpha: 1 });
+            timeline.to(this.$el, { duration: 0.1, alpha: 0 });
+            timeline.to(this.$el, { duration: 0.1, alpha: 1 });
+
+            return timeline;
         },
 
         transitionOut() {
