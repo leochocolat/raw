@@ -36,7 +36,7 @@ const resources = [
         name: 'audio_supermarket',
         namespace: 'supermarket',
         path: '/audio/audio_supermarket.mp3',
-        preload: false,
+        preload: true,
     },
 ];
 

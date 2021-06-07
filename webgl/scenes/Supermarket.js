@@ -65,12 +65,14 @@ class Supermarket extends RenderTargetScene {
         if (this._blurScreen) this._blurScreen.blur = censorshipFactor;
     }
 
-    setMenuState(state) {
-        super.setMenuState(state);
-    }
+    transitionToMenu() {
+        super.transitionToMenu();
 
-    setInactive(state) {
-        super.setInactive(state);
+        if (this._modelCamera) {
+            this.setCameraFOV({ fov: this._animationsSettings.originalFOV });
+        }
+
+        AudioManager.pause('audio_supermarket');
     }
 
     update() {

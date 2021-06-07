@@ -36,7 +36,7 @@ const resources = [
         name: 'audio_hallway',
         namespace: 'hallway',
         path: '/audio/audio_hallway.mp3',
-        preload: false,
+        preload: true,
     },
 
 ];

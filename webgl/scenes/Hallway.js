@@ -67,6 +67,16 @@ class Hallway extends RenderTargetScene {
         if (this._blurScreen) this._blurScreen.blur = censorshipFactor;
     }
 
+    transitionToMenu() {
+        super.transitionToMenu();
+
+        if (this._modelCamera) {
+            this.setCameraFOV({ fov: this._animationsSettings.originalFOV });
+        }
+
+        AudioManager.pause('audio_hallway');
+    }
+
     // Hooks
     update() {
         super.update();

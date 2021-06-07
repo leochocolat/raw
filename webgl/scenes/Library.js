@@ -69,6 +69,10 @@ class Library extends RenderTargetScene {
     transitionToMenu() {
         super.transitionToMenu();
 
+        if (this._modelCamera) {
+            this.setCameraFOV({ fov: this._animationsSettings.originalFOV });
+        }
+
         // AudioManager.pause('audio_library');
     }
 

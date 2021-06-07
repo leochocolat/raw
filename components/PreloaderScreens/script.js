@@ -2,6 +2,10 @@
 import gsap from 'gsap';
 import { mapGetters } from 'vuex';
 
+// utils
+import ResourceLoader from '@/utils/resource-loader';
+import AudioManager from '@/utils/AudioManager';
+
 export default {
     props: ['data'],
 
@@ -76,6 +80,13 @@ export default {
             }
         },
 
+        playMainSound() {
+            ResourceLoader.load('audio_main').then((audio) => {
+                AudioManager.add('audio_main', audio);
+                AudioManager.play('audio_main', { loop: true });
+            });
+        },
+
         refresh() {
             if (!this.screens) return;
             for (let i = 0; i < this.screens.length; i++) {
@@ -94,6 +105,7 @@ export default {
         cookiesClickHandler() {
             this.$refs.cookies.transitionOut();
             this.startAnimation();
+            this.playMainSound();
         },
 
         /**

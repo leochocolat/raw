@@ -31,7 +31,7 @@ const audios = [
         type: 'audio',
         name: 'audio_main',
         path: '/audio/audio_main.mp3',
-        preload: true,
+        preload: false,
     },
 ];
 /**

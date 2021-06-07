@@ -137,6 +137,8 @@ class RenderTargetScene extends THREE.Scene {
         this._timelineIn.set(this._uniforms[`u_scale_${this._id}`], { value: 1 }, 0);
         this._timelineIn.set(this._uniforms[`u_noise_alpha_${this._id}`], { value: 0 }, 0);
 
+        AudioManager.pause('audio_main');
+
         return this._timelineIn;
     }
 
@@ -169,6 +171,8 @@ class RenderTargetScene extends THREE.Scene {
         this._timelineMenu.set(this._uniforms[`u_size_${this._id}`], { value: 0.5 }, 0);
         this._timelineMenu.set(this._uniforms[`u_scale_${this._id}`], { value: 2 }, 0);
         this._timelineMenu.set(this._uniforms[`u_noise_alpha_${this._id}`], { value: 0 }, 0);
+
+        AudioManager.play('audio_main', { loop: true });
 
         return this._timelineMenu;
     }
