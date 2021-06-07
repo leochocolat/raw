@@ -46,7 +46,6 @@ const webgl = [
     ...library,
     ...supermarket,
     ...bar,
-
     // Test Animations
     {
         type: 'texture',
@@ -62,7 +61,6 @@ const webgl = [
         namespace: 'hallway',
         preload: false,
     },
-
     // Test Blur
     {
         type: 'texture',
@@ -83,7 +81,6 @@ const webgl = [
             flipY: true,
         },
     },
-
     // Test Violent content
     {
         type: 'texture',
