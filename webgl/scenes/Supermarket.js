@@ -21,7 +21,7 @@ class Supermarket extends RenderTargetScene {
     constructor(options) {
         super(options);
 
-        const zoomFOV = 8;
+        const zoomFOV = 16.6;
         this._animationsSettings = { progress: 0, fov: zoomFOV };
 
         this._resources = this._setupResources();

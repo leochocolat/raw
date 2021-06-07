@@ -21,7 +21,7 @@ class Bar extends RenderTargetScene {
     constructor(options) {
         super(options);
 
-        const zoomFOV = 8;
+        const zoomFOV = 5.30;
         this._originalFOV = 0;
 
         this._animationsSettings = { progress: 0, fov: zoomFOV };
