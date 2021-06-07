@@ -29,6 +29,8 @@ class Supermarket extends RenderTargetScene {
         this._resources = this._setupResources();
 
         this._mainAnimations = ['TRACK_Camera', 'MainsPere', 'Caddie_Movement', 'Cereal_Box'];
+        this._manAnimations = ['AdulteHomme_Rayon'];
+        this._oldGirlAnimations = ['VieuxFemme_Fruits'];
 
         this._updateSettings();
 
@@ -52,6 +54,10 @@ class Supermarket extends RenderTargetScene {
         for (let index = 0; index < this._mainAnimations.length; index++) {
             this._animationController.playAnimation({ animation: this._animationController.actionType[this._mainAnimations[index]], loop: false });
         }
+
+        this._oldGirlAnimationsControllers[0].playAnimation({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], loop: true });
+        this._manAnimationsControllers[0].playAnimation({ animation: this._manAnimationsControllers[0].actionType[this._manAnimations[0]], loop: true });
+
         AudioManager.play('audio_supermarket', { loop: true });
     }
 
@@ -99,6 +105,7 @@ class Supermarket extends RenderTargetScene {
         this._model = this._createModel();
         this._interactionScreen = this._setupInteractionScreen();
         this._modelCamera = this._createModelCameraAnimation();
+        this._createHumanModels();
 
         // setup audios
         AudioManager.add('audio_supermarket', this._resources.get('audio_supermarket'));
@@ -179,8 +186,6 @@ class Supermarket extends RenderTargetScene {
         const animationController = new AnimationComponent({ model, animations: model.animations });
         this.animationControllers.push(animationController);
 
-        // animationController.playAnimation({ animation: animationController.actionType.CameraMove, loop: false });
-
         return animationController;
     }
 
@@ -193,15 +198,24 @@ class Supermarket extends RenderTargetScene {
         return this._model.cameras[0];
     }
 
+    _createHumanModels() {
+        this._manAnimationsControllers = [];
+        this._oldGirlAnimationsControllers = [];
+
+        const modelMan = this._resources.get('AdulteHomme');
+        const modelOldGirl = this._resources.get('AdulteVieux');
+
+        const animatedMan = this._createAnimatedMesh(modelMan, 0);
+        this._manAnimationsControllers.push(animatedMan);
+
+        const animatedOldGirl = this._createAnimatedMesh(modelOldGirl, 0);
+        this._oldGirlAnimationsControllers.push(animatedOldGirl);
+    }
+
     // On Tick
     _updateAnimationController() {
         if (!this._animationController) return;
         this._animationController.update(this._sceneDelta);
-
-        // if (!this._humanAnimationControllers.length < 0) return;
-        // for (let index = 0; index < this._humanAnimationControllers.length; index++) {
-        //     this._humanAnimationControllers[index].update(this._sceneDelta);
-        // }
     }
 
     _setupDebug() {
@@ -281,14 +295,8 @@ class Supermarket extends RenderTargetScene {
         for (let index = 0; index < this._mainAnimations.length; index++) {
             this._animationController.setAnimationProgress({ animation: this._animationController.actionType[this._mainAnimations[index]], progress: this._animationsSettings.progress });
         }
-
-        // for (let index = 0; index < this._humanAnimations.length; index++) {
-        //     this._humanAnimationControllers[index].setAnimationProgress({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], progress: this._animationsSettings.progress });
-        // }
-
-        // for (let index = 0; index < this._oldManAnimations.length; index++) {
-        //     this._oldManAnimationsControllers[index].setAnimationProgress({ animation: this._oldManAnimationsControllers[index].actionType[this._oldManAnimations[index]], progress: this._animationsSettings.progress });
-        // }
+        this._oldGirlAnimationsControllers[0].setAnimationProgress({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], progress: this._animationsSettings.progress });
+        this._manAnimationsControllers[0].setAnimationProgress({ animation: this._manAnimationsControllers[0].actionType[this._manAnimations[0]], progress: this._animationsSettings.progress });
     }
 
     _clickPlayAnimationsHandler() {
@@ -296,13 +304,8 @@ class Supermarket extends RenderTargetScene {
             this._animationController.playAnimation({ animation: this._animationController.actionType[this._mainAnimations[index]], progress: this._animationsSettings.progress });
         }
 
-        // for (let index = 0; index < this._humanAnimations.length; index++) {
-        //     this._humanAnimationControllers[index].playAnimation({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], progress: this._animationsSettings.progress });
-        // }
-
-        // for (let index = 0; index < this._oldManAnimations.length; index++) {
-        //     this._oldManAnimationsControllers[index].playAnimation({ animation: this._oldManAnimationsControllers[index].actionType[this._oldManAnimations[index]], progress: this._animationsSettings.progress });
-        // }
+        this._oldGirlAnimationsControllers[0].playAnimation({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], progress: this._animationsSettings.progress });
+        this._manAnimationsControllers[0].playAnimation({ animation: this._manAnimationsControllers[0].actionType[this._manAnimations[0]], progress: this._animationsSettings.progress });
     }
 }
 

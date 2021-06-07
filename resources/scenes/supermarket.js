@@ -7,6 +7,20 @@ const resources = [
         path: '/models/scene_supermarket_2.glb',
         preload: false,
     },
+    {
+        type: 'gltf',
+        name: 'AdulteHomme',
+        namespace: 'supermarket',
+        path: '/models/supermarket/AdulteHomme.glb',
+        preload: false,
+    },
+    {
+        type: 'gltf',
+        name: 'AdulteVieux',
+        namespace: 'supermarket',
+        path: '/models/supermarket/AdulteVieux.glb',
+        preload: false,
+    },
 
     // Textures
     {

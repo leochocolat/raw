@@ -144,7 +144,7 @@ class Library extends RenderTargetScene {
 
         const clone = model;
         this.add(clone.scene);
-        console.log(model);
+
         clone.scene.traverse((child) => {
             child.frustumCulled = false;
             if (child.isMesh && child.name === 'scene_library') {
