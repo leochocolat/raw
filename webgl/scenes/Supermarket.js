@@ -295,6 +295,7 @@ class Supermarket extends RenderTargetScene {
         for (let index = 0; index < this._mainAnimations.length; index++) {
             this._animationController.setAnimationProgress({ animation: this._animationController.actionType[this._mainAnimations[index]], progress: this._animationsSettings.progress });
         }
+
         this._oldGirlAnimationsControllers[0].setAnimationProgress({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], progress: this._animationsSettings.progress });
         this._manAnimationsControllers[0].setAnimationProgress({ animation: this._manAnimationsControllers[0].actionType[this._manAnimations[0]], progress: this._animationsSettings.progress });
     }
