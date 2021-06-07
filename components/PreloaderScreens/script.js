@@ -1,37 +1,44 @@
 // Vendor
 import gsap from 'gsap';
+import { mapGetters } from 'vuex';
 
 // Utils
 import math from '@/utils/math';
 import AudioManager from '@/utils/AudioManager';
 
 export default {
+    props: ['data'],
+
     data() {
         return {
-            data: {},
+            isHome: this.getRouteBaseName() === 'index',
             activeIndex: 0,
-            intervalTime: 4500,
+            intervalTime: 5500,
             isDisable: false,
             isComplete: false,
             isPreloaderComplete: false,
         };
     },
 
-    watch: {
-        '$i18n.locale'() {
-            this.$fetch();
-            this.restart();
-        },
-    },
-
-    fetch() {
-        return this.$api.getEntryById('5rjWV266TXZKdTaYcuht6i').then((response) => {
-            this.data = response.fields;
-        });
+    computed: {
+        ...mapGetters({
+            isReady: 'preloader/isReady',
+            isDebug: 'context/isDebug',
+            isDevelopment: 'context/isDevelopment',
+            isProduction: 'context/isProduction',
+        }),
     },
 
     beforeDestroy() {
         this.killTimer();
+    },
+
+    mounted() {
+        if (this.isHome || this.isDebug || !this.isProduction) {
+            this.disable();
+        } else {
+            this.start();
+        }
     },
 
     methods: {
@@ -39,14 +46,14 @@ export default {
          * Public
          */
         start() {
-            this.screens = [this.$refs.cookies, ...this.$refs.context, this.$refs.warning, this.$refs.intro, this.$refs.instructions, this.$refs.stop];
+            this.screens = [this.$refs.cookies, ...this.$refs.context, this.$refs.warning, this.$refs.intro, this.$refs.instructions, this.$refs.stop, this.$refs.screenLogo];
 
             const contextSteps = [];
             for (let i = 0; i < this.$refs.context.length; i++) {
                 contextSteps.push('context');
             }
 
-            this.steps = ['cookies', ...contextSteps, 'warning', 'intro', 'instructions', 'stop'];
+            this.steps = ['cookies', ...contextSteps, 'warning', 'intro', 'instructions', 'stop', 'logo'];
             this.activeIndex = 0;
             this.index = 0;
             this.activeScreen = this.screens[this.index];
@@ -54,9 +61,18 @@ export default {
             this.activeScreen.transitionIn();
         },
 
+        refresh() {
+            if (!this.screens) return;
+            for (let i = 0; i < this.screens.length; i++) {
+                const screen = this.screens[i];
+                if (screen.refresh) screen.refresh();
+            }
+        },
+
         restart() {
             this.killTimer();
-            this.activeScreen.transitionOut();
+            this.activeScreen?.transitionOut();
+            this.refresh();
             this.start();
             this.cookiesClickHandler();
         },

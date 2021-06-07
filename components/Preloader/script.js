@@ -1,3 +1,6 @@
+// Vendor
+import gsap from 'gsap';
+
 // Data
 import resources from '@/resources/index';
 
@@ -9,8 +12,29 @@ import { ThreeGltfDracoLoader, ThreeBasisTextureLoader, ThreeTextureLoader, Font
 export default {
     data() {
         return {
+            data: {},
+            isFontReady: false,
             isDisable: false,
         };
+    },
+
+    fetch() {
+        return this.$api.getEntryById('5rjWV266TXZKdTaYcuht6i').then((response) => {
+            this.data = response.fields;
+        });
+    },
+
+    computed: {
+        lang() {
+            return this.$i18n.locale;
+        },
+    },
+
+    watch: {
+        lang() {
+            this.$fetch();
+            this.$refs.preloaderScreens?.restart();
+        },
     },
 
     mounted() {
@@ -28,7 +52,6 @@ export default {
          */
         disable() {
             this.isDisable = true;
-            this.$refs.preloaderScreens.disable();
         },
 
         /**
@@ -48,13 +71,40 @@ export default {
             this.resourceLoader.add({ resources, preload: false });
             this.resourceLoader.preload();
 
-            // Start preloader
+            this.showLoadingMessage();
             this.$store.dispatch('preloader/start');
-            this.$refs.preloaderScreens.start();
+
+            ResourceLoader.load('Default Sans').then(() => {
+                this.isFontReady = true;
+            });
         },
 
         start() {
             this.$store.dispatch('preloader/setReady');
+            this.removePreloader();
+            this.hideLoadingMessage();
+        },
+
+        showLoadingMessage() {
+            const timeline = new gsap.timeline();
+
+            timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 1, ease: 'power0.none' });
+            timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 0, ease: 'power0.none' });
+            timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 1, ease: 'power0.none' });
+            timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 0, ease: 'power0.none' });
+            timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 1, ease: 'power0.none' });
+        },
+
+        hideLoadingMessage() {
+            const timeline = new gsap.timeline();
+
+            timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 0, ease: 'power0.none' });
+            timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 1, ease: 'power0.none' });
+            timeline.to(this.$refs.loadingMessage, { duration: 0.1, alpha: 0, ease: 'power0.none' });
+        },
+
+        removePreloader() {
+            this.$el.style.display = 'none';
         },
 
         /**
@@ -73,9 +123,15 @@ export default {
 
             this.$refs.preloaderScreens.isPreloaderComplete = true;
 
+            // this.hideLoadingMessage();
+
             if (this.$refs.preloaderScreens.isComplete || this.$refs.preloaderScreens.isDisable) {
                 this.start();
             }
+        },
+
+        preloaderScreenMountedHandler() {
+            // this.$nextTick(this.$refs.preloaderScreens.start);
         },
     },
 };

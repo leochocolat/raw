@@ -177,6 +177,7 @@ class SceneManager extends THREE.Scene {
         }
 
         this._screensContainer.update(time, delta);
+        this._UILayer.update(time, delta);
 
         // Partial Rendering
         this._updateIndex = (this._updateIndex + 1) % 4;

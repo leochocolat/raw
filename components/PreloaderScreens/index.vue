@@ -45,6 +45,12 @@
             :data="data.tutorial3"
         />
 
+        <ScreenLogo
+            ref="screenLogo"
+            class="screen"
+            :class="data.context && activeIndex === data.context.length + 5 ? 'is-enable' : ''"
+        />
+
     </div>
 </template>
 

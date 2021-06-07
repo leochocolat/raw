@@ -79,7 +79,7 @@ class BlurPlaneBuffer extends THREE.WebGLRenderTarget {
             u_blur_factor: { value: this._blurFactor },
             u_spreading_treshold: { value: 0.05 },
             u_resolution: { value: new THREE.Vector2(this._width, this._height) },
-            u_time: { value: 0.0 },
+            u_wobble_intensity: { value: 0.3 },
         };
 
         const material = new THREE.ShaderMaterial({

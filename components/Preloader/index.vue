@@ -1,7 +1,11 @@
 <template>
     <div class="preloader">
 
-        <PreloaderScreens ref="preloaderScreens" />
+        <PreloaderScreens v-if="isFontReady" ref="preloaderScreens" :data="data" @hook:mounted="preloaderScreenMountedHandler" />
+
+        <div ref="loadingMessage" class="loading-message">
+            {{ lang === 'fr' ? 'Chargement...' : 'Loading...' }}
+        </div>
 
     </div>
 </template>

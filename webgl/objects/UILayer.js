@@ -15,11 +15,20 @@ class UILayer extends THREE.Object3D {
 
         this._images = [];
         this._planes = [];
+
+        this._debugFolder = this._createDebugFolder();
     }
 
     /**
      * Public
      */
+    update(time, delta) {
+        for (let i = 0; i < this._planes.length; i++) {
+            const plane = this._planes[i];
+            plane.update(time, delta);
+        }
+    }
+
     createImage(image) {
         this._images.push(image);
 
@@ -29,6 +38,7 @@ class UILayer extends THREE.Object3D {
             containerBounds: image.containerBounds,
             canvasWidth: this._width,
             canvasHeight: this._height,
+            debugFolder: this._debugFolder,
         });
 
         this._planes.push(plane);
@@ -46,6 +56,17 @@ class UILayer extends THREE.Object3D {
             plane.canvasWidth = this._width;
             plane.canvasHeight = this._height;
         }
+    }
+
+    /**
+     * Private
+     */
+    _createDebugFolder() {
+        if (!this._debugger) return;
+
+        const folder = this._debugger.addFolder({ title: 'UI Layer', extended: false });
+
+        return folder;
     }
 }
 

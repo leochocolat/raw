@@ -15,6 +15,8 @@ class BlurEditor extends DebugScene {
     constructor(options) {
         super(options);
 
+        this._renderer = options.renderer;
+        this._canvas = this._renderer.domElement;
         this._width = options.width;
         this._height = options.height;
         this._renderer = options.renderer;
@@ -23,6 +25,7 @@ class BlurEditor extends DebugScene {
 
         this._settings = {
             filename: 'blur-mask',
+            blurImageFilename: 'blur-image',
         };
 
         this._resources = this._setupResources();
@@ -164,8 +167,11 @@ class BlurEditor extends DebugScene {
 
     _setupDebug() {
         // Export
-        this._debugFolder.addButton({ title: 'Export' }).on('click', this._clickExportHandler);
-        this._debugFolder.addInput(this._settings, 'filename', { label: 'File Name' }).on('click', this._clickExportHandler);
+        this._debugFolder.addButton({ title: 'Export', label: 'Mask' }).on('click', this._clickExportHandler);
+        this._debugFolder.addInput(this._settings, 'filename', { label: 'File Name' });
+
+        this._debugFolder.addButton({ title: 'Export', label: 'Blured Image' }).on('click', this._clickExportBlurImageHandler);
+        this._debugFolder.addInput(this._settings, 'blurImageFilename', { label: 'Image File Name' });
 
         // Input image / Video
         const inputImageFolder = this._debugFolder.addFolder({ title: 'Input Image' });
@@ -254,6 +260,7 @@ class BlurEditor extends DebugScene {
         this._clickExportHandler = this._clickExportHandler.bind(this);
         this._clickClearHandler = this._clickClearHandler.bind(this);
         this._clickRevertHandler = this._clickRevertHandler.bind(this);
+        this._clickExportBlurImageHandler = this._clickExportBlurImageHandler.bind(this);
     }
 
     _setupEventListeners() {
@@ -280,11 +287,11 @@ class BlurEditor extends DebugScene {
     }
 
     _videoUpdateHandler(video) {
-        this._texture = new THREE.VideoTexture(video);
-        this._texture.flipY = false;
-        this._texture.needsUpdate = true;
-        this._plane.material.map = this._texture;
-        this._blurScreen.screenTexture = this._texture;
+        this._textureVideo = new THREE.VideoTexture(video);
+        this._textureVideo.flipY = false;
+        this._textureVideo.needsUpdate = true;
+        this._plane.material.map = this._textureVideo;
+        this._blurScreen.screenTexture = this._textureVideo;
         this._resizePlane();
     }
 
@@ -301,6 +308,13 @@ class BlurEditor extends DebugScene {
 
     _clickExportHandler() {
         this._canvasBlurEditor.export(this._settings.filename);
+    }
+
+    _clickExportBlurImageHandler() {
+        const downloadButton = document.createElement('a');
+        downloadButton.download = `${this._settings.blurImageFilename}.png`;
+        downloadButton.href = this._canvas.toDataURL('image/png');
+        downloadButton.click();
     }
 
     _clickClearHandler() {

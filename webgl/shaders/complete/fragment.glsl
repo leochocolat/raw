@@ -35,7 +35,7 @@ void main()
     // Texture
     vec4 color = texture2D(u_texture, vUv + wobbl + tan_off);
     color *= u_texture_alpha;
-    // vec4 color = texture2D(u_texture, vUv + wobbl);
+    vec4 color = texture2D(u_texture, vUv + wobbl);
 
     //  noise lines
     float ival = u_resolution.y / 4.;

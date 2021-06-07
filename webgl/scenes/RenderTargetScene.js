@@ -240,7 +240,7 @@ class RenderTargetScene extends THREE.Scene {
     setComplete() {
         this.timelineComplete = new gsap.timeline();
         this.timelineComplete.to(this._uniforms[`u_completed_${this._id}`], { duration: 0.05, value: 1 });
-        this.timelineComplete.to(this._uniforms[`u_completed_alpha_${this._id}`], { duration: 0.05, value: 0.3 });
+        this.timelineComplete.to(this._uniforms[`u_completed_alpha_${this._id}`], { duration: 0.05, value: 0.25 });
 
         return this.timelineComplete;
     }

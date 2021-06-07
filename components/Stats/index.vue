@@ -3,24 +3,26 @@
 
         <div class="content">
 
-            <div class="title">
+            <div ref="title" class="title">
                 {{ title[lang] }}
             </div>
 
-            <div class="subtitle">
+            <div ref="subtitle" class="subtitle">
                 {{ subtitle[lang] }} #{{ userId }}
             </div>
 
             <div class="stats-container">
 
                 <div v-for="(item, index) in statsLabels" :key="index" class="stat-row">
-                    <div class="stat-title">
+                    <div ref="statTitle" class="stat-title">
                         {{ item }}
                     </div>
 
-                    <div class="stat" :class="index === 3 ? 'red' : ''">
+                    <div ref="stat" class="stat" :class="index === 3 ? 'red' : ''">
                         {{ stats[index] }}
                     </div>
+
+                    <div ref="highlight" class="highlight"></div>
                 </div>
 
             </div>

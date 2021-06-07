@@ -29,6 +29,7 @@ export default {
 
     computed: {
         ...mapGetters({
+            isReady: 'preloader/isReady',
             isStopped: 'stop/isStopped',
             isComplete: 'data/isComplete',
         }),

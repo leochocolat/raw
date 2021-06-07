@@ -93,6 +93,7 @@ class WebglApp {
             antialias: true,
             canvas: this._canvas,
             alpha: false,
+            preserveDrawingBuffer: true,
         });
 
         // renderer.outputEncoding = THREE.sRGBEncoding;

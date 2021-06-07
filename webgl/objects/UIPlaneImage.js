@@ -17,11 +17,14 @@ class UIPlaneImage extends THREE.Mesh {
         this._name = options.name;
         this._side = options.side;
         this._containerBounds = options.containerBounds;
+        this._debugFolder = options.debugFolder;
 
         this.geometry = this._createGeometry();
         this.material = this._createMaterial();
 
         this._loadTexture();
+
+        this._setupDebug();
     }
 
     /**
@@ -45,12 +48,39 @@ class UIPlaneImage extends THREE.Mesh {
         this._canvasHeight = height;
     }
 
+    update(time, delta) {
+        this.material.uniforms.u_time.value = time;
+    }
+
     transitionIn() {
-        this.material.uniforms.u_alpha.value = 1;
+        this.timelineOut?.kill();
+
+        this.timelineIn = new gsap.timeline();
+
+        this.timelineIn.set(this.material.uniforms.u_alpha, { value: 0.5 });
+        this.timelineIn.fromTo(this.material.uniforms.u_wobble_intensity, { duration: 0.3, value: 2 }, { value: 0.2 }, 0);
+        this.timelineIn.fromTo(this.material.uniforms.u_distortion_intensity, { duration: 0.3, value: 0.1 }, { value: 0.005 }, 0);
+
+        const rbgshiftTimeline = new gsap.timeline();
+        rbgshiftTimeline.to(this.material.uniforms.u_rgb_shift_angle.value, { duration: 0.1, x: 10, y: 0 });
+        rbgshiftTimeline.to(this.material.uniforms.u_rgb_shift_angle.value, { duration: 0.1, x: 10, y: 10 });
+        rbgshiftTimeline.to(this.material.uniforms.u_rgb_shift_angle.value, { duration: 0.1, x: 5, y: 2.5 });
+        rbgshiftTimeline.to(this.material.uniforms.u_rgb_shift_angle.value, { duration: 0.1, x: 2, y: 8 });
+        rbgshiftTimeline.fromTo(this.material.uniforms.u_rgb_shift_amount, { duration: 0.4, value: 0.05 }, { value: 0.005 }, 0);
+
+        this.timelineIn.add(rbgshiftTimeline, 0);
     }
 
     transitionOut() {
-        this.material.uniforms.u_alpha.value = 0;
+        this.timelineIn?.kill();
+
+        this.timelineOut = new gsap.timeline();
+
+        this.timelineOut.to(this.material.uniforms.u_wobble_intensity, { duration: 0.2, value: 2 }, 0);
+        this.timelineOut.to(this.material.uniforms.u_distortion_intensity, { duration: 0.2, value: 0.1 }, 0);
+        this.timelineOut.to(this.material.uniforms.u_rgb_shift_angle.value, { duration: 0.1, x: 2, y: 8 }, 0);
+        this.timelineOut.to(this.material.uniforms.u_rgb_shift_amount, { duration: 0.3, value: 0.05 }, 0);
+        this.timelineOut.set(this.material.uniforms.u_alpha, { value: 0 });
     }
 
     resize(containerBounds) {
@@ -80,9 +110,18 @@ class UIPlaneImage extends THREE.Mesh {
         const uniforms = {
             u_texture: { value: null },
             u_resolution: { value: new THREE.Vector2(this._width, this._height) },
+            u_time: { value: 0 },
             u_image_size: { value: new THREE.Vector2(0, 0) },
-            // Animations
-            u_alpha: { value: 0 },
+            // Distortions
+            u_wobble_intensity: { value: 1 },
+            u_distortion_intensity: { value: 0.04 },
+            u_distortion_speed: { value: 2.5 },
+            u_distortion_size: { value: 0.05 },
+            // RGB Shift
+            u_rgb_shift_amount: { value: 0.08 },
+            u_rgb_shift_angle: { value: new THREE.Vector2(0.0, 1.0) },
+            // Alpha
+            u_alpha: { value: 0.0 },
         };
 
         const material = new THREE.ShaderMaterial({
@@ -103,6 +142,19 @@ class UIPlaneImage extends THREE.Mesh {
 
             this.resize();
         });
+    }
+
+    _setupDebug() {
+        if (!this._debugFolder) return;
+        const folder = this._debugFolder.addFolder({ title: 'UI Plane Image', extended: false });
+        // Distortion
+        folder.addInput(this.material.uniforms.u_wobble_intensity, 'value', { label: 'Wooble', min: 0, max: 1 });
+        folder.addInput(this.material.uniforms.u_distortion_intensity, 'value', { label: 'Distortion Intensity', min: 0, max: 0.5 });
+        folder.addInput(this.material.uniforms.u_distortion_speed, 'value', { label: 'Distortion Speed', min: 0, max: 5 });
+        folder.addInput(this.material.uniforms.u_distortion_size, 'value', { label: 'Distortion Size Y', min: 0, max: 0.1 });
+        // RGB Shift
+        folder.addInput(this.material.uniforms.u_rgb_shift_amount, 'value', { label: 'RGB Shift amount', min: 0, max: 0.1 });
+        folder.addInput(this.material.uniforms.u_rgb_shift_angle, 'value', { label: 'RGB Shift angle' });
     }
 }
 

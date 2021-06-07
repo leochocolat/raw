@@ -39,7 +39,7 @@
             </div>
 
             <!-- Displayed only when every scenerio is completed -->
-            <Stats v-if="isFullComplete || isStopped" :id="id" ref="stats" :data="data" />
+            <Stats v-if="allowStats" :id="id" ref="stats" :data="data" />
 
             <!-- Displayed only when every scenerio is completed -->
             <div v-if="isFullComplete" class="screen-footer">

@@ -7,7 +7,7 @@
 
             <RichText class="text" :document="data" />
 
-            <div class="buttons-container">
+            <div ref="buttonContainer" class="buttons-container">
                 <button class="button" @click="clickYesHandler">
                     {{ lang === 'fr' ? 'Oui' : 'Yes' }}
                 </button>

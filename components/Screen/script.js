@@ -54,6 +54,20 @@ export default {
         isDisable() {
             return this.getRouteBaseName() === this.id;
         },
+
+        allowStats() {
+            return (this.isFullComplete || this.isStopped);
+        },
+    },
+
+    watch: {
+        allowStats(allowStats) {
+            if (allowStats) {
+                this.$nextTick(() => {
+                    this.$refs.stats.transitionIn();
+                });
+            }
+        },
     },
 
     beforeDestroy() {
@@ -73,6 +87,10 @@ export default {
             this.timelineIn.to(this.$el, { duration: 0.1, alpha: 1 });
             this.timelineIn.to(this.$el, { duration: 0.1, alpha: 0 });
             this.timelineIn.to(this.$el, { duration: 0.1, alpha: 1 });
+
+            if (this.$refs.stats && !this.$refs.stats.isVisible) {
+                this.timelineIn.add(this.$refs.stats.transitionIn(), 0);
+            }
 
             if (this.isComplete || this.isStopped) {
                 this.timelineIn.add(this.$root.webglApp.sceneManager?.scenes[this.id].setComplete(), 0);
