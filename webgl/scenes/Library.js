@@ -21,13 +21,16 @@ class Library extends RenderTargetScene {
     constructor(options) {
         super(options);
 
-        const zoomFOV = 23;
-        this._animationsSettings = { progress: 0, fov: zoomFOV };
+        const zoomFOV = 39.6;
+        const originalFOV = 50.5;
+
+        this._animationsSettings = { progress: 0, zoomFOV, originalFOV };
 
         this._resources = this._setupResources();
 
-        // this._humanAnimations = ['BarHomme_Sleep', 'BarHomme_Talk'];
-        this._mainAnimations = ['CameraMove'];
+        this._girlAnimations = ['AdulteFemme_Laptop', 'AdulteFemme_Read'];
+        this._oldGirlAnimations = ['VieuxFemme_Read'];
+        this._mainAnimations = ['TRACK_Camera', 'Computer', 'MainsEtudiante', 'Laptop_Movement'];
         this._animationComplete = false;
 
         this._updateSettings();
@@ -53,6 +56,12 @@ class Library extends RenderTargetScene {
         for (let index = 0; index < this._mainAnimations.length; index++) {
             this._animationController.playAnimation({ animation: this._animationController.actionType[this._mainAnimations[index]], loop: false });
         }
+
+        for (let index = 0; index < this._girlAnimations.length; index++) {
+            this._girlAnimationControllers[index].playAnimation({ animation: this._girlAnimationControllers[index].actionType[this._girlAnimations[index]], loop: false });
+        }
+
+        this._oldGirlAnimationsControllers[0].playAnimation({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], progress: this._animationsSettings.progress });
 
         // this._playAudios();
     }
@@ -95,12 +104,18 @@ class Library extends RenderTargetScene {
         this._sceneMaterial = this._createSceneMaterial();
         this._model = this._createModel();
         this._interactionScreen = this._setupInteractionScreen();
-
         this._modelCamera = this._createModelCameraAnimation();
+        this._createHumanModels();
 
         // setup animations
         this._animationController = this._createAnimationController();
-        this._animationController.onAnimationComplete(() => this.setScreenIsolation());
+        this._animationController.onAnimationComplete(() => {
+            if (!this._animationComplete) {
+                this._animationComplete = true;
+                this._setCameraZoom();
+                this.setScreenIsolation();
+            }
+        });
 
         // setup audios
         // AudioManager.add('audio_bar', this._resources.get('audio_library'));
@@ -129,12 +144,12 @@ class Library extends RenderTargetScene {
 
         const clone = model;
         this.add(clone.scene);
-
+        console.log(model);
         clone.scene.traverse((child) => {
             child.frustumCulled = false;
-            // if (child.isMesh && child.name === 'scene_library') {
-            child.material = this._sceneMaterial;
-            // }
+            if (child.isMesh && child.name === 'scene_library') {
+                child.material = this._sceneMaterial;
+            }
         });
 
         return clone;
@@ -145,7 +160,7 @@ class Library extends RenderTargetScene {
         const screenTexture = this._resources.get('video-gore-test');
         const maskTexture = this._resources.get('blur-mask-test');
 
-        const screen = this._model.scene.getObjectByName('Interaction_SCREEN');
+        const screen = this._model.scene.getObjectByName('Interaction_Screen');
         const container = new THREE.Box3().setFromObject(screen);
         const size = new THREE.Vector3();
         container.getSize(size);
@@ -180,22 +195,27 @@ class Library extends RenderTargetScene {
         if (!this._model.cameras) return;
 
         this.setModelCamera(this._model.cameras[0]);
+        this.setCameraFOV({ fov: this._animationsSettings.originalFOV });
 
         return this._model.cameras[0];
     }
 
     _createHumanModels() {
-        this._humanAnimationControllers = [];
-        this._oldManAnimationsControllers = [];
+        this._girlAnimationControllers = [];
+        this._oldGirlAnimationsControllers = [];
 
-        const modelMan = this._resources.get('LibraryHomme');
+        // const modelMan = this._resources.get('LibraryHomme');
         const modelGirl = this._resources.get('LibraryFemme');
+        const modelOldGirl = this._resources.get('LibraryVieux');
 
-        this.add(modelGirl.scene);
+        const animatedMesh = this._createAnimatedMesh(modelOldGirl, 0);
+        this._oldGirlAnimationsControllers.push(animatedMesh);
 
-        for (let index = 0; index < this._humanAnimations.length; index++) {
-            const animatedMesh = this._createAnimatedMesh(modelMan, index);
-            this._humanAnimationControllers.push(animatedMesh);
+        // this.add(modelGirl.scene);
+
+        for (let index = 0; index < this._girlAnimations.length; index++) {
+            const animatedMesh = this._createAnimatedMesh(modelGirl, index);
+            this._girlAnimationControllers.push(animatedMesh);
         }
     }
 
@@ -228,13 +248,13 @@ class Library extends RenderTargetScene {
 
         const animations = this.debugFolder.addFolder({ title: 'Animation', expanded: true });
         animations.addInput(this._animationsSettings, 'progress', { min: 0, max: 1 }).on('change', this._animationsProgressChangeHandler);
-        animations.addInput(this._animationsSettings, 'fov', { min: 0.1, max: 80 }).on('change', this._cameraFovChangeHandler);
+        animations.addInput(this._animationsSettings, 'zoomFOV', { min: 0.1, max: 80 }).on('change', this._cameraFovChangeHandler);
         animations.addButton({ title: 'Play' }).on('click', this._clickPlayAnimationsHandler);
     }
 
     _setCameraZoom() {
         gsap.to(this._modelCamera, {
-            fov: this._animationsSettings.fov,
+            fov: this._animationsSettings.zoomFOV,
             duration: 1,
             ease: 'sine.inOut',
             onUpdate: () => {
@@ -280,7 +300,7 @@ class Library extends RenderTargetScene {
     }
 
     _cameraFovChangeHandler() {
-        this._modelCamera.fov = this._animationsSettings.fov;
+        this._modelCamera.fov = this._animationsSettings.zoomFOV;
         this.setCameraFOV({ fov: this._model.cameras[0].fov });
     }
 
@@ -289,9 +309,10 @@ class Library extends RenderTargetScene {
             this._animationController.setAnimationProgress({ animation: this._animationController.actionType[this._mainAnimations[index]], progress: this._animationsSettings.progress });
         }
 
-        // for (let index = 0; index < this._humanAnimations.length; index++) {
-        //     this._humanAnimationControllers[index].setAnimationProgress({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], progress: this._animationsSettings.progress });
-        // }
+        for (let index = 0; index < this._girlAnimations.length; index++) {
+            this._girlAnimationControllers[index].setAnimationProgress({ animation: this._girlAnimationControllers[index].actionType[this._girlAnimations[index]], progress: this._animationsSettings.progress });
+        }
+        this._oldGirlAnimationsControllers[0].setAnimationProgress({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], progress: this._animationsSettings.progress });
     }
 
     _clickPlayAnimationsHandler() {
@@ -299,9 +320,10 @@ class Library extends RenderTargetScene {
             this._animationController.playAnimation({ animation: this._animationController.actionType[this._mainAnimations[index]], progress: this._animationsSettings.progress });
         }
 
-        // for (let index = 0; index < this._humanAnimations.length; index++) {
-        //     this._humanAnimationControllers[index].playAnimation({ animation: this._humanAnimationControllers[index].actionType[this._humanAnimations[index]], progress: this._animationsSettings.progress });
-        // }
+        for (let index = 0; index < this._girlAnimations.length; index++) {
+            this._girlAnimationControllers[index].playAnimation({ animation: this._girlAnimationControllers[index].actionType[this._girlAnimations[index]], progress: this._animationsSettings.progress });
+        }
+        this._oldGirlAnimationsControllers[0].playAnimation({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], progress: this._animationsSettings.progress });
     }
 }
 
