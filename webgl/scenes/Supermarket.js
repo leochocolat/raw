@@ -17,6 +17,9 @@ import BlurScreen from '../utils/BlurScreen';
 import vertex from '../shaders/isolationScreen/vertex.glsl';
 import fragment from '../shaders/isolationScreen/fragment.glsl';
 
+import emptyScreenVertex from '../shaders/emptyScreens/vertex.glsl';
+import emptyScreenFragment from '../shaders/emptyScreens/fragment.glsl';
+
 class Supermarket extends RenderTargetScene {
     constructor(options) {
         super(options);
@@ -24,7 +27,7 @@ class Supermarket extends RenderTargetScene {
         const zoomFOV = 16.6;
         const originalFOV = 50.5;
 
-        this._animationsSettings = { progress: 0, zoomFOV, originalFOV };
+        this._animationsSettings = { progress: 0.9, zoomFOV, originalFOV };
 
         this._resources = this._setupResources();
 
@@ -81,6 +84,10 @@ class Supermarket extends RenderTargetScene {
         if (!this._blurScreen) return;
         this._blurScreen.update(this._sceneDelta);
 
+        if (!this._emptyScreensMaterial) return;
+
+        this._emptyScreensMaterial.uniforms.u_screen_texture.value = this._blurScreen.screenMaterial;
+
         this._updateAnimationController();
     }
 
@@ -108,6 +115,7 @@ class Supermarket extends RenderTargetScene {
         this._interactionScreen = this._setupInteractionScreen();
         this._modelCamera = this._createModelCameraAnimation();
         this._createHumanModels();
+        this._setupEmptyScreens();
 
         // setup audios
         AudioManager.add('audio_supermarket', this._resources.get('audio_supermarket'));
@@ -121,6 +129,9 @@ class Supermarket extends RenderTargetScene {
                 this.setScreenIsolation();
             }
         });
+
+        // debug
+        this._animationsProgressChangeHandler();
     }
 
     _createSceneMaterial() {
@@ -168,8 +179,8 @@ class Supermarket extends RenderTargetScene {
         const size = new THREE.Vector3();
         container.getSize(size);
 
-        const width = size.z * 0.4;
-        const height = size.x;
+        const width = size.x;
+        const height = size.y;
 
         size.x = width;
         size.y = height;
@@ -184,6 +195,27 @@ class Supermarket extends RenderTargetScene {
             height: this._height,
             size,
         });
+    }
+
+    _setupEmptyScreens() {
+        const uniforms = {
+            u_screen_texture: { value: null },
+        };
+        const emptyScreens = this._model.scene.getObjectByName('Empty_Screens');
+        this._emptyScreensMaterial = new THREE.ShaderMaterial({
+            uniforms,
+            fragmentShader: emptyScreenFragment,
+            vertexShader: emptyScreenVertex,
+            side: THREE.DoubleSide,
+            transparent: true,
+        });
+        emptyScreens.traverse((child) => {
+            if (child.name.includes('screen_')) {
+                child.material = this._emptyScreensMaterial;
+                // child.material = this._blurScreen.screenMaterial.map;
+            }
+        });
+        return this._emptyScreensMaterial;
     }
 
     _createAnimationController() {

@@ -121,7 +121,7 @@ class Bar extends RenderTargetScene {
         // setup animations
         this._animationController = this._createAnimationController();
         this._animationController.onAnimationComplete((e) => {
-            if (!this._animationComplete && e.action._clip.name === 'TRACK_CameraMovement') {
+            if (!this._animationComplete && e.action._clip.name === 'TRACK_Camera') {
                 this._animationComplete = true;
                 this._setCameraZoom();
                 this.setScreenIsolation();
