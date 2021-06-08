@@ -37,7 +37,7 @@ export default {
             this.introductionSplits = [];
             this.introductionLines = [];
 
-            const introParagraphs = this.$refs.introductionTitle.querySelectorAll('p');
+            const introParagraphs = this.$refs.introductionTitle.querySelectorAll('p, h2');
             for (let i = 0; i < introParagraphs.length; i++) {
                 const paragraph = introParagraphs[i];
                 const split = new SplitText(paragraph, { type: 'lines', linesClass: 'line' });
@@ -66,7 +66,7 @@ export default {
             this.conclusionSplits = [];
             this.conclusionLines = [];
 
-            const conclusionParagraphs = this.$refs.conclusionContent.querySelectorAll('p');
+            const conclusionParagraphs = this.$refs.conclusionContent.querySelectorAll('p, h2');
             for (let i = 0; i < conclusionParagraphs.length; i++) {
                 const paragraph = conclusionParagraphs[i];
                 const split = new SplitText(paragraph, { type: 'lines', linesClass: 'line' });
@@ -169,9 +169,11 @@ export default {
 
                 const line = this.introductionLines[i];
                 const highlight = this.introductionHighlightings[i];
+                const ba = line.querySelectorAll('b, a');
 
                 timeline.to(highlight, { duration: 0.3, scaleX: 1, ease: 'power0.none' });
                 timeline.set(line, { color: 'white' });
+                if (ba.length > 0) timeline.set(ba, { color: 'red' });
                 timeline.set(highlight, { transformOrigin: 'right top' });
                 timeline.to(highlight, { duration: 0.3, scaleX: 0, ease: 'power0.none' });
 
@@ -191,9 +193,11 @@ export default {
 
                 const line = this.conclusionLines[i];
                 const highlight = this.conclusionHighlightings[i];
+                const ba = line.querySelectorAll('b, a');
 
                 timeline.to(highlight, { duration: 0.3, scaleX: 1, ease: 'power0.none' });
                 timeline.set(line, { color: 'white' });
+                if (ba.length > 0) timeline.set(ba, { color: 'red' });
                 timeline.set(highlight, { transformOrigin: 'right top' });
                 timeline.to(highlight, { duration: 0.3, scaleX: 0, ease: 'power0.none' });
 

@@ -5,7 +5,6 @@ varying vec2 vUv;
 uniform vec2 u_resolution;
 uniform float u_time;
 uniform sampler2D u_texture;
-uniform sampler2D u_texture_displacement;
 uniform float u_wobble_intensity;
 uniform float u_distortion_intensity;
 uniform float u_distortion_speed;

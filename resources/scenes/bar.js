@@ -7,7 +7,6 @@ const resources = [
         path: '/models/bar/scene_bar.glb',
         preload: false,
     },
-
     {
         type: 'gltf',
         name: 'BarHomme',

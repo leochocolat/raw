@@ -1,15 +1,11 @@
 .the-end {
     position: relative;
 
-    min-height: 100vh;
-
     margin-top: 100vh;
 
     padding: content-padding();
     padding-top: 0;
     padding-bottom: 0;
-
-    // background-color: $color-black;
 
     @include respond-to('large') {
         padding-right: vw-l(450px);
@@ -18,12 +14,15 @@
 }
 
 .introduction {
-    display: flex;
+    min-height: 100vh;
 
-    justify-content: center;
-    align-items: center;
+    padding-top: vw(100px);
+    padding-bottom: vw(150px);
 
-    height: 100vh;
+    @include respond-to('large') {
+        padding-top: vw-l(300px);
+        padding-bottom: vw-l(350px);
+    }
 
     &::v-deep {
         .line {
@@ -47,6 +46,15 @@
 
             transform-origin: left top;
         }
+
+        // Rich Text
+        p {
+            font-size: rem(20px);
+
+            @include respond-to('large') {
+                font-size: rem-l(30px);
+            }
+        }
     }
 }
 
@@ -56,12 +64,6 @@
 
     @include respond-to('large') {
         font-size: rem-l(50px);
-    }
-
-    &::v-deep {
-        b {
-            color: red;
-        }
     }
 }
 
@@ -84,12 +86,15 @@
 }
 
 .conclusion {
-    display: flex;
+    min-height: 100vh;
 
-    justify-content: center;
-    align-items: center;
+    padding-top: vw(100px);
+    padding-bottom: vw(150px);
 
-    height: 100vh;
+    @include respond-to('large') {
+        padding-top: vw-l(300px);
+        padding-bottom: vw-l(350px);
+    }
 }
 
 .conclusion-content {
@@ -101,10 +106,6 @@
     }
 
     &::v-deep {
-        b {
-            color: red;
-        }
-        
         .line {
             display: inline-block;
             position: relative;
@@ -125,6 +126,15 @@
             transform: scaleX(0);
 
             transform-origin: left top;
+        }
+
+        // Rich Text
+        p {
+            font-size: rem(20px);
+
+            @include respond-to('large') {
+                font-size: rem-l(30px);
+            }
         }
     }
 }
