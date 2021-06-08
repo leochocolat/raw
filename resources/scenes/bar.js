@@ -1,32 +1,34 @@
+const preload = false;
+
 const resources = [
     // Models
     {
         type: 'gltf',
         name: 'bar',
         namespace: 'bar',
-        path: '/models/bar/scene_bar_2.glb',
-        preload: false,
+        path: '/models/bar/scene_bar.glb',
+        preload,
     },
     {
         type: 'gltf',
         name: 'BarHomme',
         path: '/models/bar/BarHomme.glb',
         namespace: 'bar',
-        preload: false,
+        preload,
     },
     {
         type: 'gltf',
         name: 'BarFemme',
         path: '/models/bar/BarFemme.glb',
         namespace: 'bar',
-        preload: false,
+        preload,
     },
     {
         type: 'gltf',
         name: 'BarVieux',
         path: '/models/bar/BarVieux.glb',
         namespace: 'bar',
-        preload: false,
+        preload,
     },
     // Textures
     {
@@ -34,7 +36,7 @@ const resources = [
         name: 'texture_bar',
         namespace: 'bar',
         path: '/textures/basis/scene_bar.basis',
-        preload: false,
+        preload,
     },
     // Sounds
     {

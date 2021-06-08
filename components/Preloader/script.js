@@ -75,6 +75,7 @@ export default {
             this.showLoadingMessage();
             this.$store.dispatch('preloader/start');
 
+            // Prepare font for SplitText
             ResourceLoader.load('Default Sans').then(() => {
                 this.isFontReady = true;
             });
@@ -135,8 +136,6 @@ export default {
             this.$store.dispatch('preloader/setComplete');
 
             this.$refs.preloaderScreens.isPreloaderComplete = true;
-
-            // this.hideLoadingMessage();
 
             if (this.$refs.preloaderScreens.isComplete || this.$refs.preloaderScreens.isDisable) {
                 this.start();

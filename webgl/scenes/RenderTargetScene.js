@@ -28,8 +28,6 @@ class RenderTargetScene extends THREE.Scene {
         this._isActive = options.isActive;
         this._isVisible = options.isVisible;
 
-        // this.background = new THREE.Color(data.colors[this._id]);
-
         this._cameraPosition = {
             current: new THREE.Vector3(0, 0, 0),
             target: new THREE.Vector3(0, 0, 0),
@@ -53,7 +51,6 @@ class RenderTargetScene extends THREE.Scene {
         this._sceneDelta = 0;
 
         this._renderTarget = this._createRenderTarget();
-        // this._debugCube = this._createDebugCube();
         this._ambientLight = this._createAmbientLight();
         this._debugFolder = this._createDebugFolder();
         this._cameras = this._createCameras();
@@ -132,7 +129,7 @@ class RenderTargetScene extends THREE.Scene {
 
         this._timelineIn = new gsap.timeline();
 
-        this._timelineMenu?.call(this._pauseMainSound, null, 0);
+        this._timelineIn.call(this._pauseMainSound, null, 0);
         this._timelineIn.set(this._uniforms[`u_step_factor_${this._id}`], { value: 0 }, 0);
         this._timelineIn.set(this._uniforms[`u_size_${this._id}`], { value: 0 }, 0);
         this._timelineIn.set(this._uniforms[`u_scale_${this._id}`], { value: 1 }, 0);
@@ -408,18 +405,6 @@ class RenderTargetScene extends THREE.Scene {
         this.cameras.main.rotation.y = this._cameraRotation.current.y;
     }
 
-    _createDebugCube() {
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshBasicMaterial({
-            color: 'red',
-        });
-
-        const mesh = new THREE.Mesh(geometry, material);
-        // this.add(mesh);
-
-        return mesh;
-    }
-
     _createAmbientLight() {
         const ambientLight = new THREE.AmbientLight(0xffffff, 1);
         this.add(ambientLight);
@@ -455,7 +440,6 @@ class RenderTargetScene extends THREE.Scene {
             '_resetCameraPosition',
             'resetAnimationProgress',
             'resetScreenIsolation',
-
         );
     }
 }

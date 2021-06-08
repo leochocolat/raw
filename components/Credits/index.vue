@@ -14,7 +14,7 @@
 
                     <li v-for="(item, index) in data.contributors" :key="index" class="contrubutors-list-item">
                         <div ref="name" class="contributor-name">
-                            {{ item.fields.name }}
+                            <a :href="item.fields.portfolio" target="_blank" rel="noopener noreferrer">{{ item.fields.name }}</a>
                         </div>
                         <ul class="contributor-roles-list">
                             <li v-for="(role, i) in item.fields.roles" :key="i" class="contributor-roles-list-item">

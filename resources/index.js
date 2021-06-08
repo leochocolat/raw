@@ -20,14 +20,20 @@ const fonts = [
 ];
 
 /**
- * Sounds
+ * Scenes
  */
-const audios = [
+const scenes = [
     // Scenes
     ...hallway,
     ...library,
     ...supermarket,
     ...bar,
+];
+
+/**
+ * Shared Audios
+ */
+const audios = [
     // Main
     {
         type: 'audio',
@@ -38,27 +44,20 @@ const audios = [
 ];
 
 /**
- * WebGL
+ * Shared WebGL
  */
 const webgl = [
-    // Scenes
-    ...hallway,
-    ...library,
-    ...supermarket,
-    ...bar,
     // Test Animations
     {
         type: 'texture',
         name: 'tex1',
         path: '/textures/tex1.jpg',
-        namespace: 'hallway',
         preload: false,
     },
     {
         type: 'texture',
         name: 'tex2',
         path: '/textures/tex2.jpg',
-        namespace: 'hallway',
         preload: false,
     },
     // Test Blur
@@ -75,7 +74,6 @@ const webgl = [
         type: 'texture',
         name: 'blur-mask-test',
         path: '/textures/blur-mask-test.jpg',
-        namespace: 'blur',
         preload: false,
         options: {
             flipY: true,
@@ -96,7 +94,6 @@ const webgl = [
         name: 'video_test_0',
         path: '/videos/video_test_0.mp4',
         preload: false,
-        namespace: 'screen',
         options: {
             autoplay: true,
             loop: true,
@@ -118,6 +115,6 @@ const webgl = [
     },
 ];
 
-const resources = [...fonts, ...webgl, ...audios];
+const resources = [...fonts, ...webgl, ...audios, ...scenes];
 
 export default resources;

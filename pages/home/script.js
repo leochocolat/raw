@@ -49,4 +49,8 @@ export default {
          * Private
          */
     },
+
+    middleware({ app, redirect }) {
+        return redirect(app.localePath('prototype'));
+    },
 };

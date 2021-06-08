@@ -115,7 +115,8 @@ class Screen extends DebugScene {
     }
 
     _setupResources() {
-        const resources = new ResourceManager({ name: 'screen', namespace: 'screen' });
+        const resources = new ResourceManager({ name: 'screen' });
+        resources.addByName('video_test_0');
         resources.addByName('test-blur');
         resources.load();
 
