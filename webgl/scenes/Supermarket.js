@@ -27,7 +27,7 @@ class Supermarket extends RenderTargetScene {
         const zoomFOV = 16.6;
         const originalFOV = 50.5;
 
-        this._animationsSettings = { progress: 0.9, zoomFOV, originalFOV };
+        this._animationsSettings = { progress: 0, zoomFOV, originalFOV };
 
         this._resources = this._setupResources();
 
@@ -129,9 +129,6 @@ class Supermarket extends RenderTargetScene {
                 this.setScreenIsolation();
             }
         });
-
-        // debug
-        this._animationsProgressChangeHandler();
     }
 
     _createSceneMaterial() {

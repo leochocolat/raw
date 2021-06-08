@@ -172,8 +172,8 @@ class Library extends RenderTargetScene {
         const size = new THREE.Vector3();
         container.getSize(size);
 
-        const width = size.z * 0.4;
-        const height = size.x;
+        const width = size.x;
+        const height = size.y;
 
         size.x = width;
         size.y = height;

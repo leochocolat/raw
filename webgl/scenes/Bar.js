@@ -175,7 +175,7 @@ class Bar extends RenderTargetScene {
         const size = new THREE.Vector3();
         container.getSize(size);
 
-        const width = size.z * 0.4;
+        const width = size.y;
         const height = size.x;
 
         size.x = width;
