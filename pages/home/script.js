@@ -50,7 +50,8 @@ export default {
          */
     },
 
-    middleware({ app, redirect }) {
+    middleware({ app, redirect, query }) {
+        if (query.debug !== undefined) return;
         return redirect(app.localePath('prototype'));
     },
 };
