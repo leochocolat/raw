@@ -7,6 +7,8 @@ uniform sampler2D u_texture;
 uniform vec2 u_resolution;
 uniform float u_time;
 uniform vec2 u_size;
+uniform float u_alpha;
+
 
 vec2 resized_uv(vec2 inital_uv, vec2 aspect_ratio)
 {
@@ -48,6 +50,9 @@ void main() {
     blur_mask_texel.g *= blur_mask_texel.a;
     blur_mask_texel.b *= blur_mask_texel.a;
     blur_mask_texel.a = 1.0;
+
+    texel.a = u_alpha;
+
 
     // texel = blur_mask_texel;
 

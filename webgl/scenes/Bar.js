@@ -30,7 +30,7 @@ class Bar extends RenderTargetScene {
 
         this._humanAnimations = ['BarHomme_Sleep', 'BarHomme_Talk'];
         this._oldManAnimations = ['BarVieux_Comptoir', 'BarVieux_Drink'];
-        this._mainAnimations = ['TRACK_Camera', 'Torchon', 'Remote', 'Pinte_Vieux', 'Pinte_Mains', 'Mains_BarMaid'];
+        this._mainAnimations = ['Mains_BarMaid', 'Pinte_Mains', 'Torchon', 'Remote', 'Pinte_Vieux', 'TRACK_Camera'];
         this._animationComplete = false;
 
         this._updateSettings();
@@ -111,7 +111,6 @@ class Bar extends RenderTargetScene {
         this._sceneMaterial = this._createSceneMaterial();
         this._model = this._createModel();
         this._interactionScreen = this._setupInteractionScreen();
-
         this._modelCamera = this._createModelCameraAnimation();
         this._createHumanModels();
 
@@ -127,6 +126,10 @@ class Bar extends RenderTargetScene {
                 this.setScreenIsolation();
             }
         });
+        // setup screen alpha activation
+        setTimeout(() => {
+            this._playScreenActivate();
+        }, 21200);
     }
 
     _createSceneMaterial() {
@@ -190,11 +193,13 @@ class Bar extends RenderTargetScene {
             width: this._width,
             height: this._height,
             size,
+            isScreenOff: true,
         });
     }
 
     _createAnimationController() {
         const model = this._model;
+
         const animationController = new AnimationComponent({ model, animations: model.animations });
         this.animationControllers.push(animationController);
 
@@ -231,6 +236,17 @@ class Bar extends RenderTargetScene {
 
     _playAudios() {
         AudioManager.play('audio_bar', { loop: true });
+    }
+
+    _playScreenActivate() {
+        gsap.to(this._blurScreen, {
+            screenAlpha: 1,
+            duration: 0.2,
+            ease: 'sine.inOut',
+            onUpdate: () => {
+                this._blurScreen.meshMaterial.uniforms.u_alpha.value = this._blurScreen.screenAlpha;
+            },
+        });
     }
 
     // On Tick

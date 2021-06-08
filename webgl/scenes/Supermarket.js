@@ -86,7 +86,7 @@ class Supermarket extends RenderTargetScene {
 
         if (!this._emptyScreensMaterial) return;
 
-        this._emptyScreensMaterial.uniforms.u_screen_texture.value = this._blurScreen.screenMaterial;
+        this._emptyScreensMaterial.uniforms.u_screen_texture.value = this._blurScreen.meshTexture;
 
         this._updateAnimationController();
     }
