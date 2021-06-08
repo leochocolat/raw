@@ -28,7 +28,7 @@ class Supermarket extends RenderTargetScene {
 
         this._resources = this._setupResources();
 
-        this._mainAnimations = ['TRACK_Camera', 'MainsPere', 'Caddie_Movement', 'Cereal_Box'];
+        this._mainAnimations = ['TRACK_Camera', 'MainsPere', 'Caddie_Movement', 'Cereal_Box', 'Panier_AdulteHomme', 'Panier_VieuxFemme'];
         this._manAnimations = ['AdulteHomme_Rayon'];
         this._oldGirlAnimations = ['VieuxFemme_Fruits'];
 
@@ -114,8 +114,8 @@ class Supermarket extends RenderTargetScene {
 
         // setup animations
         this._animationController = this._createAnimationController();
-        this._animationController.onAnimationComplete(() => {
-            if (!this._animationComplete) {
+        this._animationController.onAnimationComplete((e) => {
+            if (!this._animationComplete && e.action._clip.name === 'TRACK_Camera') {
                 this._animationComplete = true;
                 this._setCameraZoom();
                 this.setScreenIsolation();
@@ -147,6 +147,9 @@ class Supermarket extends RenderTargetScene {
         this.add(clone.scene);
         clone.scene.traverse((child) => {
             child.frustumCulled = false;
+            if (child.isMesh) {
+                child.material.side = THREE.DoubleSide;
+            }
             if (child.isMesh && child.name === 'scene_supermarket') {
                 child.material = this._sceneMaterial;
             }

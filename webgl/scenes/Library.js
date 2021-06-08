@@ -113,8 +113,8 @@ class Library extends RenderTargetScene {
 
         // setup animations
         this._animationController = this._createAnimationController();
-        this._animationController.onAnimationComplete(() => {
-            if (!this._animationComplete) {
+        this._animationController.onAnimationComplete((e) => {
+            if (!this._animationComplete && e.action._clip.name === 'TRACK_Camera') {
                 this._animationComplete = true;
                 this._setCameraZoom();
                 this.setScreenIsolation();
@@ -151,6 +151,9 @@ class Library extends RenderTargetScene {
 
         clone.scene.traverse((child) => {
             child.frustumCulled = false;
+            if (child.isMesh) {
+                child.material.side = THREE.DoubleSide;
+            }
             if (child.isMesh && child.name === 'scene_library') {
                 child.material = this._sceneMaterial;
             }
