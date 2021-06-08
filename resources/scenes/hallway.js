@@ -1,3 +1,5 @@
+const preload = false;
+
 const resources = [
     // Models
     {
@@ -5,21 +7,21 @@ const resources = [
         name: 'hallway',
         namespace: 'hallway',
         path: '/models/scene_hallway.glb',
-        preload: false,
+        preload,
     },
     {
         type: 'gltf',
         name: 'LyceenHomme',
         path: '/models/LyceenHomme.glb',
         namespace: 'hallway',
-        preload: false,
+        preload,
     },
     {
         type: 'gltf',
         name: 'LyceenFemme',
         path: '/models/LyceenFemme.glb',
         namespace: 'hallway',
-        preload: false,
+        preload,
     },
     // Textures
     {
@@ -27,7 +29,7 @@ const resources = [
         name: 'texture_hallway',
         namespace: 'hallway',
         path: '/textures/basis/scene_hallway.basis',
-        preload: false,
+        preload,
     },
 
     // Sounds

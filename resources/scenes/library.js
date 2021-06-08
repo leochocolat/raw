@@ -1,3 +1,5 @@
+const preload = false;
+
 const resources = [
     // Models
     {
@@ -5,21 +7,21 @@ const resources = [
         name: 'library',
         namespace: 'library',
         path: '/models/scene_library.glb',
-        preload: false,
+        preload,
     },
     {
         type: 'gltf',
         name: 'LibraryFemme',
         namespace: 'library',
         path: '/models/library/LibraryFemme.glb',
-        preload: false,
+        preload,
     },
     {
         type: 'gltf',
         name: 'LibraryVieux',
         namespace: 'library',
         path: '/models/library/LibraryVieux.glb',
-        preload: false,
+        preload,
     },
     // Textures
     {
@@ -27,7 +29,7 @@ const resources = [
         name: 'texture_library',
         namespace: 'library',
         path: '/textures/basis/scene_library.basis',
-        preload: false,
+        preload,
     },
     // Sounds
     // {
@@ -35,7 +37,7 @@ const resources = [
     //     name: 'audio_library',
     //     namespace: 'library',
     //     path: '/audio/audio_library.mp3',
-    //     preload: false,
+    //     preload: true,
     // },
 ];
 

@@ -11,6 +11,8 @@ export default {
             activeScene: 'scenes/active',
             menuState: 'scenes/menu',
             isStopped: 'stop/isStopped',
+            isPreloaderComplete: 'preloader/isComplete',
+            isPreloaderReady: 'preloader/isReady',
         }),
     },
 
@@ -26,6 +28,10 @@ export default {
 
         isStopped(isStopped) {
             if (isStopped) this.$root.webglApp.sceneManager?.setScenesComplete();
+        },
+
+        isPreloaderComplete(isComplete) {
+            if (isComplete) this.$root.webglApp.start();
         },
     },
 

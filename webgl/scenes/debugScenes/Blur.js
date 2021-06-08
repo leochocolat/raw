@@ -83,12 +83,10 @@ class Blur extends DebugScene {
     }
 
     _setupResources() {
-        const resources = new ResourceManager({
-            name: 'blur',
-            namespace: 'blur',
-        });
+        const resources = new ResourceManager({ name: 'blur' });
 
         resources.addByName('video-gore-test');
+        resources.addByName('blur-mask-test');
 
         resources.load();
 

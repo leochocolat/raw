@@ -20,10 +20,6 @@ export default {
             this.$store.dispatch('router/setPrevious', from);
         },
 
-        isReady(isReady) {
-            if (isReady) this.$root.webglApp.start();
-        },
-
         '$i18n.locale'() {
             this.$fetch();
         },
@@ -38,6 +34,7 @@ export default {
     computed: {
         ...mapGetters({
             isReady: 'preloader/isReady',
+            isPreloaderComplete: 'preloader/isComplete',
             isDebug: 'context/isDebug',
             isDevelopment: 'context/isDevelopment',
             isProduction: 'context/isProduction',

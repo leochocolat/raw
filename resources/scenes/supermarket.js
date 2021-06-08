@@ -1,3 +1,5 @@
+const preload = false;
+
 const resources = [
     // Models
     {
@@ -5,30 +7,29 @@ const resources = [
         name: 'supermarket',
         namespace: 'supermarket',
         path: '/models/scene_supermarket_2.glb',
-        preload: false,
+        preload,
     },
     {
         type: 'gltf',
         name: 'AdulteHomme',
         namespace: 'supermarket',
         path: '/models/supermarket/AdulteHomme.glb',
-        preload: false,
+        preload,
     },
     {
         type: 'gltf',
         name: 'AdulteVieux',
         namespace: 'supermarket',
         path: '/models/supermarket/AdulteVieux.glb',
-        preload: false,
+        preload,
     },
-
     // Textures
     {
         type: 'basis',
         name: 'texture_supermarket',
         namespace: 'supermarket',
         path: '/textures/basis/scene_supermarket.basis',
-        preload: false,
+        preload,
     },
     // Sounds
     {

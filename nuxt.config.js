@@ -125,12 +125,29 @@ export default {
             });
         },
 
+        /**
+         * Prevent caching issues on hot reload
+         */
+        devMiddleware: {
+            headers: {
+                'Cache-Control': 'no-store',
+                Vary: '*',
+            },
+        },
+
         transpile: ['three'],
     },
 
     server: {
         port: 3000,
         host: '0.0.0.0',
+    },
+
+    /*
+  ** Generate
+  */
+    generate: {
+        fallback: '200.html',
     },
 
     env: {

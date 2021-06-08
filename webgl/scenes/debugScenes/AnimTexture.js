@@ -57,10 +57,9 @@ class AnimTexture extends DebugScene {
      */
 
     _setupResources() {
-        const resources = new ResourceManager({
-            name: 'hallway',
-            namespace: 'hallway',
-        });
+        const resources = new ResourceManager();
+        resources.addByName('tex1');
+        resources.addByName('tex2');
 
         resources.load();
 
