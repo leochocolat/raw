@@ -24,7 +24,7 @@ class Hallway extends RenderTargetScene {
         const zoomFOV = 3.57;
         const originalFOV = 50.5;
 
-        this._animationsSettings = { progress: 1, zoomFOV, originalFOV };
+        this._animationsSettings = { progress: 0, zoomFOV, originalFOV };
 
         this._resources = this._setupResources();
         this._modelsCount = this.sceneModelsCount.hallway;
