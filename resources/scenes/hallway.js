@@ -4,7 +4,7 @@ const resources = [
         type: 'gltf',
         name: 'hallway',
         namespace: 'hallway',
-        path: '/models/scene_hallway.glb',
+        path: '/models/scene_hallway_2.glb',
         preload: false,
     },
     {

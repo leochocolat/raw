@@ -4,7 +4,7 @@ const resources = [
         type: 'gltf',
         name: 'bar',
         namespace: 'bar',
-        path: '/models/bar/scene_bar.glb',
+        path: '/models/bar/scene_bar_2.glb',
         preload: false,
     },
     {

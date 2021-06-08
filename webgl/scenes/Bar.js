@@ -24,7 +24,7 @@ class Bar extends RenderTargetScene {
         const zoomFOV = 5.30;
         const originalFOV = 50.5;
 
-        this._animationsSettings = { progress: 0, zoomFOV, originalFOV };
+        this._animationsSettings = { progress: 1, zoomFOV, originalFOV };
 
         this._resources = this._setupResources();
 
@@ -175,7 +175,7 @@ class Bar extends RenderTargetScene {
         const size = new THREE.Vector3();
         container.getSize(size);
 
-        const width = size.z * 0.4;
+        const width = size.y;
         const height = size.x;
 
         size.x = width;

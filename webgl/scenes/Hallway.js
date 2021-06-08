@@ -24,7 +24,7 @@ class Hallway extends RenderTargetScene {
         const zoomFOV = 3.57;
         const originalFOV = 50.5;
 
-        this._animationsSettings = { progress: 0, zoomFOV, originalFOV };
+        this._animationsSettings = { progress: 1, zoomFOV, originalFOV };
 
         this._resources = this._setupResources();
         this._modelsCount = this.sceneModelsCount.hallway;
@@ -149,6 +149,7 @@ class Hallway extends RenderTargetScene {
         this.add(clone.scene);
 
         clone.scene.traverse((child) => {
+            child.frustumCulled = false;
             if (child.isMesh) {
                 child.material.side = THREE.DoubleSide;
             }
@@ -170,7 +171,7 @@ class Hallway extends RenderTargetScene {
         const size = new THREE.Vector3();
         container.getSize(size);
 
-        const width = size.z * 0.4;
+        const width = size.y;
         const height = size.x;
 
         size.x = width;

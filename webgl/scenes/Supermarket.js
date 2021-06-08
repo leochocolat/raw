@@ -129,9 +129,6 @@ class Supermarket extends RenderTargetScene {
                 this.setScreenIsolation();
             }
         });
-
-        // debug
-        this._animationsProgressChangeHandler();
     }
 
     _createSceneMaterial() {
