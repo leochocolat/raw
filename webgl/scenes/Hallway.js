@@ -192,7 +192,6 @@ class Hallway extends RenderTargetScene {
     _createAnimationController() {
         const model = this._model;
         const animationController = new AnimationComponent({ model, animations: model.animations });
-
         this.animationControllers.push(animationController);
 
         return animationController;
