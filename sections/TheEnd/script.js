@@ -113,7 +113,7 @@ export default {
 
             for (let i = 0; i < this.$refs.blocks.length; i++) {
                 const element = this.$refs.blocks[i];
-                const trigger = { el: element, callbackIn: this.blockQuotesTransitionIn, callbackOut: this.blockQuotesTransitionOut, repeat: true, offset: 0.5 };
+                const trigger = { el: element, callbackIn: this.blockQuotesTransitionIn, callbackOut: this.blockQuotesTransitionOut, repeat: true, offset: 0.3 };
                 this.triggers.push(trigger);
             }
         },
