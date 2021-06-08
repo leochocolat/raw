@@ -67,6 +67,10 @@ class BlurScreen {
         this._screenTexture = value;
     }
 
+    get screenMaterial() {
+        return this._screenMesh.material.uniforms.u_texture.value;
+    }
+
     /**
      * Public
      */
@@ -148,11 +152,10 @@ class BlurScreen {
             u_blur_mask: { value: this._maskTexture },
             u_texture: { value: this._screenTexture },
             u_size: { value: new THREE.Vector2(this._bufferWidth, this._bufferHeight) },
-            u_resolution: { value: new THREE.Vector2(this._containerSize.x, this._containerSize.z) },
+            u_resolution: { value: new THREE.Vector2(this._containerSize.x, this._containerSize.y) },
             u_time: { value: 0.0 },
         };
 
-        // add skinning shader
         const material = new THREE.ShaderMaterial({
             uniforms,
             fragmentShader: fragment,

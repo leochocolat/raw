@@ -128,9 +128,9 @@ class AnimationComponent {
     }
 
     _setupEventListeners() {
-        this.mixer.addEventListener('finished', (anim) => {
+        this.mixer.addEventListener('finished', (e) => {
             if (this.completeCallback) {
-                this.completeCallback();
+                this.completeCallback(e);
             }
         });
     }

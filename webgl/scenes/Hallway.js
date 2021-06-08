@@ -116,8 +116,8 @@ class Hallway extends RenderTargetScene {
 
         // setup animations
         this._animationController = this._createAnimationController();
-        this._animationController.onAnimationComplete(() => {
-            if (!this._animationComplete) {
+        this._animationController.onAnimationComplete((e) => {
+            if (!this._animationComplete && e.action._clip.name === 'TRACK_CameraMovement') {
                 this._animationComplete = true;
                 this._setCameraZoom();
                 this.setScreenIsolation();
@@ -149,6 +149,9 @@ class Hallway extends RenderTargetScene {
         this.add(clone.scene);
 
         clone.scene.traverse((child) => {
+            if (child.isMesh) {
+                child.material.side = THREE.DoubleSide;
+            }
             if (child.isMesh && child.name === 'scene_hallway1') {
                 child.material = this._sceneMaterial;
             }

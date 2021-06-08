@@ -6,8 +6,8 @@ const resources = [
         type: 'gltf',
         name: 'supermarket',
         namespace: 'supermarket',
-        path: '/models/scene_supermarket_2.glb',
-        preload,
+        path: '/models/scene_supermarket.glb',
+        preload: false,
     },
     {
         type: 'gltf',

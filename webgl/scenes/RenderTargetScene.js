@@ -162,8 +162,8 @@ class RenderTargetScene extends THREE.Scene {
 
         this._timelineMenu = new gsap.timeline();
 
-        this._timelineMenu.call(this._resetCameraPosition, null, 0);
-        this._timelineMenu.call(this._playMainSound, null, 0);
+        this._timelineMenu?.call(this._resetCameraPosition, null, 0);
+        this._timelineMenu?.call(this._playMainSound, null, 0);
 
         this._timelineMenu.set(this._uniforms[`u_step_factor_${this._id}`], { value: 0.5 }, 0);
         this._timelineMenu.set(this._uniforms[`u_size_${this._id}`], { value: 0.5 }, 0);
