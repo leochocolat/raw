@@ -194,6 +194,7 @@ class Library extends RenderTargetScene {
         const model = this._model;
         const animationController = new AnimationComponent({ model, animations: model.animations });
         this.animationControllers.push(animationController);
+        console.log(animationController);
 
         return animationController;
     }

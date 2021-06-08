@@ -39,10 +39,10 @@ const data = {
     },
 
     animations: {
-        hallway: { duration: 26 },
-        library: { duration: 10 },
-        supermarket: { duration: 23 },
-        bar: { duration: 24 },
+        hallway: { duration: 27.64 },
+        library: { duration: 26 },
+        supermarket: { duration: 28.66 },
+        bar: { duration: 24.33 },
     },
 
     sceneModelsCount: {
