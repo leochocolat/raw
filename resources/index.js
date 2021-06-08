@@ -115,6 +115,6 @@ const webgl = [
     },
 ];
 
-const resources = [...fonts, ...webgl, ...audios, ...scenes];
+const resources = [...scenes, ...fonts, ...webgl, ...audios];
 
 export default resources;
