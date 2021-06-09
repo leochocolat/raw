@@ -33,6 +33,8 @@ export default {
     },
 
     mounted() {
+        console.log('!! Is preloader disabled ' + this.isDisable);
+
         if (this.isDisable) {
             this.disable();
         } else {
