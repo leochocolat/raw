@@ -73,7 +73,7 @@ const webgl = [
     {
         type: 'texture',
         name: 'blur-mask-test',
-        path: '/textures/blur-mask-test.jpg',
+        path: '/textures/blur-mask-test.png',
         preload: false,
         options: {
             flipY: true,

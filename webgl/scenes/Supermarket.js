@@ -275,7 +275,7 @@ class Supermarket extends RenderTargetScene {
         this.interactionsSettings.positionFactor.x = 0;
         this.interactionsSettings.positionFactor.y = 0;
 
-        this.interactionsSettings.rotationFactor.x = -10;
+        this.interactionsSettings.rotationFactor.x = -20;
         this.interactionsSettings.rotationFactor.y = 10;
 
         // Blur Settings

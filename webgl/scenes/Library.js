@@ -250,13 +250,13 @@ class Library extends RenderTargetScene {
         this.interactionsSettings.positionFactor.x = 0;
         this.interactionsSettings.positionFactor.y = 0;
 
-        this.interactionsSettings.rotationFactor.x = -10;
-        this.interactionsSettings.rotationFactor.y = 10;
+        this.interactionsSettings.rotationFactor.x = -20;
+        this.interactionsSettings.rotationFactor.y = 20;
 
         // Blur Settings
-        // this.blurSettings.wobbleIntensity = 0.5;
-        // this.blurSettings.spreadingTreshold = 0.05;
-        // this.blurSettings.intensityFactor = 2;
+        this.blurSettings.spreadingTreshold = 0.05;
+        this.blurSettings.wobbleIntensity = 0.15;
+        this.blurSettings.intensityFactor = 1;
 
         this._debugFolder?.refresh();
     }

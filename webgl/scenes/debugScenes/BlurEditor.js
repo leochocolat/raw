@@ -120,6 +120,7 @@ class BlurEditor extends DebugScene {
         resources.addByName('test-blur');
         resources.addByName('video_test_0');
         resources.addByName('blur-mask-test');
+        resources.addByName('video-gore-test');
 
         resources.load();
 
@@ -206,6 +207,7 @@ class BlurEditor extends DebugScene {
             folder: inputTabs.pages[1],
             options: {
                 'video_test_0': this._resources.get('video_test_0').image.src,
+                'video-gore-test': this._resources.get('video-gore-test').image.src,
             },
         });
         inputVideo.on('update', this._videoUpdateHandler);

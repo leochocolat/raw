@@ -249,8 +249,8 @@ class Hallway extends RenderTargetScene {
         this.interactionsSettings.positionFactor.x = 0;
         this.interactionsSettings.positionFactor.y = 0;
 
-        this.interactionsSettings.rotationFactor.x = -10;
-        this.interactionsSettings.rotationFactor.y = 10;
+        this.interactionsSettings.rotationFactor.x = -15;
+        this.interactionsSettings.rotationFactor.y = 15;
 
         // Blur Settings
         // this.blurSettings.wobbleIntensity = 0.5;
