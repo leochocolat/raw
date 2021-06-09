@@ -12,6 +12,7 @@ class UILayer extends THREE.Object3D {
         this._debugger = options.debugger;
         this._width = options.width;
         this._height = options.height;
+        this._scenes = options.scenes;
 
         this._images = [];
         this._planes = [];
@@ -35,10 +36,12 @@ class UILayer extends THREE.Object3D {
         const plane = new UIPlaneImage({
             name: image.name,
             side: image.side,
+            scale: image.scale,
             containerBounds: image.containerBounds,
             canvasWidth: this._width,
             canvasHeight: this._height,
             debugFolder: this._debugFolder,
+            scenes: this._scenes,
         });
 
         this._planes.push(plane);

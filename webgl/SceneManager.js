@@ -263,6 +263,7 @@ class SceneManager extends THREE.Scene {
             debugger: this._debugger,
             width: this._width,
             height: this._height,
+            scenes: this._scenes,
         });
 
         this.add(layer);

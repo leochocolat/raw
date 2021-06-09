@@ -28,6 +28,8 @@ class RenderTargetScene extends THREE.Scene {
         this._isActive = options.isActive;
         this._isVisible = options.isVisible;
 
+        this._blurScreen = null;
+
         this._cameraPosition = {
             current: new THREE.Vector3(0, 0, 0),
             target: new THREE.Vector3(0, 0, 0),
@@ -118,6 +120,10 @@ class RenderTargetScene extends THREE.Scene {
     set censorshipFactor(factor) {
         this._censorshipFactor = factor;
         if (this._blurScreen) this._blurScreen.blur = factor;
+    }
+
+    get blurScreen() {
+        return this._blurScreen;
     }
 
     show() {
