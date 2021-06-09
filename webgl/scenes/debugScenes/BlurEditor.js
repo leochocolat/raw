@@ -287,11 +287,11 @@ class BlurEditor extends DebugScene {
     }
 
     _videoUpdateHandler(video) {
-        this._textureVideo = new THREE.VideoTexture(video);
-        this._textureVideo.flipY = false;
-        this._textureVideo.needsUpdate = true;
-        this._plane.material.map = this._textureVideo;
-        this._blurScreen.screenTexture = this._textureVideo;
+        this._texture = new THREE.VideoTexture(video);
+        this._texture.flipY = false;
+        this._texture.needsUpdate = true;
+        this._plane.material.map = this._texture;
+        this._blurScreen.screenTexture = this._texture;
         this._resizePlane();
     }
 
