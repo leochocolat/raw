@@ -46,6 +46,34 @@ const resources = [
         path: '/audio/audio_library_fx.mp3',
         preload: true,
     },
+
+    // Violent
+    {
+        type: 'basis',
+        name: 'image_gore_library',
+        path: '/textures/basis/image_gore_library.basis',
+        namespace: 'library',
+        preload: false,
+        options: {
+            flipY: false,
+        },
+    },
+
+    {
+        type: 'video-texture',
+        name: 'video_library_001',
+        path: '/videos/video_library_001.mp4',
+        namespace: 'library',
+        preload: false,
+        options: {
+            autoplay: false,
+            loop: false,
+            muted: true,
+            playsinline: true,
+            flipY: false,
+            pausedAfterPlay: true,
+        },
+    },
 ];
 
 export default resources;

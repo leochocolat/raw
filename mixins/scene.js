@@ -71,10 +71,8 @@ export default {
             timeline.add(this.$refs.screenActive.rewindClock(), 0);
             timeline.add(this.$root.webglApp.sceneManager.scenes[this.scene.id].resetAnimationProgress(), 0);
 
-            if (this.isComplete) {
-                timeline.add(this.$root.webglApp.sceneManager.scenes[this.scene.id].resetScreenIsolation(), 0);
-                timeline.add(this.$root.webglApp.sceneManager.scenes[this.scene.id].resetCameraFOV(), 0);
-            }
+            timeline.call(this.$root.webglApp.sceneManager.scenes[this.scene.id].resetScreenIsolation(), 0);
+            timeline.call(this.$root.webglApp.sceneManager.scenes[this.scene.id].resetCameraFOV(), 0);
 
             timeline.add(this.$refs.screenActive.hideRewindArrow());
 

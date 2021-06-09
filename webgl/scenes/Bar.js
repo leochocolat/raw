@@ -22,7 +22,7 @@ class Bar extends RenderTargetScene {
         super(options);
 
         const zoomFOV = 5.30;
-        const originalFOV = 50.5;
+        const originalFOV = 65.5;
 
         this._animationsSettings = { progress: 0, zoomFOV, originalFOV };
 
@@ -65,6 +65,11 @@ class Bar extends RenderTargetScene {
             this._oldManAnimationsControllers[index].playAnimation({ animation: this._oldManAnimationsControllers[index].actionType[this._oldManAnimations[index]], loop: false });
         }
 
+        // setup screen alpha activation
+        setTimeout(() => {
+            this._playScreenActivate();
+        }, 21200);
+
         this._playAudios();
     }
 
@@ -73,6 +78,12 @@ class Bar extends RenderTargetScene {
 
         if (this._modelCamera) {
             this.setCameraFOV({ fov: this._animationsSettings.originalFOV });
+        }
+
+        this._animationComplete = false;
+
+        if (this._blurScreen) {
+            this._playScreenDeactivate();
         }
 
         AudioManager.pause('audio_bar');
@@ -126,10 +137,6 @@ class Bar extends RenderTargetScene {
                 this.setScreenIsolation();
             }
         });
-        // setup screen alpha activation
-        setTimeout(() => {
-            this._playScreenActivate();
-        }, 21200);
     }
 
     _createSceneMaterial() {
@@ -209,7 +216,8 @@ class Bar extends RenderTargetScene {
     _createModelCameraAnimation() {
         if (!this._model.cameras) return;
         this.setModelCamera(this._model.cameras[0]);
-        this.setCameraFOV({ fov: this._animationsSettings.originalFOV });
+        this._animationsSettings.originalFOV = this._model.cameras[0].fov;
+        this.setCameraFOV({ fov: this._model.cameras[0].fov });
 
         return this._model.cameras[0];
     }
@@ -241,6 +249,17 @@ class Bar extends RenderTargetScene {
     _playScreenActivate() {
         gsap.to(this._blurScreen, {
             screenAlpha: 1,
+            duration: 0.2,
+            ease: 'sine.inOut',
+            onUpdate: () => {
+                this._blurScreen.meshMaterial.uniforms.u_alpha.value = this._blurScreen.screenAlpha;
+            },
+        });
+    }
+
+    _playScreenDeactivate() {
+        gsap.to(this._blurScreen, {
+            screenAlpha: 0,
             duration: 0.2,
             ease: 'sine.inOut',
             onUpdate: () => {

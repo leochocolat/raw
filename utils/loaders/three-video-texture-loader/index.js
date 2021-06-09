@@ -16,7 +16,15 @@ class ThreeVideoTextureLoader extends Loader {
         const promise = new Promise((resolve) => {
             video.addEventListener('canplay', () => {
                 const videoTexture = new VideoTexture(video);
+                videoTexture.flipY = options.flipY;
                 video.play();
+
+                if (options.pausedAfterPlay) {
+                    setTimeout(() => {
+                        video.pause();
+                    }, 1);
+                }
+
                 resolve(videoTexture);
             });
         });

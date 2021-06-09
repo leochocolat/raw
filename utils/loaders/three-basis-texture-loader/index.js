@@ -25,9 +25,12 @@ class ThreeBasisTextureLoader extends Loader {
     /**
      * Public
      */
-    load({ path }) {
+    load({ path, options = {} }) {
         const promise = new Promise((resolve, reject) => {
-            this._loader.load(path, resolve, null, reject);
+            this._loader.load(path, (texture) => {
+                texture.flipY = options.flipY;
+                resolve(texture);
+            }, null, reject);
         });
 
         return promise;

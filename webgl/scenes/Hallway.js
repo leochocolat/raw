@@ -22,7 +22,7 @@ class Hallway extends RenderTargetScene {
         super(options);
 
         const zoomFOV = 3.57;
-        const originalFOV = 50.5;
+        const originalFOV = 65.5;
 
         this._animationsSettings = { progress: 0, zoomFOV, originalFOV };
 
@@ -73,6 +73,8 @@ class Hallway extends RenderTargetScene {
         if (this._modelCamera) {
             this.setCameraFOV({ fov: this._animationsSettings.originalFOV });
         }
+
+        this._animationComplete = false;
 
         AudioManager.pause('audio_hallway');
         AudioManager.pause('audio_hallway_fx');
@@ -202,7 +204,8 @@ class Hallway extends RenderTargetScene {
     _createModelCameraAnimation() {
         if (!this._model.cameras) return;
         this.setModelCamera(this._model.cameras[0]);
-        this.setCameraFOV({ fov: this._animationsSettings.originalFOV });
+        this._animationsSettings.originalFOV = this._model.cameras[0].fov;
+        this.setCameraFOV({ fov: this._model.cameras[0].fov });
 
         return this._model.cameras[0];
     }

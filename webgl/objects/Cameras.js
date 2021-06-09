@@ -1,7 +1,7 @@
 // Vendor
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-
+import gsap from 'gsap';
 class Cameras {
     constructor(options) {
         this._sceneName = options.sceneName;
@@ -72,8 +72,13 @@ class Cameras {
     }
 
     updateCameraFOV(options) {
-        this._active.fov = options.fov;
-        this._active.updateProjectionMatrix();
+        gsap.to(this._active, {
+            fov: options.fov,
+            duration: 1,
+            onUpdate: () => {
+                this._active.updateProjectionMatrix();
+            },
+        });
     }
 
     /**

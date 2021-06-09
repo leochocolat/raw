@@ -22,7 +22,7 @@ class Library extends RenderTargetScene {
         super(options);
 
         const zoomFOV = 39.6;
-        const originalFOV = 50.5;
+        const originalFOV = 65.5;
 
         this._animationsSettings = { progress: 0, zoomFOV, originalFOV };
 
@@ -63,6 +63,7 @@ class Library extends RenderTargetScene {
 
         this._oldGirlAnimationsControllers[0].playAnimation({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], progress: this._animationsSettings.progress });
 
+        this._blurScreen.screenTexture.image.play();
         this._playAudios();
     }
 
@@ -72,6 +73,12 @@ class Library extends RenderTargetScene {
         if (this._modelCamera) {
             this.setCameraFOV({ fov: this._animationsSettings.originalFOV });
         }
+        if (this._blurScreen) {
+            this._blurScreen.screenTexture.image.currentTime = 0;
+            this._blurScreen.screenTexture.image.pause();
+        }
+
+        this._animationComplete = false;
 
         AudioManager.pause('audio_library');
         AudioManager.pause('audio_library_fx');
@@ -166,7 +173,7 @@ class Library extends RenderTargetScene {
 
     _setupInteractionScreen() {
         // const screenTexture = this._resources.get('texture-gore-test');
-        const screenTexture = this._resources.get('video-gore-test');
+        const screenTexture = this._resources.get('video_library_001');
         const maskTexture = this._resources.get('blur-mask-test');
 
         const screen = this._model.scene.getObjectByName('Interaction_Screen');
@@ -196,7 +203,6 @@ class Library extends RenderTargetScene {
         const model = this._model;
         const animationController = new AnimationComponent({ model, animations: model.animations });
         this.animationControllers.push(animationController);
-        console.log(animationController);
 
         return animationController;
     }
@@ -205,7 +211,8 @@ class Library extends RenderTargetScene {
         if (!this._model.cameras) return;
 
         this.setModelCamera(this._model.cameras[0]);
-        this.setCameraFOV({ fov: this._animationsSettings.originalFOV });
+        this._animationsSettings.originalFOV = this._model.cameras[0].fov;
+        this.setCameraFOV({ fov: this._model.cameras[0].fov });
 
         return this._model.cameras[0];
     }

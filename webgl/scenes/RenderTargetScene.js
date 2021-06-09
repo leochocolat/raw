@@ -164,6 +164,7 @@ class RenderTargetScene extends THREE.Scene {
 
         this._timelineMenu?.call(this._resetCameraPosition, null, 0);
         this._timelineMenu?.call(this._playMainSound, null, 0);
+        this._timelineMenu?.call(this.resetScreenIsolation, null, 0);
 
         this._timelineMenu.set(this._uniforms[`u_step_factor_${this._id}`], { value: 0.5 }, 0);
         this._timelineMenu.set(this._uniforms[`u_size_${this._id}`], { value: 0.5 }, 0);
@@ -217,7 +218,7 @@ class RenderTargetScene extends THREE.Scene {
     }
 
     resetCameraFOV(options) {
-        this.cameras.updateCameraFOV({ fov: 65.5 });
+        this.cameras.updateCameraFOV({ fov: 39.6 });
     }
 
     mouseenter() {
@@ -282,6 +283,7 @@ class RenderTargetScene extends THREE.Scene {
     }
 
     resetScreenIsolation() {
+        if (!this.sceneMaterial) return;
         gsap.to(this.sceneMaterial.uniforms.u_isolation_alpha, { value: 1, duration: 0.5 });
     }
 
