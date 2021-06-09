@@ -33,8 +33,6 @@ export default {
     },
 
     mounted() {
-        console.log('!! Is preloader disabled ' + this.isDisable);
-
         if (this.isDisable) {
             this.disable();
         } else {
@@ -51,6 +49,7 @@ export default {
          * Public
          */
         start() {
+            if (!this.$refs.context) return;
             this.screens = [...this.$refs.context, this.$refs.warning, this.$refs.instructions, this.$refs.stop, this.$refs.screenLogo];
 
             const contextSteps = [];
