@@ -75,6 +75,7 @@ class Hallway extends RenderTargetScene {
         }
 
         AudioManager.pause('audio_hallway');
+        AudioManager.pause('audio_hallway_fx');
     }
 
     // Hooks
@@ -113,6 +114,7 @@ class Hallway extends RenderTargetScene {
 
         // setup audios
         AudioManager.add('audio_hallway', this._resources.get('audio_hallway'));
+        AudioManager.add('audio_hallway_fx', this._resources.get('audio_hallway_fx'));
 
         // setup animations
         this._animationController = this._createAnimationController();
@@ -225,6 +227,7 @@ class Hallway extends RenderTargetScene {
 
     _playAudios() {
         AudioManager.play('audio_hallway', { loop: true });
+        AudioManager.play('audio_hallway_fx', { loop: false });
     }
 
     // On Tick

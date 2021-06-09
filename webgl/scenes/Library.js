@@ -63,7 +63,7 @@ class Library extends RenderTargetScene {
 
         this._oldGirlAnimationsControllers[0].playAnimation({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], progress: this._animationsSettings.progress });
 
-        // this._playAudios();
+        this._playAudios();
     }
 
     transitionToMenu() {
@@ -73,7 +73,8 @@ class Library extends RenderTargetScene {
             this.setCameraFOV({ fov: this._animationsSettings.originalFOV });
         }
 
-        // AudioManager.pause('audio_library');
+        AudioManager.pause('audio_library');
+        AudioManager.pause('audio_library_fx');
     }
 
     setCensorship(censorshipFactor) {
@@ -122,7 +123,8 @@ class Library extends RenderTargetScene {
         });
 
         // setup audios
-        // AudioManager.add('audio_bar', this._resources.get('audio_library'));
+        AudioManager.add('audio_library', this._resources.get('audio_library'));
+        AudioManager.add('audio_library_fx', this._resources.get('audio_library_fx'));
     }
 
     _createSceneMaterial() {
@@ -229,6 +231,7 @@ class Library extends RenderTargetScene {
 
     _playAudios() {
         AudioManager.play('audio_library', { loop: true });
+        AudioManager.play('audio_library_fx', { loop: false });
     }
 
     // On Tick

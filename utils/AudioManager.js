@@ -25,9 +25,9 @@ class AudioManager {
         if (!next) return;
         if (this._current === next) return;
 
-        if (this._current) {
-            this._current.pause();
-        }
+        // if (this._current) {
+        //     this._current.pause();
+        // }
 
         this._current = next;
         this._current.loop = options.loop || false;

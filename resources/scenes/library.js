@@ -32,13 +32,20 @@ const resources = [
         preload,
     },
     // Sounds
-    // {
-    //     type: 'audio',
-    //     name: 'audio_library',
-    //     namespace: 'library',
-    //     path: '/audio/audio_library.mp3',
-    //     preload: true,
-    // },
+    {
+        type: 'audio',
+        name: 'audio_library',
+        namespace: 'library',
+        path: '/audio/audio_library.mp3',
+        preload: true,
+    },
+    {
+        type: 'audio',
+        name: 'audio_library_fx',
+        namespace: 'library',
+        path: '/audio/audio_library_fx.mp3',
+        preload: true,
+    },
 ];
 
 export default resources;

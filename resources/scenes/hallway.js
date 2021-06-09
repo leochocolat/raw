@@ -40,6 +40,13 @@ const resources = [
         path: '/audio/audio_hallway.mp3',
         preload: true,
     },
+    {
+        type: 'audio',
+        name: 'audio_hallway_fx',
+        namespace: 'hallway',
+        path: '/audio/audio_hallway_fx.mp3',
+        preload: true,
+    },
 ];
 
 export default resources;
