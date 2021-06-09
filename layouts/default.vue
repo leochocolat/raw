@@ -18,7 +18,7 @@
         <!-- Footer -->
         <TheFooter ref="footer" />
 
-        <StopOverlay :data="globalCopy.stopConfirmation" />
+        <StopOverlay v-if="globalCopy" :data="globalCopy.stopConfirmation" />
     </div>
 </template>
 
