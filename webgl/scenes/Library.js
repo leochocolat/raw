@@ -13,9 +13,6 @@ import AudioManager from '@/utils/AudioManager';
 import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
 import BlurScreen from '../utils/BlurScreen';
 
-// Data
-import data from '@/webgl/data';
-
 // Shader
 import vertex from '../shaders/isolationScreen/vertex.glsl';
 import fragment from '../shaders/isolationScreen/fragment.glsl';
