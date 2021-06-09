@@ -189,6 +189,7 @@ class Library extends RenderTargetScene {
             width: this._width,
             height: this._height,
             size,
+            settings: this.blurSettings,
         });
     }
 
@@ -243,6 +244,7 @@ class Library extends RenderTargetScene {
     }
 
     _updateSettings() {
+        // Interactions Settings
         this.interactionsSettings.isEnable = true;
 
         this.interactionsSettings.positionFactor.x = 0;
@@ -250,6 +252,11 @@ class Library extends RenderTargetScene {
 
         this.interactionsSettings.rotationFactor.x = -10;
         this.interactionsSettings.rotationFactor.y = 10;
+
+        // Blur Settings
+        // this.blurSettings.wobbleIntensity = 0.5;
+        // this.blurSettings.spreadingTreshold = 0.05;
+        // this.blurSettings.intensityFactor = 2;
 
         this._debugFolder?.refresh();
     }
@@ -261,6 +268,11 @@ class Library extends RenderTargetScene {
         animations.addInput(this._animationsSettings, 'progress', { min: 0, max: 1 }).on('change', this._animationsProgressChangeHandler);
         animations.addInput(this._animationsSettings, 'zoomFOV', { min: 0.1, max: 80 }).on('change', this._cameraFovChangeHandler);
         animations.addButton({ title: 'Play' }).on('click', this._clickPlayAnimationsHandler);
+
+        const blur = this.debugFolder.addFolder({ title: 'Blur', expanded: true });
+        blur.addInput(this.blurSettings, 'spreadingTreshold', { min: 0, max: 0.5 }).on('change', this._blurSettingsChangeHandler);
+        blur.addInput(this.blurSettings, 'wobbleIntensity', { min: 0, max: 1 }).on('change', this._blurSettingsChangeHandler);
+        blur.addInput(this.blurSettings, 'intensityFactor', { min: 0, max: 10 }).on('change', this._blurSettingsChangeHandler);
     }
 
     _setCameraZoom() {
@@ -299,6 +311,7 @@ class Library extends RenderTargetScene {
             '_animationsProgressChangeHandler',
             '_cameraFovChangeHandler',
             '_clickPlayAnimationsHandler',
+            '_blurSettingsChangeHandler',
         );
     }
 
@@ -335,6 +348,10 @@ class Library extends RenderTargetScene {
             this._girlAnimationControllers[index].playAnimation({ animation: this._girlAnimationControllers[index].actionType[this._girlAnimations[index]], progress: this._animationsSettings.progress });
         }
         this._oldGirlAnimationsControllers[0].playAnimation({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], progress: this._animationsSettings.progress });
+    }
+
+    _blurSettingsChangeHandler() {
+        this._blurScreen?.updateSettings(this.blurSettings);
     }
 }
 

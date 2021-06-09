@@ -8,18 +8,18 @@ import BlurPlaneBuffer from '../buffers/BlurPlaneBuffer';
 import vertex from '../shaders/censorship/vertex.glsl';
 import fragment from '../shaders/censorship/fragment.glsl';
 
-const BLUR_INTENSITY_FACTOR = 1;
+// Data
+import data from '@/webgl/data';
 
 // Reduce to improve performances
-const BUFFER_QUALITY_FACTOR = 0.4;
+const BUFFER_QUALITY_FACTOR = 0.2;
 
 class BlurScreen {
     constructor(options) {
-        this._settings = {
-            blur: options.blurFactor * BLUR_INTENSITY_FACTOR,
-        };
+        this._settings = options.settings || data.settings.blur;
 
         this._blurFactor = options.blurFactor;
+        this._blurValue = options.blurFactor * this._settings.intensityFactor;
 
         this._width = options.width;
         this._height = options.height;
@@ -35,11 +35,11 @@ class BlurScreen {
     }
 
     get blur() {
-        return this._settings.blur;
+        return this._blurValue;
     }
 
     set blur(value) {
-        this._settings.blur = value * BLUR_INTENSITY_FACTOR;
+        this._blurValue = value * this._settings.intensityFactor;
     }
 
     get blurFactor() {
@@ -48,7 +48,16 @@ class BlurScreen {
 
     set blurFactor(factor) {
         this._blurFactor = factor;
-        this._settings.blur = factor * BLUR_INTENSITY_FACTOR;
+        this._blurValue = factor * this._settings.intensityFactor;
+    }
+
+    get blurIntensityFactor() {
+        return this._settings.intensityFactor;
+    }
+
+    set blurIntensityFactor(factor) {
+        this._settings.intensityFactor = factor;
+        this._blurValue = this._blurFactor * this._settings.intensityFactor;
     }
 
     get planeSize() {
@@ -102,6 +111,15 @@ class BlurScreen {
         this._applyBlur();
     }
 
+    updateSettings(settings) {
+        this._settings = settings;
+
+        this._bufferA.updateSettings(this._settings);
+        this._bufferB.updateSettings(this._settings);
+
+        this._blurValue = this._blurFactor * this._settings.intensityFactor;
+    }
+
     /**
      * Private
      */
@@ -148,13 +166,13 @@ class BlurScreen {
     }
 
     _createBufferA() {
-        const buffer = new BlurPlaneBuffer(this._bufferWidth, this._bufferHeight, this._screenTexture, this._maskTexture, this._settings.blur);
+        const buffer = new BlurPlaneBuffer(this._bufferWidth, this._bufferHeight, this._screenTexture, this._maskTexture, this._blurValue, this._settings);
 
         return buffer;
     }
 
     _createBufferB() {
-        const buffer = new BlurPlaneBuffer(this._bufferWidth, this._bufferHeight, this._screenTexture, this._maskTexture, this._settings.blur);
+        const buffer = new BlurPlaneBuffer(this._bufferWidth, this._bufferHeight, this._screenTexture, this._maskTexture, this._blurValue, this._settings);
 
         return buffer;
     }
@@ -192,7 +210,7 @@ class BlurScreen {
         this._bufferB.plane.material.uniforms.u_blur_factor.value = this._blurFactor;
 
         for (let i = 0; i < iterations; i++) {
-            const radius = (iterations - i - 1) * this._settings.blur;
+            const radius = (iterations - i - 1) * this._blurValue;
             writeBuffer.plane.material.uniforms.u_blur_direction.value.x = i % 2 === 0 ? radius : 0;
             writeBuffer.plane.material.uniforms.u_blur_direction.value.y = i % 2 === 0 ? 0 : radius;
 

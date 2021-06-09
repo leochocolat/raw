@@ -41,6 +41,7 @@ class RenderTargetScene extends THREE.Scene {
         };
 
         this._interactionsSettings = JSON.parse(JSON.stringify(data.settings.mouseInteractions));
+        this._blurSettings = JSON.parse(JSON.stringify(data.settings.blur));
 
         this._sceneModelsCount = JSON.parse(JSON.stringify(data.sceneModelsCount));
 
@@ -94,6 +95,10 @@ class RenderTargetScene extends THREE.Scene {
 
     get interactionsSettings() {
         return this._interactionsSettings;
+    }
+
+    get blurSettings() {
+        return this._blurSettings;
     }
 
     get animationControllers() {
