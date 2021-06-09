@@ -28,9 +28,10 @@ class BlurScreen {
         this._screenMesh = options.scenePlane;
         this._maskTexture = options.maskTexture;
         this._screenTexture = options.screenTexture;
+        this._initialTexture = options.initialTexture || this._screenTexture;
         this._planeSize = options.size;
         this._screenAlpha = options.isScreenOff ? 0.0 : 1.0;
-        this._isBlured = options.isInitiallyBlured;
+        this._isBlured = !(options.isInitiallyBlured === false);
 
         this._setup();
     }
@@ -194,7 +195,7 @@ class BlurScreen {
 
     _createFinalPlane() {
         const uniforms = {
-            u_texture_initial: { value: this._screenTexture },
+            u_texture_initial: { value: this._initialTexture },
             u_blur_mask: { value: this._maskTexture },
             u_texture: { value: this._screenTexture },
             u_size: { value: new THREE.Vector2(this._bufferWidth, this._bufferHeight) },

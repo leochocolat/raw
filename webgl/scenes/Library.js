@@ -68,7 +68,7 @@ class Library extends RenderTargetScene {
 
             this._oldGirlAnimationsControllers[0].playAnimation({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], progress: this._animationsSettings.progress });
 
-            this._blurScreen.screenTexture.image.play();
+            this._initialeScreenTexture.image.play();
 
             this._playAudios();
         }, null, 0);
@@ -204,7 +204,6 @@ class Library extends RenderTargetScene {
         this._initialeScreenTexture = this._resources.get('video_library_001');
         this._finaleScreenTexture = this._resources.get('video-gore-test');
         const maskTexture = this._resources.get('blur-mask-test');
-        maskTexture.flipY = false;
 
         const screen = this._model.scene.getObjectByName('Interaction_Screen');
         const container = new THREE.Box3().setFromObject(screen);
@@ -221,7 +220,8 @@ class Library extends RenderTargetScene {
             blurFactor: this.censorshipFactor,
             scenePlane: screen,
             maskTexture,
-            screenTexture: this._initialeScreenTexture,
+            screenTexture: this._finaleScreenTexture,
+            initialTexture: this._initialeScreenTexture,
             renderer: this._renderer,
             width: this._width,
             height: this._height,
@@ -230,20 +230,19 @@ class Library extends RenderTargetScene {
             isInitiallyBlured: false,
         });
 
-        this._blurScreen.screenTexture.image.addEventListener('ended', this._applyFinaleScreenTexture, null);
+        this._initialeScreenTexture.image.addEventListener('ended', this._applyFinaleScreenTexture, null);
 
         // Debug
         // setTimeout(this._applyFinaleScreenTexture, 1000);
     }
 
     _applyFinaleScreenTexture() {
-        this._finaleScreenTexture.flipY = false;
-        this._blurScreen.screenTexture = this._finaleScreenTexture;
+        // this._blurScreen.screenTexture = this._finaleScreenTexture;
         this._blurScreen.isBlured = true;
     }
 
     _resetInitialScreenTexture() {
-        this._blurScreen.screenTexture = this._initialeScreenTexture;
+        // this._blurScreen.screenTexture = this._initialeScreenTexture;
         this._blurScreen.isBlured = false;
     }
 

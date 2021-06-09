@@ -99,6 +99,7 @@ const webgl = [
             loop: true,
             muted: true,
             playsinline: true,
+            flipY: true,
         },
     },
     {
@@ -111,6 +112,7 @@ const webgl = [
             loop: true,
             muted: true,
             playsinline: true,
+            flipY: true,
         },
     },
 ];
