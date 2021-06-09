@@ -13,6 +13,8 @@ import math from '@/utils/math';
 import bindAll from '@/utils/bindAll';
 import AudioManager from '@/utils/AudioManager';
 
+const RENDER_TARGET_SIZE_FACTOR = 0.5;
+
 class RenderTargetScene extends THREE.Scene {
     constructor(options) {
         super();
@@ -344,15 +346,15 @@ class RenderTargetScene extends THREE.Scene {
         this._width = width;
         this._height = height;
 
-        this._renderTarget.setSize(this._width, this._height);
-        this._cameras.resize(width, height);
+        this._renderTarget.setSize(this._width * RENDER_TARGET_SIZE_FACTOR, this._height * RENDER_TARGET_SIZE_FACTOR);
+        this._cameras.resize(width * RENDER_TARGET_SIZE_FACTOR, height * RENDER_TARGET_SIZE_FACTOR);
     }
 
     /**
      * Private
      */
     _createRenderTarget() {
-        const renderTarget = new THREE.WebGLRenderTarget(this._width, this._height);
+        const renderTarget = new THREE.WebGLRenderTarget(this._width * RENDER_TARGET_SIZE_FACTOR, this._height * RENDER_TARGET_SIZE_FACTOR);
 
         return renderTarget;
     }
@@ -384,8 +386,8 @@ class RenderTargetScene extends THREE.Scene {
             isActive: this._isActive,
             debugger: this._debugger,
             debugFolder: this._debugFolder,
-            width: this._width,
-            height: this._height,
+            width: this._width * RENDER_TARGET_SIZE_FACTOR,
+            height: this._height * RENDER_TARGET_SIZE_FACTOR,
             camera: this._camera,
         });
 

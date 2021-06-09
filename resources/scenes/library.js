@@ -59,10 +59,26 @@ const resources = [
         },
     },
 
+    // {
+    //     type: 'video-texture',
+    //     name: 'video_library_001',
+    //     path: '/videos/video_library_001.mp4',
+    //     namespace: 'library',
+    //     preload: false,
+    //     options: {
+    //         autoplay: false,
+    //         loop: false,
+    //         muted: true,
+    //         playsinline: true,
+    //         flipY: false,
+    //         pausedAfterPlay: true,
+    //     },
+    // },
+
     {
         type: 'video-texture',
         name: 'video_library_001',
-        path: '/videos/video_library_001.mp4',
+        path: '/videos/video_library_001_shorter.mp4',
         namespace: 'library',
         preload: false,
         options: {
