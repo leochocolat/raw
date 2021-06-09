@@ -11,6 +11,9 @@ import { ResourceManager } from '@/utils/resource-loader';
 // Scene
 import DebugScene from './DebugScene';
 
+// Data
+import data from '@/webgl/data';
+
 class BlurEditor extends DebugScene {
     constructor(options) {
         super(options);
@@ -26,6 +29,7 @@ class BlurEditor extends DebugScene {
         this._settings = {
             filename: 'blur-mask',
             blurImageFilename: 'blur-image',
+            blur: data.settings.blur,
         };
 
         this._resources = this._setupResources();
@@ -63,6 +67,7 @@ class BlurEditor extends DebugScene {
 
         this._canvasBlurEditor?.update();
         this._blurScreen?.update();
+        this._blurScreen?.updateSettings(this._settings.blur);
     }
 
     destroy() {
@@ -103,6 +108,7 @@ class BlurEditor extends DebugScene {
             renderer: this._renderer,
             width: this._width,
             height: this._height,
+            settings: this._settings.blur,
         });
 
         this._resizePlane();
@@ -114,6 +120,7 @@ class BlurEditor extends DebugScene {
         resources.addByName('test-blur');
         resources.addByName('video_test_0');
         resources.addByName('blur-mask-test');
+        resources.addByName('video-gore-test');
 
         resources.load();
 
@@ -200,6 +207,7 @@ class BlurEditor extends DebugScene {
             folder: inputTabs.pages[1],
             options: {
                 'video_test_0': this._resources.get('video_test_0').image.src,
+                'video-gore-test': this._resources.get('video-gore-test').image.src,
             },
         });
         inputVideo.on('update', this._videoUpdateHandler);
@@ -246,6 +254,9 @@ class BlurEditor extends DebugScene {
 
         // Blur
         const blurFolder = this._debugFolder.addFolder({ title: 'Blur Effect' });
+        blurFolder.addInput(this._settings.blur, 'spreadingTreshold', { min: 0, max: 0.5 });
+        blurFolder.addInput(this._settings.blur, 'wobbleIntensity', { min: 0, max: 1 });
+        blurFolder.addInput(this._settings.blur, 'intensityFactor', { min: 0, max: 10 });
         blurFolder.addInput(this._blurScreen, 'blurFactor', { min: 0, max: 1, label: 'Blur Factor' });
 
         this._debugFolder.expanded = true;

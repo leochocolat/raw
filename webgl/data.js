@@ -21,6 +21,12 @@ const data = {
             rotationFactor: { x: -30, y: 30 },
             damping: 0.1,
         },
+
+        blur: {
+            wobbleIntensity: 0.5,
+            spreadingTreshold: 0.05,
+            intensityFactor: 2,
+        },
     },
 
     colors: [

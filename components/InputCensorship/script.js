@@ -1,5 +1,6 @@
 // Vendor
 import gsap from 'gsap';
+import { mapGetters } from 'vuex';
 
 // Components
 import ArrowDown from '@/assets/icons/arrow-down.svg?inline';
@@ -49,6 +50,18 @@ export default {
                 en: 'Choice confirmed',
             },
         };
+    },
+
+    computed: {
+        ...mapGetters({
+            isWebglReady: 'isWebglReady',
+        }),
+    },
+
+    watch: {
+        isWebglReady() {
+            this.initCensorship();
+        },
     },
 
     mounted() {
@@ -118,7 +131,10 @@ export default {
         },
 
         initCensorship() {
+            if (!this.$root.webglApp) return;
             this.$root.webglApp.debugSceneManager?.scene.setCensorship(this.newCensorshipFactor);
+            this.$root.webglApp.sceneManager.scenes[this.scene.id].censorshipFactor = this.newCensorshipFactor;
+            // this.$root.webglApp.sceneManager.scenes[this.scene.id].setCensorship(this.newCensorshipFactor);
         },
 
         initDragPosition() {
@@ -163,8 +179,9 @@ export default {
                 this.$root.webglApp.debugSceneManager.scene.setCensorship(this.newCensorshipFactor);
             }
 
-            if (this.$root.webglApp.sceneManager?.scenes[this.scene.id].setCensorship) {
-                this.$root.webglApp.sceneManager.scenes[this.scene.id].setCensorship(this.newCensorshipFactor);
+            if (this.$root.webglApp.sceneManager?.scenes[this.scene.id]) {
+                this.$root.webglApp.sceneManager.scenes[this.scene.id].censorshipFactor = this.newCensorshipFactor;
+                // this.$root.webglApp.sceneManager.scenes[this.scene.id].setCensorship(this.newCensorshipFactor);
             }
         },
 

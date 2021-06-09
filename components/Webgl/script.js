@@ -49,5 +49,7 @@ export default {
 
         this.$root.webglApp.sceneManager?.setMenuState(this.menuState);
         this.$root.webglApp.sceneManager?.setActiveScene(this.activeScene);
+
+        this.$store.dispatch('setWebglReady');
     },
 };

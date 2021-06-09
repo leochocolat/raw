@@ -3,7 +3,7 @@ import WindowResizeObserver from '@/utils/WindowResizeObserver';
 import { mapGetters } from 'vuex';
 
 export default {
-    props: ['name', 'side'],
+    props: ['name', 'side', 'scale'],
 
     computed: {
         ...mapGetters({
@@ -53,6 +53,7 @@ export default {
             this.webglImage = this.$root.webglApp.sceneManager.UILayer.createImage({
                 name: this.name,
                 side: this.side,
+                scale: this.scale,
                 containerBounds: this.containerBounds,
             });
         },

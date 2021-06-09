@@ -1,5 +1,5 @@
 <template>
-    <div ref="container" class="censorship-messages">
+    <div ref="container" class="censorship-messages" @mouseenter="mouseenterHandler" @mouseleave="mouseleaveHandler">
 
         <div ref="square" class="square"></div>
 

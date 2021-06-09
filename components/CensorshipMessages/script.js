@@ -177,6 +177,14 @@ export default {
             });
         },
 
+        mouseenterHandler() {
+            gsap.to(this, { duration: 0.1, speed: 0 });
+        },
+
+        mouseleaveHandler() {
+            gsap.to(this, { duration: 0.1, speed: 1 });
+        },
+
         /**
          * Utils
          */

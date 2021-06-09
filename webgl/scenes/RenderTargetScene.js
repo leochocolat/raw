@@ -28,6 +28,8 @@ class RenderTargetScene extends THREE.Scene {
         this._isActive = options.isActive;
         this._isVisible = options.isVisible;
 
+        this._blurScreen = null;
+
         this._cameraPosition = {
             current: new THREE.Vector3(0, 0, 0),
             target: new THREE.Vector3(0, 0, 0),
@@ -41,6 +43,7 @@ class RenderTargetScene extends THREE.Scene {
         };
 
         this._interactionsSettings = JSON.parse(JSON.stringify(data.settings.mouseInteractions));
+        this._blurSettings = JSON.parse(JSON.stringify(data.settings.blur));
 
         this._sceneModelsCount = JSON.parse(JSON.stringify(data.sceneModelsCount));
 
@@ -49,6 +52,8 @@ class RenderTargetScene extends THREE.Scene {
         this._clock = new THREE.Clock();
         this._sceneFps = 0;
         this._sceneDelta = 0;
+
+        this._censorshipFactor = 0.5;
 
         this._renderTarget = this._createRenderTarget();
         this._ambientLight = this._createAmbientLight();
@@ -96,12 +101,29 @@ class RenderTargetScene extends THREE.Scene {
         return this._interactionsSettings;
     }
 
+    get blurSettings() {
+        return this._blurSettings;
+    }
+
     get animationControllers() {
         return this._animationControllers;
     }
 
     get sceneModelsCount() {
         return this._sceneModelsCount;
+    }
+
+    get censorshipFactor() {
+        return this._censorshipFactor;
+    }
+
+    set censorshipFactor(factor) {
+        this._censorshipFactor = factor;
+        if (this._blurScreen) this._blurScreen.blur = factor;
+    }
+
+    get blurScreen() {
+        return this._blurScreen;
     }
 
     show() {

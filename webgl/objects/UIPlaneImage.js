@@ -15,14 +15,16 @@ class UIPlaneImage extends THREE.Mesh {
         this._canvasHeight = options.canvasHeight;
 
         this._name = options.name;
+        this._scale = options.scale;
         this._side = options.side;
         this._containerBounds = options.containerBounds;
+        this._scenes = options.scenes;
         this._debugFolder = options.debugFolder;
 
         this.geometry = this._createGeometry();
         this.material = this._createMaterial();
 
-        this._loadTexture();
+        // this._loadTexture();
 
         this._setupDebug();
     }
@@ -50,6 +52,17 @@ class UIPlaneImage extends THREE.Mesh {
 
     update(time, delta) {
         this.material.uniforms.u_time.value = time;
+
+        if (this._scenes && this._scenes[this._name].blurScreen) {
+            const texture = this._scenes[this._name].blurScreen.meshTexture;
+            this.material.uniforms.u_texture.value = texture;
+
+            if (!this._texture) {
+                this._texture = texture;
+                this.material.needsUpdate = true;
+                this.resize();
+            }
+        }
     }
 
     transitionIn() {
@@ -86,10 +99,16 @@ class UIPlaneImage extends THREE.Mesh {
     resize(containerBounds) {
         if (containerBounds) this._containerBounds = containerBounds;
 
-        const ratio = this._texture.image.width / this._texture.image.height;
+        const videoAspectRatio = this._texture.image.videoWidth / this._texture.image.videoHeight;
+        const aspectRatio = this._texture.image.width / this._texture.image.height;
 
-        this._size = new THREE.Vector2(this._containerBounds.width / 2, (this._containerBounds.width / 2) / ratio);
-        this._offsetX = this._side === 'left' ? this._size.x / 2 : -this._size.x / 2;
+        const ratio = aspectRatio || videoAspectRatio;
+
+        const planeWidth = this._containerBounds.width / 2;
+        const planeHeight = (this._containerBounds.width / 2) / ratio;
+
+        this._size = new THREE.Vector2(planeWidth * this._scale, planeHeight * this._scale);
+        this._offsetX = this._side === 'left' ? (this._size.x / 2) / this._scale : -(this._size.x / 2) / this._scale;
 
         this.scale.set(this._size.x, this._size.y, 1);
         this.position.set(this._offsetX, 0, 0.1);
@@ -122,6 +141,7 @@ class UIPlaneImage extends THREE.Mesh {
             u_rgb_shift_angle: { value: new THREE.Vector2(0.0, 1.0) },
             // Alpha
             u_alpha: { value: 0.0 },
+            u_black_filter: { value: 0.05 },
         };
 
         const material = new THREE.ShaderMaterial({

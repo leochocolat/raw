@@ -16,6 +16,7 @@ uniform float u_rgb_shift_amount;
 uniform vec2 u_rgb_shift_angle;
 // Alpha
 uniform float u_alpha;
+uniform float u_black_filter;
 
 const float PI = 3.14159265;
 
@@ -60,9 +61,14 @@ void main() {
     uv.x += vertical_bar(uv.y, u_distortion_intensity, 0.8, 87.0);
     uv.x += vertical_bar(uv.y, u_distortion_intensity, 0.5, 87.0);
 
+
     vec4 texel = texture2D(u_texture, uv + wobbl);
     texel = RGBShift(uv + wobbl, u_rgb_shift_angle, u_rgb_shift_amount, u_texture);
     texel.a = u_alpha;
+
+    float monochome = step(u_black_filter, texel.r + texel.g + texel.b / 3.0);
+
+    if (monochome == 0.0) discard;
 
     gl_FragColor = texel;
 }

@@ -49,7 +49,8 @@ export default {
          * Public
          */
         start() {
-            this.screens = [...this.$refs.context, this.$refs.warning, this.$refs.instructions, this.$refs.stop, this.$refs.screenLogo];
+            const context = this.$refs.context || [];
+            this.screens = [...context, this.$refs.warning, this.$refs.instructions, this.$refs.stop, this.$refs.screenLogo];
 
             const contextSteps = [];
             for (let i = 0; i < this.$refs.context.length; i++) {
