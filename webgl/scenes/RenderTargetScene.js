@@ -51,6 +51,8 @@ class RenderTargetScene extends THREE.Scene {
         this._sceneFps = 0;
         this._sceneDelta = 0;
 
+        this._censorshipFactor = 0.5;
+
         this._renderTarget = this._createRenderTarget();
         this._ambientLight = this._createAmbientLight();
         this._debugFolder = this._createDebugFolder();
@@ -107,6 +109,15 @@ class RenderTargetScene extends THREE.Scene {
 
     get sceneModelsCount() {
         return this._sceneModelsCount;
+    }
+
+    get censorshipFactor() {
+        return this._censorshipFactor;
+    }
+
+    set censorshipFactor(factor) {
+        this._censorshipFactor = factor;
+        if (this._blurScreen) this._blurScreen.blur = factor;
     }
 
     show() {

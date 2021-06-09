@@ -183,7 +183,7 @@ class Supermarket extends RenderTargetScene {
         size.y = height;
 
         this._blurScreen = new BlurScreen({
-            blurFactor: 0.5,
+            blurFactor: this.censorshipFactor,
             scenePlane: screen,
             maskTexture,
             screenTexture,

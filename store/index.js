@@ -1,5 +1,6 @@
 export const state = () => ({
     message: '',
+    isWebglReady: false,
     instructions: '',
     isFinalInstruction: false,
 });
@@ -7,6 +8,10 @@ export const state = () => ({
 export const mutations = {
     SET_MESSAGE(state, message) {
         state.message = message;
+    },
+
+    SET_WEBGL_READY(state) {
+        state.isWebglReady = true;
     },
 
     SET_INSTRUCTIONS(state, instructions) {
@@ -23,6 +28,10 @@ export const actions = {
         commit('SET_MESSAGE', payload.message);
     },
 
+    setWebglReady({ commit }) {
+        commit('SET_WEBGL_READY');
+    },
+
     setInstructions({ commit }, instructions) {
         commit('SET_INSTRUCTIONS', instructions);
     },
@@ -33,8 +42,8 @@ export const actions = {
 };
 
 export const getters = {
-    setup({ commit }, payload) {
-        commit('SET_MESSAGE', payload.message);
+    isWebglReady(state) {
+        return state.isWebglReady;
     },
 
     instructions(state) {
