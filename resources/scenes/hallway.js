@@ -12,14 +12,14 @@ const resources = [
     {
         type: 'gltf',
         name: 'LyceenHomme',
-        path: '/models/LyceenHomme.glb',
+        path: '/models/hallway/LyceenHomme.glb',
         namespace: 'hallway',
         preload,
     },
     {
         type: 'gltf',
         name: 'LyceenFemme',
-        path: '/models/LyceenFemme.glb',
+        path: '/models/hallway/LyceenFemme.glb',
         namespace: 'hallway',
         preload,
     },
