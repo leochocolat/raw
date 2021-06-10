@@ -41,7 +41,7 @@ class ScreensContainer extends THREE.Mesh {
         this._timelineEffectOut?.kill();
 
         this._timelineEffectIn = new gsap.timeline();
-        this._timelineEffectIn.to(this.material.uniforms.u_global_intensity, { value: 1.0, duration: 1.5, ease: 'sine.out' });
+        this._timelineEffectIn.to(this.material.uniforms.u_global_intensity, { value: 1.0, duration: 2, ease: 'power0.none' });
 
         return this._timelineEffectIn;
     }
@@ -50,7 +50,7 @@ class ScreensContainer extends THREE.Mesh {
         this._timelineEffectIn?.kill();
 
         this._timelineEffectOut = new gsap.timeline();
-        this._timelineEffectOut.to(this.material.uniforms.u_global_intensity, { value: 0.0, duration: 1.5, ease: 'sine.out' });
+        this._timelineEffectOut.to(this.material.uniforms.u_global_intensity, { value: 0.3, duration: 1.5, ease: 'power0.none' });
 
         return this._timelineEffectOut;
     }
