@@ -13,6 +13,9 @@ import AudioManager from '@/utils/AudioManager';
 import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
 import BlurScreen from '../utils/BlurScreen';
 
+// Data
+import data from '@/webgl/data';
+
 // Shader
 import vertex from '../shaders/isolationScreen/vertex.glsl';
 import fragment from '../shaders/isolationScreen/fragment.glsl';
@@ -129,9 +132,11 @@ class Library extends RenderTargetScene {
      */
     _setupResources() {
         const resources = new ResourceManager({ name: 'library', namespace: 'library' });
-        resources.addByName('blur-mask-test');
-        resources.addByName('video-gore-test');
-        resources.addByName('texture-gore-test');
+
+        if (data.textures[this.sceneName].addToResourceManager) {
+            resources.addByName(data.textures[this.sceneName].violent);
+            resources.addByName(data.textures[this.sceneName].mask);
+        }
 
         resources.load();
 
@@ -199,8 +204,8 @@ class Library extends RenderTargetScene {
 
     _setupInteractionScreen() {
         this._initialeScreenTexture = this._resources.get('video_library_001');
-        this._finaleScreenTexture = this._resources.get('video-gore-test');
-        const maskTexture = this._resources.get('blur-mask-test');
+        this._finaleScreenTexture = this._resources.get(data.textures[this.sceneName].violent);
+        const maskTexture = this._resources.get(data.textures[this.sceneName].mask);
 
         const screen = this._model.scene.getObjectByName('Interaction_Screen');
         const container = new THREE.Box3().setFromObject(screen);

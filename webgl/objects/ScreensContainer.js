@@ -79,6 +79,14 @@ class ScreensContainer extends THREE.Mesh {
         this.material.uniforms.u_resolution.value.set(this._width, this._height);
     }
 
+    destroy() {
+        this.geometry.dispose();
+        this.geometry = null;
+
+        this.material.dispose();
+        this.material = null;
+    }
+
     /**
      * Private
      */

@@ -4,6 +4,20 @@
 
 read -p 'input directory? ' INPUT_DIRECTORY
 
+read -r -p "Flip Y? [Y/n] " flipYInput
+
+case $flipYInput in
+    [yY][eE][sS]|[yY])
+		flipY=true
+		;;
+    [nN][oO]|[nN])
+       		;;
+    *)
+	echo "Invalid input..."
+	exit 1
+	;;
+esac
+
 if [ ! -d "$INPUT_DIRECTORY" ]; then
     echo "$INPUT_DIRECTORY is not a directory. exit script."
     exit 1
@@ -36,6 +50,8 @@ do
         continue
     fi
 
+    # "-y_flip";
+
     # Execute encoding
-    $BASISU $TEXTURE -q 255 -output_path $OUTPUT_DIRECTORY
+    $BASISU $TEXTURE -q 255 -output_path $OUTPUT_DIRECTORY 
 done

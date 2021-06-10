@@ -48,6 +48,13 @@ const resources = [
             flipY: false,
         },
     },
+    {
+        type: 'basis',
+        name: 'bar_texture_violent',
+        namespace: 'bar',
+        path: '/textures/basis/bar_texture_violent.basis',
+        preload,
+    },
     // Sounds
     {
         type: 'audio',

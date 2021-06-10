@@ -57,7 +57,6 @@ class RenderTargetScene extends THREE.Scene {
         this._censorshipFactor = 0.5;
 
         this._renderTarget = this._createRenderTarget();
-        this._ambientLight = this._createAmbientLight();
         this._debugFolder = this._createDebugFolder();
         this._cameras = this._createCameras();
         this._uniforms = this._createUniforms();
@@ -68,6 +67,10 @@ class RenderTargetScene extends THREE.Scene {
      */
     get sceneId() {
         return this._id;
+    }
+
+    get sceneName() {
+        return this._name;
     }
 
     get uniforms() {
@@ -349,6 +352,20 @@ class RenderTargetScene extends THREE.Scene {
         this._cameras.resize(width * RENDER_TARGET_SIZE_FACTOR, height * RENDER_TARGET_SIZE_FACTOR);
     }
 
+    destroy() {
+        this._renderTarget.dispose();
+        this._renderTarget = null;
+        this._cameras = null;
+
+        this._cameraPosition = null;
+        this._cameraRotation = null;
+
+        this._animationControllers = null;
+
+        this._uniforms = null;
+        this._debugFolder = null;
+    }
+
     /**
      * Private
      */
@@ -428,13 +445,6 @@ class RenderTargetScene extends THREE.Scene {
         this.cameras.main.position.set(this._cameraPosition.current.x, this._cameraPosition.current.z, this._cameraPosition.current.y);
         this.cameras.main.rotation.x = this._cameraRotation.current.x;
         this.cameras.main.rotation.y = this._cameraRotation.current.y;
-    }
-
-    _createAmbientLight() {
-        const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-        this.add(ambientLight);
-
-        return ambientLight;
     }
 
     _createDebugFolder() {

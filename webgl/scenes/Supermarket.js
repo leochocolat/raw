@@ -13,6 +13,9 @@ import AudioManager from '@/utils/AudioManager';
 import cloneSkinnedMesh from '@/utils/cloneSkinnedMesh';
 import BlurScreen from '../utils/BlurScreen';
 
+// Data
+import data from '@/webgl/data';
+
 // Shader
 import vertex from '../shaders/isolationScreen/vertex.glsl';
 import fragment from '../shaders/isolationScreen/fragment.glsl';
@@ -104,9 +107,11 @@ class Supermarket extends RenderTargetScene {
 
         });
 
-        resources.addByName('blur-mask-test');
-        resources.addByName('texture-gore-test');
-        resources.addByName('video-gore-test');
+        if (data.textures[this.sceneName].addToResourceManager) {
+            resources.addByName(data.textures[this.sceneName].violent);
+            resources.addByName(data.textures[this.sceneName].mask);
+        }
+
         resources.load();
 
         return resources;
@@ -115,7 +120,6 @@ class Supermarket extends RenderTargetScene {
     _setup() {
         this._sceneMaterial = this._createSceneMaterial();
         this._model = this._createModel();
-        console.log(this._model);
         this._interactionScreen = this._setupInteractionScreen();
         this._modelCamera = this._createModelCameraAnimation();
         this._createHumanModels();
@@ -175,9 +179,8 @@ class Supermarket extends RenderTargetScene {
     }
 
     _setupInteractionScreen() {
-        // const screenTexture = this._resources.get('texture-gore-test');
-        const screenTexture = this._resources.get('video-gore-test');
-        const maskTexture = this._resources.get('blur-mask-test');
+        const screenTexture = this._resources.get(data.textures[this.sceneName].violent);
+        const maskTexture = this._resources.get(data.textures[this.sceneName].mask);
 
         const screen = this._model.scene.getObjectByName('Interaction_Screen');
         const container = new THREE.Box3().setFromObject(screen);

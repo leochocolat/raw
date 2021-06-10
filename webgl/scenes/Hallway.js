@@ -103,9 +103,12 @@ class Hallway extends RenderTargetScene {
             name: 'hallway',
             namespace: 'hallway',
         });
-        resources.addByName('blur-mask-test');
-        resources.addByName('texture-gore-test');
-        resources.addByName('video-gore-test');
+
+        if (data.textures[this.sceneName].addToResourceManager) {
+            resources.addByName(data.textures[this.sceneName].violent);
+            resources.addByName(data.textures[this.sceneName].mask);
+        }
+
         resources.load();
 
         return resources;
@@ -171,9 +174,8 @@ class Hallway extends RenderTargetScene {
     }
 
     _setupInteractionScreen() {
-        // const screenTexture = this._resources.get('texture-gore-test');
-        const screenTexture = this._resources.get('video-gore-test');
-        const maskTexture = this._resources.get('blur-mask-test');
+        const screenTexture = this._resources.get(data.textures[this.sceneName].violent);
+        const maskTexture = this._resources.get(data.textures[this.sceneName].mask);
 
         const screen = this._model.scene.getObjectByName('Interaction_Screen');
         const container = new THREE.Box3().setFromObject(screen);

@@ -44,8 +44,13 @@ class Screen extends DebugScene {
      * Private
      */
     _setup() {
-        this._texture = this._resources.get('test-blur');
-        this._textureVideo = this._resources.get('video_test_0');
+        // this._texture = this._resources.get('test-blur');
+        // this._texture = this._resources.get('test-blur');
+        // this._textureVideo = this._resources.get('video_test_0');
+        this._textureVideo = this._resources.get('bar_texture_violent');
+        // this._textureVideo.flipY = false;
+        console.log(this._textureVideo);
+        console.log(this._textureVideo.flipY);
 
         this._textureAspectRatio = this._getTextureAspectRatio(this._textureVideo);
 
@@ -118,6 +123,7 @@ class Screen extends DebugScene {
         const resources = new ResourceManager({ name: 'screen' });
         resources.addByName('video_test_0');
         resources.addByName('test-blur');
+        resources.addByName('bar_texture_violent');
         resources.load();
 
         return resources;

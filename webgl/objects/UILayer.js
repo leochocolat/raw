@@ -61,6 +61,14 @@ class UILayer extends THREE.Object3D {
         }
     }
 
+    destroy() {
+        for (let i = 0; i < this._planes.length; i++) {
+            const plane = this._planes[i];
+            plane.geometry.dispose();
+            plane.material.dispose();
+        }
+    }
+
     /**
      * Private
      */

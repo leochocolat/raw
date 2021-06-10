@@ -200,7 +200,13 @@ class SceneManager extends THREE.Scene {
     }
 
     destroy() {
+        for (const key in this._scenes) {
+            const scene = this._scenes[key];
+            scene.destroy();
+        }
 
+        this._screensContainer.destroy();
+        this._UILayer.destroy();
     }
 
     setScenesComplete() {

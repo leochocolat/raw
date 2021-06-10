@@ -51,6 +51,13 @@ const data = {
         bar: { duration: 24.33 },
     },
 
+    textures: {
+        hallway: { violent: 'supermarket_texture_violent', mask: 'blur-mask-test', addToResourceManager: true },
+        library: { violent: 'supermarket_texture_violent', mask: 'blur-mask-test', addToResourceManager: true },
+        supermarket: { violent: 'supermarket_texture_violent', mask: 'blur-mask-test', addToResourceManager: true },
+        bar: { violent: 'supermarket_texture_violent', mask: 'blur-mask-test', addToResourceManager: true },
+    },
+
     sceneModelsCount: {
         hallway: 2,
         library: 2,

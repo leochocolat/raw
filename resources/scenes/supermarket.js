@@ -41,6 +41,16 @@ const resources = [
             flipY: true,
         },
     },
+    {
+        type: 'basis',
+        name: 'supermarket_texture_violent',
+        namespace: 'supermarket',
+        path: '/textures/basis/supermarket_texture_violent.basis',
+        preload,
+        options: {
+            flipY: true,
+        },
+    },
     // Sounds
     {
         type: 'audio',
