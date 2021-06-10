@@ -84,19 +84,23 @@ const webgl = [
             flipY: true,
         },
     },
-
-    // Test Animations
     {
-        type: 'texture',
-        name: 'tex1',
-        path: '/textures/tex1.jpg',
+        type: 'basis',
+        name: 'texture_lycee_femme',
+        path: '/textures/basis/texture_lycee_femme.basis',
         preload: false,
+        options: {
+            flipY: true,
+        },
     },
     {
-        type: 'texture',
-        name: 'tex2',
-        path: '/textures/tex2.jpg',
+        type: 'basis',
+        name: 'texture_lycee_homme',
+        path: '/textures/basis/texture_lycee_homme.basis',
         preload: false,
+        options: {
+            flipY: true,
+        },
     },
     // Test Blur
     {
