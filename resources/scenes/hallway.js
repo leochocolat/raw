@@ -31,6 +31,13 @@ const resources = [
         path: '/textures/basis/scene_hallway.basis',
         preload,
     },
+    {
+        type: 'basis',
+        name: 'hallway_texture_violent',
+        namespace: 'bar',
+        path: '/textures/basis/hallway_texture_violent.basis',
+        preload,
+    },
     // {
     //     type: 'basis',
     //     name: 'texture_hallway_items',
