@@ -45,7 +45,7 @@ const resources = [
         path: '/textures/hallway_texture_mask.png',
         preload,
         options: {
-            flipY: true,
+            flipY: false,
         },
     },
     // {
