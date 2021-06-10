@@ -52,6 +52,14 @@ class Supermarket extends RenderTargetScene {
         return this._sceneMaterial;
     }
 
+    get humanModels() {
+        return this._humanModels;
+    }
+
+    get itemsModels() {
+        return this._itemsModels;
+    }
+
     transitionIn() {
         super.transitionIn();
 
@@ -146,7 +154,7 @@ class Supermarket extends RenderTargetScene {
         const texture = this._resources.get('texture_supermarket');
 
         const uniforms = {
-            u_scene_texture: { value: texture },
+            u_texture: { value: texture },
             u_isolation_alpha: { value: 1.0 },
         };
 
@@ -163,8 +171,14 @@ class Supermarket extends RenderTargetScene {
     _createModel() {
         const textureItems = this._resources.get('texture_supermarket_items');
         const model = this._resources.get('supermarket');
+        this._itemsModels = [];
+
+        const uniforms = {
+            u_texture: { value: textureItems },
+            u_isolation_alpha: { value: 1.0 },
+        };
+
         const clone = model;
-        this.add(clone.scene);
 
         clone.scene.traverse((child) => {
             child.frustumCulled = false;
@@ -174,9 +188,20 @@ class Supermarket extends RenderTargetScene {
             if (child.isMesh && child.name === 'scene_supermarket') {
                 child.material = this._sceneMaterial;
             } else if (child.isMesh) {
-                child.material = new THREE.MeshBasicMaterial({ map: textureItems, side: THREE.DoubleSide, skinning: true });
+                const material = new THREE.ShaderMaterial({
+                    side: THREE.DoubleSide,
+                    uniforms,
+                    vertexShader: vertex,
+                    fragmentShader: fragment,
+                    skinning: true,
+                });
+                this._itemsModels.push(child);
+
+                child.material = material;
             }
         });
+
+        this.add(clone.scene);
 
         return clone;
     }
@@ -251,6 +276,7 @@ class Supermarket extends RenderTargetScene {
     _createHumanModels() {
         this._manAnimationsControllers = [];
         this._oldGirlAnimationsControllers = [];
+        this._humanModels = [];
 
         const textureMan = this._resources.get('texture_adulte_homme');
         const textureOldGirl = this._resources.get('texture_vieux_femme');
@@ -319,17 +345,26 @@ class Supermarket extends RenderTargetScene {
     _createAnimatedMesh(model, index, texture) {
         const skinnedModelCloned = cloneSkinnedMesh(model);
         skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
-        // const animationController = new AnimationComponent({ model: skinnedModelCloned, animations: skinnedModelCloned.animations[index] });
-        const manMaterial = new THREE.MeshBasicMaterial({ map: texture, skinning: true });
 
+        const uniforms = {
+            u_texture: { value: texture },
+            u_isolation_alpha: { value: 1.0 },
+        };
+
+        const material = new THREE.ShaderMaterial({
+            side: THREE.DoubleSide,
+            uniforms,
+            vertexShader: vertex,
+            fragmentShader: fragment,
+            skinning: true,
+        });
         const mesh = skinnedModelCloned.scene.getObjectByName('skinned_mesh');
-        mesh.material = manMaterial;
+        mesh.material = material;
         mesh.frustumCulled = false;
+
+        this._humanModels.push(mesh);
+
         this.add(skinnedModelCloned.scene);
-
-        // this.animationControllers.push(animationController);
-
-        // return animationController;
     }
 
     /**
@@ -365,18 +400,12 @@ class Supermarket extends RenderTargetScene {
         for (let index = 0; index < this._mainAnimations.length; index++) {
             this._animationController.setAnimationProgress({ animation: this._animationController.actionType[this._mainAnimations[index]], progress: this._animationsSettings.progress });
         }
-
-        this._oldGirlAnimationsControllers[0].setAnimationProgress({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], progress: this._animationsSettings.progress });
-        this._manAnimationsControllers[0].setAnimationProgress({ animation: this._manAnimationsControllers[0].actionType[this._manAnimations[0]], progress: this._animationsSettings.progress });
     }
 
     _clickPlayAnimationsHandler() {
         for (let index = 0; index < this._mainAnimations.length; index++) {
             this._animationController.playAnimation({ animation: this._animationController.actionType[this._mainAnimations[index]], progress: this._animationsSettings.progress });
         }
-
-        this._oldGirlAnimationsControllers[0].playAnimation({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], progress: this._animationsSettings.progress });
-        this._manAnimationsControllers[0].playAnimation({ animation: this._manAnimationsControllers[0].actionType[this._manAnimations[0]], progress: this._animationsSettings.progress });
     }
 
     _blurSettingsChangeHandler() {

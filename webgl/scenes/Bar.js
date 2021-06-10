@@ -51,6 +51,14 @@ class Bar extends RenderTargetScene {
         return this._sceneMaterial;
     }
 
+    get humanModels() {
+        return this._humanModels;
+    }
+
+    get itemsModels() {
+        return this._itemsModels;
+    }
+
     transitionIn() {
         super.transitionIn();
 
@@ -153,7 +161,7 @@ class Bar extends RenderTargetScene {
         const texture = this._resources.get('texture_bar');
 
         const uniforms = {
-            u_scene_texture: { value: texture },
+            u_texture: { value: texture },
             u_isolation_alpha: { value: 1.0 },
         };
 
@@ -170,9 +178,14 @@ class Bar extends RenderTargetScene {
     _createModel() {
         const model = this._resources.get('bar');
         const textureItems = this._resources.get('texture_bar_items');
+        this._itemsModels = [];
+
+        const uniforms = {
+            u_texture: { value: textureItems },
+            u_isolation_alpha: { value: 1.0 },
+        };
 
         const clone = model;
-        this.add(clone.scene);
 
         clone.scene.traverse((child) => {
             child.frustumCulled = false;
@@ -182,9 +195,20 @@ class Bar extends RenderTargetScene {
             if (child.isMesh && child.name === 'scene_bar') {
                 child.material = this._sceneMaterial;
             } else if (child.isMesh) {
-                child.material = new THREE.MeshBasicMaterial({ map: textureItems, side: THREE.DoubleSide, skinning: true });
+                const material = new THREE.ShaderMaterial({
+                    side: THREE.DoubleSide,
+                    uniforms,
+                    vertexShader: vertex,
+                    fragmentShader: fragment,
+                    skinning: true,
+                });
+                this._itemsModels.push(child);
+
+                child.material = material;
             }
         });
+
+        this.add(clone.scene);
 
         return clone;
     }
@@ -239,6 +263,7 @@ class Bar extends RenderTargetScene {
     _createHumanModels() {
         this._humanAnimationControllers = [];
         this._oldManAnimationsControllers = [];
+        this._humanModels = [];
 
         const textureAdulteHomme = this._resources.get('texture_adulte_homme');
         const textureVieuxHomme = this._resources.get('texture_vieux_homme');
@@ -337,16 +362,29 @@ class Bar extends RenderTargetScene {
 
     _createAnimatedMesh(model, index, texture) {
         const skinnedModelCloned = cloneSkinnedMesh(model);
-        const manMaterial = new THREE.MeshBasicMaterial({ map: texture, skinning: true });
-
-        const mesh = skinnedModelCloned.scene.getObjectByName('skinned_mesh');
-        mesh.material = manMaterial;
-        mesh.frustumCulled = false;
+        skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
         const animationController = new AnimationComponent({ model: skinnedModelCloned, animations: skinnedModelCloned.animations[index] });
-        this.add(skinnedModelCloned.scene);
 
+        const uniforms = {
+            u_texture: { value: texture },
+            u_isolation_alpha: { value: 1.0 },
+        };
+
+        const material = new THREE.ShaderMaterial({
+            side: THREE.DoubleSide,
+            uniforms,
+            vertexShader: vertex,
+            fragmentShader: fragment,
+            skinning: true,
+        });
+        const mesh = skinnedModelCloned.scene.getObjectByName('skinned_mesh');
+        mesh.material = material;
+        mesh.frustumCulled = false;
+
+        this._humanModels.push(mesh);
         this.animationControllers.push(animationController);
 
+        this.add(skinnedModelCloned.scene);
         return animationController;
     }
 
