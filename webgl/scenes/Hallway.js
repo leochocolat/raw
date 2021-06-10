@@ -143,6 +143,7 @@ class Hallway extends RenderTargetScene {
 
         // setup animations
         this._animationController = this._createAnimationController();
+        console.log(this._animationController);
         this._animationController.onAnimationComplete((e) => {
             if (!this._animationComplete && e.action._clip.name === 'TRACK_Camera') {
                 this._animationComplete = true;
