@@ -47,6 +47,17 @@ const audios = [
  * Shared WebGL
  */
 const webgl = [
+    // Main textures
+    {
+        type: 'basis',
+        name: 'texture_adulte_homme',
+        path: '/textures/basis/AdulteHomme.basis',
+        preload: false,
+        options: {
+            flipY: true,
+        },
+    },
+
     // Test Animations
     {
         type: 'texture',

@@ -6,7 +6,7 @@ const resources = [
         type: 'gltf',
         name: 'supermarket',
         namespace: 'supermarket',
-        path: '/models/scene_supermarket.glb',
+        path: '/models/scene_supermarket_2.glb',
         preload: false,
     },
     {
@@ -30,6 +30,16 @@ const resources = [
         namespace: 'supermarket',
         path: '/textures/basis/scene_supermarket.basis',
         preload,
+    },
+    {
+        type: 'basis',
+        name: 'texture_supermarket_items',
+        namespace: 'supermarket',
+        path: '/textures/basis/scene_supermarket_items.basis',
+        preload,
+        options: {
+            flipY: true,
+        },
     },
     // Sounds
     {

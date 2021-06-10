@@ -6,7 +6,7 @@ const resources = [
         type: 'gltf',
         name: 'bar',
         namespace: 'bar',
-        path: '/models/bar/scene_bar.glb',
+        path: '/models/bar/scene_bar_2.glb',
         preload,
     },
     {
@@ -37,6 +37,16 @@ const resources = [
         namespace: 'bar',
         path: '/textures/basis/scene_bar.basis',
         preload,
+    },
+    {
+        type: 'basis',
+        name: 'texture_bar_items',
+        namespace: 'bar',
+        path: '/textures/basis/scene_bar_items.basis',
+        preload,
+        options: {
+            flipY: false,
+        },
     },
     // Sounds
     {

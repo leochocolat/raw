@@ -30,8 +30,7 @@ class Supermarket extends RenderTargetScene {
         this._animationsSettings = { progress: 0, zoomFOV, originalFOV };
 
         this._resources = this._setupResources();
-
-        this._mainAnimations = ['TRACK_Camera', 'MainsPere', 'Caddie_Movement', 'Cereal_Box', 'Panier_AdulteHomme', 'Panier_VieuxFemme'];
+        this._mainAnimations = ['TRACK_Camera', 'MainsPere', 'Caddie_Movement', 'PastaBox', 'Panier_VieuxFemme', 'Panier_AdulteHomme'];
         this._manAnimations = ['AdulteHomme_Rayon'];
         this._oldGirlAnimations = ['VieuxFemme_Fruits'];
 
@@ -114,6 +113,7 @@ class Supermarket extends RenderTargetScene {
     _setup() {
         this._sceneMaterial = this._createSceneMaterial();
         this._model = this._createModel();
+        console.log(this._model);
         this._interactionScreen = this._setupInteractionScreen();
         this._modelCamera = this._createModelCameraAnimation();
         this._createHumanModels();
@@ -152,9 +152,11 @@ class Supermarket extends RenderTargetScene {
     }
 
     _createModel() {
+        const textureItems = this._resources.get('texture_supermarket_items');
         const model = this._resources.get('supermarket');
         const clone = model;
         this.add(clone.scene);
+
         clone.scene.traverse((child) => {
             child.frustumCulled = false;
             if (child.isMesh) {
@@ -162,6 +164,8 @@ class Supermarket extends RenderTargetScene {
             }
             if (child.isMesh && child.name === 'scene_supermarket') {
                 child.material = this._sceneMaterial;
+            } else if (child.isMesh) {
+                child.material = new THREE.MeshBasicMaterial({ map: textureItems, side: THREE.DoubleSide, skinning: true });
             }
         });
 

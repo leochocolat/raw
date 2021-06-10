@@ -222,14 +222,11 @@ class Library extends RenderTargetScene {
         this._girlAnimationControllers = [];
         this._oldGirlAnimationsControllers = [];
 
-        // const modelMan = this._resources.get('LibraryHomme');
         const modelGirl = this._resources.get('LibraryFemme');
         const modelOldGirl = this._resources.get('LibraryVieux');
 
         const animatedMesh = this._createAnimatedMesh(modelOldGirl, 0);
         this._oldGirlAnimationsControllers.push(animatedMesh);
-
-        // this.add(modelGirl.scene);
 
         for (let index = 0; index < this._girlAnimations.length; index++) {
             const animatedMesh = this._createAnimatedMesh(modelGirl, index);

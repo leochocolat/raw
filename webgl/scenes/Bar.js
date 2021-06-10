@@ -113,6 +113,8 @@ class Bar extends RenderTargetScene {
         resources.addByName('blur-mask-test');
         resources.addByName('texture-gore-test');
         resources.addByName('video-gore-test');
+        resources.addByName('texture_adulte_homme');
+
         resources.load();
 
         return resources;
@@ -124,7 +126,7 @@ class Bar extends RenderTargetScene {
         this._interactionScreen = this._setupInteractionScreen();
         this._modelCamera = this._createModelCameraAnimation();
         this._createHumanModels();
-
+        console.log(this._model);
         // setup audios
         AudioManager.add('audio_bar', this._resources.get('audio_bar'));
 
@@ -159,6 +161,8 @@ class Bar extends RenderTargetScene {
 
     _createModel() {
         const model = this._resources.get('bar');
+        const textureItems = this._resources.get('texture_bar_items');
+
         const clone = model;
         this.add(clone.scene);
 
@@ -169,6 +173,8 @@ class Bar extends RenderTargetScene {
             }
             if (child.isMesh && child.name === 'scene_bar') {
                 child.material = this._sceneMaterial;
+            } else if (child.isMesh) {
+                child.material = new THREE.MeshBasicMaterial({ map: textureItems, side: THREE.DoubleSide, skinning: true });
             }
         });
 
@@ -227,10 +233,15 @@ class Bar extends RenderTargetScene {
         this._humanAnimationControllers = [];
         this._oldManAnimationsControllers = [];
 
+        // const texture = this._resources.get('texture_adulte_homme');
+
+        // const manMaterial = new THREE.MeshBasicMaterial({ map: texture });
+        // const girlMaterial = new THREE.MeshBasicMaterial({ map: texture });
+        // const oldManMaterial = new THREE.MeshBasicMaterial({ map: texture });
+
         const modelMan = this._resources.get('BarHomme');
         const modelOldMan = this._resources.get('BarVieux');
         const modelGirl = this._resources.get('BarFemme');
-
         this.add(modelGirl.scene);
 
         for (let index = 0; index < this._humanAnimations.length; index++) {
