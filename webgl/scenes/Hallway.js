@@ -34,7 +34,7 @@ class Hallway extends RenderTargetScene {
         this._manAnimations = ['LyceenHomme_Wall', 'LyceenHomme_Phone', 'LyceenHomme_Talk'];
         this._girlAnimations = ['LyceeFemme_Talk'];
 
-        this._mainAnimations = ['TRACK_CameraMovement', 'Phone'];
+        this._mainAnimations = ['TRACK_Camera', 'Phone'];
 
         this._updateSettings();
 
@@ -60,9 +60,9 @@ class Hallway extends RenderTargetScene {
             this._animationController.playAnimation({ animation: this._animationController.actionType[this._mainAnimations[index]], loop: false });
         }
 
-        // for (let index = 0; index < this._manAnimations.length; index++) {
-        //     this._manAnimationsController[index].playAnimation({ animation: this._manAnimationsController[index].actionType[this._manAnimations[index]], loop: false });
-        // }
+        for (let index = 0; index < this._manAnimations.length; index++) {
+            this._manAnimationsController[index].playAnimation({ animation: this._manAnimationsController[index].actionType[this._manAnimations[index]], loop: false });
+        }
 
         for (let index = 0; index < this._girlAnimations.length; index++) {
             this._girlAnimationsController[index].playAnimation({ animation: this._girlAnimationsController[index].actionType[this._girlAnimations[index]], loop: false });
@@ -136,7 +136,7 @@ class Hallway extends RenderTargetScene {
         // setup animations
         this._animationController = this._createAnimationController();
         this._animationController.onAnimationComplete((e) => {
-            if (!this._animationComplete && e.action._clip.name === 'TRACK_CameraMovement') {
+            if (!this._animationComplete && e.action._clip.name === 'TRACK_Camera') {
                 this._animationComplete = true;
                 this._setCameraZoom();
                 this.setScreenIsolation();
@@ -172,7 +172,7 @@ class Hallway extends RenderTargetScene {
             if (child.isMesh) {
                 child.material.side = THREE.DoubleSide;
             }
-            if (child.isMesh && child.name === 'scene_hallway1') {
+            if (child.isMesh && child.name === 'scene_hallway') {
                 child.material = this._sceneMaterial;
             }
         });
@@ -189,8 +189,8 @@ class Hallway extends RenderTargetScene {
         const size = new THREE.Vector3();
         container.getSize(size);
 
-        const width = size.y;
-        const height = size.x;
+        const width = size.x;
+        const height = size.y;
 
         size.x = width;
         size.y = height;

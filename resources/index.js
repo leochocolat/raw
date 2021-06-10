@@ -102,19 +102,6 @@ const webgl = [
             flipY: true,
         },
     },
-    // Test Animations
-    {
-        type: 'texture',
-        name: 'tex1',
-        path: '/textures/tex1.jpg',
-        preload: false,
-    },
-    {
-        type: 'texture',
-        name: 'tex2',
-        path: '/textures/tex2.jpg',
-        preload: false,
-    },
     // Test Blur
     {
         type: 'texture',

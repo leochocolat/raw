@@ -34,7 +34,7 @@ class AudioManager {
         this._current.volume = VOLUME;
         this._current.attack = 0.5;
         this._current.release = 2;
-        this._current.play();
+        this._current.play(0, 0);
     }
 
     pause(name, options) {

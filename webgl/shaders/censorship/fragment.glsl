@@ -39,4 +39,6 @@ void main() {
 
     texel.a = u_alpha;
     gl_FragColor = texel;
+    // gl_FragColor = vec4(r_uv.y, 0., 0., 1.);
+
 }

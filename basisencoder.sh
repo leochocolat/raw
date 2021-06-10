@@ -53,5 +53,5 @@ do
     # "-y_flip";
 
     # Execute encoding
-    $BASISU $TEXTURE -q 255 -output_path $OUTPUT_DIRECTORY -y_flip
+    $BASISU $TEXTURE -q 255 -output_path $OUTPUT_DIRECTORY
 done
