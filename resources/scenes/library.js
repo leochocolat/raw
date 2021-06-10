@@ -6,7 +6,7 @@ const resources = [
         type: 'gltf',
         name: 'library',
         namespace: 'library',
-        path: '/models/scene_library.glb',
+        path: '/models/library/scene_library.glb',
         preload,
     },
     {
@@ -30,6 +30,16 @@ const resources = [
         namespace: 'library',
         path: '/textures/basis/scene_library.basis',
         preload,
+    },
+    {
+        type: 'basis',
+        name: 'texture_library_items',
+        namespace: 'library',
+        path: '/textures/basis/scene_library_items.basis',
+        preload,
+        options: {
+            flipY: false,
+        },
     },
     // Sounds
     {

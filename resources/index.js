@@ -51,7 +51,34 @@ const webgl = [
     {
         type: 'basis',
         name: 'texture_adulte_homme',
-        path: '/textures/basis/AdulteHomme.basis',
+        path: '/textures/basis/texture_adulte_homme.basis',
+        preload: false,
+        options: {
+            flipY: true,
+        },
+    },
+    {
+        type: 'basis',
+        name: 'texture_adulte_femme',
+        path: '/textures/basis/texture_adulte_femme.basis',
+        preload: false,
+        options: {
+            flipY: true,
+        },
+    },
+    {
+        type: 'basis',
+        name: 'texture_vieux_femme',
+        path: '/textures/basis/texture_vieux_femme.basis',
+        preload: false,
+        options: {
+            flipY: true,
+        },
+    },
+    {
+        type: 'basis',
+        name: 'texture_vieux_homme',
+        path: '/textures/basis/texture_vieux_homme.basis',
         preload: false,
         options: {
             flipY: true,

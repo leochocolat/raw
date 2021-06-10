@@ -60,8 +60,8 @@ class Supermarket extends RenderTargetScene {
             this._animationController.playAnimation({ animation: this._animationController.actionType[this._mainAnimations[index]], loop: false });
         }
 
-        this._oldGirlAnimationsControllers[0].playAnimation({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], loop: true });
-        this._manAnimationsControllers[0].playAnimation({ animation: this._manAnimationsControllers[0].actionType[this._manAnimations[0]], loop: true });
+        // this._oldGirlAnimationsControllers[0].playAnimation({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], loop: true });
+        // this._manAnimationsControllers[0].playAnimation({ animation: this._manAnimationsControllers[0].actionType[this._manAnimations[0]], loop: true });
 
         AudioManager.play('audio_supermarket', { loop: true });
     }
@@ -111,6 +111,9 @@ class Supermarket extends RenderTargetScene {
             resources.addByName(data.textures[this.sceneName].violent);
             resources.addByName(data.textures[this.sceneName].mask);
         }
+
+        resources.addByName('texture_vieux_femme');
+        resources.addByName('texture_adulte_homme');
 
         resources.load();
 
@@ -249,14 +252,17 @@ class Supermarket extends RenderTargetScene {
         this._manAnimationsControllers = [];
         this._oldGirlAnimationsControllers = [];
 
+        const textureMan = this._resources.get('texture_adulte_homme');
+        const textureOldGirl = this._resources.get('texture_vieux_femme');
+
         const modelMan = this._resources.get('AdulteHomme');
         const modelOldGirl = this._resources.get('AdulteVieux');
 
-        const animatedMan = this._createAnimatedMesh(modelMan, 0);
-        this._manAnimationsControllers.push(animatedMan);
+        const animatedMan = this._createAnimatedMesh(modelMan, 0, textureMan);
+        // this._manAnimationsControllers.push(animatedMan);
 
-        const animatedOldGirl = this._createAnimatedMesh(modelOldGirl, 0);
-        this._oldGirlAnimationsControllers.push(animatedOldGirl);
+        const animatedOldGirl = this._createAnimatedMesh(modelOldGirl, 0, textureOldGirl);
+        // this._oldGirlAnimationsControllers.push(animatedOldGirl);
     }
 
     // On Tick
@@ -310,15 +316,20 @@ class Supermarket extends RenderTargetScene {
         this.interactionsSettings.rotationFactor.y = 0.5;
     }
 
-    _createAnimatedMesh(model, index) {
+    _createAnimatedMesh(model, index, texture) {
         const skinnedModelCloned = cloneSkinnedMesh(model);
         skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
-        const animationController = new AnimationComponent({ model: skinnedModelCloned, animations: skinnedModelCloned.animations[index] });
+        // const animationController = new AnimationComponent({ model: skinnedModelCloned, animations: skinnedModelCloned.animations[index] });
+        const manMaterial = new THREE.MeshBasicMaterial({ map: texture, skinning: true });
+
+        const mesh = skinnedModelCloned.scene.getObjectByName('skinned_mesh');
+        mesh.material = manMaterial;
+        mesh.frustumCulled = false;
         this.add(skinnedModelCloned.scene);
 
-        this.animationControllers.push(animationController);
+        // this.animationControllers.push(animationController);
 
-        return animationController;
+        // return animationController;
     }
 
     /**

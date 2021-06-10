@@ -31,6 +31,16 @@ const resources = [
         path: '/textures/basis/scene_hallway.basis',
         preload,
     },
+    // {
+    //     type: 'basis',
+    //     name: 'texture_hallway_items',
+    //     namespace: 'bar',
+    //     path: '/textures/basis/texture_hallway_items.basis',
+    //     preload,
+    //     options: {
+    //         flipY: false,
+    //     },
+    // },
 
     // Sounds
     {

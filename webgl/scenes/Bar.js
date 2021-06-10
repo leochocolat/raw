@@ -122,6 +122,7 @@ class Bar extends RenderTargetScene {
         }
 
         resources.addByName('texture_adulte_homme');
+        resources.addByName('texture_vieux_homme');
 
         resources.load();
 
@@ -134,7 +135,6 @@ class Bar extends RenderTargetScene {
         this._interactionScreen = this._setupInteractionScreen();
         this._modelCamera = this._createModelCameraAnimation();
         this._createHumanModels();
-        console.log(this._model);
         // setup audios
         AudioManager.add('audio_bar', this._resources.get('audio_bar'));
 
@@ -240,23 +240,18 @@ class Bar extends RenderTargetScene {
         this._humanAnimationControllers = [];
         this._oldManAnimationsControllers = [];
 
-        // const texture = this._resources.get('texture_adulte_homme');
-
-        // const manMaterial = new THREE.MeshBasicMaterial({ map: texture });
-        // const girlMaterial = new THREE.MeshBasicMaterial({ map: texture });
-        // const oldManMaterial = new THREE.MeshBasicMaterial({ map: texture });
+        const textureAdulteHomme = this._resources.get('texture_adulte_homme');
+        const textureVieuxHomme = this._resources.get('texture_vieux_homme');
 
         const modelMan = this._resources.get('BarHomme');
         const modelOldMan = this._resources.get('BarVieux');
-        const modelGirl = this._resources.get('BarFemme');
-        this.add(modelGirl.scene);
 
         for (let index = 0; index < this._humanAnimations.length; index++) {
-            const animatedMesh = this._createAnimatedMesh(modelMan, index);
+            const animatedMesh = this._createAnimatedMesh(modelMan, index, textureAdulteHomme);
             this._humanAnimationControllers.push(animatedMesh);
         }
         for (let index = 0; index < this._oldManAnimations.length; index++) {
-            const animatedMesh = this._createAnimatedMesh(modelOldMan, index);
+            const animatedMesh = this._createAnimatedMesh(modelOldMan, index, textureVieuxHomme);
             this._oldManAnimationsControllers.push(animatedMesh);
         }
     }
@@ -340,9 +335,13 @@ class Bar extends RenderTargetScene {
         this.interactionsSettings.rotationFactor.y = 0.5;
     }
 
-    _createAnimatedMesh(model, index) {
+    _createAnimatedMesh(model, index, texture) {
         const skinnedModelCloned = cloneSkinnedMesh(model);
-        skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
+        const manMaterial = new THREE.MeshBasicMaterial({ map: texture, skinning: true });
+
+        const mesh = skinnedModelCloned.scene.getObjectByName('skinned_mesh');
+        mesh.material = manMaterial;
+        mesh.frustumCulled = false;
         const animationController = new AnimationComponent({ model: skinnedModelCloned, animations: skinnedModelCloned.animations[index] });
         this.add(skinnedModelCloned.scene);
 

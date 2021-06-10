@@ -138,6 +138,9 @@ class Library extends RenderTargetScene {
             resources.addByName(data.textures[this.sceneName].mask);
         }
 
+        resources.addByName('texture_vieux_femme');
+        resources.addByName('texture_adulte_femme');
+
         resources.load();
 
         return resources;
@@ -185,6 +188,7 @@ class Library extends RenderTargetScene {
 
     _createModel() {
         const model = this._resources.get('library');
+        const textureItems = this._resources.get('texture_library_items');
 
         const clone = model;
         this.add(clone.scene);
@@ -196,6 +200,8 @@ class Library extends RenderTargetScene {
             }
             if (child.isMesh && child.name === 'scene_library') {
                 child.material = this._sceneMaterial;
+            } else if (child.isMesh) {
+                child.material = new THREE.MeshBasicMaterial({ map: textureItems, side: THREE.DoubleSide, skinning: true });
             }
         });
 
@@ -272,12 +278,14 @@ class Library extends RenderTargetScene {
 
         const modelGirl = this._resources.get('LibraryFemme');
         const modelOldGirl = this._resources.get('LibraryVieux');
+        const textureOldGirl = this._resources.get('texture_vieux_femme');
+        const textureGirl = this._resources.get('texture_adulte_femme');
 
-        const animatedMesh = this._createAnimatedMesh(modelOldGirl, 0);
+        const animatedMesh = this._createAnimatedMesh(modelOldGirl, 0, textureOldGirl);
         this._oldGirlAnimationsControllers.push(animatedMesh);
 
         for (let index = 0; index < this._girlAnimations.length; index++) {
-            const animatedMesh = this._createAnimatedMesh(modelGirl, index);
+            const animatedMesh = this._createAnimatedMesh(modelGirl, index, textureGirl);
             this._girlAnimationControllers.push(animatedMesh);
         }
     }
@@ -340,10 +348,15 @@ class Library extends RenderTargetScene {
         this.interactionsSettings.rotationFactor.y = 0.5;
     }
 
-    _createAnimatedMesh(model, index) {
+    _createAnimatedMesh(model, index, texture) {
         const skinnedModelCloned = cloneSkinnedMesh(model);
         skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
         const animationController = new AnimationComponent({ model: skinnedModelCloned, animations: skinnedModelCloned.animations[index] });
+        const manMaterial = new THREE.MeshBasicMaterial({ map: texture, skinning: true });
+
+        const mesh = skinnedModelCloned.scene.getObjectByName('skinned_mesh');
+        mesh.material = manMaterial;
+        mesh.frustumCulled = false;
         this.add(skinnedModelCloned.scene);
 
         this.animationControllers.push(animationController);
