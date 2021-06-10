@@ -68,7 +68,7 @@ class Bar extends RenderTargetScene {
         // setup screen alpha activation
         setTimeout(() => {
             this._playScreenActivate();
-        }, 21200);
+        }, 19500);
 
         this._playAudios();
     }
