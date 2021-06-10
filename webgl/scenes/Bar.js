@@ -71,7 +71,7 @@ class Bar extends RenderTargetScene {
         // setup screen alpha activation
         setTimeout(() => {
             this._playScreenActivate();
-        }, 19500);
+        }, 18500);
 
         this._playAudios();
     }
@@ -268,8 +268,8 @@ class Bar extends RenderTargetScene {
     _playScreenActivate() {
         gsap.to(this._blurScreen, {
             screenAlpha: 1,
-            duration: 0.2,
-            ease: 'sine.inOut',
+            duration: 0.1,
+            ease: 'power0.none',
             onUpdate: () => {
                 this._blurScreen.meshMaterial.uniforms.u_alpha.value = this._blurScreen.screenAlpha;
             },
