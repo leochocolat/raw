@@ -52,7 +52,7 @@ const data = {
     },
 
     textures: {
-        hallway: { violent: 'hallway_texture_violent', mask: 'blur-mask-test', addToResourceManager: true },
+        hallway: { violent: 'hallway_texture_violent', mask: 'hallway_texture_mask', addToResourceManager: true },
         library: { violent: 'bar_texture_violent', mask: 'blur-mask-test', addToResourceManager: true },
         supermarket: { violent: 'supermarket_texture_violent', mask: 'blur-mask-test', addToResourceManager: true },
         bar: { violent: 'bar_texture_violent', mask: 'blur-mask-test', addToResourceManager: true },

@@ -46,6 +46,7 @@ export default {
             timeline.call(this.setInstructions, 0);
             timeline.call(() => this.$store.dispatch('scenes/setMenuScene', false), 0);
             timeline.call(() => this.$store.dispatch('scenes/setActiveScene', this.$options.name), 0);
+            timeline.add(this.$root.webglApp.sceneManager.screensContainer.effectOut(), 0);
             timeline.to(this.$el, { duration: 0.1, alpha: 1, ease: 'circ.inOut' }, 2);
             timeline.add(this.$refs.screenActive.transitionIn(), 2);
 
@@ -59,6 +60,7 @@ export default {
             timeline.call(() => this.$store.dispatch('scenes/setMenuScene', false), 0);
             timeline.call(() => this.$store.dispatch('scenes/setActiveScene', this.$options.name), 0);
             timeline.to(this.$el, { duration: 0.1, alpha: 1, ease: 'circ.inOut' }, 0.5);
+            timeline.add(this.$root.webglApp.sceneManager.screensContainer.effectOut(), 0);
             timeline.add(this.$refs.screenActive.transitionIn(), 0.5);
 
             return timeline;
@@ -69,6 +71,7 @@ export default {
 
             timeline.add(this.$refs.screenActive.showRewindArrow(), 0);
             timeline.add(this.$refs.screenActive.rewindClock(), 0);
+            timeline.add(this.$root.webglApp.sceneManager.screensContainer.effectIn(), 0);
             timeline.add(this.$root.webglApp.sceneManager.scenes[this.scene.id].resetAnimationProgress(), 0);
 
             timeline.call(this.$root.webglApp.sceneManager.scenes[this.scene.id].resetScreenIsolation(), null, 0);

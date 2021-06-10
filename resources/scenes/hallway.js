@@ -38,6 +38,16 @@ const resources = [
         path: '/textures/basis/hallway_texture_violent.basis',
         preload,
     },
+    {
+        type: 'texture',
+        name: 'hallway_texture_mask',
+        namespace: 'bar',
+        path: '/textures/hallway_texture_mask.png',
+        preload,
+        options: {
+            flipY: true,
+        },
+    },
     // {
     //     type: 'basis',
     //     name: 'texture_hallway_items',

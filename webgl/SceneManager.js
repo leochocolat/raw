@@ -75,7 +75,7 @@ class SceneManager extends THREE.Scene {
 
         this.menuTimeline = new gsap.timeline();
 
-        // if (state) this.menuTimeline.add(this._screensContainer.effectIn(), 0);
+        if (state) this.menuTimeline.add(this._screensContainer.effectIn(), 0);
 
         for (const key in this._scenes) {
             if (this._scenes[key] === previousActiveScene) continue;
@@ -131,7 +131,7 @@ class SceneManager extends THREE.Scene {
         this.activeSceneTimeline.call(this._activeScene.setVisible, null, 0);
 
         this.activeSceneTimeline.add(this._activeScene.transitionIn(), 0);
-        // this.activeSceneTimeline.add(this._screensContainer.effectOut(), 0);
+        this.activeSceneTimeline.add(this._screensContainer.effectOut(), 0);
     }
 
     mousemoveHandler(mouse) {
