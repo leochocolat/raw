@@ -76,6 +76,8 @@ class Supermarket extends RenderTargetScene {
 
         this._animationComplete = false;
 
+        this._updateSettings();
+
         AudioManager.pause('audio_supermarket');
     }
 

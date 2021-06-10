@@ -86,6 +86,8 @@ class Bar extends RenderTargetScene {
             this._playScreenDeactivate();
         }
 
+        this._updateSettings();
+
         AudioManager.pause('audio_bar');
     }
 

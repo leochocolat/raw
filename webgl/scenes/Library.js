@@ -49,39 +49,65 @@ class Library extends RenderTargetScene {
     }
 
     transitionIn() {
-        super.transitionIn();
+        const timeline = new gsap.timeline();
 
-        if (!this._animationController) return;
+        timeline.add(super.transitionIn(), 0);
+        timeline.call(() => {
+            if (!this._animationController) return;
 
-        for (let index = 0; index < this._mainAnimations.length; index++) {
-            this._animationController.playAnimation({ animation: this._animationController.actionType[this._mainAnimations[index]], loop: false });
-        }
+            for (let index = 0; index < this._mainAnimations.length; index++) {
+                this._animationController.playAnimation({ animation: this._animationController.actionType[this._mainAnimations[index]], loop: false });
+            }
 
-        for (let index = 0; index < this._girlAnimations.length; index++) {
-            this._girlAnimationControllers[index].playAnimation({ animation: this._girlAnimationControllers[index].actionType[this._girlAnimations[index]], loop: false });
-        }
+            for (let index = 0; index < this._girlAnimations.length; index++) {
+                this._girlAnimationControllers[index].playAnimation({ animation: this._girlAnimationControllers[index].actionType[this._girlAnimations[index]], loop: false });
+            }
 
-        this._oldGirlAnimationsControllers[0].playAnimation({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], progress: this._animationsSettings.progress });
+            this._oldGirlAnimationsControllers[0].playAnimation({ animation: this._oldGirlAnimationsControllers[0].actionType[this._oldGirlAnimations[0]], progress: this._animationsSettings.progress });
 
-        this._blurScreen.screenTexture.image.play();
-        this._playAudios();
+            this._initialeScreenTexture.image.play();
+
+            this._playAudios();
+        }, null, 0);
+
+        return timeline;
     }
 
     transitionToMenu() {
-        super.transitionToMenu();
+        const timeline = new gsap.timeline();
 
-        if (this._modelCamera) {
-            this.setCameraFOV({ fov: this._animationsSettings.originalFOV });
-        }
+        timeline.add(super.transitionToMenu(), 0);
+
+        timeline.call(() => {
+            if (this._modelCamera) {
+                this.setCameraFOV({ fov: this._animationsSettings.originalFOV });
+            }
+
+            this._animationComplete = false;
+
+            AudioManager.pause('audio_library');
+            AudioManager.pause('audio_library_fx');
+
+            this._updateSettings();
+        }, null, 0);
+
+        return timeline;
+    }
+
+    resetAnimationProgress() {
+        const timelineProgress = new gsap.timeline();
+
+        timelineProgress.add(super.resetAnimationProgress(), 0);
+
         if (this._blurScreen) {
-            this._blurScreen.screenTexture.image.currentTime = 0;
-            this._blurScreen.screenTexture.image.pause();
-        }
+            timelineProgress.call(() => {
+                this._resetInitialScreenTexture();
+                this._initialeScreenTexture.image.pause();
+                this._initialeScreenTexture.image.currentTime = 0;
+            }, null, 0);
+        };
 
-        this._animationComplete = false;
-
-        AudioManager.pause('audio_library');
-        AudioManager.pause('audio_library_fx');
+        return timelineProgress;
     }
 
     setCensorship(censorshipFactor) {
@@ -172,8 +198,8 @@ class Library extends RenderTargetScene {
     }
 
     _setupInteractionScreen() {
-        // const screenTexture = this._resources.get('texture-gore-test');
-        const screenTexture = this._resources.get('video_library_001');
+        this._initialeScreenTexture = this._resources.get('video_library_001');
+        this._finaleScreenTexture = this._resources.get('video-gore-test');
         const maskTexture = this._resources.get('blur-mask-test');
 
         const screen = this._model.scene.getObjectByName('Interaction_Screen');
@@ -191,13 +217,30 @@ class Library extends RenderTargetScene {
             blurFactor: this.censorshipFactor,
             scenePlane: screen,
             maskTexture,
-            screenTexture,
+            screenTexture: this._finaleScreenTexture,
+            initialTexture: this._initialeScreenTexture,
             renderer: this._renderer,
             width: this._width,
             height: this._height,
             size,
             settings: this.blurSettings,
+            isInitiallyBlured: false,
         });
+
+        this._initialeScreenTexture.image.addEventListener('ended', this._applyFinaleScreenTexture, null);
+
+        // Debug
+        // setTimeout(this._applyFinaleScreenTexture, 1000);
+    }
+
+    _applyFinaleScreenTexture() {
+        // this._blurScreen.screenTexture = this._finaleScreenTexture;
+        this._blurScreen.isBlured = true;
+    }
+
+    _resetInitialScreenTexture() {
+        // this._blurScreen.screenTexture = this._initialeScreenTexture;
+        this._blurScreen.isBlured = false;
     }
 
     _createAnimationController() {
@@ -316,6 +359,7 @@ class Library extends RenderTargetScene {
             '_cameraFovChangeHandler',
             '_clickPlayAnimationsHandler',
             '_blurSettingsChangeHandler',
+            '_applyFinaleScreenTexture',
         );
     }
 

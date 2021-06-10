@@ -28,8 +28,10 @@ class BlurScreen {
         this._screenMesh = options.scenePlane;
         this._maskTexture = options.maskTexture;
         this._screenTexture = options.screenTexture;
+        this._initialTexture = options.initialTexture || this._screenTexture;
         this._planeSize = options.size;
         this._screenAlpha = options.isScreenOff ? 0.0 : 1.0;
+        this._isBlured = !(options.isInitiallyBlured === false);
 
         this._setup();
     }
@@ -75,6 +77,7 @@ class BlurScreen {
 
     set screenTexture(value) {
         this._screenTexture = value;
+        this._resizeBuffers();
     }
 
     get meshTexture() {
@@ -91,6 +94,19 @@ class BlurScreen {
 
     get screenAlpha() {
         return this._screenAlpha;
+    }
+
+    get isBlured() {
+        return this._isBlured;
+    }
+
+    set isBlured(bool) {
+        this._isBlured = bool;
+        this._screenMesh.material.uniforms.u_is_blured.value = this._isBlured;
+    }
+
+    get material() {
+        return this._screenMesh.material;
     }
 
     /**
@@ -179,13 +195,14 @@ class BlurScreen {
 
     _createFinalPlane() {
         const uniforms = {
-            u_texture_initial: { value: this._screenTexture },
+            u_texture_initial: { value: this._initialTexture },
             u_blur_mask: { value: this._maskTexture },
             u_texture: { value: this._screenTexture },
             u_size: { value: new THREE.Vector2(this._bufferWidth, this._bufferHeight) },
             u_resolution: { value: new THREE.Vector2(this._containerSize.x, this._containerSize.y) },
             u_time: { value: 0.0 },
             u_alpha: { value: this._screenAlpha },
+            u_is_blured: { value: this._isBlured },
         };
 
         const material = new THREE.ShaderMaterial({

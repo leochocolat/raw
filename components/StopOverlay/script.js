@@ -182,6 +182,13 @@ export default {
                 expires: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
                 maxAge: 1000 * 3600 * 24 * 30,
             });
+
+            // Apply maximum blur on every scenes
+            // TODO: Store in cookies
+            const scenes = this.$root.webglApp.sceneManager.scenes;
+            for (const key in scenes) {
+                scenes[key].censorshipFactor = 1;
+            }
         },
 
         keydownHandler(e) {

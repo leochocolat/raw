@@ -79,6 +79,8 @@ class Hallway extends RenderTargetScene {
 
         this._animationComplete = false;
 
+        this._updateSettings();
+
         AudioManager.pause('audio_hallway');
         AudioManager.pause('audio_hallway_fx');
     }
