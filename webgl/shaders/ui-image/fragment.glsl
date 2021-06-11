@@ -52,6 +52,7 @@ vec4 RGBShift(vec2 uv, vec2 angle, float amount, sampler2D texel) {
 
 void main() {
     vec2 uv = vUv;
+    uv.y = 1.0 - uv.y;
 
     // wobble
     vec2 wobbl = vec2((u_wobble_intensity / 100.0) * rand(vec2(u_time, gl_FragCoord.y)), 0.);
