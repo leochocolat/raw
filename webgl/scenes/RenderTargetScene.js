@@ -308,7 +308,7 @@ class RenderTargetScene extends THREE.Scene {
         gsap.to(this.sceneMaterial.uniforms.u_isolation_alpha, { value: 0.3, duration: 0.5 });
 
         this.humanModels.forEach((model) => {
-            gsap.to(model.material.uniforms.u_isolation_alpha, { value: 0.3, duration: 0.5 });
+            gsap.to(model.material.uniforms.u_isolation_alpha, { value: 0.1, duration: 0.5 });
         });
 
         this.itemsModels.forEach((model) => {
