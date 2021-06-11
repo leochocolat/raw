@@ -328,7 +328,7 @@ class Bar extends RenderTargetScene {
         // Blur Settings
         this.blurSettings.wobbleIntensity = 0.5;
         this.blurSettings.spreadingTreshold = 0.41;
-        this.blurSettings.intensityFactor = 0.75;
+        this.blurSettings.intensityFactor = 3.26;
 
         this._debugFolder?.refresh();
     }

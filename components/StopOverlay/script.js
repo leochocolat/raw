@@ -38,8 +38,10 @@ export default {
     },
 
     mounted() {
-        this.setupSplitText();
-        this.setupEventListeners();
+        setTimeout(() => {
+            this.setupSplitText();
+            this.setupEventListeners();
+        }, 1000);
     },
 
     beforeDestroy() {
