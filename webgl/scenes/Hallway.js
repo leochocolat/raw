@@ -270,9 +270,9 @@ class Hallway extends RenderTargetScene {
         this.interactionsSettings.rotationFactor.y = 15;
 
         // Blur Settings
-        // this.blurSettings.wobbleIntensity = 0.5;
-        // this.blurSettings.spreadingTreshold = 0.05;
-        // this.blurSettings.intensityFactor = 2;
+        this.blurSettings.wobbleIntensity = 0.16;
+        this.blurSettings.spreadingTreshold = 0.72;
+        this.blurSettings.intensityFactor = 0.6;
 
         this._debugFolder?.refresh();
     }

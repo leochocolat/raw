@@ -59,11 +59,25 @@ const resources = [
 
     // Violent
     {
-        type: 'basis',
-        name: 'image_gore_library',
-        path: '/textures/basis/image_gore_library.basis',
+        type: 'video-texture',
+        name: 'library_texture_violent',
+        path: '/videos/library_texture_violent.mp4',
         namespace: 'library',
         preload: false,
+        options: {
+            autoplay: true,
+            loop: true,
+            muted: true,
+            playsinline: true,
+            flipY: false,
+        },
+    },
+    {
+        type: 'texture',
+        name: 'library_texture_mask',
+        namespace: 'library',
+        path: '/textures/library_texture_mask.png',
+        preload,
         options: {
             flipY: false,
         },

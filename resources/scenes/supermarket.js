@@ -41,14 +41,29 @@ const resources = [
             flipY: true,
         },
     },
+    // Violent
     {
-        type: 'basis',
+        type: 'video-texture',
         name: 'supermarket_texture_violent',
+        path: '/videos/supermarket_texture_violent.mp4',
         namespace: 'supermarket',
-        path: '/textures/basis/supermarket_texture_violent.basis',
+        preload: false,
+        options: {
+            autoplay: true,
+            loop: true,
+            muted: true,
+            playsinline: true,
+            flipY: false,
+        },
+    },
+    {
+        type: 'texture',
+        name: 'supermarket_texture_mask',
+        namespace: 'supermarket',
+        path: '/textures/supermarket_texture_mask.png',
         preload,
         options: {
-            flipY: true,
+            flipY: false,
         },
     },
     // Sounds

@@ -296,9 +296,9 @@ class Supermarket extends RenderTargetScene {
         this.interactionsSettings.rotationFactor.y = 10;
 
         // Blur Settings
-        // this.blurSettings.wobbleIntensity = 0.5;
-        // this.blurSettings.spreadingTreshold = 0.05;
-        // this.blurSettings.intensityFactor = 2;
+        this.blurSettings.wobbleIntensity = 0.22;
+        this.blurSettings.spreadingTreshold = 0.14;
+        this.blurSettings.intensityFactor = 0.33;
 
         this._debugFolder?.refresh();
     }

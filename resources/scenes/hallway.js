@@ -32,16 +32,23 @@ const resources = [
         preload,
     },
     {
-        type: 'basis',
+        type: 'video-texture',
         name: 'hallway_texture_violent',
         namespace: 'bar',
-        path: '/textures/basis/hallway_texture_violent.basis',
+        path: '/videos/hallway_texture_violent.mp4',
         preload,
+        options: {
+            autoplay: true,
+            loop: true,
+            muted: true,
+            playsinline: true,
+            flipY: false,
+        },
     },
     {
         type: 'texture',
         name: 'hallway_texture_mask',
-        namespace: 'bar',
+        namespace: 'hallway',
         path: '/textures/hallway_texture_mask.png',
         preload,
         options: {

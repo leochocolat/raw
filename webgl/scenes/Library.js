@@ -315,8 +315,8 @@ class Library extends RenderTargetScene {
 
         // Blur Settings
         this.blurSettings.spreadingTreshold = 0.05;
-        this.blurSettings.wobbleIntensity = 0.15;
-        this.blurSettings.intensityFactor = 1;
+        this.blurSettings.wobbleIntensity = 0.35;
+        this.blurSettings.intensityFactor = 0.65;
 
         this._debugFolder?.refresh();
     }
