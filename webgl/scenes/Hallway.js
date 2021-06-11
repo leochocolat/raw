@@ -51,6 +51,14 @@ class Hallway extends RenderTargetScene {
         return this._sceneMaterial;
     }
 
+    get humanModels() {
+        return this._humanModels;
+    }
+
+    get itemsModels() {
+        return this._itemsModels;
+    }
+
     transitionIn() {
         super.transitionIn();
 
@@ -135,6 +143,7 @@ class Hallway extends RenderTargetScene {
 
         // setup animations
         this._animationController = this._createAnimationController();
+        console.log(this._animationController);
         this._animationController.onAnimationComplete((e) => {
             if (!this._animationComplete && e.action._clip.name === 'TRACK_Camera') {
                 this._animationComplete = true;
@@ -148,7 +157,7 @@ class Hallway extends RenderTargetScene {
         const texture = this._resources.get('texture_hallway');
 
         const uniforms = {
-            u_scene_texture: { value: texture },
+            u_texture: { value: texture },
             u_isolation_alpha: { value: 1.0 },
         };
 
@@ -166,6 +175,8 @@ class Hallway extends RenderTargetScene {
         const model = this._resources.get('hallway');
         const clone = model;
         this.add(clone.scene);
+
+        this._itemsModels = [];
 
         clone.scene.traverse((child) => {
             child.frustumCulled = false;
@@ -228,10 +239,11 @@ class Hallway extends RenderTargetScene {
     _createHumanModels() {
         this._manAnimationsController = [];
         this._girlAnimationsController = [];
+        this._humanModels = [];
 
         const modelMan = this._resources.get('LyceenHomme');
         const modelGirl = this._resources.get('LyceenFemme');
-        console.log(modelGirl);
+
         const textureGirl = this._resources.get('texture_lycee_femme');
         const textureMan = this._resources.get('texture_lycee_homme');
 
@@ -309,13 +321,26 @@ class Hallway extends RenderTargetScene {
         skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
         const animationController = new AnimationComponent({ model: skinnedModelCloned, animations: skinnedModelCloned.animations[index] });
 
-        const manMaterial = new THREE.MeshBasicMaterial({ map: texture, skinning: true });
-        const mesh = skinnedModelCloned.scene.getObjectByName('skinned_mesh');
-        mesh.material = manMaterial;
-        mesh.frustumCulled = false;
-        this.add(skinnedModelCloned.scene);
+        const uniforms = {
+            u_texture: { value: texture },
+            u_isolation_alpha: { value: 1.0 },
+        };
 
+        const material = new THREE.ShaderMaterial({
+            side: THREE.DoubleSide,
+            uniforms,
+            vertexShader: vertex,
+            fragmentShader: fragment,
+            skinning: true,
+        });
+        const mesh = skinnedModelCloned.scene.getObjectByName('skinned_mesh');
+        mesh.material = material;
+        mesh.frustumCulled = false;
+
+        this._humanModels.push(mesh);
         this.animationControllers.push(animationController);
+
+        this.add(skinnedModelCloned.scene);
         return animationController;
     }
 
@@ -349,7 +374,7 @@ class Hallway extends RenderTargetScene {
     }
 
     _animationsProgressChangeHandler() {
-        this._animationController.setAnimationProgress({ animation: this._animationController.actionType.TRACK_CameraMovement, progress: this._animationsSettings.progress });
+        this._animationController.setAnimationProgress({ animation: this._animationController.actionType.TRACK_Camera, progress: this._animationsSettings.progress });
         this._animationController.setAnimationProgress({ animation: this._animationController.actionType.Phone, progress: this._animationsSettings.progress });
 
         for (let index = 0; index < this._manAnimationsController.length; index++) {
@@ -358,7 +383,7 @@ class Hallway extends RenderTargetScene {
     }
 
     _clickPlayAnimationsHandler() {
-        this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_CameraMovement, loop: false });
+        this._animationController.playAnimation({ animation: this._animationController.actionType.TRACK_Camera, loop: false });
         this._animationController.playAnimation({ animation: this._animationController.actionType.Phone, loop: false });
 
         for (let index = 0; index < this._manAnimationsController.length; index++) {

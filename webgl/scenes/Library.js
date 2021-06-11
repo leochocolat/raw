@@ -51,6 +51,14 @@ class Library extends RenderTargetScene {
         return this._sceneMaterial;
     }
 
+    get humanModels() {
+        return this._humanModels;
+    }
+
+    get itemsModels() {
+        return this._itemsModels;
+    }
+
     transitionIn() {
         const timeline = new gsap.timeline();
 
@@ -172,7 +180,7 @@ class Library extends RenderTargetScene {
         const texture = this._resources.get('texture_library');
 
         const uniforms = {
-            u_scene_texture: { value: texture },
+            u_texture: { value: texture },
             u_isolation_alpha: { value: 1.0 },
         };
 
@@ -189,6 +197,12 @@ class Library extends RenderTargetScene {
     _createModel() {
         const model = this._resources.get('library');
         const textureItems = this._resources.get('texture_library_items');
+        this._itemsModels = [];
+
+        const uniforms = {
+            u_texture: { value: textureItems },
+            u_isolation_alpha: { value: 1.0 },
+        };
 
         const clone = model;
         this.add(clone.scene);
@@ -201,7 +215,17 @@ class Library extends RenderTargetScene {
             if (child.isMesh && child.name === 'scene_library') {
                 child.material = this._sceneMaterial;
             } else if (child.isMesh) {
-                child.material = new THREE.MeshBasicMaterial({ map: textureItems, side: THREE.DoubleSide, skinning: true });
+                const material = new THREE.ShaderMaterial({
+                    side: THREE.DoubleSide,
+                    uniforms,
+                    vertexShader: vertex,
+                    fragmentShader: fragment,
+                    skinning: true,
+                });
+
+                this._itemsModels.push(child);
+
+                child.material = material;
             }
         });
 
@@ -275,6 +299,7 @@ class Library extends RenderTargetScene {
     _createHumanModels() {
         this._girlAnimationControllers = [];
         this._oldGirlAnimationsControllers = [];
+        this._humanModels = [];
 
         const modelGirl = this._resources.get('LibraryFemme');
         const modelOldGirl = this._resources.get('LibraryVieux');
@@ -352,15 +377,27 @@ class Library extends RenderTargetScene {
         const skinnedModelCloned = cloneSkinnedMesh(model);
         skinnedModelCloned.scene.getObjectByName('skinned_mesh').frustumCulled = false;
         const animationController = new AnimationComponent({ model: skinnedModelCloned, animations: skinnedModelCloned.animations[index] });
-        const manMaterial = new THREE.MeshBasicMaterial({ map: texture, skinning: true });
 
+        const uniforms = {
+            u_texture: { value: texture },
+            u_isolation_alpha: { value: 1.0 },
+        };
+
+        const material = new THREE.ShaderMaterial({
+            side: THREE.DoubleSide,
+            uniforms,
+            vertexShader: vertex,
+            fragmentShader: fragment,
+            skinning: true,
+        });
         const mesh = skinnedModelCloned.scene.getObjectByName('skinned_mesh');
-        mesh.material = manMaterial;
+        mesh.material = material;
         mesh.frustumCulled = false;
-        this.add(skinnedModelCloned.scene);
 
+        this._humanModels.push(mesh);
         this.animationControllers.push(animationController);
 
+        this.add(skinnedModelCloned.scene);
         return animationController;
     }
 

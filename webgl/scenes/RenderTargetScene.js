@@ -306,11 +306,29 @@ class RenderTargetScene extends THREE.Scene {
 
     setScreenIsolation() {
         gsap.to(this.sceneMaterial.uniforms.u_isolation_alpha, { value: 0.3, duration: 0.5 });
+
+        this.humanModels.forEach((model) => {
+            gsap.to(model.material.uniforms.u_isolation_alpha, { value: 0.3, duration: 0.5 });
+        });
+
+        this.itemsModels.forEach((model) => {
+            gsap.to(model.material.uniforms.u_isolation_alpha, { value: 0.3, duration: 0.5 });
+        });
     }
 
     resetScreenIsolation() {
         if (!this.sceneMaterial) return;
         gsap.to(this.sceneMaterial.uniforms.u_isolation_alpha, { value: 1, duration: 0.5 });
+
+        if (!this.humanModels) return;
+        this.humanModels.forEach((model) => {
+            gsap.to(model.material.uniforms.u_isolation_alpha, { value: 1, duration: 0.5 });
+        });
+
+        if (!this.itemsModels) return;
+        this.itemsModels.forEach((model) => {
+            gsap.to(model.material.uniforms.u_isolation_alpha, { value: 1, duration: 0.5 });
+        });
     }
 
     // Hooks

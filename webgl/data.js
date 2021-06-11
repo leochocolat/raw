@@ -45,7 +45,7 @@ const data = {
     },
 
     animations: {
-        hallway: { duration: 27.64 },
+        hallway: { duration: 27 },
         library: { duration: 26, blurDelay: 3 },
         supermarket: { duration: 28.66 },
         bar: { duration: 24.33 },
